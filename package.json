@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TalkControl/TalkControl.git"
+    "url": "git+https://github.com/TalkControl/talk-control.git"
   },
   "contributors": [
     "Gildas Morel des Vallons <gildas2k@gmail.com>",
