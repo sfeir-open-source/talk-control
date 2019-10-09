@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "npx mocha",
         "lint": "eslint --fix . && echo 'Lint complete.'"
     },
     "repository": {
@@ -20,9 +20,13 @@
     },
     "homepage": "https://github.com/TalkControl/TalkControl#readme",
     "devDependencies": {
+        "chai": "^4.2.0",
         "eslint": "^6.5.1",
         "eslint-config-prettier": "^6.4.0",
+        "eslint-plugin-mocha": "^6.1.1",
         "eslint-plugin-prettier": "^3.1.1",
-        "prettier": "^1.18.2"
+        "mocha": "^6.2.1",
+        "prettier": "^1.18.2",
+        "sinon": "^7.5.0"
     }
 }
