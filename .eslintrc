@@ -2,12 +2,20 @@
     "env": {
         "node": true,
         "commonjs": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
-    "extends": "eslint:recommended",
+    "plugins": [
+        "mocha"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:mocha/recommended"
+    ],
     "globals": {
     },
     "parserOptions": {
+        "sourceType": "module",
         "ecmaVersion": 2018
     },
     "rules": {
