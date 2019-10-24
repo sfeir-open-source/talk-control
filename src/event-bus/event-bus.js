@@ -15,6 +15,7 @@ export class EventBus {
      *
      * @param {string} key - Event key to which attach the callback
      * @param {*} callback - Function to call when key event is fired
+     * @throws Will throw an error if key is not specified
      */
     on(key, callback) {
         if (!key) {
@@ -33,6 +34,7 @@ export class EventBus {
      *
      * @param {string} key - Event key to fire
      * @param {any} data - Data to emit
+     * @throws Will throw an error if key is not specified
      */
     emit(key, data) {
         if (!key) {
@@ -59,6 +61,7 @@ export class EventBus {
      *
      * @param {string} key - Event key from which extract callbacks
      * @returns {any[]} - The array of callbacks attached on the event key
+     * @throws Will throw an error if key is not specified
      */
     getCallbacks(key) {
         if (!key) {
