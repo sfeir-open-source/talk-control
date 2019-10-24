@@ -5,7 +5,8 @@
     "scripts": {
         "start": "npx nodemon --exec babel-node src/index.js",
         "build": "babel src --out-dir ./dist --source-maps",
-        "test": "npx nyc mocha",
+        "test": "npx mocha",
+        "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
         "commit": "npx git-cz"
     },
@@ -51,8 +52,8 @@
     },
     "nyc": {
         "include": [
-            "test/**/*.spec.ts",
-            "test/**/.*spec.tsx"
+            "test/**/*.js",
+            "src/**/*.js"
         ],
         "require": [
             "@babel/register"
