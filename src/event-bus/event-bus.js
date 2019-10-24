@@ -1,8 +1,7 @@
 const NO_KEY_PROVIDED = 'No key provided';
 
 /**
- * Event bus implementation
- *
+ * @classdesc Event bus implementation
  * @class
  */
 export class EventBus {
