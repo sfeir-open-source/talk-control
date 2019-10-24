@@ -1,69 +1,70 @@
 {
-  "name": "talkcontrol",
-  "version": "0.1.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "npx nodemon --exec babel-node src/index.js",
-    "build": "babel src --out-dir ./dist --source-maps",
-    "test": "npx nyc mocha",
-    "lint": "eslint --fix . && echo 'Lint complete.'",
-    "commit": "npx git-cz"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TalkControl/talk-control.git"
-  },
-  "contributors": [
-    "Gildas Morel des Vallons <gildas2k@gmail.com>",
-    "Jean-François Garreau <jean.francois.garreau@gmail.com>"
-  ],
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/TalkControl/TalkControl/issues"
-  },
-  "homepage": "https://github.com/TalkControl/TalkControl#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4",
-    "@babel/node": "^7.6.3",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.6.2",
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
-    "chai": "^4.2.0",
-    "commitizen": "^4.0.3",
-    "cz-conventional-changelog": "^3.0.2",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-plugin-mocha": "^6.1.1",
-    "eslint-plugin-prettier": "^3.1.1",
-    "husky": "^3.0.9",
-    "mocha": "^6.2.1",
-    "nodemon": "^1.19.4",
-    "nyc": "^14.1.1",
-    "prettier": "^1.18.2",
-    "sinon": "^7.5.0"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "nyc": {
-    "include": [
-      "test/**/*.spec.ts",
-      "test/**/.*spec.tsx"
+    "name": "talkcontrol",
+    "version": "0.1.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "npx nodemon --exec babel-node src/index.js",
+        "build": "babel src --out-dir ./dist --source-maps",
+        "test": "npx nyc mocha",
+        "lint": "eslint --fix . && echo 'Lint complete.'",
+        "commit": "npx git-cz"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TalkControl/talk-control.git"
+    },
+    "contributors": [
+        "Gildas Morel des Vallons <gildas2k@gmail.com>",
+        "Jean-François Garreau <jean.francois.garreau@gmail.com>"
     ],
-    "require": [
-      "@babel/register"
-    ],
-    "reporter": [
-      "text",
-      "html"
-    ],
-    "all": true
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/TalkControl/TalkControl/issues"
+    },
+    "homepage": "https://github.com/TalkControl/TalkControl#readme",
+    "devDependencies": {
+        "@babel/cli": "^7.6.4",
+        "@babel/core": "^7.6.4",
+        "@babel/node": "^7.6.3",
+        "@babel/preset-env": "^7.6.3",
+        "@babel/register": "^7.6.2",
+        "@commitlint/cli": "^8.2.0",
+        "@commitlint/config-conventional": "^8.2.0",
+        "chai": "^4.2.0",
+        "commitizen": "^4.0.3",
+        "cz-conventional-changelog": "^3.0.2",
+        "eslint": "^6.5.1",
+        "eslint-config-prettier": "^6.4.0",
+        "eslint-plugin-mocha": "^6.1.1",
+        "eslint-plugin-prettier": "^3.1.1",
+        "husky": "^3.0.9",
+        "mocha": "^6.2.1",
+        "nodemon": "^1.19.4",
+        "nyc": "^14.1.1",
+        "prettier": "^1.18.2",
+        "pretty-quick": "^2.0.0",
+        "sinon": "^7.5.0"
+    },
+    "directories": {
+        "test": "test"
+    },
+    "nyc": {
+        "include": [
+            "test/**/*.spec.ts",
+            "test/**/.*spec.tsx"
+        ],
+        "require": [
+            "@babel/register"
+        ],
+        "reporter": [
+            "text",
+            "html"
+        ],
+        "all": true
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
     }
-  }
 }
