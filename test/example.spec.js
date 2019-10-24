@@ -1,5 +1,4 @@
-const chai = require('chai');
-const expect = chai.expect;
+import { expect } from 'chai';
 
 describe('smoke test', function() {
     it('checks equality', function() {

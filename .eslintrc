@@ -10,7 +10,8 @@
     ],
     "extends": [
         "eslint:recommended",
-        "plugin:mocha/recommended"
+        "plugin:mocha/recommended",
+        "prettier"
     ],
     "globals": {
     },

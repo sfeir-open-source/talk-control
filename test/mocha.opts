@@ -1,0 +1,4 @@
+# mocha.opts
+-r @babel/register
+--full-trace
+test/**/*.spec.js
