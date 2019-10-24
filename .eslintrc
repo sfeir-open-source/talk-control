@@ -6,12 +6,14 @@
         "mocha": true
     },
     "plugins": [
-        "mocha"
+        "mocha",
+        "jsdoc"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:mocha/recommended",
-        "prettier"
+        "prettier",
+        "plugin:jsdoc/recommended"
     ],
     "globals": {
     },
