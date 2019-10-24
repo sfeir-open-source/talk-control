@@ -18,6 +18,7 @@ pids
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+.nyc_output
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
