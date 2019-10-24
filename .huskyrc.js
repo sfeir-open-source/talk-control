@@ -1,6 +1,7 @@
 module.exports = {
     hooks: {
         'pre-commit': 'eslint --ext .js,.ts .',
-        'pre-push': 'npm test'
+        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+        'pre-push': 'npm test',
     }
 };

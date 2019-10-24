@@ -6,7 +6,8 @@
     "start": "npx nodemon -r ts-node/register src/index.ts",
     "build": "npx tsc",
     "test": "npx nyc mocha",
-    "lint": "eslint --ext .js,.ts --fix . && echo 'Lint complete.'"
+    "lint": "eslint --ext .js,.ts --fix . && echo 'Lint complete.'",
+    "commit": "npx git-cz"
   },
   "repository": {
     "type": "git",
@@ -22,12 +23,16 @@
   },
   "homepage": "https://github.com/TalkControl/TalkControl#readme",
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@types/chai": "^4.2.4",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.5",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "chai": "^4.2.0",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-mocha": "^6.1.1",
@@ -40,7 +45,6 @@
     "sinon": "^7.5.0",
     "source-map-support": "^0.5.13"
   },
-  "description": "",
   "directories": {
     "test": "test"
   },
@@ -49,7 +53,6 @@
     "tslint": "^5.20.0",
     "typescript": "^3.6.4"
   },
-  "author": "",
   "nyc": {
     "include": [
       "test/**/*.spec.ts",
@@ -63,5 +66,10 @@
       "html"
     ],
     "all": true
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
