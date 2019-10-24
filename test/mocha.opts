@@ -1,5 +1,4 @@
 # mocha.opts
--r ts-node/register
--r source-map-support/register
+-r @babel/register
 --full-trace
-test/**/*.spec.ts
+test/**/*.spec.js

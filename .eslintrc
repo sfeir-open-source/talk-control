@@ -6,19 +6,15 @@
         "mocha": true
     },
     "plugins": [
-        "mocha",
-        "@typescript-eslint"
+        "mocha"
     ],
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
         "plugin:mocha/recommended",
-        "prettier",
-        "prettier/@typescript-eslint"
+        "prettier"
     ],
     "globals": {
     },
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2018
