@@ -1,6 +1,6 @@
 module.exports = {
     'hooks': {
-        'pre-commit': 'npm run lint',
+        'pre-commit': 'eslint --ext .js,.ts',
         'pre-push': 'npm test'
     }
 }
