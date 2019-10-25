@@ -1,7 +1,8 @@
 import { expect } from 'chai';
+import itWorks from '../src/index';
 
 describe('smoke test', function() {
-    it('checks equality', function() {
-        expect(true).to.be.true;
+    it('checks itWorks method', function() {
+        expect(itWorks('app')).to.equal('app works !');
     });
 });
