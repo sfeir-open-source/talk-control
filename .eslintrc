@@ -3,7 +3,8 @@
         "node": true,
         "commonjs": true,
         "es6": true,
-        "mocha": true
+        "mocha": true,
+        "browser": true
     },
     "plugins": [
         "mocha",
