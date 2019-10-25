@@ -7,6 +7,12 @@ describe('EventBus', function() {
         eventBus = new EventBus();
     });
 
+    describe('constructor()', function() {
+        it('should have instantiated SocketEventBus', function() {
+            expect(eventBus).to.be.ok;
+        });
+    });
+
     describe('on()', function() {
         it('should throw an error', function() {
             expect(() => eventBus.on(undefined, () => 'test')).to.throw('No key provided');
