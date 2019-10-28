@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test Page for Reveal Socket</title>
+
+	<meta name="author" content="JefBinomed">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+	<link rel="stylesheet" href="reveal/css/reveal.css">
+	<link rel="stylesheet" href="reveal/css/theme/black.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+</head>
+<body>
+	<div class="reveal">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+       		<section data-markdown="assets/slides.md" data-separator="##==##" data-separator-vertical="##--##" data-separator-notes="^Notes:" ></section>
+		</div>
+
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="reveal/lib/js/head.min.js"></script>
+		<script src="reveal/js/reveal.js"></script>
+
+		<!-- Web Remote Control Imports -->
+		<!-- Dev -->
+		<script src="/.tmp/src/ensuite-client.js"></script>
+		<!-- Prod -->
+		<!--
+			<script src="dev/plugins/js/notes-client.js"></script>
+		-->
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+                width: 1280,
+	            height: 920,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/highlight/highlight.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+					//{ src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'reveal/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'reveal/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			// Configuration of Web Remote Control
+			EnsuiteClient.init({
+				devMode:true,
+				engine:{
+					name:'revealjs'
+				},
+				plugins : [
+					/*
+					* Dev
+					*/
+					{ src: '/.tmp/src/displays/sws-plugin-remote-pointer.js', async: true }
+					/*
+					* Prod
+					*/
+					/*{ src: 'prod/plugins/js/notes-client.js', async: true, callback: function() { RevealClientNotes.init(); } },
+					{ src: 'prod/plugins/plugins/sws-plugin-remote-pointer.js', async: true }*/
+				]
+			});
+
+		</script>
+	</body>
+</html>
