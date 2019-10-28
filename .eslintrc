@@ -3,15 +3,18 @@
         "node": true,
         "commonjs": true,
         "es6": true,
-        "mocha": true
+        "mocha": true,
+        "browser": true
     },
     "plugins": [
-        "mocha"
+        "mocha",
+        "jsdoc"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:mocha/recommended",
-        "prettier"
+        "prettier",
+        "plugin:jsdoc/recommended"
     ],
     "globals": {
     },
@@ -31,7 +34,8 @@
         ],
         "quotes": [
             "error",
-            "single"
+            "single",
+            "avoid-escape"
         ],
         "semi": [
             "error",
