@@ -1,4 +1,5 @@
 # mocha.opts
 -r @babel/register
+-r jsdom-global/register
 --full-trace
 test/**/*.spec.js
