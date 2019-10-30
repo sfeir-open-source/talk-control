@@ -3,6 +3,10 @@
 import { EventBusResolver } from './event-bus/event-bus-resolver';
 import { isUrlValid } from './helpers/helpers';
 
+/**
+ * @classdesc Class that handle the events from the remote client
+ * @class
+ */
 export class RemoteControl {
     constructor() {
         this.eventBus = new EventBusResolver({
@@ -11,6 +15,9 @@ export class RemoteControl {
         });
     }
 
+    /**
+     * Listen on event keys and display iframe when slideshow url is given
+     */
     init() {
         const inputPresentation = document.getElementById('inputPresentation');
         const validateUrl = document.getElementById('btnValidate');
@@ -21,11 +28,13 @@ export class RemoteControl {
 
             urlError.innerHTML = '';
 
+            // If url invalid, show an error
             if (!isUrlValid(url)) {
                 urlError.innerHTML = 'URL is not valid';
                 return;
             }
 
+            // Hide url fields and show iframe
             document.getElementById('form-group').style.display = 'none';
             iframe.style.display = '';
             iframe.src = url;
