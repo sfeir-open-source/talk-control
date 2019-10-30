@@ -38,11 +38,16 @@ describe('EventBusResolver', function() {
 
         it('shoud instantiate a Postmessage', function() {
             // Given
-            global.window = { addEventListener: () => undefined, postMessage: spy() };
+            // global.window = { addEventListener: () => undefined, postMessage: spy() };
+            stub(window, 'addEventListener');
+            spy(window, 'postMessage');
             // When
             resolver = new EventBusResolver({});
             // Then
             expect(resolver.postMessageBus).to.be.ok;
+
+            window.addEventListener.restore();
+            window.postMessage.restore();
         });
     });
 });

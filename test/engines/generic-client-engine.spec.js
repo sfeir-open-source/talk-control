@@ -1,11 +1,12 @@
 import { expect, assert } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { GenericEngine } from '../../src/engines/generic-client-engine';
 
 describe('GenericEngine', function() {
     let engine;
     before(function() {
-        global.window = { addEventListener: spy() };
+        // global.window = { addEventListener: spy() };
+        stub(window, 'addEventListener');
     });
 
     beforeEach(function() {
@@ -13,7 +14,8 @@ describe('GenericEngine', function() {
     });
 
     after(function() {
-        global.window = undefined;
+        // global.window = undefined;
+        window.addEventListener.restore();
     });
 
     describe('constructor()', function() {
@@ -31,6 +33,16 @@ describe('GenericEngine', function() {
             engine.receiveMessageFromRemote({ data: JSON.stringify(data) });
             // Then
             assert(engine.forwardMessageFromRemote.calledOnceWith(data));
+        });
+
+        it("shouldn't call forwardMessageFromRemote()", function() {
+            // Given
+            const data = 'test';
+            engine.forwardMessageFromRemote = spy();
+            // When
+            engine.receiveMessageFromRemote({ data });
+            // Then
+            assert(engine.forwardMessageFromRemote.notCalled);
         });
     });
 });

@@ -5,30 +5,27 @@ import { RevealEngine } from '../../src/engines/revealjs-client-engine';
 describe('RevealEngine', function() {
     let engine;
     beforeEach(function() {
-        global.window = {
-            addEventListener: spy(),
-            parent: {
-                postMessage: spy()
-            },
-            Reveal: {
-                getCurrentSlide: stub(),
-                configure: spy(),
-                next: spy(),
-                up: spy(),
-                down: spy(),
-                left: spy(),
-                right: spy(),
-                slide: spy(),
-                getIndices: stub(),
-                addEventListener: spy()
-            }
+        window.Reveal = {
+            getCurrentSlide: stub(),
+            configure: spy(),
+            next: spy(),
+            up: spy(),
+            down: spy(),
+            left: spy(),
+            right: spy(),
+            slide: spy(),
+            getIndices: stub(),
+            addEventListener: spy()
         };
+        stub(window, 'addEventListener');
+        stub(window.parent, 'postMessage');
 
         engine = new RevealEngine();
     });
 
-    after(function() {
-        global.window = undefined;
+    afterEach(function() {
+        window.addEventListener.restore();
+        window.parent.postMessage.restore();
     });
 
     describe('constructor()', function() {
@@ -158,8 +155,8 @@ describe('RevealEngine', function() {
         it('should have set listeners on Reveal', function() {
             // Given
             const callback = spy();
-            window.top = 15;
-            window.self = 10;
+            stub(window, 'top').get(() => 15);
+            stub(window, 'self').get(() => 10);
             // When
             engine.initEngineListener(callback);
             // Then
@@ -187,6 +184,8 @@ describe('RevealEngine', function() {
             expect(engine.mapPosition).to.be.an('object');
             expect(engine.mapPosition['0-0']).to.be.equals(1);
             expect(engine.mapPosition['4-1']).to.be.undefined;
+
+            document.querySelectorAll.restore();
         });
     });
 });
