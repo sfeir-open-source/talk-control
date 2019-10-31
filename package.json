@@ -81,7 +81,7 @@
         "@src": "src",
         "@event-bus": "src/common/event-bus",
         "@helpers": "src/common/helpers",
-        "@engines": "src/client/engines",
+        "@client": "src/client",
         "@remote-control": "src/remote-control"
     }
 }
