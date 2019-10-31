@@ -1,4 +1,4 @@
-import { EventBus } from '../event-bus.js';
+import { EventBus } from '@event-bus/event-bus.js';
 import socketIO, { Socket } from 'socket.io';
 
 /**
