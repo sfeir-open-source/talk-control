@@ -1,3 +1,5 @@
+'use strict';
+
 import 'module-alias/register';
 import { assert, expect } from 'chai';
 import { spy } from 'sinon';

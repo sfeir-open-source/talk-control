@@ -1,3 +1,5 @@
+'use strict';
+
 import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { SocketEventBusClient } from '@event-bus/websockets/event-bus-websockets-client';

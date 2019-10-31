@@ -1,3 +1,5 @@
+'use strict';
+
 import { EventBus } from '@event-bus/event-bus.js';
 
 /**

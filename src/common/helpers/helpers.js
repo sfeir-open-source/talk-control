@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Return true if url is well formated
  *

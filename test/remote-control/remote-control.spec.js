@@ -1,8 +1,11 @@
+'use strict';
+
 import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { RemoteControl } from '@remote-control/remote-control';
+
 describe('', function() {
     let remoteControl;
 
