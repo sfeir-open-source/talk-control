@@ -1,7 +1,7 @@
 import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { RevealEngine } from '@engines/revealjs-client-engine';
+import { RevealEngine } from '@client/engines/revealjs-client-engine';
 
 describe('RevealEngine', function() {
     let engine;

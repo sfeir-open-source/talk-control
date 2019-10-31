@@ -1,7 +1,7 @@
 import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { GenericEngine } from '@engines/generic-client-engine';
+import { GenericEngine } from '@client/engines/generic-client-engine';
 
 describe('GenericEngine', function() {
     let engine;
