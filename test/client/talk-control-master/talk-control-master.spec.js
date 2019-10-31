@@ -29,23 +29,21 @@ describe('', function() {
     });
 
     describe('init()', function() {
-        let inputPresentation, btnValidate, iframe, urlError, formGroup;
+        let inputPresentation, btnValidate, stageFrame, urlError;
         let eventBus;
 
         beforeEach(function() {
             // Display mock
             inputPresentation = { value: 'http://test.com:8080', addEventListener: stub() };
             btnValidate = { addEventListener: stub() };
-            iframe = { style: { display: 'none' }, src: '' };
-            urlError = { innerHTML: '' };
-            formGroup = { style: { display: '' } };
+            stageFrame = { src: '', classList: { add: () => (stageFrame.hidden = true), remove: () => (stageFrame.hidden = false) }, hidden: true };
+            urlError = { classList: { add: () => (urlError.hidden = true), remove: () => (urlError.hidden = false) }, hidden: true };
 
             const getElementById = stub(document, 'getElementById');
             getElementById.withArgs('inputPresentation').returns(inputPresentation);
             getElementById.withArgs('btnValidate').returns(btnValidate);
-            getElementById.withArgs('stageFrame').returns(iframe);
+            getElementById.withArgs('stageFrame').returns(stageFrame);
             getElementById.withArgs('urlError').returns(urlError);
-            getElementById.withArgs('form-group').returns(formGroup);
 
             // Event mock
             stub(talkControlMaster.eventBus, 'emit');
@@ -64,9 +62,9 @@ describe('', function() {
             talkControlMaster.init();
             btnCallback();
             // Then
-            expect(formGroup.style.display).to.be.equals('none');
-            expect(iframe.style.display).to.be.equals('');
-            expect(iframe.src).to.be.equals(inputPresentation.value);
+            expect(urlError.hidden).to.be.true;
+            expect(stageFrame.hidden).to.be.false;
+            expect(stageFrame.src).to.be.equals(inputPresentation.value);
         });
 
         it('should have displayed the iframe when enter is pushed on inputPresentation', function() {
@@ -77,9 +75,8 @@ describe('', function() {
             talkControlMaster.init();
             inputCallback({ keyCode: 13 });
             // Then
-            expect(formGroup.style.display).to.be.equals('none');
-            expect(iframe.style.display).to.be.equals('');
-            expect(iframe.src).to.be.equals(inputPresentation.value);
+            expect(stageFrame.hidden).to.be.false;
+            expect(stageFrame.src).to.be.equals(inputPresentation.value);
         });
 
         it('should not displayed the iframe when another key is pushed on inputPresentation', function() {
@@ -90,9 +87,8 @@ describe('', function() {
             talkControlMaster.init();
             inputCallback({ keyCode: 12 });
             // Then
-            expect(formGroup.style.display).to.be.equals('');
-            expect(iframe.style.display).to.be.equals('none');
-            expect(iframe.src).to.be.equals('');
+            expect(stageFrame.hidden).to.be.true;
+            expect(stageFrame.src).to.be.equals('');
         });
 
         it('should have shown an error because there is no URL given', function() {
@@ -104,8 +100,8 @@ describe('', function() {
             talkControlMaster.init();
             btnCallback();
             // Then
-            expect(urlError.innerHTML).to.be.equals('URL is not valid');
-            expect(iframe.style.display).to.be.equals('none');
+            expect(urlError.hidden).to.be.false;
+            expect(stageFrame.hidden).to.be.true;
         });
 
         it('should fire "up" event', function() {
