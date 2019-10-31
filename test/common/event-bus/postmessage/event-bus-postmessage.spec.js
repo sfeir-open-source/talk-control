@@ -3,15 +3,15 @@
 import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { PostMessageEventBus } from '@event-bus/postmessage/event-bus-postmessage';
+import { EventBusPostMessage } from '@event-bus/postmessage/event-bus-postmessage';
 
-describe('PostMessageEventBus', function() {
+describe('EventBusPostMessage', function() {
     let eventBus;
     beforeEach(function() {
         // global.window = { addEventListener: () => undefined, postMessage: spy() };
         stub(window, 'addEventListener');
         spy(window, 'postMessage');
-        eventBus = new PostMessageEventBus();
+        eventBus = new EventBusPostMessage();
     });
 
     afterEach(function() {

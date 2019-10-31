@@ -7,7 +7,7 @@ import { EventBus } from '../event-bus.js';
  * @class
  * @augments EventBus
  */
-export class PostMessageEventBus extends EventBus {
+export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
      */

@@ -1,8 +1,8 @@
 'use strict';
 
-import { SocketEventBus } from '../websockets/event-bus-websockets.js';
-import { SocketEventBusClient } from '../websockets/event-bus-websockets-client.js';
-import { PostMessageEventBus } from '../postmessage/event-bus-postmessage.js';
+import { SocketEventBus } from './websockets/event-bus-websockets.js';
+import { SocketEventBusClient } from './websockets/event-bus-websockets-client.js';
+import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 
 /**
  * @classdesc Instantiate event buses based on params given
@@ -19,7 +19,7 @@ export class EventBusResolver {
         }
 
         if (typeof window != 'undefined') {
-            this.postMessageBus = new PostMessageEventBus();
+            this.postMessageBus = new EventBusPostMessage();
         }
     }
 }
