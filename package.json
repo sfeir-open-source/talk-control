@@ -74,6 +74,7 @@
     },
     "dependencies": {
         "module-alias": "^2.2.2",
+        "parcel-bundler": "^1.12.4",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0"
     },
