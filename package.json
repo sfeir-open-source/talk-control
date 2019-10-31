@@ -8,7 +8,8 @@
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
-        "commit": "npx git-cz"
+        "commit": "npx git-cz",
+        "tc-master": "npx parcel src/client/talk-control-master/index.html"
     },
     "repository": {
         "type": "git",
