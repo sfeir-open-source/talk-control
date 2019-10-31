@@ -6,7 +6,7 @@ const NO_KEY_PROVIDED = 'No key provided';
  * @classdesc Event bus implementation
  * @class
  */
-export class EventBus {
+export default class EventBus {
     constructor() {
         this.callBacks = {};
     }
