@@ -23,21 +23,17 @@ export class TalkControlMaster {
         const validateUrl = document.getElementById('btnValidate');
         const displaySlideshow = () => {
             const url = inputPresentation.value;
-            const iframe = document.getElementById('stageFrame');
-            const urlError = document.getElementById('urlError');
-
-            urlError.innerHTML = '';
 
             // If url invalid, show an error
+            document.getElementById('urlError').classList.add('is-hidden');
             if (!isUrlValid(url)) {
-                urlError.innerHTML = 'URL is not valid';
+                document.getElementById('stageFrame').classList.add('is-hidden');
+                document.getElementById('urlError').classList.remove('is-hidden');
                 return;
             }
 
-            // Hide url fields and show iframe
-            document.getElementById('form-group').style.display = 'none';
-            iframe.style.display = '';
-            iframe.src = url;
+            document.getElementById('stageFrame').src = url;
+            document.getElementById('stageFrame').classList.remove('is-hidden');
         };
 
         validateUrl.addEventListener('click', displaySlideshow);
