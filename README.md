@@ -1,6 +1,28 @@
 # TalkControl
 
-## About the folders structure
+## Naming match with WebRemoteControlSpeaker
+
+-   **ensuite-node => server**
+
+    The server handling states, the source of truth
+
+-   **ensuite-front => talk-control-master**
+
+    The webpage to take control of the presentation
+
+-   **ensuite-client => talk-control-slave**
+
+    The script to include into the presentation to interact with talk-control-master
+
+-   **layouts => layouts**
+
+    The layouts: on stage (what the public see), presenter (what the presenter see)
+
+-   **engines => engines**
+
+    The engines to interact with revealjs, etc...
+
+## The folders structure
 
 -   **src**
 
