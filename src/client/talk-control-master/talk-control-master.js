@@ -1,13 +1,13 @@
 'use strict';
 
-import EventBusPostMessage from '../../common/event-bus/postmessage/event-bus-postmessage.js';
+import { EventBusPostMessage } from '../../common/event-bus/postmessage/event-bus-postmessage.js';
 import { isUrlValid } from '../../common/helpers/helpers.js';
 
 /**
  * @classdesc Class that handle the events from the remote client
  * @class
  */
-export default class TalkControlMaster {
+export class TalkControlMaster {
     /**
      * Class constructor
      */

@@ -1,13 +1,13 @@
 'use strict';
 
-import EventBus from '../event-bus.js';
+import { EventBus } from '../event-bus.js';
 
 /**
  * @classdesc Event bus implementation that fire events through window
  * @class
  * @augments EventBus
  */
-export default class EventBusPostMessage extends EventBus {
+export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
      */
