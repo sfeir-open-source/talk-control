@@ -16,7 +16,8 @@
     },
     "contributors": [
         "Gildas Morel des Vallons <gildas2k@gmail.com>",
-        "Jean-François Garreau <jean.francois.garreau@gmail.com>"
+        "Jean-François Garreau <jean.francois.garreau@gmail.com>",
+        "Tristan Elain <elain.t@sfeir.com>"
     ],
     "license": "Apache-2.0",
     "bugs": {
