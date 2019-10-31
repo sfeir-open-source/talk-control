@@ -73,7 +73,7 @@ export class RemoteControl {
                     break;
             }
             if (action) {
-                this.eventBus.socketBus.emit('movement', { data: action });
+                this.eventBus.emit('movement', { data: action });
             }
         });
     }
