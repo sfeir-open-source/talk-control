@@ -1,8 +1,7 @@
 'use strict';
 
-import 'module-alias/register';
-import { EventBusResolver } from '@event-bus/event-bus-resolver';
-import { isUrlValid } from '@helpers/helpers';
+import { EventBusPostMessage } from '../../common/event-bus/postmessage/event-bus-postmessage.js';
+import { isUrlValid } from '../../common/helpers/helpers.js';
 
 /**
  * @classdesc Class that handle the events from the remote client
@@ -10,7 +9,7 @@ import { isUrlValid } from '@helpers/helpers';
  */
 export class RemoteControl {
     constructor() {
-        this.eventBus = new EventBusResolver({
+        this.eventBus = new EventBusPostMessage({
             client: true,
             server: `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
         });
@@ -74,7 +73,7 @@ export class RemoteControl {
                     break;
             }
             if (action) {
-                this.eventBus.socketBus.emit('movement', { data: action });
+                this.eventBus.emit('movement', { data: action });
             }
         });
     }

@@ -4,7 +4,7 @@ import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
-import { RemoteControl } from '@client/remote-control/remote-control';
+import { RemoteControl } from '@client/talk-control-master/talk-control-master';
 
 describe('', function() {
     let remoteControl;
@@ -30,7 +30,7 @@ describe('', function() {
 
     describe('init()', function() {
         let inputPresentation, btnValidate, iframe, urlError, formGroup;
-        let socketBus;
+        let eventBus;
 
         beforeEach(function() {
             // Display mock
@@ -48,8 +48,8 @@ describe('', function() {
             getElementById.withArgs('form-group').returns(formGroup);
 
             // Event mock
-            socketBus = remoteControl.eventBus.socketBus;
-            stub(remoteControl.eventBus.socketBus, 'emit');
+            stub(remoteControl.eventBus, 'emit');
+            eventBus = remoteControl.eventBus;
         });
 
         afterEach(function() {
@@ -116,7 +116,7 @@ describe('', function() {
             remoteControl.init();
             document.dispatchEvent(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('movement', { data: 'up' }));
+            assert(eventBus.emit.calledOnceWith('movement', { data: 'up' }));
         });
 
         it('should fire "down" event', function() {
@@ -127,7 +127,7 @@ describe('', function() {
             remoteControl.init();
             document.dispatchEvent(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('movement', { data: 'down' }));
+            assert(eventBus.emit.calledOnceWith('movement', { data: 'down' }));
         });
 
         it('should fire "left" event', function() {
@@ -138,7 +138,7 @@ describe('', function() {
             remoteControl.init();
             document.dispatchEvent(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('movement', { data: 'left' }));
+            assert(eventBus.emit.calledOnceWith('movement', { data: 'left' }));
         });
 
         it('should fire "right" event', function() {
@@ -149,7 +149,7 @@ describe('', function() {
             remoteControl.init();
             document.dispatchEvent(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('movement', { data: 'right' }));
+            assert(eventBus.emit.calledOnceWith('movement', { data: 'right' }));
         });
 
         it("shouldn't fire any event", function() {
@@ -160,7 +160,7 @@ describe('', function() {
             remoteControl.init();
             document.dispatchEvent(event);
             // Then
-            assert(socketBus.emit.notCalled);
+            assert(eventBus.emit.notCalled);
         });
     });
 });

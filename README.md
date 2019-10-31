@@ -40,9 +40,13 @@
 
             Handle several layouts for different purposes : on-stage layout, presenter layout, etc... Each layout is a set of components (see above)
 
-        -   **remote-control**
+        -   **talk-control-master**
 
             Handle the logic to take control of the slide show (interaction with iframe and more...)
+
+        -   **talk-control-slave**
+
+            Handle the logic to receive and send back events to talk-control-master
 
     -   **common**
 
