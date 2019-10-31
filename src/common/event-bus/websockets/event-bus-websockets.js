@@ -19,23 +19,37 @@ export class SocketEventBus extends EventBus {
         this.io.on('connection', socket => {
             console.log('### connection');
             this.sockets.push(socket);
+            // Subscribe new socket on existing keys
+            for (const key in this.callBacks) {
+                this.on(key, null, socket);
+            }
+            // When disconnected, remove socket from the array
+            socket.on('disconnect', () => {
+                console.log('### disconnected');
+                const index = this.sockets.indexOf(socket);
+                this.sockets.splice(index, 1);
+            });
         });
     }
 
     /**
-     * Register a callback on a key locally and for each socket connected
+     * Register a callback on a key locally and for each socket connected or a specific one
      *
      * @param {string} key - Event key to which attach the callback and attach each socket
      * @param {*} callback - Function to call when key event is fired
+     * @param {Socket} socket - Specific socket to attach the key to
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback) {
-        super.on(key, callback);
-        this.sockets.forEach(socket => {
-            socket.on(key, message => {
-                this.emit(key, message, socket);
-            });
-        });
+    on(key, callback, socket) {
+        if (callback) {
+            super.on(key, callback);
+        }
+        const socketCallback = message => this.emit(key, message, socket);
+        if (socket) {
+            socket.on(key, socketCallback);
+        } else {
+            this.sockets.forEach(socket => socket.on(key, socketCallback));
+        }
     }
 
     /**

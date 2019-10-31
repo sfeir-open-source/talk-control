@@ -30,6 +30,21 @@ describe('SocketEventBus', function() {
             assert(socketB.on.calledOnceWith(key));
             assert(socketC.on.calledOnceWith(key));
         });
+
+        it('should add key only on given socket', function() {
+            // Given
+            const socketA = { on: spy() },
+                socketB = { on: spy() },
+                socketC = { on: spy() };
+            const key = 'test';
+            eventBus.sockets = [socketA, socketB];
+            // When
+            eventBus.on(key, null, socketC);
+            // Then
+            assert(socketA.on.notCalled);
+            assert(socketB.on.notCalled);
+            assert(socketC.on.calledOnceWith(key));
+        });
     });
 
     describe('emit()', function() {
