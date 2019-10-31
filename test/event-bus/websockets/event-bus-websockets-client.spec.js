@@ -13,6 +13,10 @@ describe('SocketEventBusClient', function() {
         eventBus = new SocketEventBusClient();
     });
 
+    after(function() {
+        socketIO.connect.restore();
+    });
+
     describe('constructor()', function() {
         it('should have instantiated SocketEventBusClient', function() {
             expect(eventBus).to.be.ok;

@@ -27,7 +27,7 @@ export class SocketEventBusClient extends EventBus {
         super.on(key, callback);
         this.sockets.forEach(socket => {
             socket.on(key, message => {
-                this.emit(key, message, socket);
+                this.emit(key, message);
             });
         });
     }

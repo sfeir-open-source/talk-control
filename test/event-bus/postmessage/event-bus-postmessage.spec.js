@@ -1,16 +1,19 @@
 import { expect, assert } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { PostMessageEventBus } from '../../../src/event-bus/postmessage/event-bus-postmessage';
 
 describe('PostMessageEventBus', function() {
     let eventBus;
     beforeEach(function() {
-        global.window = { addEventListener: () => undefined, postMessage: spy() };
+        // global.window = { addEventListener: () => undefined, postMessage: spy() };
+        stub(window, 'addEventListener');
+        spy(window, 'postMessage');
         eventBus = new PostMessageEventBus();
     });
 
-    after(function() {
-        global.window = undefined;
+    afterEach(function() {
+        window.addEventListener.restore();
+        window.postMessage.restore();
     });
 
     describe('constructor()', function() {
