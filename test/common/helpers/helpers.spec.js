@@ -1,5 +1,6 @@
+import 'module-alias/register';
 import { assert } from 'chai';
-import { isUrlValid } from '../../src/common/helpers/helpers';
+import { isUrlValid } from '@helpers/helpers';
 
 describe('Helpers', function() {
     describe('isUrlValid', function() {

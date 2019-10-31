@@ -1,6 +1,7 @@
+import 'module-alias/register';
 import { assert, expect } from 'chai';
 import { spy } from 'sinon';
-import { SocketEventBus } from '../../../src/common/event-bus/websockets/event-bus-websockets';
+import { SocketEventBus } from '@event-bus/websockets/event-bus-websockets';
 
 describe('SocketEventBus', function() {
     let eventBus = new SocketEventBus();
