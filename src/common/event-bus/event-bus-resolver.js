@@ -1,8 +1,8 @@
 'use strict';
 
-import { SocketEventBus } from './websockets/event-bus-websockets';
-import { SocketEventBusClient } from './websockets/event-bus-websockets-client';
-import { PostMessageEventBus } from './postmessage/event-bus-postmessage';
+import { SocketEventBus } from '../websockets/event-bus-websockets.js';
+import { SocketEventBusClient } from '../websockets/event-bus-websockets-client.js';
+import { PostMessageEventBus } from '../postmessage/event-bus-postmessage.js';
 
 /**
  * @classdesc Instantiate event buses based on params given
