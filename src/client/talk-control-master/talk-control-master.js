@@ -7,7 +7,7 @@ import { isUrlValid } from '../../common/helpers/helpers.js';
  * @classdesc Class that handle the events from the remote client
  * @class
  */
-export class RemoteControl {
+export class TalkControlMaster {
     constructor() {
         this.eventBus = new EventBusPostMessage({
             client: true,

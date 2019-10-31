@@ -4,10 +4,10 @@ import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
-import { RemoteControl } from '@client/talk-control-master/talk-control-master';
+import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
 
 describe('', function() {
-    let remoteControl;
+    let talkControlMaster;
 
     before(function() {
         // Needed otherwise there will be an error because there is no server to connect to
@@ -15,7 +15,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        remoteControl = new RemoteControl();
+        talkControlMaster = new TalkControlMaster();
     });
 
     after(function() {
@@ -23,8 +23,8 @@ describe('', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated RemoteControl', function() {
-            expect(remoteControl).to.be.ok;
+        it('should have instantiated TalkControlMaster', function() {
+            expect(talkControlMaster).to.be.ok;
         });
     });
 
@@ -48,8 +48,8 @@ describe('', function() {
             getElementById.withArgs('form-group').returns(formGroup);
 
             // Event mock
-            stub(remoteControl.eventBus, 'emit');
-            eventBus = remoteControl.eventBus;
+            stub(talkControlMaster.eventBus, 'emit');
+            eventBus = talkControlMaster.eventBus;
         });
 
         afterEach(function() {
@@ -61,7 +61,7 @@ describe('', function() {
             let btnCallback;
             btnValidate.addEventListener = (_, callback) => (btnCallback = callback);
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             btnCallback();
             // Then
             expect(formGroup.style.display).to.be.equals('none');
@@ -74,7 +74,7 @@ describe('', function() {
             let inputCallback;
             inputPresentation.addEventListener = (_, callback) => (inputCallback = callback);
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             inputCallback({ keyCode: 13 });
             // Then
             expect(formGroup.style.display).to.be.equals('none');
@@ -87,7 +87,7 @@ describe('', function() {
             let inputCallback;
             inputPresentation.addEventListener = (_, callback) => (inputCallback = callback);
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             inputCallback({ keyCode: 12 });
             // Then
             expect(formGroup.style.display).to.be.equals('');
@@ -101,7 +101,7 @@ describe('', function() {
             btnValidate.addEventListener = (_, callback) => (btnCallback = callback);
             inputPresentation.value = '';
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             btnCallback();
             // Then
             expect(urlError.innerHTML).to.be.equals('URL is not valid');
@@ -113,7 +113,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowUp';
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
             assert(eventBus.emit.calledOnceWith('movement', { data: 'up' }));
@@ -124,7 +124,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowDown';
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
             assert(eventBus.emit.calledOnceWith('movement', { data: 'down' }));
@@ -135,7 +135,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowLeft';
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
             assert(eventBus.emit.calledOnceWith('movement', { data: 'left' }));
@@ -146,7 +146,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowRight';
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
             assert(eventBus.emit.calledOnceWith('movement', { data: 'right' }));
@@ -157,7 +157,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = undefined;
             // When
-            remoteControl.init();
+            talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
             assert(eventBus.emit.notCalled);
