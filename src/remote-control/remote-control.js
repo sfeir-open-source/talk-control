@@ -1,7 +1,7 @@
 'use-strict';
 
-import { EventBusResolver } from './event-bus/event-bus-resolver';
-import { isUrlValid } from './helpers/helpers';
+import { EventBusResolver } from '../common/event-bus/event-bus-resolver';
+import { isUrlValid } from '../common/helpers/helpers';
 
 /**
  * @classdesc Class that handle the events from the remote client

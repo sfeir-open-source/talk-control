@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { EventBus } from '../../src/event-bus/event-bus';
+import { EventBus } from '../../src/common/event-bus/event-bus';
 
 describe('EventBus', function() {
     let eventBus = new EventBus();

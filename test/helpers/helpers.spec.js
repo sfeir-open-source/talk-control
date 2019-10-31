@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { isUrlValid } from '../../src/helpers/helpers';
+import { isUrlValid } from '../../src/common/helpers/helpers';
 
 describe('Helpers', function() {
     describe('isUrlValid', function() {

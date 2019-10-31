@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { GenericEngine } from '../../src/engines/generic-client-engine';
+import { GenericEngine } from '../../src/client/engines/generic-client-engine';
 
 describe('GenericEngine', function() {
     let engine;

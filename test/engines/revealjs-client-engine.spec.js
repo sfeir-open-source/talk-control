@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { RevealEngine } from '../../src/engines/revealjs-client-engine';
+import { RevealEngine } from '../../src/client/engines/revealjs-client-engine';
 
 describe('RevealEngine', function() {
     let engine;
