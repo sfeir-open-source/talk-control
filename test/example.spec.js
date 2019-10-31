@@ -1,5 +1,6 @@
+import 'module-alias/register';
 import { expect } from 'chai';
-import itWorks from '../src/index';
+import itWorks from '@src/index';
 
 describe('smoke test', function() {
     it('checks itWorks method', function() {
