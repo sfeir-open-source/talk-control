@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai';
-import { SocketEventBusClient } from '../../../src/event-bus/websockets/event-bus-websockets-client';
+import { SocketEventBusClient } from '../../../src/common/event-bus/websockets/event-bus-websockets-client';
 import { stub, spy } from 'sinon';
 import socketIO from 'socket.io-client';
 

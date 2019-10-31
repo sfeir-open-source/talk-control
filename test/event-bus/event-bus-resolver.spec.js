@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver } from '../../src/event-bus/event-bus-resolver';
-import { SocketEventBusClient } from '../../src/event-bus/websockets/event-bus-websockets-client';
+import { EventBusResolver } from '../../src/common/event-bus/event-bus-resolver';
+import { SocketEventBusClient } from '../../src/common/event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 
 describe('EventBusResolver', function() {

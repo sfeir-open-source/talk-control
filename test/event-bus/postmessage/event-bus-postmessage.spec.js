@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
-import { PostMessageEventBus } from '../../../src/event-bus/postmessage/event-bus-postmessage';
+import { PostMessageEventBus } from '../../../src/common/event-bus/postmessage/event-bus-postmessage';
 
 describe('PostMessageEventBus', function() {
     let eventBus;

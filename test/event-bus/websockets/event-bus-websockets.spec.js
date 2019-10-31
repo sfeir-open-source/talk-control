@@ -1,6 +1,6 @@
 import { assert, expect } from 'chai';
 import { spy } from 'sinon';
-import { SocketEventBus } from '../../../src/event-bus/websockets/event-bus-websockets';
+import { SocketEventBus } from '../../../src/common/event-bus/websockets/event-bus-websockets';
 
 describe('SocketEventBus', function() {
     let eventBus = new SocketEventBus();
