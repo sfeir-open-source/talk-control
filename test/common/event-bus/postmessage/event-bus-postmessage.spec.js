@@ -52,7 +52,7 @@ describe('EventBusPostMessage', function() {
             };
             eventBus.callBacks = callbacks;
             // When
-            eventBus._receiveMessageWindow({ data: JSON.stringify(message) });
+            eventBus._receiveMessageWindow({ data: message });
             // Then
             assert(callbacks[key][0].calledOnceWith(message), `callbacks[${key}][0] wasn't called with "${message}"`);
             assert(callbacks[key][1].calledOnceWith(message), `callbacks[${key}][1] wasn't called with "${message}"`);

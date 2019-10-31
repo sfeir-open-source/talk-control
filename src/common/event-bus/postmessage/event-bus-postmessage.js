@@ -41,14 +41,14 @@ export class EventBusPostMessage extends EventBus {
      * @param {MessageEvent} message - message to forward
      */
     _receiveMessageWindow(message) {
-        if (!message || !message.data || message.data.length === 0) {
+        if (!message || !message.data) {
             return;
         }
-        if (message.data.charAt(0) === '{' && message.data.charAt(message.data.length - 1) === '}') {
-            message = JSON.parse(message.data);
-            const callBacks = super.getCallbacks(message.type);
+
+        if (typeof message.data === 'object' && message.data.type) {
+            const callBacks = super.getCallbacks(message.data.type);
             if (callBacks && callBacks.length > 0) {
-                callBacks.forEach(callback => callback(message));
+                callBacks.forEach(callback => callback(message.data));
             }
         }
     }
