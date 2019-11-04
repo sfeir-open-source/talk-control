@@ -56,11 +56,11 @@
 
             -   **postmessage**
 
-                Fire and receive message between window and iframe
+                Send and receive messages between window and iframe
 
             -   **websockets**
 
-                Fire and receive message through websockets (socket.io)
+                Send and receive messages through websockets (socket.io)
 
         -   **helpers**
 
