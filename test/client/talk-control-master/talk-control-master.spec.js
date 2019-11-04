@@ -30,7 +30,7 @@ describe('', function() {
 
     describe('init()', function() {
         let inputPresentation, btnValidate, stageFrame, urlError;
-        let eventBus;
+        let socketBus;
 
         beforeEach(function() {
             // Display mock
@@ -46,8 +46,8 @@ describe('', function() {
             getElementById.withArgs('urlError').returns(urlError);
 
             // Event mock
-            stub(talkControlMaster.eventBus, 'emit');
-            eventBus = talkControlMaster.eventBus;
+            stub(talkControlMaster.eventBus.socketBus, 'emit');
+            socketBus = talkControlMaster.eventBus.socketBus;
         });
 
         afterEach(function() {
@@ -112,7 +112,7 @@ describe('', function() {
             talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
-            assert(eventBus.emit.calledOnceWith('movement', { data: 'up' }));
+            assert(socketBus.emit.calledOnceWith('movement', { data: 'up' }));
         });
 
         it('should fire "down" event', function() {
@@ -123,7 +123,7 @@ describe('', function() {
             talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
-            assert(eventBus.emit.calledOnceWith('movement', { data: 'down' }));
+            assert(socketBus.emit.calledOnceWith('movement', { data: 'down' }));
         });
 
         it('should fire "left" event', function() {
@@ -134,7 +134,7 @@ describe('', function() {
             talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
-            assert(eventBus.emit.calledOnceWith('movement', { data: 'left' }));
+            assert(socketBus.emit.calledOnceWith('movement', { data: 'left' }));
         });
 
         it('should fire "right" event', function() {
@@ -145,7 +145,7 @@ describe('', function() {
             talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
-            assert(eventBus.emit.calledOnceWith('movement', { data: 'right' }));
+            assert(socketBus.emit.calledOnceWith('movement', { data: 'right' }));
         });
 
         it("shouldn't fire any event", function() {
@@ -156,7 +156,7 @@ describe('', function() {
             talkControlMaster.init();
             document.dispatchEvent(event);
             // Then
-            assert(eventBus.emit.notCalled);
+            assert(socketBus.emit.notCalled);
         });
     });
 });

@@ -1,7 +1,7 @@
 'use strict';
 
-import { EventBusPostMessage } from '../../common/event-bus/postmessage/event-bus-postmessage.js';
-import { isUrlValid } from '../../common/helpers/helpers.js';
+import { EventBusResolver } from '@event-bus/event-bus-resolver';
+import { isUrlValid } from '@helpers/helpers.js';
 
 /**
  * @classdesc Class that handle the events from the remote client
@@ -12,7 +12,10 @@ export class TalkControlMaster {
      * Class constructor
      */
     constructor() {
-        this.eventBus = new EventBusPostMessage();
+        this.eventBus = new EventBusResolver({
+            client: true,
+            server: `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+        });
     }
 
     /**
@@ -69,7 +72,9 @@ export class TalkControlMaster {
                     break;
             }
             if (action) {
-                this.eventBus.emit('movement', { data: action });
+                this.eventBus.socketBus.emit('movement', { data: action });
+                // ! Here not to broke previous implementation but not the right place to do it
+                this.eventBus.postMessageBus.emit('movement', { data: action });
             }
         });
     }

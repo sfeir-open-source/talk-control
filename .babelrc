@@ -1,3 +1,17 @@
 {
-    "presets": ["@babel/preset-env"]
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+        [
+            "module-resolver",
+            {
+                "alias": {
+                    "@src": "./src",
+                    "@event-bus": "./src/common/event-bus",
+                    "@helpers": "./src/common/helpers",
+                    "@client": "./src/client",
+                    "@remote-control": "./src/remote-control"
+                }
+            }
+        ]
+    ]
 }
