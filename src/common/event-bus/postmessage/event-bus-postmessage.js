@@ -41,7 +41,7 @@ export class EventBusPostMessage extends EventBus {
      * @param {MessageEvent} message - message to forward
      */
     _receiveMessageWindow(message) {
-        if (!message || !message.data) {
+        if (!message || !message.data || typeof message.data !== 'object') {
             return;
         }
 
