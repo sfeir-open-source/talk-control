@@ -71,29 +71,5 @@ describe('EventBusPostMessage', function() {
             // Then
             expect(callback.called).to.be.false;
         });
-
-        it('should do nothing because message.data is undefined', function() {
-            // Given
-            const key = 'test';
-            const callback = spy();
-
-            eventBus.callBacks = { [key]: [callback] };
-            // When
-            eventBus._receiveMessageWindow({ key });
-            // Then
-            expect(callback.called).to.be.false;
-        });
-
-        it('should do nothing because message.data is not an object', function() {
-            // Given
-            const key = 'test';
-            const callback = spy();
-
-            eventBus.callBacks = { [key]: [callback] };
-            // When
-            eventBus._receiveMessageWindow({ data: [] });
-            // Then
-            expect(callback.called).to.be.false;
-        });
     });
 });
