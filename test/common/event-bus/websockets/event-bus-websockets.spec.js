@@ -56,7 +56,7 @@ describe('SocketEventBus', function() {
             // When
             eventBus.emit(key, message, socket);
             // Then
-            assert(socket.broadcast.emit.calledOnceWith(message));
+            assert(socket.broadcast.emit.calledOnceWith(key, message));
         });
     });
 });
