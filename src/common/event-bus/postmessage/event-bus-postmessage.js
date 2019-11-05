@@ -1,4 +1,4 @@
-import { EventBus } from '@event-bus/event-bus.js';
+import { EventBus } from '../event-bus.js';
 
 /**
  * @classdesc Event bus implementation that fire events through window

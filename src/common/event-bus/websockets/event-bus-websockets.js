@@ -1,4 +1,4 @@
-import { EventBus } from '@event-bus/event-bus.js';
+import { EventBus } from '../event-bus.js';
 import socketIO, { Socket } from 'socket.io';
 
 /**
@@ -65,7 +65,9 @@ export class SocketEventBus extends EventBus {
         super.emit(key, data);
         // System broadcast (several devices)
         if (socket) {
-            socket.broadcast.emit(data);
+            socket.broadcast.emit(key, data);
+        } else {
+            this.io.emit(key, data);
         }
     }
 }
