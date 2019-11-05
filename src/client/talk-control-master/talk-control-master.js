@@ -73,8 +73,6 @@ export class TalkControlMaster {
             }
             if (action) {
                 this.eventBus.socketBus.emit('movement', { data: action });
-                // ! Here not to broke previous implementation but not the right place to do it
-                this.eventBus.postMessageBus.emit('movement', { data: action });
             }
         });
     }
