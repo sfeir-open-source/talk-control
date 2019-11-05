@@ -1,3 +1,5 @@
+'use strict';
+
 import socketIO from 'socket.io-client';
 import { EventBus } from '../event-bus';
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use strict';
 
 /**
@@ -28,6 +27,7 @@ export class GenericEngine {
      *
      * @param {MessageEvent} message - Message to handle
      */
+    // eslint-disable-next-line no-unused-vars
     forwardMessageFromRemote(message) {}
 
     /**
@@ -35,6 +35,7 @@ export class GenericEngine {
      *
      * @param {*} params - Params indicating to which slide go to
      */
+    // eslint-disable-next-line no-unused-vars
     goToSlide(params) {}
 
     /**

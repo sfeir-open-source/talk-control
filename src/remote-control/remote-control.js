@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 import 'module-alias/register';
 import { EventBusResolver } from '@event-bus/event-bus-resolver';

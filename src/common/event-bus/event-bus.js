@@ -1,3 +1,5 @@
+'use strict';
+
 const NO_KEY_PROVIDED = 'No key provided';
 
 /**

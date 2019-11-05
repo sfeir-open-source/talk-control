@@ -1,3 +1,5 @@
+'use strict';
+
 import 'module-alias/register';
 import { expect } from 'chai';
 import { EventBus } from '@event-bus/event-bus';
