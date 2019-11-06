@@ -8,7 +8,8 @@
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
-        "commit": "npx git-cz"
+        "commit": "npx git-cz",
+        "tc-master": "npx parcel src/client/talk-control-master/index.html"
     },
     "repository": {
         "type": "git",
@@ -32,6 +33,7 @@
         "@babel/register": "^7.6.2",
         "@commitlint/cli": "^8.2.0",
         "@commitlint/config-conventional": "^8.2.0",
+        "babel-plugin-module-resolver": "^3.2.0",
         "chai": "^4.2.0",
         "commitizen": "^4.0.3",
         "cz-conventional-changelog": "^3.0.2",
@@ -46,6 +48,7 @@
         "mocha": "^6.2.1",
         "nodemon": "^1.19.4",
         "nyc": "^14.1.1",
+        "parcel-bundler": "^1.12.4",
         "prettier": "^1.18.2",
         "pretty-quick": "^2.0.0",
         "sinon": "^7.5.0"
@@ -73,15 +76,17 @@
         }
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.11.2",
+        "bulma": "^0.8.0",
         "module-alias": "^2.2.2",
         "socket.io": "^2.3.0",
-        "socket.io-client": "^2.3.0"
+        "socket.io-client": "^2.3.0",
+        "uws": "^10.148.1"
     },
     "_moduleAliases": {
         "@src": "src",
         "@event-bus": "src/common/event-bus",
         "@helpers": "src/common/helpers",
-        "@client": "src/client",
-        "@remote-control": "src/remote-control"
+        "@client": "src/client"
     }
 }

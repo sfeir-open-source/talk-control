@@ -1,7 +1,7 @@
 'use strict';
 
 import socketIO from 'socket.io-client';
-import { EventBus } from '@event-bus/event-bus';
+import { EventBus } from '../event-bus';
 
 /**
  * @classdesc SocketClient based EventBus implementation
