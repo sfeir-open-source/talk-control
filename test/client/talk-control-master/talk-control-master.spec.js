@@ -47,6 +47,7 @@ describe('', function() {
 
             // Event mock
             stub(talkControlMaster.eventBus.socketBus, 'emit');
+            stub(talkControlMaster.eventBus.socketBus, 'on');
             socketBus = talkControlMaster.eventBus.socketBus;
         });
 
