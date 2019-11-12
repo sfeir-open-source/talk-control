@@ -6,20 +6,17 @@ import { ACTIONS } from './actions';
 
 const logger = createLogger();
 const initialState = {
-    currentSlide: 0,
-    slideNumber: 0
+    currentSlide: {},
+    slides: []
 };
 
 export const reducers = (state, action) => {
+    const { data } = action;
     switch (action.type) {
         case ACTIONS.INIT:
-            return { ...state, slideNumber: action.data.slideNumber };
-        case ACTIONS.NEXT:
-            if (state.currentSlide < state.slideNumber) return { ...state, currentSlide: state.currentSlide + 1 };
-            break;
-        case ACTIONS.PREV:
-            if (state.currentSlide > 0) return { ...state, currentSlide: state.currentSlide - 1 };
-            break;
+            return { ...state, currentSlide: data.currentSlide, slides: data.slides };
+        case ACTIONS.GOTO_SLIDE:
+            return { ...state, currentSlide: data };
     }
     return state;
 };

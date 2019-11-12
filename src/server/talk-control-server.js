@@ -2,7 +2,8 @@
 
 import { EventBusResolver } from '@event-bus/event-bus-resolver';
 import store from './store';
-import { movement, init } from './store/actions';
+import { EngineResolver } from './engines/engine-resolver';
+import * as _ from 'lodash';
 
 /**
  * @classdesc Handle state changes and socket events
@@ -17,14 +18,18 @@ export class TalkControlServer {
     constructor(server) {
         this.eventBus = new EventBusResolver({ server });
         this.previousState = store.getState();
+        this.engine = null;
     }
 
     /**
-     * Subscribe to socket and store events
+     * Subscribe to socket and store events and initialize the engine
+     *
+     * @param {string} engineName - Name of the engine to use
      */
-    init() {
-        this.eventBus.socketBus.on('init', data => store.dispatch(init(data)));
-        this.eventBus.socketBus.on('movement', data => store.dispatch(movement(data)));
+    init(engineName) {
+        this.engine = EngineResolver.getEngine(engineName);
+        this.eventBus.socketBus.on('init', this.engine.init);
+        this.eventBus.socketBus.on('keyPressed', this.engine.handleInput);
         store.subscribe(this.emitStateChanges.bind(this));
     }
 
@@ -34,11 +39,11 @@ export class TalkControlServer {
     emitStateChanges() {
         const currentState = store.getState();
         switch (true) {
-            case this.previousState.slideNumber !== currentState.slideNumber:
-                this.eventBus.socketBus.emit('slideNumber', currentState);
+            case !this.previousState.slides.length && !!currentState.slides.length:
+                this.eventBus.socketBus.emit('initialized');
                 break;
-            case currentState.currentSlide !== this.previousState.currentSlide:
-                this.eventBus.socketBus.emit('currentSlide', currentState.currentSlide);
+            case !_.isEmpty(this.previousState.currentSlide) && !this.engine.slideEquals(currentState.currentSlide, this.previousState.currentSlide):
+                this.eventBus.socketBus.emit('gotoSlide', { slide: currentState.currentSlide });
                 break;
         }
         this.previousState = currentState;

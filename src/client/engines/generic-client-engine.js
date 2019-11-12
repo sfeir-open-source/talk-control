@@ -39,23 +39,7 @@ export class GenericEngine {
     goToSlide(params) {}
 
     /**
-     * Add listeners on slideshow events
-     *
+     * Return all the slides
      */
-    initEngineListener() {}
-
-    /**
-     * Returns the number of slides in the slideshow
-     */
-    countNbSlides() {}
-
-    /**
-     * Returns the current position in the slideshow
-     */
-    getPosition() {}
-
-    /**
-     * Returns the index of the current slide
-     */
-    getSlideNumber() {}
+    getSlides() {}
 }
