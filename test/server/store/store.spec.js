@@ -7,61 +7,36 @@ describe('redux store', function() {
         it('should return the initial state', function() {
             // Given
             const state = {
-                currentSlide: 0,
-                slideNumber: 0
+                currentSlide: {},
+                slides: []
             };
             // Then
             expect(reducers(state, {})).to.eql(state);
         });
 
-        it('should increment state.currentSlide', function() {
+        it('should change state.currentSlide', function() {
             // Given
             const state = {
-                currentSlide: 1,
-                slideNumber: 15
+                currentSlide: { h: 1, v: 1, f: 3 },
+                slides: []
             };
+            const data = { h: 2, v: 0, f: 0 };
             // Then
-            expect(reducers(state, { type: ACTIONS.NEXT })).to.eql({ ...state, currentSlide: 2 });
-        });
-
-        it('should not increment state.currentSlide', function() {
-            // Given
-            const state = {
-                currentSlide: 15,
-                slideNumber: 15
-            };
-            // Then
-            expect(reducers(state, { type: ACTIONS.NEXT })).to.eql(state);
-        });
-
-        it('should decrement state.currentSlide', function() {
-            // Given
-            const state = {
-                currentSlide: 1,
-                slideNumber: 15
-            };
-            // Then
-            expect(reducers(state, { type: ACTIONS.PREV })).to.eql({ ...state, currentSlide: 0 });
-        });
-
-        it('should not decrement state.currentSlide', function() {
-            // Given
-            const state = {
-                currentSlide: 0,
-                slideNumber: 15
-            };
-            // Then
-            expect(reducers(state, { type: ACTIONS.PREV })).to.eql(state);
+            expect(reducers(state, { type: ACTIONS.GOTO_SLIDE, data })).to.eql({ ...state, currentSlide: data });
         });
 
         it('should handle INIT', function() {
             // Given
             const state = {
-                currentSlide: 0,
-                slideNumber: 0
+                currentSlide: {},
+                slides: []
+            };
+            const data = {
+                currentSlide: { h: 0, v: 0, f: 0 },
+                slides: [{ h: 0, v: 0, f: 0, fMax: 3 }, { h: 0, v: 1, f: 0, fMax: 2 }, { h: 1, v: 0, f: 0, fMax: 1 }, { h: 2, v: 0, f: 0, fMax: 0 }]
             };
             // Then
-            expect(reducers(state, { type: ACTIONS.INIT, data: { slideNumber: 15 } })).to.eql({ ...state, slideNumber: 15 });
+            expect(reducers(state, { type: ACTIONS.INIT, data })).to.eql({ ...state, ...data });
         });
     });
 });

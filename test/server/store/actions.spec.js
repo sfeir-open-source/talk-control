@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { init, movement, ACTIONS } from '@server/store/actions';
+import { init, gotoSlide, ACTIONS } from '@server/store/actions';
 
 describe('redux actions', function() {
     describe('init()', function() {
@@ -11,26 +11,12 @@ describe('redux actions', function() {
         });
     });
 
-    describe('movement()', function() {
-        it('should create a "next" action', function() {
+    describe('gotoSlide()', function() {
+        it('should create a "gotoSlide" action', function() {
             // Given
-            const direction = 'right';
+            const data = { h: 1, v: 4, f: 3 };
             // Then
-            expect(movement({ direction })).to.eql({ type: ACTIONS.NEXT });
-        });
-
-        it('should create a "prev" action', function() {
-            // Given
-            const direction = 'left';
-            // Then
-            expect(movement({ direction })).to.eql({ type: ACTIONS.PREV });
-        });
-
-        it('should create a void action', function() {
-            // Given
-            const direction = '';
-            // Then
-            expect(movement({ direction })).to.eql({ type: '' });
+            expect(gotoSlide(data)).to.eql({ type: ACTIONS.GOTO_SLIDE, data });
         });
     });
 });
