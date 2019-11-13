@@ -16,9 +16,8 @@ export class GenericEngine {
      * @param {MessageEvent} message - Message received
      */
     receiveMessageFromRemote(message) {
-        if (message.data.charAt(0) === '{' && message.data.charAt(message.data.length - 1) === '}') {
-            message = JSON.parse(message.data);
-            this.forwardMessageFromRemote(message);
+        if (typeof message.data === 'object' && message.data.type) {
+            this.forwardMessageFromRemote(message.data);
         }
     }
 

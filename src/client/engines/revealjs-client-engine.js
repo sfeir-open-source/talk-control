@@ -47,19 +47,30 @@ export class RevealEngine extends GenericEngine {
 
     /**
      *
-     * @param {{h: number, v: number, f?: number}} index - position of the slide to go to
+     * @param {{h: number, v: number, f?: number}} indicies - position of the slide to go to
      */
-    goToSlide(index) {
-        this.Reveal.slide(index.h, index.v, index.f || 0);
+    goToSlide(indicies) {
+        this.Reveal.slide(indicies.h, indicies.v, indicies.f || 0);
     }
 
     /**
      * @returns {{h: number, v: number, f: number, fMax: number}[]} List on slides
      */
     getSlides() {
-        return this.Reveal.getSlides().map(slide => {
-            const fragments = slide.querySelectorAll('.fragment');
-            return { h: slide.dataset.indexH, v: slide.dataset.indexV, f: 0, fMax: fragments.length ? fragments.length + 1 : 0 };
+        const slides = [];
+        const horizontalSlides = document.querySelectorAll('.slides>section');
+        horizontalSlides.forEach((slideH, indexH) => {
+            const fragmentsH = slideH.querySelectorAll('.fragment');
+            const verticalSlides = slideH.querySelectorAll('section');
+            if (verticalSlides.length) {
+                verticalSlides.forEach((slideV, indexV) => {
+                    const fragmentsV = slideV.querySelectorAll('.fragment');
+                    slides.push({ h: indexH, v: indexV, f: 0, fMax: fragmentsV.length ? fragmentsV.length + 1 : 0 });
+                });
+            } else {
+                slides.push({ h: indexH, v: 0, f: 0, fMax: fragmentsH.length ? fragmentsH.length + 1 : 0 });
+            }
         });
+        return slides;
     }
 }
