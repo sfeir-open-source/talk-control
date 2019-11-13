@@ -79,16 +79,13 @@ describe('RevealEngineClient', function() {
         it('should return an array of slides', function() {
             // Given
             const querySelectorAll = stub().returns([]);
-            window.Reveal.getSlides.returns([
-                { querySelectorAll, dataset: { indexH: 0, indexV: 0 } },
-                { querySelectorAll, dataset: { indexH: 1, indexV: 0 } },
-                { querySelectorAll, dataset: { indexH: 2, indexV: 0 } }
-            ]);
+            stub(document, 'querySelectorAll').returns([{ querySelectorAll }, { querySelectorAll }, { querySelectorAll }]);
             // When
             const slides = engine.getSlides();
             // Then
             expect(slides.length).to.equals(3);
             expect(slides[0]).to.eqls({ h: 0, v: 0, f: 0, fMax: 0 });
+            document.querySelectorAll.restore();
         });
     });
 });

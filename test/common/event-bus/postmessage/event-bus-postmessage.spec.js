@@ -11,7 +11,7 @@ describe('EventBusPostMessage', function() {
         // global.window = { addEventListener: () => undefined, postMessage: spy() };
         stub(window, 'addEventListener');
         spy(window, 'postMessage');
-        eventBus = new EventBusPostMessage();
+        eventBus = new EventBusPostMessage({ postMessage: {} });
     });
 
     afterEach(function() {
@@ -30,16 +30,17 @@ describe('EventBusPostMessage', function() {
             // Given
             const key = 'test';
             const data = 'data';
+            eventBus.windows = [window];
             // When
             eventBus.emit(key, data);
             // Then
-            const jsonObject = JSON.stringify({ type: key, data });
-            assert(window.postMessage.calledOnceWith(jsonObject));
+            const object = { type: key, data };
+            assert(window.postMessage.calledOnceWith(object));
         });
     });
 
     describe('_receiveMessageWindow', function() {
-        it('should call each callback substribed on "key" with the data', function() {
+        it('should call each callback subscribed on "key" with the data', function() {
             // Given
             const key = 'test',
                 anotherKey = 'anotherTest';
@@ -54,9 +55,9 @@ describe('EventBusPostMessage', function() {
             // When
             eventBus._receiveMessageWindow({ data: message });
             // Then
-            assert(callbacks[key][0].calledOnceWith(message), `callbacks[${key}][0] wasn't called with "${message}"`);
-            assert(callbacks[key][1].calledOnceWith(message), `callbacks[${key}][1] wasn't called with "${message}"`);
-            assert(callbacks[key][2].calledOnceWith(message), `callbacks[${key}][2] wasn't called with "${message}"`);
+            assert(callbacks[key][0].calledOnceWith(data), `callbacks[${key}][0] wasn't called with "${data}"`);
+            assert(callbacks[key][1].calledOnceWith(data), `callbacks[${key}][1] wasn't called with "${data}"`);
+            assert(callbacks[key][2].calledOnceWith(data), `callbacks[${key}][2] wasn't called with "${data}"`);
             expect(callbacks[anotherKey][0].called).to.be.false;
         });
 

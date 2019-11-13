@@ -15,7 +15,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        talkControlMaster = new TalkControlMaster();
+        talkControlMaster = new TalkControlMaster('http://localhost:3000');
     });
 
     after(function() {
