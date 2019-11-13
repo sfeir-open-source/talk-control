@@ -10,9 +10,17 @@ import { EventBus } from '../event-bus.js';
 export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
+     *
+     * @param {*} params -
      */
-    constructor() {
+    constructor(params) {
         super();
+        this.windows = [];
+        if (params.frames) {
+            this.windows = [...params.frames];
+        } else if (params.slave) {
+            this.windows.push(window.parent);
+        }
         window.addEventListener('message', this._receiveMessageWindow.bind(this), false);
     }
 
@@ -26,12 +34,14 @@ export class EventBusPostMessage extends EventBus {
     emit(key, data) {
         super.emit(key, data);
         // Inner broadcast (same app)
-        window.postMessage(
-            JSON.stringify({
-                type: key,
-                data
-            }),
-            '*'
+        this.windows.forEach(w =>
+            w.postMessage(
+                {
+                    type: key,
+                    data
+                },
+                '*'
+            )
         );
     }
 
@@ -48,7 +58,7 @@ export class EventBusPostMessage extends EventBus {
         if (typeof message.data === 'object' && message.data.type) {
             const callBacks = super.getCallbacks(message.data.type);
             if (callBacks && callBacks.length > 0) {
-                callBacks.forEach(callback => callback(message.data));
+                callBacks.forEach(callback => callback(message.data.data));
             }
         }
     }

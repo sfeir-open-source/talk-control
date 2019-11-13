@@ -11,11 +11,8 @@ import { EventBus } from '../event-bus';
 export class SocketEventBusClient extends EventBus {
     constructor(server) {
         super();
+        this.sockets = [];
         this.io = socketIO.connect(server);
-        this.io.on('connection', socket => {
-            console.log('### connection');
-            this.sockets.push(socket);
-        });
     }
 
     /**
@@ -27,11 +24,7 @@ export class SocketEventBusClient extends EventBus {
      */
     on(key, callback) {
         super.on(key, callback);
-        this.sockets.forEach(socket => {
-            socket.on(key, message => {
-                this.emit(key, message);
-            });
-        });
+        this.io.on(key, callback);
     }
 
     /**
@@ -45,6 +38,6 @@ export class SocketEventBusClient extends EventBus {
         // Inner broadcast (same app)
         super.emit(key, data);
         // System broadcast (several devices)
-        this.io.emit(data);
+        this.io.emit(key, data);
     }
 }

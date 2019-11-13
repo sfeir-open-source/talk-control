@@ -19,7 +19,7 @@ export class EventBusResolver {
         }
 
         if (typeof window != 'undefined') {
-            this.postMessageBus = new EventBusPostMessage();
+            this.postMessageBus = new EventBusPostMessage(params.postMessage || {});
         }
     }
 }
