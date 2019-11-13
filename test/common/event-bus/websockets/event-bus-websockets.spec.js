@@ -2,7 +2,7 @@
 
 import 'module-alias/register';
 import { assert, expect } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { SocketEventBus } from '@event-bus/websockets/event-bus-websockets';
 
 describe('SocketEventBus', function() {
@@ -52,13 +52,14 @@ describe('SocketEventBus', function() {
     describe('emit()', function() {
         it('sould broadcast the data', function() {
             // Given
-            const socket = { broadcast: { emit: spy() } };
+            stub(eventBus.io, 'emit');
             const key = 'test';
             const message = 'message';
             // When
-            eventBus.emit(key, message, socket);
+            eventBus.emit(key, message, false);
             // Then
-            assert(socket.broadcast.emit.calledOnceWith(key, message));
+            assert(eventBus.io.emit.notCalled);
+            eventBus.io.emit.restore();
         });
     });
 });
