@@ -47,36 +47,43 @@ export class TalkControlMaster {
             }
         });
 
-        document.addEventListener('keyup', this.onKeyUp.bind(this));
+        this.afterInitialisation();
         this.forwardEvents();
     }
 
-    onKeyUp(event) {
+    /**
+     * Do actions once the server send the 'initialized' event
+     */
+    afterInitialisation() {
+        this.eventBus.on(MAIN_CHANNEL, 'initialized', () => document.addEventListener('keyup', this.onKeyUp.bind(this)));
+    }
+
+    _onKeyUp(event) {
         let action = '';
         switch (event.key) {
             case 'Down': // IE specific value
             case 'ArrowDown':
                 // Do something for "down arrow" key press.
-                action = 'down';
+                action = 'arrowDown';
                 break;
             case 'Up': // IE specific value
             case 'ArrowUp':
                 // Do something for "up arrow" key press.
-                action = 'up';
+                action = 'arrowUp';
                 break;
             case 'Left': // IE specific value
             case 'ArrowLeft':
                 // Do something for "left arrow" key press.
-                action = 'left';
+                action = 'arrowLeft';
                 break;
             case 'Right': // IE specific value
             case 'ArrowRight':
                 // Do something for "right arrow" key press.
-                action = 'right';
+                action = 'arrowRight';
                 break;
         }
         if (action) {
-            this.eventBus.emit(MAIN_CHANNEL, 'movement', { data: action });
+            this.eventBus.emit(MAIN_CHANNEL, 'keyPressed', { key: action });
         }
     }
 

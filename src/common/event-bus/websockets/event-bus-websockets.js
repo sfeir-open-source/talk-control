@@ -21,23 +21,38 @@ export class SocketEventBus extends EventBus {
         this.io.on('connection', socket => {
             console.log('### connection');
             this.sockets.push(socket);
+            // Subscribe new socket on existing keys
+            for (const key in this.callBacks) {
+                this.on(key, null, socket);
+            }
+            // When disconnected, remove socket from the array
+            socket.on('disconnect', () => {
+                console.log('### disconnected');
+                const index = this.sockets.indexOf(socket);
+                this.sockets.splice(index, 1);
+            });
         });
     }
 
     /**
-     * Register a callback on a key locally and for each socket connected
+     * Register a callback on a key locally and for each socket connected or a specific one
      *
      * @param {string} key - Event key to which attach the callback and attach each socket
      * @param {*} callback - Function to call when key event is fired
+     * @param {Socket} socket - Specific socket to attach the key to
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback) {
-        super.on(key, callback);
-        this.sockets.forEach(socket => {
-            socket.on(key, message => {
-                this.emit(key, message, socket);
-            });
-        });
+    on(key, callback, socket) {
+        if (callback) {
+            super.on(key, callback);
+        }
+        // When an event is fired from a socket, we call emit so that we trigger local callbacks
+        const socketCallback = message => this.emit(key, message, false);
+        if (socket) {
+            socket.on(key, socketCallback);
+        } else {
+            this.sockets.forEach(socket => socket.on(key, socketCallback));
+        }
     }
 
     /**
@@ -45,15 +60,15 @@ export class SocketEventBus extends EventBus {
      *
      * @param {string} key - Event key to fire
      * @param {any} data - Data to emit
-     * @param {Socket} socket - Socket which is emitting
+     * @param {boolean} broadcast - Set false if the event must not be broadcasted on network
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data, socket) {
-        // Inner broadcast (same app)
+    emit(key, data, broadcast = true) {
+        // Inner
         super.emit(key, data);
-        // System broadcast (several devices)
-        if (socket) {
-            socket.broadcast.emit(data);
+
+        if (broadcast) {
+            this.io.emit(key, data);
         }
     }
 }

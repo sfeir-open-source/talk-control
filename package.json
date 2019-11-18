@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "main": "index.js",
     "scripts": {
-        "start": "npx nodemon --exec babel-node src/index.js",
+        "start": "npx nodemon --exec babel-node src/server/index.js",
         "build": "babel src --out-dir ./dist --source-maps",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
@@ -78,7 +78,11 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.11.2",
         "bulma": "^0.8.0",
+        "express": "^4.17.1",
+        "lodash": "^4.17.15",
         "module-alias": "^2.2.2",
+        "redux": "^4.0.4",
+        "redux-logger": "^3.0.6",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",
         "uws": "^10.148.1"
@@ -87,6 +91,7 @@
         "@src": "src",
         "@event-bus": "src/common/event-bus",
         "@helpers": "src/common/helpers",
-        "@client": "src/client"
+        "@client": "src/client",
+        "@server": "src/server"
     }
 }
