@@ -24,21 +24,13 @@ Firstly install the dependencies
 npm i
 ```
 
-Then build the sources
+Then run the project
 
 ```sh
-npm run build
+npm start
 ```
 
-Now that everything is built you need to run the three parts
-
-```sh
-node dist/server
-serve dist/client/master
-serve showcase
-```
-
-Now you just need to open your browser on localhost:5000.
+Now you just need to open your browser on localhost:1234.
 
 ## How to test the software
 
