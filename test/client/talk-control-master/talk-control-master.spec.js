@@ -5,6 +5,7 @@ import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
+import { MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
 
 describe('', function() {
     let talkControlMaster;
@@ -47,6 +48,7 @@ describe('', function() {
             getElementById.withArgs('form').returns(formBlock);
 
             stub(talkControlMaster, 'afterInitialisation');
+            stub(talkControlMaster, 'forwardEvents');
         });
 
         afterEach(function() {
@@ -105,15 +107,15 @@ describe('', function() {
     });
 
     describe('_onKeyUp', function() {
-        let socketBus;
+        let mainChannel;
         beforeEach(function() {
             // Event mock
-            socketBus = talkControlMaster.eventBus.socketBus;
-            stub(socketBus, 'emit');
+            mainChannel = talkControlMaster.eventBus.channels[MAIN_CHANNEL];
+            stub(mainChannel, 'emit');
         });
 
         afterEach(function() {
-            socketBus.emit.restore();
+            mainChannel.emit.restore();
         });
 
         it('should fire "arrowUp" event', function() {
@@ -123,7 +125,7 @@ describe('', function() {
             // When
             talkControlMaster._onKeyUp(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('keyPressed', { key: 'arrowUp' }));
+            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowUp' }));
         });
 
         it('should fire "arrowDown" event', function() {
@@ -133,7 +135,7 @@ describe('', function() {
             // When
             talkControlMaster._onKeyUp(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('keyPressed', { key: 'arrowDown' }));
+            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowDown' }));
         });
 
         it('should fire "arrowLeft" event', function() {
@@ -143,7 +145,7 @@ describe('', function() {
             // When
             talkControlMaster._onKeyUp(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('keyPressed', { key: 'arrowLeft' }));
+            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowLeft' }));
         });
 
         it('should fire "arrowRight" event', function() {
@@ -153,7 +155,7 @@ describe('', function() {
             // When
             talkControlMaster._onKeyUp(event);
             // Then
-            assert(socketBus.emit.calledOnceWith('keyPressed', { key: 'arrowRight' }));
+            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowRight' }));
         });
 
         it("shouldn't fire any event", function() {
@@ -163,7 +165,7 @@ describe('', function() {
             // When
             talkControlMaster._onKeyUp(event);
             // Then
-            assert(socketBus.emit.notCalled);
+            assert(mainChannel.emit.notCalled);
         });
     });
 });

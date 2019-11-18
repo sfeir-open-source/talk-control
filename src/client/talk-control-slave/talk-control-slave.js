@@ -1,6 +1,6 @@
 'use strict';
 
-import { EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
 
 export class TalkControlSlave {
@@ -11,13 +11,13 @@ export class TalkControlSlave {
             }
         });
         this.engine = EngineResolver.getEngine(params.engineName);
-        this.eventBus.postMessageBus.on('init', this.init.bind(this));
+        this.eventBus.on(SECONDARY_CHANNEL, 'init', this.init.bind(this));
     }
 
     init() {
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.eventBus.postMessageBus.emit('initialized', { slides });
-        this.eventBus.postMessageBus.on('gotoSlide', data => this.engine.goToSlide(data.slide));
+        this.eventBus.emit(SECONDARY_CHANNEL, 'initialized', { slides });
+        this.eventBus.on(SECONDARY_CHANNEL, 'gotoSlide', data => this.engine.goToSlide(data.slide));
     }
 }

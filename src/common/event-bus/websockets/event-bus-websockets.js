@@ -46,7 +46,8 @@ export class SocketEventBus extends EventBus {
         if (callback) {
             super.on(key, callback);
         }
-        const socketCallback = message => this.emit(key, message, socket);
+        // When an event is fired from a socket, we call emit so that we trigger local callbacks
+        const socketCallback = message => this.emit(key, message, false);
         if (socket) {
             socket.on(key, socketCallback);
         } else {
@@ -59,16 +60,14 @@ export class SocketEventBus extends EventBus {
      *
      * @param {string} key - Event key to fire
      * @param {any} data - Data to emit
-     * @param {Socket} socket - Socket which is emitting
+     * @param {boolean} broadcast - Set false if the event must not be broadcasted on network
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data, socket) {
-        // Inner broadcast (same app)
+    emit(key, data, broadcast = true) {
+        // Inner
         super.emit(key, data);
-        // System broadcast (several devices)
-        if (socket) {
-            socket.broadcast.emit(key, data);
-        } else {
+
+        if (broadcast) {
             this.io.emit(key, data);
         }
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-import { EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
 import store from './store';
 import { EngineResolver } from './engines/engine-resolver';
 import * as _ from 'lodash';
@@ -28,8 +28,8 @@ export class TalkControlServer {
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.eventBus.socketBus.on('init', this.engine.init);
-        this.eventBus.socketBus.on('keyPressed', this.engine.handleInput);
+        this.eventBus.on(MAIN_CHANNEL, 'init', this.engine.init);
+        this.eventBus.on(MAIN_CHANNEL, 'keyPressed', this.engine.handleInput);
         store.subscribe(this.emitStateChanges.bind(this));
     }
 
@@ -40,10 +40,10 @@ export class TalkControlServer {
         const currentState = store.getState();
         switch (true) {
             case !this.previousState.slides.length && !!currentState.slides.length:
-                this.eventBus.socketBus.emit('initialized');
+                this.eventBus.emit(MAIN_CHANNEL, 'initialized');
                 break;
             case !_.isEmpty(this.previousState.currentSlide) && !this.engine.slideEquals(currentState.currentSlide, this.previousState.currentSlide):
-                this.eventBus.socketBus.emit('gotoSlide', { slide: currentState.currentSlide });
+                this.eventBus.emit(MAIN_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
                 break;
         }
         this.previousState = currentState;

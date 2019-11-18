@@ -3,20 +3,14 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MAIN_CHANNEL, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
 import { SocketEventBusClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 
 describe('EventBusResolver', function() {
     describe('constructor()', function() {
-        let resolver;
-
         before(function() {
             stub(socketIOClient, 'connect').returns({ on: spy() });
-        });
-
-        afterEach(function() {
-            resolver = undefined;
         });
 
         after(function() {
@@ -34,23 +28,37 @@ describe('EventBusResolver', function() {
 
         it('shoud instantiate a SocketClient', function() {
             // When
-            resolver = new EventBusResolver({ server: 'http://localhost:3000', client: true });
+            const resolver = new EventBusResolver({ server: 'http://localhost:3000', client: true });
             // Then
-            expect(resolver.socketBus instanceof SocketEventBusClient).to.be.true;
+            expect(resolver.channels[MAIN_CHANNEL] instanceof SocketEventBusClient).to.be.true;
         });
 
         it('shoud instantiate a Postmessage', function() {
             // Given
             // global.window = { addEventListener: () => undefined, postMessage: spy() };
             stub(window, 'addEventListener');
-            spy(window, 'postMessage');
+            stub(window, 'postMessage');
             // When
-            resolver = new EventBusResolver({});
+            const resolver = new EventBusResolver({});
             // Then
-            expect(resolver.postMessageBus).to.be.ok;
+            expect(resolver.channels[SECONDARY_CHANNEL]).to.be.ok;
 
             window.addEventListener.restore();
             window.postMessage.restore();
+        });
+    });
+
+    describe('emit', function() {
+        it('should throw an error', function() {
+            const resolver = new EventBusResolver({});
+            expect(() => resolver.emit('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
+        });
+    });
+
+    describe('on', function() {
+        it('should throw an error', function() {
+            const resolver = new EventBusResolver({});
+            expect(() => resolver.on('src', 'key', () => 'callback')).to.throw("'src' is not a known source.");
         });
     });
 });
