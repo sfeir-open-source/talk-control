@@ -1,75 +1,58 @@
-# TalkControl
+# Talk Control
 
-## Naming match with WebRemoteControlSpeaker
+**Description**: This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
+It is composed by three main parts:
 
--   **ensuite-node => server**
+-   **Server** : As its name say, it's the backend part of the app. Its job is to work as the **single source sf truth** of the app.
+-   **Master** : The master is the "view" that is displayed to the user. It's purpose is to be the "bridge" between the server and its slave(s). There is possibly multiple masters with each a different purpose. For exemple the presenter master, it will display the presentation in an iframe (this is the slave) and listen to any key pressed by the speaker to send them to the server. It will then forward the server response to its slave so that it can update the slideshow accordingly.
+-   **Slave** : The slave is the part that interract directly with the slideshow. It will update the view with the events received from its master. There could be multiple slides assossiated with one master. For exemple, in a presenter view where you have the presenter notes and a preview of the next slide. Both these part would be different slaves.
 
-    The server handling states, the source of truth
+Other things to include:
 
--   **ensuite-front => talk-control-master**
+-   **Technology stack**: This app is written in plain javascript, tested with mocha and chai and bundled with parcelJs.
+-   **Status**: This app is currently still in initial developpement phase.
 
-    The webpage to take control of the presentation
+## Dependencies
 
--   **ensuite-client => talk-control-slave**
+For this to work you need to have nodeJS installed on your computer.
 
-    The script to include into the presentation to interact with talk-control-master
+## Usage
 
--   **layouts => layouts**
+Firstly install the dependencies
 
-    The layouts: on stage (what the public see), presenter (what the presenter see)
+```sh
+npm i
+```
 
--   **engines => engines**
+Then build the sources
 
-    The engines to interact with revealjs, etc...
+```sh
+npm run build
+```
 
-## The folders structure
+Now that everything is built you need to run the three parts
 
--   **src**
+```sh
+node dist/server
+serve dist/client/master
+serve showcase
+```
 
-    -   **client**
+Now you just need to open your browser on localhost:5000.
 
-        -   **components**
+## How to test the software
 
-            Contains components (WebComponents) to compose layouts
+Run tests
 
-        -   **engines**
+```sh
+npm test
+```
 
-            Contains a folder for each engine (revealjs, ...) to be able to get data like: slide number, slide position, etc...
+## Getting help
 
-        -   **layouts**
+Feel free to add any issue that you might find useful to improve the project and even propose pull request to help us :).
+You can go check our [issues page]('https://github.com/sfeir-open-source/talk-control/issues')
 
-            Handle several layouts for different purposes : on-stage layout, presenter layout, etc... Each layout is a set of components (see above)
+## Getting involved
 
-        -   **talk-control-master**
-
-            Handle the logic to take control of the slide show (interaction with iframe and more...)
-
-        -   **talk-control-slave**
-
-            Handle the logic to receive and send back events to talk-control-master
-
-    -   **common**
-
-        -   **event-bus**
-
-            Event handling, client side and server side
-
-            -   **postmessage**
-
-                Send and receive messages between window and iframe
-
-            -   **websockets**
-
-                Send and receive messages through websockets (socket.io)
-
-        -   **helpers**
-
-            Useful things
-
-    -   **server**
-
-        The source of truth
-
--   **test**
-
-    Unit tests
+General instructions on _how_ can be found in the [CONTRIBUTING](CONTRIBUTING.md) file.
