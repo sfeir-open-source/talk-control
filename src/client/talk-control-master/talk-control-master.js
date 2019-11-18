@@ -1,6 +1,6 @@
 'use strict';
 
-import { EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MAIN_CHANNEL, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
 import { isUrlValid } from '@helpers/helpers.js';
 
 /**
@@ -48,13 +48,14 @@ export class TalkControlMaster {
         });
 
         this.afterInitialisation();
+        this.forwardEvents();
     }
 
     /**
      * Do actions once the server send the 'initialized' event
      */
     afterInitialisation() {
-        this.eventBus.socketBus.on('initialized', () => document.addEventListener('keyup', this.onKeyUp.bind(this)));
+        this.eventBus.on(MAIN_CHANNEL, 'initialized', () => document.addEventListener('keyup', this.onKeyUp.bind(this)));
     }
 
     _onKeyUp(event) {
@@ -82,7 +83,13 @@ export class TalkControlMaster {
                 break;
         }
         if (action) {
-            this.eventBus.socketBus.emit('keyPressed', { key: action });
+            this.eventBus.emit(MAIN_CHANNEL, 'keyPressed', { key: action });
         }
+    }
+
+    forwardEvents() {
+        const forward = (key => data => this.eventBus.emit(SECONDARY_CHANNEL, key, data)).bind(this);
+        this.eventBus.on(MAIN_CHANNEL, 'slideNumber', forward('slideNumber'));
+        this.eventBus.on(MAIN_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 }

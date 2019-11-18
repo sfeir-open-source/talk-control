@@ -1,6 +1,7 @@
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import { TalkControlServer } from '@server/talk-control-server';
+import { MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
 import store from '@server/store';
 
 describe('should have instantiated', function() {
@@ -8,8 +9,7 @@ describe('should have instantiated', function() {
     let on;
     beforeEach(function() {
         talkControlServer = new TalkControlServer();
-        on = stub();
-        talkControlServer.eventBus = { socketBus: { on } };
+        on = stub(talkControlServer.eventBus, 'on');
     });
 
     describe('constructor()', function() {
@@ -23,17 +23,20 @@ describe('should have instantiated', function() {
             // When
             talkControlServer.init('revealjs');
             // Then
-            assert(on.calledTwice);
-            assert(on.calledWith('init'));
-            assert(on.calledWith('keyPressed'));
+            assert(on.calledTwice, 'not called twice');
+            assert(on.calledWith(MAIN_CHANNEL, 'init'), 'not called with init');
+            assert(on.calledWith(MAIN_CHANNEL, 'keyPressed'), 'not called with keypressed');
         });
     });
 
     describe('emitStateChanges()', function() {
         let emit;
         beforeEach(function() {
-            emit = stub();
-            talkControlServer.eventBus = { socketBus: { emit, on } };
+            emit = stub(talkControlServer.eventBus, 'emit');
+        });
+
+        afterEach(function() {
+            emit.restore();
         });
 
         it('should emit noting', function() {
@@ -60,7 +63,7 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
-            assert(emit.calledOnceWith('gotoSlide'));
+            assert(emit.calledOnceWith(MAIN_CHANNEL, 'gotoSlide'));
             store.getState.restore();
         });
 
@@ -74,7 +77,7 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
-            assert(emit.calledOnceWith('initialized'));
+            assert(emit.calledOnceWith(MAIN_CHANNEL, 'initialized'));
             store.getState.restore();
         });
     });
