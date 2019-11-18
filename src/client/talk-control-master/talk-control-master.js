@@ -44,6 +44,7 @@ export class TalkControlMaster {
 
             stageFrame.src = url;
             stageFrame.classList.remove('is-hidden');
+            document.getElementById('form').classList.add('is-hidden');
             stageFrame.onload = () => {
                 this.eventBus.postMessageBus.emit('init');
             };
@@ -67,7 +68,7 @@ export class TalkControlMaster {
         // Forward initialization event to server
         this.eventBus.postMessageBus.on('initialized', data => this.eventBus.socketBus.emit('init', data));
         // Start listening on keys once the server is initialized
-        this.eventBus.socketBus.on('initialized', () => document.addEventListener('keyup', this._onKeyUp.bind(this)));
+        this.eventBus.socketBus.on('initialized', () => addEventListener('keyup', this._onKeyUp.bind(this)));
         // Forward "gotoSlide" events to slave
         this.eventBus.socketBus.on('gotoSlide', data => this.eventBus.postMessageBus.emit('gotoSlide', data));
     }

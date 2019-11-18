@@ -37,12 +37,14 @@ describe('', function() {
             btnValidate = { addEventListener: stub() };
             stageFrame = { src: '', classList: { add: () => (stageFrame.hidden = true), remove: () => (stageFrame.hidden = false) }, hidden: true };
             urlError = { classList: { add: () => (urlError.hidden = true), remove: () => (urlError.hidden = false) }, hidden: true };
+            const formBlock = { classList: { add: stub() } };
 
             const getElementById = stub(document, 'getElementById');
             getElementById.withArgs('inputPresentation').returns(inputPresentation);
             getElementById.withArgs('btnValidate').returns(btnValidate);
             getElementById.withArgs('stageFrame').returns(stageFrame);
             getElementById.withArgs('urlError').returns(urlError);
+            getElementById.withArgs('form').returns(formBlock);
 
             stub(talkControlMaster, 'afterInitialisation');
         });

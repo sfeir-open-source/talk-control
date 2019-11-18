@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="./index.css" />
     </head>
     <body>
-        <section class="section">
+        <section class="section" id="form">
             <div class="container">
                 <h1 class="title">
                     Talk control
@@ -28,7 +28,7 @@
                                     type="url"
                                     placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
                                     id="inputPresentation"
-                                    value="http://127.0.0.1:8080/#/"
+                                    value="http://127.0.0.1:5000"
                                 />
                             </div>
                             <div class="column">
@@ -47,16 +47,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- iframe area -->
-                <div class="columns">
-                    <div class="column">
-                        <iframe id="stageFrame" class="is-hidden"></iframe>
-                    </div>
-                </div>
-
-                <script src="./index.js"></script>
             </div>
         </section>
+        <section>
+            <iframe id="stageFrame" class="is-hidden"></iframe>
+        </section>
+        <script src="./index.js"></script>
     </body>
 </html>
