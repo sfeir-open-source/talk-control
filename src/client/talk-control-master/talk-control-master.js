@@ -47,33 +47,42 @@ export class TalkControlMaster {
             }
         });
 
-        document.addEventListener('keyup', event => {
-            let action = '';
-            switch (event.key) {
-                case 'Down': // IE specific value
-                case 'ArrowDown':
-                    // Do something for "down arrow" key press.
-                    action = 'down';
-                    break;
-                case 'Up': // IE specific value
-                case 'ArrowUp':
-                    // Do something for "up arrow" key press.
-                    action = 'up';
-                    break;
-                case 'Left': // IE specific value
-                case 'ArrowLeft':
-                    // Do something for "left arrow" key press.
-                    action = 'left';
-                    break;
-                case 'Right': // IE specific value
-                case 'ArrowRight':
-                    // Do something for "right arrow" key press.
-                    action = 'right';
-                    break;
-            }
-            if (action) {
-                this.eventBus.socketBus.emit('movement', { data: action });
-            }
-        });
+        this.afterInitialisation();
+    }
+
+    /**
+     * Do actions once the server send the 'initialized' event
+     */
+    afterInitialisation() {
+        this.eventBus.socketBus.on('initialized', () => document.addEventListener('keyup', this.onKeyUp.bind(this)));
+    }
+
+    _onKeyUp(event) {
+        let action = '';
+        switch (event.key) {
+            case 'Down': // IE specific value
+            case 'ArrowDown':
+                // Do something for "down arrow" key press.
+                action = 'arrowDown';
+                break;
+            case 'Up': // IE specific value
+            case 'ArrowUp':
+                // Do something for "up arrow" key press.
+                action = 'arrowUp';
+                break;
+            case 'Left': // IE specific value
+            case 'ArrowLeft':
+                // Do something for "left arrow" key press.
+                action = 'arrowLeft';
+                break;
+            case 'Right': // IE specific value
+            case 'ArrowRight':
+                // Do something for "right arrow" key press.
+                action = 'arrowRight';
+                break;
+        }
+        if (action) {
+            this.eventBus.socketBus.emit('keyPressed', { key: action });
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 import 'module-alias/register';
 import { assert, expect } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { SocketEventBus } from '@event-bus/websockets/event-bus-websockets';
 
 describe('SocketEventBus', function() {
@@ -32,18 +32,34 @@ describe('SocketEventBus', function() {
             assert(socketB.on.calledOnceWith(key));
             assert(socketC.on.calledOnceWith(key));
         });
+
+        it('should add key only on given socket', function() {
+            // Given
+            const socketA = { on: spy() },
+                socketB = { on: spy() },
+                socketC = { on: spy() };
+            const key = 'test';
+            eventBus.sockets = [socketA, socketB];
+            // When
+            eventBus.on(key, null, socketC);
+            // Then
+            assert(socketA.on.notCalled);
+            assert(socketB.on.notCalled);
+            assert(socketC.on.calledOnceWith(key));
+        });
     });
 
     describe('emit()', function() {
         it('sould broadcast the data', function() {
             // Given
-            const socket = { broadcast: { emit: spy() } };
+            stub(eventBus.io, 'emit');
             const key = 'test';
             const message = 'message';
             // When
-            eventBus.emit(key, message, socket);
+            eventBus.emit(key, message, false);
             // Then
-            assert(socket.broadcast.emit.calledOnceWith(message));
+            assert(eventBus.io.emit.notCalled);
+            eventBus.io.emit.restore();
         });
     });
 });
