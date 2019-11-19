@@ -5,9 +5,9 @@
 This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
 It is composed by three main parts:
 
--   **Server** : As its name say, it's the backend part of the app. Its job is to work as the **single source sf truth** of the app.
--   **Master** : The master is the "view" that is displayed to the user. It's purpose is to be the "bridge" between the server and its slave(s). There is possibly multiple masters with each a different purpose. For exemple the presenter master, it will display the presentation in an iframe (this is the slave) and listen to any key pressed by the speaker to send them to the server. It will then forward the server response to its slave so that it can update the slideshow accordingly.
--   **Slave** : The slave is the part that interract directly with the slideshow. It will update the view with the events received from its master. There could be multiple slides assossiated with one master. For exemple, in a presenter view where you have the presenter notes and a preview of the next slide. Both these part would be different slaves.
+-   **Server** : As its name says, it's the backend part of the app. Its job is to work as the **single source of truth** of the app.
+-   **Master** : The master is the "view" that is displayed to the user. It's purpose is to be the "bridge" between its slave(s) and the server. There are possibly multiple masters with each a different purpose. For exemple the presenter master, it will display the presentation in an iframe (this is the slave) and listen to any key pressed by the speaker to send them to the server. It will then forward the server response to its slave so that it can update the slideshow accordingly.
+-   **Slave** : The slave is the part that interract directly with the slideshow. It will update the view with the events received from its master. There could be multiple slaves assossiated with one master. For exemple, in a presenter view where you have the presenter notes and a preview of the next slide. Both these part would be different slaves.
 
 ### Technology stack
 
