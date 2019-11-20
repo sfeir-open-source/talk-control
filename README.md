@@ -19,7 +19,7 @@ This app is currently still in initial developpement phase.
 
 ## Dependencies
 
-For this to work you need to have nodeJS v8.16.2 or more installed on your computer.
+For this to work you need to have nodeJS v8 or more installed on your computer.
 
 ## Usage
 
