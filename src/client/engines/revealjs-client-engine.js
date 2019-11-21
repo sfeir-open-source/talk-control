@@ -47,10 +47,10 @@ export class RevealEngine extends GenericEngine {
 
     /**
      *
-     * @param {{h: number, v: number, f?: number}} indicies - position of the slide to go to
+     * @param {{h: number, v: number, f?: number}} indices - position of the slide to go to
      */
-    goToSlide(indicies) {
-        this.Reveal.slide(indicies.h, indicies.v, indicies.f || 0);
+    goToSlide(indices) {
+        this.Reveal.slide(indices.h, indices.v, indices.f || 0);
     }
 
     /**
