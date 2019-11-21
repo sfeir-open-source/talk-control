@@ -4,8 +4,8 @@ import { SocketEventBus } from './websockets/event-bus-websockets.js';
 import { SocketEventBusClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 
-export const MAIN_CHANNEL = 'MAIN_CHANNEL';
-export const SECONDARY_CHANNEL = 'SECONDARY_CHANNEL';
+export const MAIN_CHANNEL = 'MASTER/SERVER';
+export const SECONDARY_CHANNEL = 'MASTER/SLAVE';
 
 /**
  * @classdesc Instantiate event buses based on params given
@@ -39,6 +39,7 @@ export class EventBusResolver {
         if (![MAIN_CHANNEL, SECONDARY_CHANNEL].includes(dest)) {
             throw new Error(`'${dest}' is not a known destination.`);
         }
+        console.warn(`emit '${key}' on ${dest}`);
         this.channels[dest].emit(key, data);
     }
 

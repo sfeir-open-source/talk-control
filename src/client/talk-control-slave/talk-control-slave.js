@@ -10,6 +10,7 @@ export class TalkControlSlave {
                 slave: true
             }
         });
+        this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.eventBus.on(SECONDARY_CHANNEL, 'init', this.init.bind(this));
     }
@@ -18,6 +19,6 @@ export class TalkControlSlave {
         // Send the total slide number
         const slides = this.engine.getSlides();
         this.eventBus.emit(SECONDARY_CHANNEL, 'initialized', { slides });
-        this.eventBus.on(SECONDARY_CHANNEL, 'gotoSlide', data => this.engine.goToSlide(data.slide));
+        this.eventBus.on(SECONDARY_CHANNEL, 'gotoSlide', data => this.engine.goToSlide(data.slide, this.delta));
     }
 }

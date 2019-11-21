@@ -48,9 +48,21 @@ export class RevealEngine extends GenericEngine {
     /**
      *
      * @param {{h: number, v: number, f?: number}} indices - position of the slide to go to
+     * @param {number} delta - delta
      */
-    goToSlide(indices) {
-        this.Reveal.slide(indices.h, indices.v, indices.f || 0);
+    goToSlide(indices, delta = 0) {
+        console.log(`[${window.name}] gotoslide`, indices, delta);
+        let slideDelta = { ...indices };
+        const slides = this.getSlides();
+        const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
+        if (indices.f < slides[currentIndex].fMax) {
+            slideDelta.f += delta;
+        } else if (currentIndex + delta < slides.length - 1) {
+            slideDelta = slides[currentIndex + delta];
+        } else {
+            slideDelta = slides[slides.length - 1];
+        }
+        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f || 0);
     }
 
     /**
