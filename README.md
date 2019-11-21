@@ -10,7 +10,7 @@ It is composed by three main parts:
 
     It has 2 purposes :
 
-    -   It recieves the events from master(s) and forward them to slaves
+    -   It receives and send events to master(s)
     -   It stores the state of the app : slide number, etc...
 
     Its job is to work as the **single source of truth** for the app.
