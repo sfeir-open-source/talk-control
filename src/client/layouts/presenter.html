@@ -1,1 +1,32 @@
-TODO ...
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="../../../node_modules/bulma/css/bulma.min.css" />
+        <script defer src="../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+        <title>Presenter view</title>
+        <style>
+            div {
+                border: 0.1rem solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="columns" style="height: 100vh;">
+            <div class="column is-three-fifths" id="right-panel">
+                <div>Current slide</div>
+            </div>
+            <div class="column" id="left-panel">
+                <div>
+                    <div style="height: 40vh;">Next slide</div>
+                    <div>
+                        <div>Time</div>
+                        <div>Notes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
