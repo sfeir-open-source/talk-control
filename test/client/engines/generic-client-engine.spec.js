@@ -30,10 +30,10 @@ describe('GenericEngine', function() {
     describe('receiveMessageFromRemote()', function() {
         it('should call forwardMessageFromRemote()', function() {
             // Given
-            const data = { text: 'test' };
+            const data = { text: 'test', type: 'type' };
             engine.forwardMessageFromRemote = spy();
             // When
-            engine.receiveMessageFromRemote({ data: JSON.stringify(data) });
+            engine.receiveMessageFromRemote({ data });
             // Then
             assert(engine.forwardMessageFromRemote.calledOnceWith(data));
         });

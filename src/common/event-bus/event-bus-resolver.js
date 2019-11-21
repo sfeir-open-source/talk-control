@@ -24,7 +24,7 @@ export class EventBusResolver {
         }
 
         if (typeof window != 'undefined') {
-            this.channels[SECONDARY_CHANNEL] = new EventBusPostMessage();
+            this.channels[SECONDARY_CHANNEL] = new EventBusPostMessage(params.postMessage || {});
         }
     }
 

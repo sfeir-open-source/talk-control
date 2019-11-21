@@ -51,6 +51,7 @@ Thumbs.db
 
 # Slide show example
 showcase/reveal/node_modules/
+showcase/assets/slave
 
 # Parcel
 .cache

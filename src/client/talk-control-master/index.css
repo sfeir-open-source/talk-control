@@ -1,4 +1,6 @@
 #stageFrame {
     width: 100%;
-    height: 500px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }

@@ -53,7 +53,7 @@ export class RevealEngine extends GenericEngine {
             case 'space':
                 if (currentSlide.f < fMax) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
-                else this._nextHorizontalSlide(currentSlide);
+                else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);
                 break;
         }
     }
@@ -76,16 +76,16 @@ export class RevealEngine extends GenericEngine {
      * **************************************
      */
 
-    _nextHorizontalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h: h + 1, v }));
+    _nextHorizontalSlide({ h }) {
+        store.dispatch(gotoSlide({ h: h + 1, v: 0 }));
     }
 
     _nextVerticalSlide({ h, v }) {
         store.dispatch(gotoSlide({ h, v: v + 1 }));
     }
 
-    _prevHorizontalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h: h - 1, v }));
+    _prevHorizontalSlide({ h }) {
+        store.dispatch(gotoSlide({ h: h - 1, v: 0 }));
     }
 
     _prevVerticalSlide({ h, v }) {
