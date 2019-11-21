@@ -1,7 +1,6 @@
 'use strict';
 
 import { EventBusResolver, MAIN_CHANNEL, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
-import { isUrlValid } from '@helpers/helpers.js';
 
 /**
  * @classdesc Class that handle the events from the remote client
@@ -14,13 +13,13 @@ export class TalkControlMaster {
      * @param {string} server - server adress to connect to
      */
     constructor(server) {
-        const frames = [];
-        document.querySelectorAll('iframe').forEach(frame => frames.push(frame.contentWindow));
+        this.frames = [];
+        document.querySelectorAll('iframe').forEach(frame => this.frames.push(frame));
         this.eventBus = new EventBusResolver({
             client: true,
             server,
             postMessage: {
-                frames
+                frames: this.frames.map(frame => frame.contentWindow)
             }
         });
     }
@@ -29,34 +28,13 @@ export class TalkControlMaster {
      * Listen on event keys and display iframe when slideshow url is given
      */
     init() {
-        const inputPresentation = document.getElementById('inputPresentation');
-        const validateUrl = document.getElementById('btnValidate');
-        const displaySlideshow = () => {
-            const url = inputPresentation.value;
-            const stageFrame = document.getElementById('stageFrame');
-            // If url invalid, show an error
-            document.getElementById('urlError').classList.add('is-hidden');
-            if (!isUrlValid(url)) {
-                stageFrame.classList.add('is-hidden');
-                document.getElementById('urlError').classList.remove('is-hidden');
-                return;
-            }
-
-            stageFrame.src = url;
-            stageFrame.classList.remove('is-hidden');
-            document.getElementById('form').classList.add('is-hidden');
-            stageFrame.onload = () => {
-                this.eventBus.emit(SECONDARY_CHANNEL, 'init');
-            };
-        };
-
-        validateUrl.addEventListener('click', displaySlideshow);
-        inputPresentation.addEventListener('keypress', e => {
-            const key = e.which || e.keyCode;
-            if (key === 13) {
-                displaySlideshow();
-            }
-        });
+        let frameCount = 0;
+        this.frames.forEach(
+            frame =>
+                (frame.onload = () => {
+                    if (++frameCount >= this.frames.length) this.eventBus.emit(SECONDARY_CHANNEL, 'init');
+                })
+        );
 
         this.afterInitialisation();
         this.forwardEvents();

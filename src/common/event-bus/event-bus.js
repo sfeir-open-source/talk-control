@@ -43,10 +43,7 @@ export class EventBus {
         }
         const callbacks = this.callBacks[key];
 
-        if (!callbacks) {
-            console.warn(`No call back for key : ${key}`);
-            return;
-        }
+        if (!callbacks) return;
 
         callbacks.forEach(callback => {
             try {
