@@ -36,7 +36,7 @@ Currently, this app is still in initial developpement phase.
 
 ## Dependencies
 
-For this to work you need to have nodeJS v8 or more installed on your computer.
+For this to work you need to have Node.js v8 or more installed on your computer.
 
 ## Usage
 
