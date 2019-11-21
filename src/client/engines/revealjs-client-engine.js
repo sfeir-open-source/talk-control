@@ -51,7 +51,6 @@ export class RevealEngine extends GenericEngine {
      * @param {number} delta - delta
      */
     goToSlide(indices, delta = 0) {
-        console.log(`[${window.name}] gotoslide`, indices, delta);
         let slideDelta = { ...indices };
         const slides = this.getSlides();
         const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
