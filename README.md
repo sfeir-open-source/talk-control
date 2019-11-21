@@ -3,11 +3,28 @@
 ## Description
 
 This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
+
 It is composed by three main parts:
 
--   **Server** : As its name says, it's the backend part of the app. Its job is to work as the **single source of truth** of the app.
--   **Master** : The master is the "view" that is displayed to the user. It's purpose is to be the "bridge" between its slave(s) and the server. There are possibly multiple masters with each a different purpose. For exemple the presenter master, it will display the presentation in an iframe (this is the slave) and listen to any key pressed by the speaker to send them to the server. It will then forward the server response to its slave so that it can update the slideshow accordingly.
--   **Slave** : The slave is the part that interract directly with the slideshow. It will update the view with the events received from its master. There could be multiple slaves assossiated with one master. For exemple, in a presenter view where you have the presenter notes and a preview of the next slide. Both these part would be different slaves.
+-   **Server** : it's the backend part of the app.
+
+    It has 2 purposes :
+
+    -   It recieves the events from master(s) and forward them to slaves
+    -   It stores the state of the app : slide number, etc...
+
+    Its job is to work as the **single source of truth** for the app.
+
+-   **Master** : the master is a set of views for the speaker.
+
+    To control the talk, the master is the bridge between the slave(s) and the server.
+    It displays the slave(s) and listens for speaker events (key pressed, etc...), and send them to the server.
+    There are multiple master views, like :
+
+    -   The stage view : it displays the talk in an iframe in fullscreen
+    -   The presenter view : it displays the current slide, the next one, the timer and the notes
+
+-   **Slave** : the slave is a technical component added to a view (for example : the slideshow, the timer, etc...) to update it from events sent by the server or the master.
 
 ### Technology stack
 
@@ -15,7 +32,7 @@ This app is written in plain javascript, tested with mocha and chai and bundled 
 
 ### Status
 
-This app is currently still in initial developpement phase.
+Currently, this app is still in initial developpement phase.
 
 ## Dependencies
 
