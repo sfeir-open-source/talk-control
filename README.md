@@ -1,75 +1,72 @@
-# TalkControl
+# Talk Control
 
-## Naming match with WebRemoteControlSpeaker
+## Description
 
--   **ensuite-node => server**
+This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
 
-    The server handling states, the source of truth
+It is composed by three main parts:
 
--   **ensuite-front => talk-control-master**
+-   **Server** : it's the backend part of the app.
 
-    The webpage to take control of the presentation
+    It has 2 purposes :
 
--   **ensuite-client => talk-control-slave**
+    -   It receives and send events to master(s)
+    -   It stores the state of the app : slide number, etc...
 
-    The script to include into the presentation to interact with talk-control-master
+    Its job is to work as the **single source of truth** for the app.
 
--   **layouts => layouts**
+-   **Master** : the master is a set of views for the speaker.
 
-    The layouts: on stage (what the public see), presenter (what the presenter see)
+    To control the talk, the master is the bridge between the slave(s) and the server.
+    It displays the slave(s) and listens for speaker events (key pressed, etc...), and send them to the server.
+    There are multiple master views, like :
 
--   **engines => engines**
+    -   The stage view : it displays the talk in an iframe in fullscreen
+    -   The presenter view : it displays the current slide, the next one, the timer and the notes
 
-    The engines to interact with revealjs, etc...
+-   **Slave** : the slave is a technical component added to a view (for example : the slideshow, the timer, etc...) to update it from events sent by the server or the master.
 
-## The folders structure
+### Technology stack
 
--   **src**
+This app is written in plain javascript, tested with mocha and chai and bundled with parcelJs.
 
-    -   **client**
+### Status
 
-        -   **components**
+Currently, this app is still in initial developpement phase.
 
-            Contains components (WebComponents) to compose layouts
+## Dependencies
 
-        -   **engines**
+For this to work you need to have Node.js v8 or more installed on your computer.
 
-            Contains a folder for each engine (revealjs, ...) to be able to get data like: slide number, slide position, etc...
+## Usage
 
-        -   **layouts**
+Firstly install the dependencies
 
-            Handle several layouts for different purposes : on-stage layout, presenter layout, etc... Each layout is a set of components (see above)
+```sh
+npm i
+```
 
-        -   **talk-control-master**
+Then run the project
 
-            Handle the logic to take control of the slide show (interaction with iframe and more...)
+```sh
+npm start
+```
 
-        -   **talk-control-slave**
+Now you just need to open your browser on localhost:1234.
 
-            Handle the logic to receive and send back events to talk-control-master
+## How to test the software
 
-    -   **common**
+Run tests
 
-        -   **event-bus**
+```sh
+npm test
+```
 
-            Event handling, client side and server side
+## Getting help
 
-            -   **postmessage**
+Feel free to add any issue that you might find useful to improve the project and even propose pull request to help us :).
+You can go check our [issues page]('https://github.com/sfeir-open-source/talk-control/issues')
 
-                Send and receive messages between window and iframe
+## Getting involved
 
-            -   **websockets**
-
-                Send and receive messages through websockets (socket.io)
-
-        -   **helpers**
-
-            Useful things
-
-    -   **server**
-
-        The source of truth
-
--   **test**
-
-    Unit tests
+General instructions on _how_ can be found in the [CONTRIBUTING](CONTRIBUTING.md) file.
