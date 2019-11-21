@@ -3,7 +3,7 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver, MAIN_CHANNEL, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { SocketEventBusClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 
@@ -30,7 +30,7 @@ describe('EventBusResolver', function() {
             // When
             const resolver = new EventBusResolver({ server: 'http://localhost:3000', client: true });
             // Then
-            expect(resolver.channels[MAIN_CHANNEL] instanceof SocketEventBusClient).to.be.true;
+            expect(resolver.channels[MASTER_SERVER_CHANNEL] instanceof SocketEventBusClient).to.be.true;
         });
 
         it('shoud instantiate a Postmessage', function() {
@@ -41,7 +41,7 @@ describe('EventBusResolver', function() {
             // When
             const resolver = new EventBusResolver({});
             // Then
-            expect(resolver.channels[SECONDARY_CHANNEL]).to.be.ok;
+            expect(resolver.channels[MASTER_SLAVE_CHANNEL]).to.be.ok;
 
             window.addEventListener.restore();
             window.postMessage.restore();

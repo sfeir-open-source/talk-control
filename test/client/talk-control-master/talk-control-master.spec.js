@@ -5,7 +5,7 @@ import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
-import { MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
+import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 
 describe('', function() {
     let talkControlMaster;
@@ -110,7 +110,7 @@ describe('', function() {
         let mainChannel;
         beforeEach(function() {
             // Event mock
-            mainChannel = talkControlMaster.eventBus.channels[MAIN_CHANNEL];
+            mainChannel = talkControlMaster.eventBus.channels[MASTER_SERVER_CHANNEL];
             stub(mainChannel, 'emit');
         });
 

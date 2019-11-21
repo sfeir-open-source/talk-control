@@ -1,6 +1,6 @@
 'use strict';
 
-import { EventBusResolver, MAIN_CHANNEL, SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 
 /**
  * @classdesc Class that handle the events from the remote client
@@ -32,7 +32,7 @@ export class TalkControlMaster {
         this.frames.forEach(
             frame =>
                 (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this.eventBus.emit(SECONDARY_CHANNEL, 'init');
+                    if (++frameCount >= this.frames.length) this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
                 })
         );
 
@@ -45,11 +45,11 @@ export class TalkControlMaster {
      */
     afterInitialisation() {
         // Forward initialization event to server
-        this.eventBus.on(SECONDARY_CHANNEL, 'initialized', data => this.eventBus.emit(MAIN_CHANNEL, 'init', data));
+        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'initialized', data => this.eventBus.emit(MASTER_SERVER_CHANNEL, 'init', data));
         // Start listening on keys once the server is initialized
-        this.eventBus.on(MAIN_CHANNEL, 'initialized', () => addEventListener('keyup', this._onKeyUp.bind(this)));
+        this.eventBus.on(MASTER_SERVER_CHANNEL, 'initialized', () => addEventListener('keyup', this._onKeyUp.bind(this)));
         // Forward "gotoSlide" events to slave
-        this.eventBus.on(MAIN_CHANNEL, 'gotoSlide', data => this.eventBus.emit(SECONDARY_CHANNEL, 'gotoSlide', data));
+        this.eventBus.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
     }
 
     _onKeyUp(event) {
@@ -81,13 +81,13 @@ export class TalkControlMaster {
                 break;
         }
         if (action) {
-            this.eventBus.emit(MAIN_CHANNEL, 'keyPressed', { key: action });
+            this.eventBus.emit(MASTER_SERVER_CHANNEL, 'keyPressed', { key: action });
         }
     }
 
     forwardEvents() {
-        const forward = (key => data => this.eventBus.emit(SECONDARY_CHANNEL, key, data)).bind(this);
-        this.eventBus.on(MAIN_CHANNEL, 'slideNumber', forward('slideNumber'));
-        this.eventBus.on(MAIN_CHANNEL, 'currentSlide', forward('currentSlide'));
+        const forward = (key => data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
+        this.eventBus.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
+        this.eventBus.on(MASTER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 }

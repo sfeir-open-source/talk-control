@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave';
-import { SECONDARY_CHANNEL } from '@event-bus/event-bus-resolver';
+import { MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 
 describe('TalkControlSlave', function() {
     let talkControlSlave;
@@ -23,8 +23,8 @@ describe('TalkControlSlave', function() {
             // When
             talkControlSlave.init('revealjs');
             // Then
-            assert(emit.calledOnceWith(SECONDARY_CHANNEL, 'initialized'), '"emit" not called with initialized');
-            assert(on.calledOnceWith(SECONDARY_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
+            assert(emit.calledOnceWith(MASTER_SLAVE_CHANNEL, 'initialized'), '"emit" not called with initialized');
+            assert(on.calledOnceWith(MASTER_SLAVE_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
         });
     });
 });

@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import { TalkControlServer } from '@server/talk-control-server';
-import { MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
+import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import store from '@server/store';
 
 describe('should have instantiated', function() {
@@ -24,8 +24,8 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             // Then
             assert(on.calledTwice, 'not called twice');
-            assert(on.calledWith(MAIN_CHANNEL, 'init'), 'not called with init');
-            assert(on.calledWith(MAIN_CHANNEL, 'keyPressed'), 'not called with keypressed');
+            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'init'), 'not called with init');
+            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'keyPressed'), 'not called with keypressed');
         });
     });
 
@@ -63,7 +63,7 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
-            assert(emit.calledOnceWith(MAIN_CHANNEL, 'gotoSlide'));
+            assert(emit.calledOnceWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
             store.getState.restore();
         });
 
@@ -77,7 +77,7 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
-            assert(emit.calledOnceWith(MAIN_CHANNEL, 'initialized'));
+            assert(emit.calledOnceWith(MASTER_SERVER_CHANNEL, 'initialized'));
             store.getState.restore();
         });
     });
