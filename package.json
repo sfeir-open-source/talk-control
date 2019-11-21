@@ -10,7 +10,7 @@
         "lint": "eslint --fix . && echo 'Lint complete.'",
         "commit": "npx git-cz",
         "tc-master": "npx parcel src/client/talk-control-master/index.html --out-dir ./dist/client/master",
-        "tc-slave": "npx parcel watch src/client/talk-control-slave/index.js --out-dir showcase/assets/slave & serve showcase && fg",
+        "tc-slave": "npx parcel watch src/client/talk-control-slave/index.js --out-dir showcase/assets/slave & serve showcase",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
         "build-slave": "npx parcel build src/client/talk-control-slave/index.js --out-dir ./dist/client/slave --target browser",
         "build-master": "npx parcel build src/client/talk-control-master/index.html --out-dir ./dist/client/master --target browser",
@@ -88,6 +88,7 @@
         "module-alias": "^2.2.2",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
+        "serve": "^11.2.0",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",
         "uws": "^10.148.1"
