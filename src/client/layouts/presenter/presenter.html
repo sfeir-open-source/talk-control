@@ -49,18 +49,25 @@
                 </div>
             </div>
         </section>
-        <section class="columns is-hidden" style="height: 100vh; overflow: hidden" id="presenter-view">
-            <div class="column is-three-fifths has-background-light">
-                <iframe id="current-slide" name="current-slide">Current slide</iframe>
+        <section class="columns is-marginless is-paddingless is-hidden" id="presenter-view">
+            <div class="column is-three-fifths" id="current">
+                <div class="content">
+                    <iframe id="current-slide" name="current-slide">Current slide</iframe>
+                </div>
             </div>
-            <div class="column">
-                <div>
-                    <div class="has-background-grey-lighter" style="height: 45vh;"><iframe id="next-slide" name="next-slide" delta="1">Next slide</iframe></div>
-                    <div class="has-background-grey-light" style="height: 10vh;">
-                        <iframe src="./components/timer/timer.html" frameborder="0"></iframe>
+            <div class="column is-paddingless has-background-light">
+                <div class="has-background-white" id="next">
+                    <div class="content">
+                        <iframe id="next-slide" name="next-slide" delta="1">Next slide</iframe>
                     </div>
-                    <div class="has-background-light" style="height: 45vh;">
-                        <div class="is-size-6">NOTES</div>
+                </div>
+                <div class="has-background-white" id="timer">
+                    <div class="content">
+                        <iframe src="./components/timer/timer.html" frameborder="0" style="width: 100%"></iframe>
+                    </div>
+                </div>
+                <div class="has-background-white" id="notes">
+                    <div class="content">
                         <iframe src="./components/notes/notes.html" frameborder="0"></iframe>
                     </div>
                 </div>

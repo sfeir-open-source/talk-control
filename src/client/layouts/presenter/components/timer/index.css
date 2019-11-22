@@ -2,3 +2,7 @@
     cursor: pointer;
     user-select: none;
 }
+.block-title {
+    margin-top: 0.5rem;
+    height: 1rem;
+}
