@@ -2,6 +2,7 @@
 
 import { TalkControlMaster } from '../../talk-control-master/talk-control-master.js';
 import { isUrlValid } from '@helpers/helpers.js';
+import config from '@config/config.json';
 
 window.addEventListener('DOMContentLoaded', function() {
     const inputPresentation = document.getElementById('inputPresentation');
@@ -33,6 +34,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const talkControlMaster = new TalkControlMaster('http://localhost:3000');
+    const talkControlMaster = new TalkControlMaster(config.tcServer.url);
     talkControlMaster.init();
 });

@@ -98,6 +98,7 @@
         "@event-bus": "src/common/event-bus",
         "@helpers": "src/common/helpers",
         "@client": "src/client",
-        "@server": "src/server"
+        "@server": "src/server",
+        "@config": "config"
     }
 }

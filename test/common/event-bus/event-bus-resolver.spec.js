@@ -6,6 +6,7 @@ import { stub, spy } from 'sinon';
 import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { SocketEventBusClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
+import config from '@config/config.json';
 
 describe('EventBusResolver', function() {
     describe('constructor()', function() {
@@ -21,14 +22,14 @@ describe('EventBusResolver', function() {
         // ! Throws 'TypeError: server.listeners is not a function'
         // it('shoud instantiate a SocketServer', function() {
         //     // When
-        //     resolver = new EventBusResolver({ server: 'http://localhost:3000' });
+        //     resolver = new EventBusResolver({ server: config.tcServer.url });
         //     // Then
         //     expect(resolver.socketBus instanceof SocketEventBus).to.be.true;
         // });
 
         it('shoud instantiate a SocketClient', function() {
             // When
-            const resolver = new EventBusResolver({ server: 'http://localhost:3000', client: true });
+            const resolver = new EventBusResolver({ server: config.tcServer.url, client: true });
             // Then
             expect(resolver.channels[MASTER_SERVER_CHANNEL] instanceof SocketEventBusClient).to.be.true;
         });

@@ -7,6 +7,7 @@ import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
 import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import { MASTER_SLAVE_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
+import config from '@config/config.json';
 
 describe('', function() {
     let talkControlMaster;
@@ -17,7 +18,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        talkControlMaster = new TalkControlMaster('http://localhost:3000');
+        talkControlMaster = new TalkControlMaster(config.tcServer.url);
     });
 
     after(function() {
