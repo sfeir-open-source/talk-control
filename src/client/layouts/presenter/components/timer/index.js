@@ -1,9 +1,14 @@
 const startTimer = () => {
     let timerElement = document.querySelector('#timer'),
+        clockElement = document.querySelector('#clock'),
         seconds = 0,
         minutes = 0,
         hours = 0;
 
+    const formatTime = time => {
+        return time ? (time < 10 ? '0' + time : time) : '00';
+    };
+    /****** TIMER FUNCTIONS ******/
     const add = () => {
         seconds++;
         if (seconds >= 60) {
@@ -14,13 +19,7 @@ const startTimer = () => {
                 hours++;
             }
         }
-
-        timerElement.textContent =
-            (hours ? (hours > 9 ? hours : '0' + hours) : '00') +
-            ':' +
-            (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') +
-            ':' +
-            (seconds > 9 ? seconds : '0' + seconds);
+        timerElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
     };
 
     const timer = () => {
@@ -33,7 +32,22 @@ const startTimer = () => {
             timerElement.textContent = '00:00:00';
         };
     };
+
+    /****** CLOCK FUNCTIONS ******/
+    const updateTime = () => {
+        const today = new Date();
+        const hours = today.getHours();
+        const minutes = today.getMinutes();
+        clockElement.textContent = `${formatTime(hours)}:${formatTime(minutes)}`;
+    };
+    const clock = () => {
+        updateTime();
+        setInterval(updateTime, 1000);
+    };
+
     let restartTimer = timer();
+    clock();
+
     timerElement.addEventListener('click', () => {
         restartTimer();
         restartTimer = timer();
@@ -46,6 +60,6 @@ addEventListener('message', message => {
     }
 
     if (typeof message.data === 'object' && message.data.type === 'init') {
-        startTimer(false);
+        startTimer();
     }
 });
