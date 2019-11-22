@@ -20,29 +20,17 @@ export class RevealEngine extends GenericEngine {
      * **************************************
      */
 
-    /**
-     * Handle the message received from the window listener
-     *
-     * @param {{type: string, data: string}} message - Message to handle
-     */
-    forwardMessageFromRemote(message) {
-        switch (message.type) {
-            case 'init':
-                this.Reveal.configure({
-                    controls: false,
-                    transition: 'default',
-                    transitionSpeed: 'fast',
-                    history: false,
-                    slideNumber: false,
-                    keyboard: false,
-                    touch: false,
-                    embedded: true
-                });
-                break;
-            case 'changeSlide':
-                this.goToSlide(message.data);
-                break;
-        }
+    init() {
+        this.Reveal.configure({
+            controls: false,
+            transition: 'default',
+            transitionSpeed: 'fast',
+            history: false,
+            slideNumber: false,
+            keyboard: false,
+            touch: false,
+            embedded: true
+        });
     }
 
     /**
@@ -83,5 +71,9 @@ export class RevealEngine extends GenericEngine {
             }
         });
         return slides;
+    }
+
+    getSlideNotes() {
+        return this.Reveal.getSlideNotes();
     }
 }

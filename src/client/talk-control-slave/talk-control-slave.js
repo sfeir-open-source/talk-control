@@ -16,9 +16,15 @@ export class TalkControlSlave {
     }
 
     init() {
+        this.engine.init();
         // Send the total slide number
         const slides = this.engine.getSlides();
         this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
-        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => this.engine.goToSlide(data.slide, this.delta));
+        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
+            this.engine.goToSlide(data.slide, this.delta);
+            if (!this.delta) {
+                this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
+            }
+        });
     }
 }

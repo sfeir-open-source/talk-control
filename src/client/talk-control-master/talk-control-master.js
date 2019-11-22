@@ -50,6 +50,8 @@ export class TalkControlMaster {
         this.eventBus.on(MASTER_SERVER_CHANNEL, 'initialized', () => addEventListener('keyup', this._onKeyUp.bind(this)));
         // Forward "gotoSlide" events to slave
         this.eventBus.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
+        // Forward "showNotes" events to slave
+        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
     }
 
     _onKeyUp(event) {
