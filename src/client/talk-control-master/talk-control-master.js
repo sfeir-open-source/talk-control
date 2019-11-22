@@ -1,6 +1,7 @@
 'use strict';
 
 import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
+import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 
 /**
  * @classdesc Class that handle the events from the remote client
@@ -14,7 +15,7 @@ export class TalkControlMaster {
      */
     constructor(server) {
         this.frames = [];
-        document.querySelectorAll('iframe').forEach(frame => this.frames.push(frame));
+        querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.eventBus = new EventBusResolver({
             client: true,
             server,
