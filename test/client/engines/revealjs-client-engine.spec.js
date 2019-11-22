@@ -38,34 +38,6 @@ describe('RevealEngineClient', function() {
         });
     });
 
-    describe('forwardMessageFromRemote()', function() {
-        it('should initialise Reveal', function() {
-            // Given
-            const message = {
-                type: 'init',
-                data: null
-            };
-            // When
-            engine.forwardMessageFromRemote(message);
-            // Then
-            expect(window.Reveal.configure.calledOnce);
-        });
-
-        it('should call this.gotoSlide()', function() {
-            // Given
-            stub(engine, 'goToSlide');
-            const message = {
-                type: 'changeSlide',
-                data: { h: 0, v: 0, f: 0 }
-            };
-            // When
-            engine.forwardMessageFromRemote(message);
-            // Then
-            expect(engine.goToSlide.calledOnceWith(0, 0, 0));
-            engine.goToSlide.restore();
-        });
-    });
-
     describe('goToSlide()', function() {
         it('should call Reveal.slide() with the given params', function() {
             // Given
