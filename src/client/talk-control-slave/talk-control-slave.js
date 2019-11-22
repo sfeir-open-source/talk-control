@@ -17,6 +17,8 @@ export class TalkControlSlave {
 
     init() {
         this.engine.init();
+        // If there's a delta, move the initial slide
+        if (this.delta) this.engine.changeSlide(this.delta);
         // Send the total slide number
         const slides = this.engine.getSlides();
         this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });

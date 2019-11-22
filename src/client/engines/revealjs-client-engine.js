@@ -76,4 +76,12 @@ export class RevealEngine extends GenericEngine {
     getSlideNotes() {
         return this.Reveal.getSlideNotes();
     }
+
+    /**
+     *
+     * @param {number} delta - number of movements to make from$ the current slide
+     */
+    changeSlide(delta) {
+        this.goToSlide(this.Reveal.getIndices(), delta);
+    }
 }

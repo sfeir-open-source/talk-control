@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 /**
@@ -10,7 +11,6 @@ export class GenericEngine {
      *
      * @param {*} params - Params indicating to which slide go to
      */
-    // eslint-disable-next-line no-unused-vars
     goToSlide(params) {}
 
     /**
@@ -22,4 +22,11 @@ export class GenericEngine {
      * Return current slide notes
      */
     getSlideNotes() {}
+
+    /**
+     * Move slides
+     *
+     * @param {number} delta - number of movements to make from$ the current slide
+     */
+    changeSlide(delta) {}
 }
