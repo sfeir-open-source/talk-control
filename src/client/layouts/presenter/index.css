@@ -1,3 +1,24 @@
+#current {
+    height: 100vh;
+    padding: 0.3rem;
+}
+#next {
+    height: 45vh;
+    padding: 0.3rem 0.3rem 0 0;
+}
+#timer {
+    height: 10vh;
+    padding: 0.3rem 0.3rem 0 0;
+}
+#notes {
+    height: 45vh;
+    padding: 0.3rem 0.3rem 0.3rem 0;
+}
+.content {
+    height: 100%;
+    padding: 0.5rem;
+    border: 3px solid black;
+}
 iframe {
     width: 100%;
     height: 100%;
