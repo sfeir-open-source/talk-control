@@ -29,6 +29,7 @@ export class TalkControlMaster {
      * Listen on event keys and display iframe when slideshow url is given
      */
     init() {
+        // Fire init event when all iframes are loaded
         let frameCount = 0;
         this.frames.forEach(
             frame =>

@@ -1,6 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
 // Extend the LitElement base class
@@ -13,12 +14,18 @@ class SlideView extends LitElement {
     }
 
     static get styles() {
-        return css`
-            iframe {
+        return [bulmaStyle, css`
+            iframe,
+            section {
                 width: 100%;
-                min-height: 100vh;
+                height: 100%;
             }
-        `;
+            .content {
+                height: 100%;
+                padding: 0.5rem;
+                border: 3px solid black;
+            }
+        `];
     }
 
     constructor() {
@@ -40,9 +47,9 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <section>
+            <div class="content">
                 <iframe>Current slide</iframe>
-            </section>
+            </div>
         `;
     }
 }
