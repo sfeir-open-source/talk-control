@@ -9,49 +9,20 @@
         <link rel="stylesheet" href="./index.css" />
     </head>
     <body>
-        <section class="section" id="form">
+        <section class="section">
             <div class="container">
                 <h1 class="title">
                     Talk control
                 </h1>
-                <p class="subtitle">
-                    Take control of your presentation by entering its url below
-                </p>
-
-                <!-- Enter presentation url form area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div class="columns">
-                            <div class="column is-four-fifths">
-                                <input
-                                    class="input"
-                                    type="url"
-                                    placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
-                                    id="inputPresentation"
-                                    value="http://127.0.0.1:5000"
-                                />
-                            </div>
-                            <div class="column">
-                                <button id="btnValidate" class="button">Validate Url</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Error message area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div id="urlError" class="notification is-danger is-hidden">
-                            <button class="delete"></button>
-                            URL is not valid
-                        </div>
-                    </div>
-                </div>
+                <ul>
+                    <li>
+                        <a href="../layouts/on-stage/on-stage.html">stage view</a>
+                    </li>
+                    <li>
+                        <a href="../layouts/presenter/presenter.html">presenter view</a>
+                    </li>
+                </ul>
             </div>
         </section>
-        <section>
-            <iframe id="stageFrame" class="is-hidden"></iframe>
-        </section>
-        <script src="./index.js"></script>
     </body>
 </html>

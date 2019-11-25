@@ -20,37 +20,36 @@ export class RevealEngine extends GenericEngine {
      * **************************************
      */
 
-    /**
-     * Handle the message received from the window listener
-     *
-     * @param {{type: string, data: string}} message - Message to handle
-     */
-    forwardMessageFromRemote(message) {
-        switch (message.type) {
-            case 'init':
-                this.Reveal.configure({
-                    controls: false,
-                    transition: 'default',
-                    transitionSpeed: 'fast',
-                    history: false,
-                    slideNumber: false,
-                    keyboard: false,
-                    touch: false,
-                    embedded: true
-                });
-                break;
-            case 'changeSlide':
-                this.goToSlide(message.data);
-                break;
-        }
+    init() {
+        this.Reveal.configure({
+            controls: false,
+            transition: 'default',
+            transitionSpeed: 'fast',
+            history: false,
+            slideNumber: false,
+            keyboard: false,
+            touch: false,
+            embedded: true
+        });
     }
 
     /**
      *
      * @param {{h: number, v: number, f?: number}} indices - position of the slide to go to
+     * @param {number} delta - delta
      */
-    goToSlide(indices) {
-        this.Reveal.slide(indices.h, indices.v, indices.f || 0);
+    goToSlide(indices, delta = 0) {
+        let slideDelta = { ...indices };
+        const slides = this.getSlides();
+        const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
+        if (indices.f < slides[currentIndex].fMax) {
+            slideDelta.f += delta;
+        } else if (currentIndex + delta < slides.length - 1) {
+            slideDelta = slides[currentIndex + delta];
+        } else {
+            slideDelta = slides[slides.length - 1];
+        }
+        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f || 0);
     }
 
     /**
@@ -72,5 +71,17 @@ export class RevealEngine extends GenericEngine {
             }
         });
         return slides;
+    }
+
+    getSlideNotes() {
+        return this.Reveal.getSlideNotes();
+    }
+
+    /**
+     *
+     * @param {number} delta - number of movements to make from$ the current slide
+     */
+    changeSlide(delta) {
+        this.goToSlide(this.Reveal.getIndices(), delta);
     }
 }

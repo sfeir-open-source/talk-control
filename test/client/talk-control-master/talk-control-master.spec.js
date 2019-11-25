@@ -5,7 +5,8 @@ import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
-import { MAIN_CHANNEL } from '@event-bus/event-bus-resolver';
+import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
+import { MASTER_SLAVE_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
 
 describe('', function() {
     let talkControlMaster;
@@ -30,79 +31,19 @@ describe('', function() {
     });
 
     describe('init()', function() {
-        let inputPresentation, btnValidate, stageFrame, urlError;
-
-        beforeEach(function() {
-            // Display mock
-            inputPresentation = { value: 'http://test.com:8080', addEventListener: stub() };
-            btnValidate = { addEventListener: stub() };
-            stageFrame = { src: '', classList: { add: () => (stageFrame.hidden = true), remove: () => (stageFrame.hidden = false) }, hidden: true };
-            urlError = { classList: { add: () => (urlError.hidden = true), remove: () => (urlError.hidden = false) }, hidden: true };
-            const formBlock = { classList: { add: stub() } };
-
-            const getElementById = stub(document, 'getElementById');
-            getElementById.withArgs('inputPresentation').returns(inputPresentation);
-            getElementById.withArgs('btnValidate').returns(btnValidate);
-            getElementById.withArgs('stageFrame').returns(stageFrame);
-            getElementById.withArgs('urlError').returns(urlError);
-            getElementById.withArgs('form').returns(formBlock);
-
+        it('should fire init when all iframes are loaded', function() {
+            // Given
+            const emit = stub(talkControlMaster.eventBus, 'emit');
             stub(talkControlMaster, 'afterInitialisation');
             stub(talkControlMaster, 'forwardEvents');
-        });
 
-        afterEach(function() {
-            document.getElementById.restore();
-        });
-
-        it('should have displayed the iframe when btnValidate is clicked', function() {
-            // Given
-            let btnCallback;
-            btnValidate.addEventListener = (_, callback) => (btnCallback = callback);
+            talkControlMaster.frames = [{}, {}, {}];
             // When
             talkControlMaster.init();
-            btnCallback();
+            talkControlMaster.frames.forEach(frame => frame.onload());
             // Then
-            expect(urlError.hidden).to.be.true;
-            expect(stageFrame.hidden).to.be.false;
-            expect(stageFrame.src).to.be.equals(inputPresentation.value);
-        });
-
-        it('should have displayed the iframe when enter is pushed on inputPresentation', function() {
-            // Given
-            let inputCallback;
-            inputPresentation.addEventListener = (_, callback) => (inputCallback = callback);
-            // When
-            talkControlMaster.init();
-            inputCallback({ keyCode: 13 });
-            // Then
-            expect(stageFrame.hidden).to.be.false;
-            expect(stageFrame.src).to.be.equals(inputPresentation.value);
-        });
-
-        it('should not displayed the iframe when another key is pushed on inputPresentation', function() {
-            // Given
-            let inputCallback;
-            inputPresentation.addEventListener = (_, callback) => (inputCallback = callback);
-            // When
-            talkControlMaster.init();
-            inputCallback({ keyCode: 12 });
-            // Then
-            expect(stageFrame.hidden).to.be.true;
-            expect(stageFrame.src).to.be.equals('');
-        });
-
-        it('should have shown an error because there is no URL given', function() {
-            // Given
-            let btnCallback;
-            btnValidate.addEventListener = (_, callback) => (btnCallback = callback);
-            inputPresentation.value = '';
-            // When
-            talkControlMaster.init();
-            btnCallback();
-            // Then
-            expect(urlError.hidden).to.be.false;
-            expect(stageFrame.hidden).to.be.true;
+            assert(emit.calledOnceWith(MASTER_SLAVE_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
+            emit.restore();
         });
     });
 
@@ -110,7 +51,7 @@ describe('', function() {
         let mainChannel;
         beforeEach(function() {
             // Event mock
-            mainChannel = talkControlMaster.eventBus.channels[MAIN_CHANNEL];
+            mainChannel = talkControlMaster.eventBus.channels[MASTER_SERVER_CHANNEL];
             stub(mainChannel, 'emit');
         });
 
