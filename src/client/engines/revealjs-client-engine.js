@@ -42,14 +42,18 @@ export class RevealEngine extends GenericEngine {
         let slideDelta = { ...indices };
         const slides = this.getSlides();
         const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
-        if (indices.f < slides[currentIndex].fMax) {
+        if (indices.f + delta < slides[currentIndex].fMax) {
             slideDelta.f += delta;
         } else if (currentIndex + delta < slides.length - 1) {
             slideDelta = slides[currentIndex + delta];
         } else {
             slideDelta = slides[slides.length - 1];
         }
-        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f || 0);
+        if (!delta) {
+            console.log(indices.f, slides[currentIndex].fMax);
+            console.log('Going to slide:', slideDelta);
+        }
+        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f);
     }
 
     /**
@@ -64,10 +68,10 @@ export class RevealEngine extends GenericEngine {
             if (verticalSlides.length) {
                 verticalSlides.forEach((slideV, indexV) => {
                     const fragmentsV = slideV.querySelectorAll('.fragment');
-                    slides.push({ h: indexH, v: indexV, f: 0, fMax: fragmentsV.length ? fragmentsV.length + 1 : 0 });
+                    slides.push({ h: indexH, v: indexV, f: -1, fMax: fragmentsV.length || -1 });
                 });
             } else {
-                slides.push({ h: indexH, v: 0, f: 0, fMax: fragmentsH.length ? fragmentsH.length + 1 : 0 });
+                slides.push({ h: indexH, v: 0, f: -1, fMax: fragmentsH.length || -1 });
             }
         });
         return slides;

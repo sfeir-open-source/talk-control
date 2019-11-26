@@ -41,7 +41,7 @@ describe('RevealEngineClient', function() {
     describe('goToSlide()', function() {
         it('should call Reveal.slide() with the given params', function() {
             // Given
-            stub(engine, 'getSlides').returns([{ h: 1, v: 1, f: 0, fMax: 0 }, { h: 1, v: 2, f: 0, fMax: 4 }]);
+            stub(engine, 'getSlides').returns([{ h: 1, v: 1, f: -1, fMax: -1 }, { h: 1, v: 2, f: -1, fMax: 4 }]);
             // When
             engine.goToSlide({ h: 1, v: 2, f: 3 });
             // Then
@@ -58,7 +58,7 @@ describe('RevealEngineClient', function() {
             const slides = engine.getSlides();
             // Then
             expect(slides.length).to.equals(3);
-            expect(slides[0]).to.eqls({ h: 0, v: 0, f: 0, fMax: 0 });
+            expect(slides[0]).to.eqls({ h: 0, v: 0, f: -1, fMax: -1 });
             document.querySelectorAll.restore();
         });
     });

@@ -33,25 +33,28 @@ export class RevealEngine extends GenericEngine {
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
         const nextHorizontalSlide = slides.find(slide => currentSlide.h + 1 === slide.h);
+        console.log('handle input: ', key);
+        console.log(fMax, currentSlide, currentSlide.f < fMax);
+
         switch (key) {
             case 'arrowRight':
-                if (currentSlide.f < fMax) this._nextFragment(currentSlide);
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);
                 break;
             case 'arrowLeft':
-                if (currentSlide.f > 0) this._prevFragment(currentSlide);
+                if (currentSlide.f > -1) this._prevFragment(currentSlide);
                 else if (currentSlideIndex) this._prevHorizontalSlide(currentSlide);
                 break;
             case 'arrowUp':
-                if (currentSlide.f > 0) this._prevFragment(currentSlide);
+                if (currentSlide.f > -1) this._prevFragment(currentSlide);
                 else if (currentSlide.v > 0) this._prevVerticalSlide(currentSlide);
                 break;
             case 'arrowDown':
-                if (currentSlide.f < fMax) this._nextFragment(currentSlide);
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
                 break;
             case 'space':
-                if (currentSlide.f < fMax) this._nextFragment(currentSlide);
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
                 else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);
                 break;
@@ -77,19 +80,19 @@ export class RevealEngine extends GenericEngine {
      */
 
     _nextHorizontalSlide({ h }) {
-        store.dispatch(gotoSlide({ h: h + 1, v: 0 }));
+        store.dispatch(gotoSlide({ h: h + 1, v: 0, f: -1 }));
     }
 
     _nextVerticalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h, v: v + 1 }));
+        store.dispatch(gotoSlide({ h, v: v + 1, f: -1 }));
     }
 
     _prevHorizontalSlide({ h }) {
-        store.dispatch(gotoSlide({ h: h - 1, v: 0 }));
+        store.dispatch(gotoSlide({ h: h - 1, v: 0, f: -1 }));
     }
 
     _prevVerticalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h, v: v - 1 }));
+        store.dispatch(gotoSlide({ h, v: v - 1, f: -1 }));
     }
 
     _nextFragment({ h, v, f }) {

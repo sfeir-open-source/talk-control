@@ -4,7 +4,7 @@ import { stub } from 'sinon';
 import store from '@server/store';
 
 describe('RevealEngineServer', function() {
-    const slides = [{ h: 0, v: 0, f: 0, fMax: 3 }, { h: 1, v: 0, f: 0, fMax: 2 }, { h: 1, v: 1, f: 0, fMax: 2 }];
+    const slides = [{ h: 0, v: 0, f: -1, fMax: 3 }, { h: 1, v: 0, f: -1, fMax: 2 }, { h: 1, v: 1, f: -1, fMax: 2 }];
     let engine;
     beforeEach(function() {
         engine = new RevealEngine();
@@ -30,7 +30,7 @@ describe('RevealEngineServer', function() {
     describe('handleInput()', function() {
         it('should do nothing', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 0 };
+            const currentSlide = { h: 0, v: 0, f: -1 };
             stub(store, 'dispatch');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -43,7 +43,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _nextFragment() on "arrowRight"', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 0 };
+            const currentSlide = { h: 0, v: 0, f: -1 };
             stub(engine, '_nextFragment');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -56,7 +56,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _nextHorizontalSlide() on "arrowRight"', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 4 };
+            const currentSlide = { h: 0, v: 0, f: 2 };
             stub(engine, '_nextHorizontalSlide');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -69,7 +69,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _prevFragment() on "arrowLeft"', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 3 };
+            const currentSlide = { h: 0, v: 0, f: 2 };
             stub(engine, '_prevFragment');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -82,7 +82,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _prevHorizontalSlide() on "arrowLeft"', function() {
             // Given
-            const currentSlide = { h: 1, v: 0, f: 0 };
+            const currentSlide = { h: 1, v: 0, f: -1 };
             stub(engine, '_prevHorizontalSlide');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -108,7 +108,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _prevVerticalSlide() on "arrowUp"', function() {
             // Given
-            const currentSlide = { h: 1, v: 1, f: 0 };
+            const currentSlide = { h: 1, v: 1, f: -1 };
             stub(engine, '_prevVerticalSlide');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
@@ -121,13 +121,13 @@ describe('RevealEngineServer', function() {
 
         it('should call _nextFragment() on "arrowDown"', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 0 };
+            const currentSlide = { h: 0, v: 0, f: -1 };
             stub(engine, '_nextFragment');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
             engine.handleInput({ key: 'arrowDown' });
             // Then
-            assert(engine._nextFragment.calledOnceWith({ h: 0, v: 0, f: 0 }));
+            assert(engine._nextFragment.calledOnceWith(currentSlide));
             store.getState.restore();
             engine._nextFragment.restore();
         });
@@ -147,7 +147,7 @@ describe('RevealEngineServer', function() {
 
         it('should call _nextFragment() on "space"', function() {
             // Given
-            const currentSlide = { h: 0, v: 0, f: 0 };
+            const currentSlide = { h: 0, v: 0, f: -1 };
             stub(engine, '_nextFragment');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
