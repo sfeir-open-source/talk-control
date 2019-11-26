@@ -49,10 +49,6 @@ export class RevealEngine extends GenericEngine {
         } else {
             slideDelta = slides[slides.length - 1];
         }
-        if (!delta) {
-            console.log(indices.f, slides[currentIndex].fMax);
-            console.log('Going to slide:', slideDelta);
-        }
         this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f);
     }
 
@@ -79,13 +75,5 @@ export class RevealEngine extends GenericEngine {
 
     getSlideNotes() {
         return this.Reveal.getSlideNotes();
-    }
-
-    /**
-     *
-     * @param {number} delta - number of movements to make from$ the current slide
-     */
-    changeSlide(delta) {
-        this.goToSlide(this.Reveal.getIndices(), delta);
     }
 }

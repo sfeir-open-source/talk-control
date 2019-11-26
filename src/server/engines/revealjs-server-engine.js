@@ -21,7 +21,7 @@ export class RevealEngine extends GenericEngine {
      * @param {*} params - Needed params to initialize the engine
      */
     init(params) {
-        store.dispatch(init({ ...params, currentSlide: { h: 0, v: 0, f: 0 } }));
+        store.dispatch(init({ ...params, currentSlide: { h: 0, v: 0, f: -1 } }));
     }
 
     /**
@@ -33,8 +33,8 @@ export class RevealEngine extends GenericEngine {
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
         const nextHorizontalSlide = slides.find(slide => currentSlide.h + 1 === slide.h);
-        console.log('handle input: ', key);
-        console.log(fMax, currentSlide, currentSlide.f < fMax);
+        const prevVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v - 1);
+        const prevHorizontalSlide = slides.find(slide => currentSlide.h - 1 === slide.h);
 
         switch (key) {
             case 'arrowRight':
@@ -43,11 +43,11 @@ export class RevealEngine extends GenericEngine {
                 break;
             case 'arrowLeft':
                 if (currentSlide.f > -1) this._prevFragment(currentSlide);
-                else if (currentSlideIndex) this._prevHorizontalSlide(currentSlide);
+                else if (prevHorizontalSlide) this._prevSlide(prevHorizontalSlide);
                 break;
             case 'arrowUp':
                 if (currentSlide.f > -1) this._prevFragment(currentSlide);
-                else if (currentSlide.v > 0) this._prevVerticalSlide(currentSlide);
+                else if (prevVerticalSlide) this._prevSlide(prevVerticalSlide);
                 break;
             case 'arrowDown':
                 if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
@@ -80,26 +80,26 @@ export class RevealEngine extends GenericEngine {
      */
 
     _nextHorizontalSlide({ h }) {
-        store.dispatch(gotoSlide({ h: h + 1, v: 0, f: -1 }));
+        this._gotoSlide({ h: h + 1, v: 0, f: -1 });
     }
 
     _nextVerticalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h, v: v + 1, f: -1 }));
+        this._gotoSlide({ h, v: v + 1, f: -1 });
     }
 
-    _prevHorizontalSlide({ h }) {
-        store.dispatch(gotoSlide({ h: h - 1, v: 0, f: -1 }));
-    }
-
-    _prevVerticalSlide({ h, v }) {
-        store.dispatch(gotoSlide({ h, v: v - 1, f: -1 }));
+    _prevSlide({ h, v, fMax }) {
+        this._gotoSlide({ h, v, f: fMax > 0 ? fMax - 1 : fMax });
     }
 
     _nextFragment({ h, v, f }) {
-        store.dispatch(gotoSlide({ h, v, f: f + 1 }));
+        this._gotoSlide({ h, v, f: f + 1 });
     }
 
     _prevFragment({ h, v, f }) {
-        store.dispatch(gotoSlide({ h, v, f: f - 1 }));
+        this._gotoSlide({ h, v, f: f - 1 });
+    }
+
+    _gotoSlide(slide) {
+        store.dispatch(gotoSlide(slide));
     }
 }

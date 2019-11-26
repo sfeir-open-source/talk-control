@@ -80,17 +80,17 @@ describe('RevealEngineServer', function() {
             engine._prevFragment.restore();
         });
 
-        it('should call _prevHorizontalSlide() on "arrowLeft"', function() {
+        it('should call _prevSlide() on "arrowLeft"', function() {
             // Given
             const currentSlide = { h: 1, v: 0, f: -1 };
-            stub(engine, '_prevHorizontalSlide');
+            stub(engine, '_prevSlide');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
             engine.handleInput({ key: 'arrowLeft' });
             // Then
-            assert(engine._prevHorizontalSlide.calledOnceWith(currentSlide));
+            assert(engine._prevSlide.calledOnceWith({ h: 0, v: 0, f: -1, fMax: 3 }));
             store.getState.restore();
-            engine._prevHorizontalSlide.restore();
+            engine._prevSlide.restore();
         });
 
         it('should call _prevFragment() on "arrowUp"', function() {
@@ -106,17 +106,17 @@ describe('RevealEngineServer', function() {
             engine._prevFragment.restore();
         });
 
-        it('should call _prevVerticalSlide() on "arrowUp"', function() {
+        it('should call _prevSlide() on "arrowUp"', function() {
             // Given
             const currentSlide = { h: 1, v: 1, f: -1 };
-            stub(engine, '_prevVerticalSlide');
+            stub(engine, '_prevSlide');
             stub(store, 'getState').returns({ currentSlide, slides });
             // When
             engine.handleInput({ key: 'arrowUp' });
             // Then
-            assert(engine._prevVerticalSlide.calledOnceWith(currentSlide));
+            assert(engine._prevSlide.calledOnceWith({ h: 1, v: 0, f: -1, fMax: 2 }));
             store.getState.restore();
-            engine._prevVerticalSlide.restore();
+            engine._prevSlide.restore();
         });
 
         it('should call _nextFragment() on "arrowDown"', function() {
