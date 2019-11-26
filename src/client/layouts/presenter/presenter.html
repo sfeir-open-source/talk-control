@@ -18,17 +18,25 @@
         <tc-url-form></tc-url-form>
         <section class="columns is-marginless is-paddingless is-hidden" id="presenter-view">
             <div class="column is-three-fifths" id="current">
-                <tc-slide style="height: 100%;"></tc-slide>
+                <div class="content">
+                    <tc-slide></tc-slide>
+                </div>
             </div>
             <div class="column is-paddingless has-background-light">
                 <div class="has-background-white" id="next">
-                    <tc-slide delta="1"></tc-slide>
+                    <div class="content">
+                        <tc-slide delta="1"></tc-slide>
+                    </div>
                 </div>
                 <div class="has-background-white" id="timer">
-                    <tc-timer></tc-timer>
+                    <div class="content">
+                        <tc-timer></tc-timer>
+                    </div>
                 </div>
                 <div class="has-background-white" id="notes">
-                    <tc-notes></tc-notes>
+                    <div class="content">
+                        <tc-notes></tc-notes>
+                    </div>
                 </div>
             </div>
         </section>

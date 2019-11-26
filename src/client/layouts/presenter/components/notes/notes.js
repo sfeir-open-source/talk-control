@@ -12,11 +12,6 @@ class NotesComponent extends LitElement {
                 .block-title {
                     height: 2rem;
                 }
-                .content {
-                    height: 100%;
-                    padding: 0.5rem;
-                    border: 3px solid black;
-                }
             `
         ];
     }
@@ -35,12 +30,10 @@ class NotesComponent extends LitElement {
 
     render() {
         return html`
-            <div class="content">
-                <div class="block-title">
-                    <p class="is-size-6">NOTES</p>
-                </div>
-                <div id="notes"></div>
+            <div class="block-title">
+                <p class="is-size-6">NOTES</p>
             </div>
+            <div id="notes"></div>
         `;
     }
 }

@@ -14,18 +14,16 @@ class SlideView extends LitElement {
     }
 
     static get styles() {
-        return [bulmaStyle, css`
-            iframe,
-            section {
-                width: 100%;
-                height: 100%;
-            }
-            .content {
-                height: 100%;
-                padding: 0.5rem;
-                border: 3px solid black;
-            }
-        `];
+        return [
+            bulmaStyle,
+            css`
+                iframe,
+                section {
+                    width: 100%;
+                    height: 100%;
+                }
+            `
+        ];
     }
 
     constructor() {
@@ -47,9 +45,9 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <div class="content">
+            <section>
                 <iframe>Current slide</iframe>
-            </div>
+            </section>
         `;
     }
 }

@@ -16,11 +16,6 @@ class TimerComponent extends LitElement {
                     margin-top: 0.5rem;
                     height: 1rem;
                 }
-                .content {
-                    height: 100%;
-                    padding: 0.5rem;
-                    border: 3px solid black;
-                }
             `
         ];
     }
@@ -101,17 +96,15 @@ class TimerComponent extends LitElement {
 
     render() {
         return html`
-            <div class="content">
-                <div class="block-title">
-                    <p class="is-size-6">TIMER</p>
+            <div class="block-title">
+                <p class="is-size-6">TIMER</p>
+            </div>
+            <div class="columns is-mobile is-paddingless is-marginless">
+                <div class="column is-paddingless">
+                    <p class="is-size-3" id="timer" @click="${this.handleTimerClick}">00:00:00</p>
                 </div>
-                <div class="columns is-mobile is-paddingless is-marginless">
-                    <div class="column is-paddingless">
-                        <p class="is-size-3" id="timer" @click="${this.handleTimerClick}">00:00:00</p>
-                    </div>
-                    <div class="column has-text-right is-paddingless" style="padding-right: 1.5rem;">
-                        <p class="is-size-3" id="clock">00:00</p>
-                    </div>
+                <div class="column has-text-right is-paddingless" style="padding-right: 1.5rem;">
+                    <p class="is-size-3" id="clock">00:00</p>
                 </div>
             </div>
         `;
