@@ -36,9 +36,14 @@ class SlideView extends LitElement {
         // For debug purposes - called each time a property value changes
         console.log('attribute change: ', name, newval);
         super.attributeChangedCallback(name, oldval, newval);
+
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
             const iframe = this.shadowRoot.querySelector('iframe');
-            iframe.src = `${newval}#delta=${this.delta}`;
+            let src = `${this.url}#delta=${this.delta}`;
+            if (this.focus) {
+                src += '&focus';
+            }
+            iframe.src = src;
             iframe.classList.remove('is-hidden');
         }
     }

@@ -27,7 +27,7 @@ export class RevealEngine extends GenericEngine {
             transitionSpeed: 'fast',
             history: false,
             slideNumber: false,
-            keyboard: false,
+            keyboard: true,
             touch: false,
             embedded: true
         });

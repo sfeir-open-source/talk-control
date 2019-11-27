@@ -25,7 +25,7 @@ describe('should have instantiated', function() {
             // Then
             assert(on.calledTwice, 'not called twice');
             assert(on.calledWith(MASTER_SERVER_CHANNEL, 'init'), 'not called with init');
-            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'keyPressed'), 'not called with keypressed');
+            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'keyboardEvent'), 'not called with keyboardEvent');
         });
     });
 

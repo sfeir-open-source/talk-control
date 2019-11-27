@@ -15,7 +15,10 @@ export class TalkControlMaster {
      */
     constructor(server) {
         this.frames = [];
+        // 'querySelectorAllDeep' enable search inside children's shadow-dom
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
+        this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
+
         this.eventBus = new EventBusResolver({
             client: true,
             server,
@@ -34,7 +37,7 @@ export class TalkControlMaster {
         this.frames.forEach(
             frame =>
                 (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
+                    if (++frameCount >= this.frames.length) this.onFramesLoaded();
                 })
         );
 
@@ -49,14 +52,14 @@ export class TalkControlMaster {
         // Forward initialization event to server
         this.eventBus.on(MASTER_SLAVE_CHANNEL, 'initialized', data => this.eventBus.emit(MASTER_SERVER_CHANNEL, 'init', data));
         // Start listening on keys once the server is initialized
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'initialized', () => addEventListener('keyup', this._onKeyUp.bind(this)));
+        this.eventBus.on(MASTER_SERVER_CHANNEL, 'initialized', () => this.eventBus.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this)));
         // Forward "gotoSlide" events to slave
         this.eventBus.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
         // Forward "showNotes" events to slave
         this.eventBus.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
     }
 
-    _onKeyUp(event) {
+    onKeyboardEvent(event) {
         let action = '';
         switch (event.key) {
             case 'Down': // IE specific value
@@ -85,7 +88,7 @@ export class TalkControlMaster {
                 break;
         }
         if (action) {
-            this.eventBus.emit(MASTER_SERVER_CHANNEL, 'keyPressed', { key: action });
+            this.eventBus.emit(MASTER_SERVER_CHANNEL, 'keyboardEvent', { key: action });
         }
     }
 
@@ -93,5 +96,11 @@ export class TalkControlMaster {
         const forward = (key => data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
         this.eventBus.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
         this.eventBus.on(MASTER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
+    }
+
+    onFramesLoaded() {
+        this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
+        this.focusFrame.focus();
+        document.addEventListener('click', () => this.focusFrame.focus());
     }
 }
