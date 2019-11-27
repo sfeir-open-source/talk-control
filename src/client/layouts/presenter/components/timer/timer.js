@@ -101,10 +101,10 @@ class TimerComponent extends LitElement {
             </div>
             <div class="columns is-mobile is-paddingless is-marginless">
                 <div class="column is-paddingless">
-                    <p class="is-size-3" id="timer" @click="${this.handleTimerClick}">00:00:00</p>
+                    <p class="is-size-3 is-unselectable" id="timer" @click="${this.handleTimerClick}">00:00:00</p>
                 </div>
                 <div class="column has-text-right is-paddingless" style="padding-right: 1.5rem;">
-                    <p class="is-size-3" id="clock">00:00</p>
+                    <p class="is-size-3 is-unselectable" id="clock">00:00</p>
                 </div>
             </div>
         `;
