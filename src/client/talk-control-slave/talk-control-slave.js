@@ -37,6 +37,11 @@ export class TalkControlSlave {
 
     _captureKeyboardEvent(event, forward = false) {
         const keys = config.tcSlave.keysBlocked;
+        // Check if there's a focused element that could be using
+        // the keyboard
+        const activeElementIsInput = document.activeElement && document.activeElement.tagName && /input|textarea/i.test(document.activeElement.tagName);
+        if (this.engine.isActiveElementEditable() || activeElementIsInput) return;
+        // Check if the pressed key should be interpreted
         if (keys.includes(event.code)) {
             event.stopPropagation();
             if (forward) this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
