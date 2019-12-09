@@ -1,5 +1,6 @@
 import { RevealEngine } from './revealjs-server-engine';
 import { GenericEngine } from './generic-server-engine';
+import { SpectacleEngine } from './spectaclejs-server-engine';
 
 /**
  * @class EngineResolver
@@ -15,6 +16,10 @@ export class EngineResolver {
         switch (engineName) {
             case 'revealjs':
                 return new RevealEngine();
+            case 'spectaclejs':
+                return new SpectacleEngine();
+            default:
+                return new GenericEngine();
         }
     }
 }

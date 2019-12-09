@@ -7,6 +7,6 @@ import { TalkControlServer } from './talk-control-server';
 const app = express();
 const server = http.Server(app);
 const talkControlServer = new TalkControlServer(server);
-talkControlServer.init('revealjs');
+talkControlServer.init('spectaclejs');
 
 server.listen(3000, () => console.log('Listening on port 3000'));

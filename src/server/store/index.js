@@ -7,14 +7,15 @@ import { ACTIONS } from './actions';
 const logger = createLogger();
 const initialState = {
     currentSlide: {},
-    slides: []
+    slides: [],
+    slideNumber: 0
 };
 
 export const reducers = (state, action) => {
     const { data } = action;
     switch (action.type) {
         case ACTIONS.INIT:
-            return { ...state, currentSlide: data.currentSlide, slides: data.slides };
+            return { ...state, currentSlide: data.currentSlide, slides: data.slides || state.slides, slideNumber: data.slideNumber || data.slides.length };
         case ACTIONS.GOTO_SLIDE:
             return { ...state, currentSlide: data };
     }
