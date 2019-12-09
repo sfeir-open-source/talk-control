@@ -33,7 +33,8 @@ describe('should have instantiated', function() {
         it('should fire "gotoSlide" event', function() {
             const emit = stub(talkControlServer.eventBusServer, 'emit');
             // Given
-            const state = { currentSlide: { h: 1, v: 0, f: 0 }, slides: [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }] };
+            const slides = [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }];
+            const state = { currentSlide: { h: 1, v: 0, f: 0 }, slides, slideNumber: slides.length };
             stub(store, 'getState').returns(state);
             // When
             talkControlServer.init('revealjs');

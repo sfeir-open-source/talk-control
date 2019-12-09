@@ -50,15 +50,15 @@ describe('RevealEngineClient', function() {
     });
 
     describe('getSlides()', function() {
-        it('should return an array of slides', function() {
+        it('should return an array of slides', async function() {
             // Given
             const querySelectorAll = stub().returns([]);
             stub(document, 'querySelectorAll').returns([{ querySelectorAll }, { querySelectorAll }, { querySelectorAll }]);
             // When
-            const slides = engine.getSlides();
+            const { slides, slideNumber } = await engine.getSlides();
             // Then
-            expect(slides.length).to.equals(3);
-            expect(slides[0]).to.eqls({ h: 0, v: 0, f: -1, fMax: -1 });
+            expect(slideNumber).to.equals(3);
+            expect(slides[0]).to.eqls({ h: 0, v: 0, f: 0, fMax: 0 });
             document.querySelectorAll.restore();
         });
     });

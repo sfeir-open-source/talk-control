@@ -31,9 +31,11 @@ describe('redux store', function() {
                 currentSlide: {},
                 slides: []
             };
+            const slides = [{ h: 0, v: 0, f: 0, fMax: 3 }, { h: 0, v: 1, f: 0, fMax: 2 }, { h: 1, v: 0, f: 0, fMax: 1 }, { h: 2, v: 0, f: 0, fMax: 0 }];
             const data = {
                 currentSlide: { h: 0, v: 0, f: 0 },
-                slides: [{ h: 0, v: 0, f: 0, fMax: 3 }, { h: 0, v: 1, f: 0, fMax: 2 }, { h: 1, v: 0, f: 0, fMax: 1 }, { h: 2, v: 0, f: 0, fMax: 0 }]
+                slides,
+                slideNumber: slides.length
             };
             // Then
             expect(reducers(state, { type: ACTIONS.INIT, data })).to.eql({ ...state, ...data });

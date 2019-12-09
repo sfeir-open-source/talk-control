@@ -19,9 +19,9 @@ describe('TalkControlSlave', function() {
     });
 
     describe('init()', function() {
-        it('should do the required subscriptions', function() {
+        it('should do the required subscriptions', async function() {
             // When
-            talkControlSlave.init('revealjs');
+            await talkControlSlave.init();
             // Then
             assert(emit.calledOnceWith(MASTER_SLAVE_CHANNEL, 'initialized'), '"emit" not called with initialized');
             assert(on.calledOnceWith(MASTER_SLAVE_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
