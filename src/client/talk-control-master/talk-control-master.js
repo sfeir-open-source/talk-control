@@ -33,11 +33,17 @@ export class TalkControlMaster {
      */
     init() {
         // Fire init event when all iframes are loaded
-        let frameCount = 0;
+        let frameCount = 0,
+            initialized = false;
         this.frames.forEach(
             frame =>
                 (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this.onFramesLoaded();
+                    if (++frameCount >= this.frames.length && !initialized) {
+                        this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
+                        // In some cases, like with spectaclejs we have to reload an iframe mutliple times
+                        // but we don't want the event to be fired another time
+                        initialized = true;
+                    }
                 })
         );
 

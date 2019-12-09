@@ -7,6 +7,10 @@
  */
 export class GenericEngine {
     /**
+     * Initialize the engine
+     */
+    init() {}
+    /**
      * Switch to the given slide
      *
      * @param {*} params - Params indicating to which slide go to
@@ -16,12 +20,12 @@ export class GenericEngine {
     /**
      * Return all the slides
      */
-    getSlides() {}
+    async getSlides() {}
 
     /**
-     * Return current slide notes
+     * Return slide notes
      */
-    getSlideNotes() {}
+    async getSlideNotes(slide) {}
 
     /**
      * Move slides

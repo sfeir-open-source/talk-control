@@ -6,7 +6,11 @@ window.addEventListener('DOMContentLoaded', function() {
     const hash = window.location.hash || '#delta=0';
     const params = parseParams(hash);
     // TODO: retrieve engineName from configuration
-    new TalkControlSlave({ engineName: 'revealjs', ...params });
+    new TalkControlSlave({ engineName: 'spectaclejs', delta });
+    // Give the focus back to parent each time it goes to the iframe
+    document.addEventListener('click', () => {
+        parent.focus();
+    });
 });
 
 const parseParams = hash => {

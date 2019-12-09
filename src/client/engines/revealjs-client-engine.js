@@ -56,25 +56,27 @@ export class RevealEngine extends GenericEngine {
      * @returns {Array<{h: number, v: number, f: number, fMax: number}>} List on slides
      */
     getSlides() {
-        const slides = [];
-        const horizontalSlides = document.querySelectorAll('.slides>section');
-        horizontalSlides.forEach((slideH, indexH) => {
-            const fragmentsH = slideH.querySelectorAll('.fragment');
-            const verticalSlides = slideH.querySelectorAll('section');
-            if (verticalSlides.length) {
-                verticalSlides.forEach((slideV, indexV) => {
-                    const fragmentsV = slideV.querySelectorAll('.fragment');
-                    slides.push({ h: indexH, v: indexV, f: -1, fMax: fragmentsV.length || -1 });
-                });
-            } else {
-                slides.push({ h: indexH, v: 0, f: -1, fMax: fragmentsH.length || -1 });
-            }
+        return new Promise(resolve => {
+            const slides = [];
+            const horizontalSlides = document.querySelectorAll('.slides>section');
+            horizontalSlides.forEach((slideH, indexH) => {
+                const fragmentsH = slideH.querySelectorAll('.fragment');
+                const verticalSlides = slideH.querySelectorAll('section');
+                if (verticalSlides.length) {
+                    verticalSlides.forEach((slideV, indexV) => {
+                        const fragmentsV = slideV.querySelectorAll('.fragment');
+                        slides.push({ h: indexH, v: indexV, f: 0, fMax: fragmentsV.length ? fragmentsV.length + 1 : 0 });
+                    });
+                } else {
+                    slides.push({ h: indexH, v: 0, f: 0, fMax: fragmentsH.length ? fragmentsH.length + 1 : 0 });
+                }
+            });
+            resolve({ slides, slideNumber: slides.length });
         });
-        return slides;
     }
 
-    getSlideNotes() {
-        return this.Reveal.getSlideNotes();
+    async getSlideNotes() {
+        return new Promise(resolve => resolve(this.Reveal.getSlideNotes()));
     }
 
     /**
