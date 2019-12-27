@@ -1,6 +1,7 @@
 module.exports = {
     title: 'TalkControl',
     description: 'TalkControl documentation',
+    base: '/talk-control/',
     themeConfig: {
         nav: [
             { text: 'User guide', link: '/users/'},
