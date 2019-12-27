@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "start": "npx npm-run-all --parallel tc-*",
-        "build": "npx npm-run-all --parallel build-*",
+        "build": "./build.sh",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
