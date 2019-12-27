@@ -16,7 +16,8 @@
         "build-master": "npx parcel build src/client/talk-control-master/index.html --out-dir ./dist/client/master --target browser",
         "build-server": "npx parcel build src/server/index.js --out-dir ./dist/server --target node",
         "docs:dev": "vuepress dev docs-sources",
-        "docs:build": "vuepress build docs-sources --dest docs"
+        "docs:build": "npm run jsdoc:build && vuepress build docs-sources --dest docs",
+        "jsdoc:build": "vuepress-jsdoc --source ./src --dist ./docs-sources/developers --folder code --title JsDoc"
     },
     "repository": {
         "type": "git",
@@ -62,7 +63,8 @@
         "prettier": "^1.18.2",
         "pretty-quick": "^2.0.0",
         "sinon": "^7.5.0",
-        "vuepress": "^1.2.0"
+        "vuepress": "^1.2.0",
+        "vuepress-jsdoc": "^2.0.1"
     },
     "directories": {
         "test": "test"
