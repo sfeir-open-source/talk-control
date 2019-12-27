@@ -15,8 +15,8 @@
         "build-slave": "npx parcel build src/client/talk-control-slave/index.js --out-dir ./dist/client/slave --target browser",
         "build-master": "npx parcel build src/client/talk-control-master/index.html --out-dir ./dist/client/master --target browser",
         "build-server": "npx parcel build src/server/index.js --out-dir ./dist/server --target node",
-        "docs:dev": "vuepress dev docs",
-        "docs:build": "vuepress build docs"
+        "docs:dev": "vuepress dev docs-sources",
+        "docs:build": "vuepress build docs-sources --dest docs"
     },
     "repository": {
         "type": "git",

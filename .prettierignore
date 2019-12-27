@@ -3,3 +3,5 @@ package-lock.json
 dist/
 coverage/
 showcase/
+docs/
+docs-sources/
