@@ -1,0 +1,19 @@
+name: Docs CI
+
+on: [push]
+
+jobs:
+  build_docs:
+    name: build docs
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: build documentation
+      run: |
+        npm ci
+        npm run docs:build
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.5.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
