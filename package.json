@@ -38,6 +38,7 @@
         "@babel/register": "^7.6.2",
         "@commitlint/cli": "^8.2.0",
         "@commitlint/config-conventional": "^8.2.0",
+        "@granite-elements/granite-lit-bulma": "^0.7.5-0",
         "babel-plugin-module-resolver": "^3.2.0",
         "chai": "^4.2.0",
         "commitizen": "^4.0.3",
@@ -47,9 +48,11 @@
         "eslint-plugin-jsdoc": "^15.12.1",
         "eslint-plugin-mocha": "^6.1.1",
         "eslint-plugin-prettier": "^3.1.1",
+        "esm": "^3.2.25",
         "husky": "^3.0.9",
         "jsdom": "15.2.0",
         "jsdom-global": "3.0.2",
+        "lit-element": "^2.2.1",
         "mocha": "^6.2.1",
         "nodemon": "^1.19.4",
         "nyc": "^14.1.1",
@@ -82,10 +85,12 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.11.2",
+        "@webcomponents/webcomponentsjs": "^2.4.0",
         "bulma": "^0.8.0",
         "express": "^4.17.1",
         "lodash": "^4.17.15",
         "module-alias": "^2.2.2",
+        "query-selector-shadow-dom": "^0.3.4",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
         "serve": "^11.2.0",
@@ -100,5 +105,8 @@
         "@client": "src/client",
         "@server": "src/server",
         "@config": "config"
-    }
+    },
+    "browserslist": [
+        "Chrome > 50"
+    ]
 }

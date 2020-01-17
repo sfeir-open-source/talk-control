@@ -41,6 +41,8 @@ export class TalkControlServer {
         switch (true) {
             case !this.previousState.slides.length && !!currentState.slides.length:
                 this.eventBus.emit(MASTER_SERVER_CHANNEL, 'initialized');
+                // Tell everyone to show the first slide
+                this.eventBus.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
                 break;
             case !_.isEmpty(this.previousState.currentSlide) && !this.engine.slideEquals(currentState.currentSlide, this.previousState.currentSlide):
                 this.eventBus.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });

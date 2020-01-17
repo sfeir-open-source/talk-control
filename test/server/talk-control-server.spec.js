@@ -67,7 +67,7 @@ describe('should have instantiated', function() {
             store.getState.restore();
         });
 
-        it('should fire "initialized" event', function() {
+        it('should fire "initialized" and "gotoSlide" events', function() {
             // Given
             const state = { currentSlide: { h: 0, v: 0, f: 0 }, slides: [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }] };
             stub(store, 'getState').returns(state);
@@ -77,7 +77,8 @@ describe('should have instantiated', function() {
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
-            assert(emit.calledOnceWith(MASTER_SERVER_CHANNEL, 'initialized'));
+            assert(emit.calledWith(MASTER_SERVER_CHANNEL, 'initialized'));
+            assert(emit.calledWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
             store.getState.restore();
         });
     });

@@ -14,12 +14,9 @@
     height: 45vh;
     padding: 0.3rem 0.3rem 0.3rem 0;
 }
+
 .content {
     height: 100%;
     padding: 0.5rem;
     border: 3px solid black;
-}
-iframe {
-    width: 100%;
-    height: 100%;
 }

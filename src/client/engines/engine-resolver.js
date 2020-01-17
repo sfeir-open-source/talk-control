@@ -12,6 +12,8 @@ export class EngineResolver {
         switch (engineName) {
             case 'revealjs':
                 return new RevealEngine();
+            default:
+                return new GenericEngine();
         }
     }
 }
