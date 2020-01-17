@@ -70,3 +70,12 @@ You can go check our [issues page]('https://github.com/sfeir-open-source/talk-co
 ## Getting involved
 
 General instructions on _how_ can be found in the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+## Troubleshoot
+
+In case of `Error: listen EADDRINUSE :::3000`, execute:
+
+```bash
+lsof -i :3000
+kill -9 <PID>
+```
