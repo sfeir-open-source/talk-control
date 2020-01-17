@@ -39,6 +39,7 @@ describe('', function() {
             stub(talkControlMaster, 'forwardEvents');
 
             talkControlMaster.frames = [{}, {}, {}];
+            talkControlMaster.focusFrame = { focus: stub() };
             // When
             talkControlMaster.init();
             talkControlMaster.frames.forEach(frame => frame.onload());
@@ -48,7 +49,7 @@ describe('', function() {
         });
     });
 
-    describe('_onKeyUp', function() {
+    describe('onKeyboardEvent', function() {
         let mainChannel;
         beforeEach(function() {
             // Event mock
@@ -65,9 +66,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowUp';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowUp' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowUp' }));
         });
 
         it('should fire "arrowDown" event', function() {
@@ -75,9 +76,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowDown';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowDown' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowDown' }));
         });
 
         it('should fire "arrowLeft" event', function() {
@@ -85,9 +86,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowLeft';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowLeft' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowLeft' }));
         });
 
         it('should fire "arrowRight" event', function() {
@@ -95,9 +96,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowRight';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowRight' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowRight' }));
         });
 
         it("shouldn't fire any event", function() {
@@ -105,7 +106,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = undefined;
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
             assert(mainChannel.emit.notCalled);
         });
