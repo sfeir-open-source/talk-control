@@ -4,7 +4,7 @@ import { GenericEngine } from './generic-server-engine';
 
 /**
  * @classdesc
- * @class
+ * @class RevealEngine
  * @augments GenericEngine
  */
 export class RevealEngine extends GenericEngine {

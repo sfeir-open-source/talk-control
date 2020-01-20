@@ -3,8 +3,8 @@
 import { GenericEngine } from './generic-client-engine.js';
 
 /**
- * @classdesc
- * @class
+ * @class RevealEngine
+ * @classdesc Revealjs engine implementation
  * @augments GenericEngine
  */
 export class RevealEngine extends GenericEngine {
@@ -35,7 +35,7 @@ export class RevealEngine extends GenericEngine {
 
     /**
      *
-     * @param {{h: number, v: number, f?: number}} indices - position of the slide to go to
+     * @param {{h: number, v: number, f: number}} indices - position of the slide to go to
      * @param {number} delta - delta
      */
     goToSlide(indices, delta = 0) {
@@ -53,7 +53,7 @@ export class RevealEngine extends GenericEngine {
     }
 
     /**
-     * @returns {{h: number, v: number, f: number, fMax: number}[]} List on slides
+     * @returns {Array<{h: number, v: number, f: number, fMax: number}>} List on slides
      */
     getSlides() {
         const slides = [];

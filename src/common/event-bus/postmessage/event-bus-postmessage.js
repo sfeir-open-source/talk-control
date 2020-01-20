@@ -4,7 +4,7 @@ import { EventBus } from '../event-bus.js';
 
 /**
  * @classdesc Event bus implementation that fire events through window
- * @class
+ * @class EventBusPostMessage
  * @augments EventBus
  */
 export class EventBusPostMessage extends EventBus {

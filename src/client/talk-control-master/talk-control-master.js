@@ -4,8 +4,8 @@ import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 
 /**
+ * @class TalkControlMaster
  * @classdesc Class that handle the events from the remote client
- * @class
  */
 export class TalkControlMaster {
     /**

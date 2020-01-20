@@ -5,7 +5,7 @@ import socketIO, { Socket } from 'socket.io';
 
 /**
  * @classdesc Sockets based EventBus implementation
- * @class
+ * @class SocketEventBus
  * @augments EventBus
  */
 export class SocketEventBus extends EventBus {

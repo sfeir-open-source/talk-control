@@ -2,7 +2,7 @@
 
 /**
  * @classdesc [server-side] 'Abstract' class that expose needed methods for engines
- * @class
+ * @class GenericEngine
  */
 export class GenericEngine {
     /**
