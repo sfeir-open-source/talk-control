@@ -5,7 +5,7 @@ You can find all the documentation about this project [here](http://m.quickmeme.
 ## Getting help
 
 Feel free to add any issue that you might find useful to improve the project and even propose pull request to help us :).
-You can go check our [issues page]('https://github.com/sfeir-open-source/talk-control/issues')
+You can go check our [issues page](https://github.com/sfeir-open-source/talk-control/issues)
 
 ## Getting involved
 
