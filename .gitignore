@@ -55,3 +55,6 @@ showcase/assets/slave
 
 # Parcel
 .cache
+
+# Documentation
+docs-dist
