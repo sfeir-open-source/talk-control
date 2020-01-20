@@ -7,12 +7,10 @@ import * as _ from 'lodash';
 
 /**
  * @classdesc Handle state changes and socket events
- * @class
+ * @class TalkControlServer
  */
 export class TalkControlServer {
     /**
-     * Class contructor
-     *
      * @param {*} server - Server to connect to
      */
     constructor(server) {

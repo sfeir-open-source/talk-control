@@ -9,7 +9,7 @@ export const MASTER_SLAVE_CHANNEL = 'MASTER_SLAVE_CHANNEL';
 
 /**
  * @classdesc Instantiate event buses based on params given
- * @class
+ * @class EventBusResolver
  */
 export class EventBusResolver {
     constructor(params) {

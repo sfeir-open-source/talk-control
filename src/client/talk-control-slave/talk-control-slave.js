@@ -4,6 +4,9 @@ import { EventBusResolver, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-res
 import { EngineResolver } from '../engines/engine-resolver';
 import config from '@config/config.json';
 
+/**
+ * @class TalkControlSlave
+ */
 export class TalkControlSlave {
     constructor(params = {}) {
         this.eventBus = new EventBusResolver({

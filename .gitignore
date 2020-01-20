@@ -55,3 +55,7 @@ showcase/assets/slave
 
 # Parcel
 .cache
+
+# Documentation
+docs-dist
+docs-sources/developers/code/parts/

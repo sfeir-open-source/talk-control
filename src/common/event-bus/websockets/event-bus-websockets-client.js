@@ -5,7 +5,7 @@ import { EventBus } from '../event-bus';
 
 /**
  * @classdesc SocketClient based EventBus implementation
- * @class
+ * @class SocketEventBusClient
  * @augments EventBus
  */
 export class SocketEventBusClient extends EventBus {
