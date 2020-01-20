@@ -1,6 +1,16 @@
 # TalkControl
 
-You can find all the documentation about this project [here](http://m.quickmeme.com/img/74/74b9f223ba4275108406508561b12d3b708110d5d0cd92b8bc05cf575fc944e8.jpg).
+This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
+
+The documentation of this project can be generated with the following commands :
+
+```bash
+npm i # install dependencies
+npm run jsdoc:build # build code documentation with JSDoc
+npm run docs:dev # build global documentation with vuepress
+
+# Then open a browser and go to url: http://localhost:8080/
+```
 
 ## Getting help
 
