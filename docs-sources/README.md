@@ -41,7 +41,7 @@ For this to work you need to have Node.js v8 or more installed on your computer.
 
 ## Usage
 
-Firstly install the dependencies
+First, install the dependencies
 
 ```sh
 npm i
