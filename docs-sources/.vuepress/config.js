@@ -10,6 +10,6 @@ module.exports = {
         ],
         editLinks: true,
         sidebarDepth: 1,
-        docsDir: "code",
+        docsDir: "code/parts",
     }
 }
