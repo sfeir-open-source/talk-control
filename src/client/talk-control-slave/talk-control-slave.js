@@ -51,5 +51,6 @@ export class TalkControlSlave {
             if (forward) {
                 this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
             }
+        }
     }
 }
