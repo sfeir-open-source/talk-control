@@ -3,7 +3,6 @@
 import { EventBusResolver, MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import store from './store';
 import { EngineResolver } from './engines/engine-resolver';
-import * as _ from 'lodash';
 
 /**
  * @classdesc Handle state changes and socket events
@@ -36,16 +35,7 @@ export class TalkControlServer {
      */
     emitStateChanges() {
         const currentState = store.getState();
-        switch (true) {
-            case !this.previousState.slides.length && !!currentState.slides.length:
-                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'initialized');
-                // Tell everyone to show the first slide
-                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
-                break;
-            case !_.isEmpty(this.previousState.currentSlide) && !this.engine.slideEquals(currentState.currentSlide, this.previousState.currentSlide):
-                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
-                break;
-        }
+        this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
         this.previousState = currentState;
     }
 }

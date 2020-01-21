@@ -47,7 +47,6 @@ export class TalkControlSlave {
         // Check if the pressed key should be interpreted
         if (keys.includes(event.code)) {
             event.stopPropagation();
-            if (forward) this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
             if (forward) {
                 this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
             }
