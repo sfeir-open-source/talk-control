@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const hash = window.location.hash || '#delta=0';
     const params = parseParams(hash);
     // TODO: retrieve engineName from configuration
-    new TalkControlSlave({ engineName: 'spectaclejs', delta });
+    new TalkControlSlave({ engineName: 'spectaclejs', params });
     // Give the focus back to parent each time it goes to the iframe
     document.addEventListener('click', () => {
         parent.focus();
