@@ -25,12 +25,12 @@ export class TalkControlSlave {
         // Send the total slide number
         const { slides, slideNumber } = await this.engine.getSlides();
         // Emit the initialized event only on the 'main' slave
-        if (!this.delta) this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides, slideNumber });
-        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', async data => {
+        if (!this.delta) this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides, slideNumber });
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', async data => {
             console.log('MASTER_SLAVE gotoSlide');
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.engine.getSlideNotes(data.slide).then(notes => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', notes));
+                this.engine.getSlideNotes(data.slide).then(notes => this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', notes));
             }
         });
         // Capture all keyboards events and only let go the ones that are not interpreted by us

@@ -39,7 +39,7 @@ export class TalkControlMaster {
             frame =>
                 (frame.onload = () => {
                     if (++frameCount >= this.frames.length && !initialized) {
-                        this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
+                        this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'init');
                         // In some cases, like with spectaclejs we have to reload an iframe mutliple times
                         // but we don't want the event to be fired another time
                         initialized = true;
