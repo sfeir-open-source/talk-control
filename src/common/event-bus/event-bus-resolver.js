@@ -1,6 +1,6 @@
 'use strict';
 
-import { SocketEventBus } from './websockets/event-bus-websockets.js';
+import { SocketEventBus } from './websockets/event-bus-websockets-server.js';
 import { SocketEventBusClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 

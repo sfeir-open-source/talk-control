@@ -19,7 +19,10 @@ export class SocketEventBus extends EventBus {
         this.sockets = [];
         this.io = socketIO(server);
         this.io.on('connection', socket => {
-            console.log('### connection');
+            console.log('### connected', {
+                id: socket.id,
+                from: socket.handshake.headers && socket.handshake.headers.referer ? socket.handshake.headers.referer : 'unknown'
+            });
             this.sockets.push(socket);
             // Subscribe new socket on existing keys
             for (const key in this.callBacks) {
@@ -27,7 +30,10 @@ export class SocketEventBus extends EventBus {
             }
             // When disconnected, remove socket from the array
             socket.on('disconnect', () => {
-                console.log('### disconnected');
+                console.log('### disconnected', {
+                    id: socket.id,
+                    from: socket.handshake.headers && socket.handshake.headers.referer ? socket.handshake.headers.referer : 'unknown'
+                });
                 const index = this.sockets.indexOf(socket);
                 this.sockets.splice(index, 1);
             });
