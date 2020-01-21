@@ -2,18 +2,18 @@
 
 import 'module-alias/register';
 import { expect, assert } from 'chai';
-import { SocketEventBusClient } from '@event-bus/websockets/event-bus-websockets-client';
+import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import { stub } from 'sinon';
 import socketIO from 'socket.io-client';
 
-describe('SocketEventBusClient', function() {
+describe('EventBusWebsocketsClient', function() {
     let eventBus;
     before(function() {
         stub(socketIO, 'connect').returns({ on: stub(), emit: stub() });
     });
 
     beforeEach(function() {
-        eventBus = new SocketEventBusClient();
+        eventBus = new EventBusWebsocketsClient();
     });
 
     after(function() {
@@ -21,7 +21,7 @@ describe('SocketEventBusClient', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated SocketEventBusClient', function() {
+        it('should have instantiated EventBusWebsocketsClient', function() {
             expect(eventBus).to.be.ok;
         });
     });

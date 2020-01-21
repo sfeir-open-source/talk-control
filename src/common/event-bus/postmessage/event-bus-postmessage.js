@@ -4,7 +4,7 @@ import { EventBus } from '../event-bus.js';
 
 /**
  * @classdesc Event bus implementation that fire events through window
- * @class
+ * @class EventBusPostMessage
  * @augments EventBus
  */
 export class EventBusPostMessage extends EventBus {
@@ -15,11 +15,9 @@ export class EventBusPostMessage extends EventBus {
      */
     constructor(params) {
         super();
-        this.windows = [];
+        this.windows = [window.parent];
         if (params.frames) {
-            this.windows = [...params.frames];
-        } else if (params.slave) {
-            this.windows.push(window.parent);
+            this.windows = [...this.windows, ...params.frames];
         }
         window.addEventListener('message', this._receiveMessageWindow.bind(this), false);
     }

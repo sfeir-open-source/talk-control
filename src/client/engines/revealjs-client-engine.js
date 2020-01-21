@@ -3,8 +3,8 @@
 import { GenericEngine } from './generic-client-engine.js';
 
 /**
- * @classdesc
- * @class
+ * @class RevealEngine
+ * @classdesc Revealjs engine implementation
  * @augments GenericEngine
  */
 export class RevealEngine extends GenericEngine {
@@ -27,7 +27,7 @@ export class RevealEngine extends GenericEngine {
             transitionSpeed: 'fast',
             history: false,
             slideNumber: false,
-            keyboard: false,
+            keyboard: true,
             touch: false,
             embedded: true
         });
@@ -35,25 +35,25 @@ export class RevealEngine extends GenericEngine {
 
     /**
      *
-     * @param {{h: number, v: number, f?: number}} indices - position of the slide to go to
+     * @param {{h: number, v: number, f: number}} indices - position of the slide to go to
      * @param {number} delta - delta
      */
     goToSlide(indices, delta = 0) {
         let slideDelta = { ...indices };
         const slides = this.getSlides();
         const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
-        if (indices.f < slides[currentIndex].fMax) {
+        if (indices.f + delta < slides[currentIndex].fMax) {
             slideDelta.f += delta;
         } else if (currentIndex + delta < slides.length - 1) {
             slideDelta = slides[currentIndex + delta];
         } else {
             slideDelta = slides[slides.length - 1];
         }
-        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f || 0);
+        this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f);
     }
 
     /**
-     * @returns {{h: number, v: number, f: number, fMax: number}[]} List on slides
+     * @returns {Array<{h: number, v: number, f: number, fMax: number}>} List on slides
      */
     getSlides() {
         const slides = [];
@@ -64,10 +64,10 @@ export class RevealEngine extends GenericEngine {
             if (verticalSlides.length) {
                 verticalSlides.forEach((slideV, indexV) => {
                     const fragmentsV = slideV.querySelectorAll('.fragment');
-                    slides.push({ h: indexH, v: indexV, f: 0, fMax: fragmentsV.length ? fragmentsV.length + 1 : 0 });
+                    slides.push({ h: indexH, v: indexV, f: -1, fMax: fragmentsV.length || -1 });
                 });
             } else {
-                slides.push({ h: indexH, v: 0, f: 0, fMax: fragmentsH.length ? fragmentsH.length + 1 : 0 });
+                slides.push({ h: indexH, v: 0, f: -1, fMax: fragmentsH.length || -1 });
             }
         });
         return slides;
@@ -78,10 +78,9 @@ export class RevealEngine extends GenericEngine {
     }
 
     /**
-     *
-     * @param {number} delta - number of movements to make from$ the current slide
+     * @returns {boolean} True if the active element is editable
      */
-    changeSlide(delta) {
-        this.goToSlide(this.Reveal.getIndices(), delta);
+    isActiveElementEditable() {
+        return document.activeElement && document.activeElement.contentEditable !== 'inherit';
     }
 }

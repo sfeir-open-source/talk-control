@@ -1,0 +1,8 @@
+{
+    "tcServer": {
+        "url": "http://localhost:3000"
+    },
+    "tcSlave": {
+        "keysBlocked": ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Space"]
+    }
+}

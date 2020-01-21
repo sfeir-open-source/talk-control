@@ -5,10 +5,10 @@ import { EventBus } from '../event-bus';
 
 /**
  * @classdesc SocketClient based EventBus implementation
- * @class
+ * @class EventBusWebsocketsClient
  * @augments EventBus
  */
-export class SocketEventBusClient extends EventBus {
+export class EventBusWebsocketsClient extends EventBus {
     constructor(server) {
         super();
         this.sockets = [];

@@ -50,8 +50,11 @@ dist
 Thumbs.db
 
 # Slide show example
-showcase/reveal/node_modules/
-showcase/assets/slave
+showcase/resources/slave/
 
 # Parcel
 .cache
+
+# Documentation
+docs-dist
+docs-sources/developers/code/parts/

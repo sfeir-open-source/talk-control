@@ -1,6 +1,9 @@
 import { RevealEngine } from './revealjs-server-engine';
 import { GenericEngine } from './generic-server-engine';
 
+/**
+ * @class EngineResolver
+ */
 export class EngineResolver {
     /**
      * Instantiate a new Engine

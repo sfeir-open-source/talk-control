@@ -7,61 +7,35 @@
         <link rel="stylesheet" href="../../../../node_modules/bulma/css/bulma.min.css" />
         <link rel="stylesheet" href="index.css" />
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+        <!-- type="module" not needed because we work with parcel bundler -->
+        <script src="../common/slide-view/slide-view.js"></script>
+        <script src="../common/url-form/url-form.js"></script>
+        <script src="./components/timer/timer.js"></script>
+        <script src="./components/notes/notes.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
-        <section class="section" id="form">
-            <div class="container">
-                <h1 class="title">
-                    Talk control
-                </h1>
-                <p class="subtitle">
-                    Take control of your presentation by entering its url below
-                </p>
-                <!-- Enter presentation url form area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div class="columns">
-                            <div class="column is-four-fifths">
-                                <input
-                                    class="input"
-                                    type="url"
-                                    placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
-                                    id="inputPresentation"
-                                    value="http://127.0.0.1:5000"
-                                />
-                            </div>
-                            <div class="column">
-                                <button id="btnValidate" class="button">Validate Url</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Error message area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div id="urlError" class="notification is-danger is-hidden">
-                            <button class="delete"></button>
-                            URL is not valid
-                        </div>
-                    </div>
+        <tc-url-form></tc-url-form>
+        <section class="columns is-marginless is-paddingless is-hidden" id="presenter-view">
+            <div class="column is-three-fifths" id="current">
+                <div class="content">
+                    <tc-slide focus></tc-slide>
                 </div>
             </div>
-        </section>
-        <section class="columns is-hidden" style="height: 100vh; overflow: hidden" id="presenter-view">
-            <div class="column is-three-fifths has-background-light" id="left-panel">
-                <iframe id="current-slide" name="current-slide">Current slide</iframe>
-            </div>
-            <div class="column" id="right-panel">
-                <div>
-                    <div class="has-background-grey-lighter" style="height: 45vh;"><iframe id="next-slide" name="next-slide" delta="1">Next slide</iframe></div>
-                    <div class="has-background-grey-light" style="height: 10vh;">
-                        <iframe src="./components/timer/timer.html" frameborder="0"></iframe>
+            <div class="column is-paddingless has-background-light">
+                <div class="has-background-white" id="next">
+                    <div class="content">
+                        <tc-slide delta="1"></tc-slide>
                     </div>
-                    <div class="has-background-light" style="height: 45vh;">
-                        <div class="is-size-6">NOTES</div>
-                        <iframe src="./components/notes/notes.html" frameborder="0"></iframe>
+                </div>
+                <div class="has-background-white" id="timer">
+                    <div class="content">
+                        <tc-timer></tc-timer>
+                    </div>
+                </div>
+                <div class="has-background-white" id="notes">
+                    <div class="content">
+                        <tc-notes></tc-notes>
                     </div>
                 </div>
             </div>

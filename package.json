@@ -3,18 +3,22 @@
     "version": "0.1.0",
     "main": "index.js",
     "scripts": {
-        "start": "npm run tc-server & npm run tc-master & npm run tc-slave",
-        "build": "npm run build-slave && npm run build-master && npm run build-server",
+        "start": "npx npm-run-all --parallel tc-*",
+        "build": "npx npm-run-all --parallel build-*",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
         "commit": "npx git-cz",
+        "tc-showcase": "serve showcase",
         "tc-master": "npx parcel src/client/talk-control-master/index.html --out-dir ./dist/client/master",
-        "tc-slave": "npx parcel watch src/client/talk-control-slave/index.js --out-dir showcase/assets/slave & serve showcase",
+        "tc-slave": "npx parcel watch src/client/talk-control-slave/index.js --out-dir showcase/resources/slave",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
-        "build-slave": "npx parcel build src/client/talk-control-slave/index.js --out-dir ./dist/client/slave --target browser",
-        "build-master": "npx parcel build src/client/talk-control-master/index.html --out-dir ./dist/client/master --target browser",
-        "build-server": "npx parcel build src/server/index.js --out-dir ./dist/server --target node"
+        "build-slave": "npx parcel build src/client/talk-control-slave/index.js --no-source-maps --out-dir ./dist/client/slave --target browser",
+        "build-master": "npx parcel build src/client/talk-control-master/index.html --no-source-maps --out-dir ./dist/client/master --target browser",
+        "build-server": "npx parcel build src/server/index.js --no-source-maps --out-dir ./dist/server --target node",
+        "docs:dev": "vuepress dev docs-sources",
+        "docs:build": "npm run jsdoc:build && vuepress build docs-sources --dest docs-dist",
+        "jsdoc:build": "vuepress-jsdoc --source ./src --dist ./docs-sources/developers/code --folder parts --title JsDoc"
     },
     "repository": {
         "type": "git",
@@ -38,6 +42,8 @@
         "@babel/register": "^7.6.2",
         "@commitlint/cli": "^8.2.0",
         "@commitlint/config-conventional": "^8.2.0",
+        "@granite-elements/granite-lit-bulma": "^0.7.5-0",
+        "@vue/component-compiler-utils": "^3.1.1",
         "babel-plugin-module-resolver": "^3.2.0",
         "chai": "^4.2.0",
         "commitizen": "^4.0.3",
@@ -47,16 +53,20 @@
         "eslint-plugin-jsdoc": "^15.12.1",
         "eslint-plugin-mocha": "^6.1.1",
         "eslint-plugin-prettier": "^3.1.1",
+        "esm": "^3.2.25",
         "husky": "^3.0.9",
         "jsdom": "15.2.0",
         "jsdom-global": "3.0.2",
+        "lit-element": "^2.2.1",
         "mocha": "^6.2.1",
         "nodemon": "^1.19.4",
         "nyc": "^14.1.1",
         "parcel-bundler": "^1.12.4",
         "prettier": "^1.18.2",
         "pretty-quick": "^2.0.0",
-        "sinon": "^7.5.0"
+        "sinon": "^7.5.0",
+        "vuepress": "^1.2.0",
+        "vuepress-jsdoc": "^2.0.1"
     },
     "directories": {
         "test": "test"
@@ -82,13 +92,15 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.11.2",
+        "@webcomponents/webcomponentsjs": "^2.4.1",
         "bulma": "^0.8.0",
         "express": "^4.17.1",
-        "lodash": "^4.17.15",
         "module-alias": "^2.2.2",
+        "npm-run-all": "^4.1.5",
+        "query-selector-shadow-dom": "^0.3.4",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
-        "serve": "^11.2.0",
+        "serve": "^11.3.0",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",
         "uws": "^10.148.1"
@@ -98,6 +110,10 @@
         "@event-bus": "src/common/event-bus",
         "@helpers": "src/common/helpers",
         "@client": "src/client",
-        "@server": "src/server"
-    }
+        "@server": "src/server",
+        "@config": "config"
+    },
+    "browserslist": [
+        "Chrome > 50"
+    ]
 }

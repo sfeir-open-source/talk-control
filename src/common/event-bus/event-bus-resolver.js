@@ -1,7 +1,7 @@
 'use strict';
 
-import { SocketEventBus } from './websockets/event-bus-websockets.js';
-import { SocketEventBusClient } from './websockets/event-bus-websockets-client.js';
+import { EventBusWebsocketsServer } from './websockets/event-bus-websockets-server.js';
+import { EventBusWebsocketsClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 
 export const MASTER_SERVER_CHANNEL = 'MASTER_SERVER_CHANNEL';
@@ -9,7 +9,7 @@ export const MASTER_SLAVE_CHANNEL = 'MASTER_SLAVE_CHANNEL';
 
 /**
  * @classdesc Instantiate event buses based on params given
- * @class
+ * @class EventBusResolver
  */
 export class EventBusResolver {
     constructor(params) {
@@ -17,13 +17,16 @@ export class EventBusResolver {
 
         if (params.server) {
             if (params.client) {
-                this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBusClient(params.server);
+                // Master
+                this.channels[MASTER_SERVER_CHANNEL] = new EventBusWebsocketsClient(params.server);
             } else {
-                this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBus(params.server);
+                // Server
+                this.channels[MASTER_SERVER_CHANNEL] = new EventBusWebsocketsServer(params.server);
             }
         }
 
         if (typeof window != 'undefined') {
+            // Slave
             this.channels[MASTER_SLAVE_CHANNEL] = new EventBusPostMessage(params.postMessage || {});
         }
     }

@@ -7,50 +7,19 @@
         <link rel="stylesheet" href="../../../../node_modules/bulma/css/bulma.min.css" />
         <link rel="stylesheet" href="index.css" />
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+        <script type="module" src="../common/slide-view/slide-view.js"></script>
+        <script type="module" src="../common/url-form/url-form.js"></script>
+
         <title>On stage</title>
     </head>
     <body>
-        <section class="section" id="form">
-            <div class="container">
-                <h1 class="title">
-                    Talk control
-                </h1>
-                <p class="subtitle">
-                    Take control of your presentation by entering its url below
-                </p>
-                <!-- Enter presentation url form area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div class="columns">
-                            <div class="column is-four-fifths">
-                                <input
-                                    class="input"
-                                    type="url"
-                                    placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
-                                    id="inputPresentation"
-                                    value="http://127.0.0.1:5000"
-                                />
-                            </div>
-                            <div class="column">
-                                <button id="btnValidate" class="button">Validate Url</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Error message area -->
-                <div class="columns">
-                    <div class="column is-half">
-                        <div id="urlError" class="notification is-danger is-hidden">
-                            <button class="delete"></button>
-                            URL is not valid
-                        </div>
-                    </div>
+        <tc-url-form></tc-url-form>
+        <section class="columns is-gapless" style="margin-bottom: 0;">
+            <div class="column" id="slide">
+                <div class="content">
+                    <tc-slide class="is-hidden" focus></tc-slide>
                 </div>
             </div>
-        </section>
-        <section>
-            <iframe id="stageFrame" class="is-hidden"></iframe>
         </section>
         <script src="./index.js"></script>
     </body>

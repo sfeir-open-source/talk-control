@@ -7,6 +7,7 @@ import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
 import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import { MASTER_SLAVE_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
+import config from '@config/config.json';
 
 describe('', function() {
     let talkControlMaster;
@@ -17,7 +18,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        talkControlMaster = new TalkControlMaster('http://localhost:3000');
+        talkControlMaster = new TalkControlMaster(config.tcServer.url);
     });
 
     after(function() {
@@ -33,11 +34,12 @@ describe('', function() {
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const emit = stub(talkControlMaster.eventBus, 'emit');
+            const emit = stub(talkControlMaster.eventBusMaster, 'emit');
             stub(talkControlMaster, 'afterInitialisation');
             stub(talkControlMaster, 'forwardEvents');
 
             talkControlMaster.frames = [{}, {}, {}];
+            talkControlMaster.focusFrame = { focus: stub() };
             // When
             talkControlMaster.init();
             talkControlMaster.frames.forEach(frame => frame.onload());
@@ -47,11 +49,11 @@ describe('', function() {
         });
     });
 
-    describe('_onKeyUp', function() {
+    describe('onKeyboardEvent', function() {
         let mainChannel;
         beforeEach(function() {
             // Event mock
-            mainChannel = talkControlMaster.eventBus.channels[MASTER_SERVER_CHANNEL];
+            mainChannel = talkControlMaster.eventBusMaster.channels[MASTER_SERVER_CHANNEL];
             stub(mainChannel, 'emit');
         });
 
@@ -64,9 +66,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowUp';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowUp' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowUp' }));
         });
 
         it('should fire "arrowDown" event', function() {
@@ -74,9 +76,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowDown';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowDown' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowDown' }));
         });
 
         it('should fire "arrowLeft" event', function() {
@@ -84,9 +86,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowLeft';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowLeft' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowLeft' }));
         });
 
         it('should fire "arrowRight" event', function() {
@@ -94,9 +96,9 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = 'ArrowRight';
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
-            assert(mainChannel.emit.calledOnceWith('keyPressed', { key: 'arrowRight' }));
+            assert(mainChannel.emit.calledOnceWith('keyboardEvent', { key: 'arrowRight' }));
         });
 
         it("shouldn't fire any event", function() {
@@ -104,7 +106,7 @@ describe('', function() {
             const event = new Event('keyup');
             event.key = undefined;
             // When
-            talkControlMaster._onKeyUp(event);
+            talkControlMaster.onKeyboardEvent(event);
             // Then
             assert(mainChannel.emit.notCalled);
         });
