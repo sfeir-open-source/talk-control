@@ -50,7 +50,6 @@ class TimerComponent extends LitElement {
         return time ? (time < 10 ? '0' + time : time) : '00';
     }
 
-    /****** TIMER FUNCTIONS ******/
     startTimer() {
         let seconds = 0,
             minutes = 0,
