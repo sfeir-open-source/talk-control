@@ -1,7 +1,7 @@
 'use strict';
 
-import { SocketEventBus } from './websockets/event-bus-websockets-server.js';
-import { SocketEventBusClient } from './websockets/event-bus-websockets-client.js';
+import { EventBusWebsocketsServer } from './websockets/event-bus-websockets-server.js';
+import { EventBusWebsocketsClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 
 export const MASTER_SERVER_CHANNEL = 'MASTER_SERVER_CHANNEL';
@@ -18,10 +18,10 @@ export class EventBusResolver {
         if (params.server) {
             if (params.client) {
                 // Master
-                this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBusClient(params.server);
+                this.channels[MASTER_SERVER_CHANNEL] = new EventBusWebsocketsClient(params.server);
             } else {
                 // Server
-                this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBus(params.server);
+                this.channels[MASTER_SERVER_CHANNEL] = new EventBusWebsocketsServer(params.server);
             }
         }
 

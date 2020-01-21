@@ -3,16 +3,16 @@
 import 'module-alias/register';
 import { assert, expect } from 'chai';
 import { spy, stub } from 'sinon';
-import { SocketEventBus } from '@event-bus/websockets/event-bus-websockets-server';
+import { EventBusWebsocketsServer } from '@event-bus/websockets/event-bus-websockets-server';
 
-describe('SocketEventBus', function() {
-    let eventBus = new SocketEventBus();
+describe('EventBusWebsocketsServer', function() {
+    let eventBus = new EventBusWebsocketsServer();
     beforeEach(function() {
-        eventBus = new SocketEventBus();
+        eventBus = new EventBusWebsocketsServer();
     });
 
     describe('constructor()', function() {
-        it('should have instantiated SocketEventBus', function() {
+        it('should have instantiated EventBusWebsocketsServer', function() {
             expect(eventBus).to.be.ok;
         });
     });

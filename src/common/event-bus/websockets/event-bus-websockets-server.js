@@ -5,10 +5,10 @@ import socketIO, { Socket } from 'socket.io';
 
 /**
  * @classdesc Sockets based EventBus implementation
- * @class SocketEventBus
+ * @class EventBusWebsocketsServer
  * @augments EventBus
  */
-export class SocketEventBus extends EventBus {
+export class EventBusWebsocketsServer extends EventBus {
     /**
      * Class constructor
      *
