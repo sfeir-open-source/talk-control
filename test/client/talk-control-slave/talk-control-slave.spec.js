@@ -8,8 +8,8 @@ describe('TalkControlSlave', function() {
     let on, emit;
     beforeEach(function() {
         talkControlSlave = new TalkControlSlave({ engineName: 'revealjs' });
-        on = stub(talkControlSlave.eventBus, 'on');
-        emit = stub(talkControlSlave.eventBus, 'emit');
+        on = stub(talkControlSlave.eventBusSlave, 'on');
+        emit = stub(talkControlSlave.eventBusSlave, 'emit');
     });
 
     describe('constructor()', function() {

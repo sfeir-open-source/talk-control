@@ -9,7 +9,7 @@ describe('should have instantiated', function() {
     let on;
     beforeEach(function() {
         talkControlServer = new TalkControlServer();
-        on = stub(talkControlServer.eventBus, 'on');
+        on = stub(talkControlServer.eventBusServer, 'on');
     });
 
     describe('constructor()', function() {
@@ -32,53 +32,22 @@ describe('should have instantiated', function() {
     describe('emitStateChanges()', function() {
         let emit;
         beforeEach(function() {
-            emit = stub(talkControlServer.eventBus, 'emit');
+            emit = stub(talkControlServer.eventBusServer, 'emit');
         });
 
         afterEach(function() {
             emit.restore();
         });
 
-        it('should emit noting', function() {
-            // Given
-            const state = { currentSlide: { h: 1, v: 0, f: 0 }, slides: [] };
-            stub(store, 'getState').returns(state);
-
-            talkControlServer.previousState = state;
-            // When
-            talkControlServer.init('revealjs');
-            talkControlServer.emitStateChanges();
-            // Then
-            assert(emit.notCalled);
-            store.getState.restore();
-        });
-
         it('should fire "gotoSlide" event', function() {
             // Given
             const state = { currentSlide: { h: 1, v: 0, f: 0 }, slides: [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }] };
             stub(store, 'getState').returns(state);
-
-            talkControlServer.previousState = { ...state, currentSlide: { h: 0, v: 0, f: 0 } };
             // When
             talkControlServer.init('revealjs');
             talkControlServer.emitStateChanges();
             // Then
             assert(emit.calledOnceWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
-            store.getState.restore();
-        });
-
-        it('should fire "initialized" and "gotoSlide" events', function() {
-            // Given
-            const state = { currentSlide: { h: 0, v: 0, f: 0 }, slides: [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }] };
-            stub(store, 'getState').returns(state);
-
-            talkControlServer.previousState = { currentSlide: {}, slides: [] };
-            // When
-            talkControlServer.init('revealjs');
-            talkControlServer.emitStateChanges();
-            // Then
-            assert(emit.calledWith(MASTER_SERVER_CHANNEL, 'initialized'));
-            assert(emit.calledWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
             store.getState.restore();
         });
     });

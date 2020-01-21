@@ -19,7 +19,7 @@ export class TalkControlMaster {
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
 
-        this.eventBus = new EventBusResolver({
+        this.eventBusMaster = new EventBusResolver({
             client: true,
             server,
             postMessage: {
@@ -50,13 +50,13 @@ export class TalkControlMaster {
      */
     afterInitialisation() {
         // Forward initialization event to server
-        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'initialized', data => this.eventBus.emit(MASTER_SERVER_CHANNEL, 'init', data));
-        // Start listening on keys once the server is initialized
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'initialized', () => this.eventBus.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this)));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'initialized', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'init', data));
         // Forward "gotoSlide" events to slave
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
         // Forward "showNotes" events to slave
-        this.eventBus.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
+        // Start listening on "keyboardEvent" on MASTER_SLAVE_CHANNEL
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this));
     }
 
     onKeyboardEvent(event) {
@@ -64,42 +64,37 @@ export class TalkControlMaster {
         switch (event.key) {
             case 'Down': // IE specific value
             case 'ArrowDown':
-                // Do something for "down arrow" key press.
                 action = 'arrowDown';
                 break;
             case 'Up': // IE specific value
             case 'ArrowUp':
-                // Do something for "up arrow" key press.
                 action = 'arrowUp';
                 break;
             case 'Left': // IE specific value
             case 'ArrowLeft':
-                // Do something for "left arrow" key press.
                 action = 'arrowLeft';
                 break;
             case 'Right': // IE specific value
             case 'ArrowRight':
-                // Do something for "right arrow" key press.
                 action = 'arrowRight';
                 break;
             case ' ':
-                // Do something for "space" key press
                 action = 'space';
                 break;
         }
         if (action) {
-            this.eventBus.emit(MASTER_SERVER_CHANNEL, 'keyboardEvent', { key: action });
+            this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'keyboardEvent', { key: action });
         }
     }
 
     forwardEvents() {
-        const forward = (key => data => this.eventBus.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
+        const forward = (key => data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 
     onFramesLoaded() {
-        this.eventBus.emit(MASTER_SLAVE_CHANNEL, 'init');
+        this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'init');
         this.focusFrame.focus();
         document.addEventListener('click', () => this.focusFrame.focus());
     }

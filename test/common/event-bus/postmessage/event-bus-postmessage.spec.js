@@ -20,7 +20,7 @@ describe('EventBusPostMessage', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated SocketEventBus', function() {
+        it('should have instantiated EventBusWebsocketsServer', function() {
             expect(eventBus).to.be.ok;
         });
     });
