@@ -17,13 +17,16 @@ export class EventBusResolver {
 
         if (params.server) {
             if (params.client) {
+                // Master
                 this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBusClient(params.server);
             } else {
+                // Server
                 this.channels[MASTER_SERVER_CHANNEL] = new SocketEventBus(params.server);
             }
         }
 
         if (typeof window != 'undefined') {
+            // Slave
             this.channels[MASTER_SLAVE_CHANNEL] = new EventBusPostMessage(params.postMessage || {});
         }
     }

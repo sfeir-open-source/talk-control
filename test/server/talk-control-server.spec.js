@@ -9,7 +9,7 @@ describe('should have instantiated', function() {
     let on;
     beforeEach(function() {
         talkControlServer = new TalkControlServer();
-        on = stub(talkControlServer.eventBus, 'on');
+        on = stub(talkControlServer.eventBusServer, 'on');
     });
 
     describe('constructor()', function() {
@@ -32,7 +32,7 @@ describe('should have instantiated', function() {
     describe('emitStateChanges()', function() {
         let emit;
         beforeEach(function() {
-            emit = stub(talkControlServer.eventBus, 'emit');
+            emit = stub(talkControlServer.eventBusServer, 'emit');
         });
 
         afterEach(function() {

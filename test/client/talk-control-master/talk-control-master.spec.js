@@ -34,7 +34,7 @@ describe('', function() {
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const emit = stub(talkControlMaster.eventBus, 'emit');
+            const emit = stub(talkControlMaster.eventBusMaster, 'emit');
             stub(talkControlMaster, 'afterInitialisation');
             stub(talkControlMaster, 'forwardEvents');
 
@@ -53,7 +53,7 @@ describe('', function() {
         let mainChannel;
         beforeEach(function() {
             // Event mock
-            mainChannel = talkControlMaster.eventBus.channels[MASTER_SERVER_CHANNEL];
+            mainChannel = talkControlMaster.eventBusMaster.channels[MASTER_SERVER_CHANNEL];
             stub(mainChannel, 'emit');
         });
 

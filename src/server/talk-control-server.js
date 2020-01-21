@@ -14,7 +14,7 @@ export class TalkControlServer {
      * @param {*} server - Server to connect to
      */
     constructor(server) {
-        this.eventBus = new EventBusResolver({ server });
+        this.eventBusServer = new EventBusResolver({ server });
         this.previousState = store.getState();
         this.engine = null;
     }
@@ -26,8 +26,8 @@ export class TalkControlServer {
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
-        this.eventBus.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
         store.subscribe(this.emitStateChanges.bind(this));
     }
 
@@ -38,12 +38,12 @@ export class TalkControlServer {
         const currentState = store.getState();
         switch (true) {
             case !this.previousState.slides.length && !!currentState.slides.length:
-                this.eventBus.emit(MASTER_SERVER_CHANNEL, 'initialized');
+                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'initialized');
                 // Tell everyone to show the first slide
-                this.eventBus.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
+                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
                 break;
             case !_.isEmpty(this.previousState.currentSlide) && !this.engine.slideEquals(currentState.currentSlide, this.previousState.currentSlide):
-                this.eventBus.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
+                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
                 break;
         }
         this.previousState = currentState;
