@@ -115,5 +115,8 @@
     },
     "browserslist": [
         "Chrome > 50"
-    ]
+    ],
+    "browser": {
+        "socket.io": false
+    }
 }
