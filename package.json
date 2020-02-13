@@ -118,5 +118,13 @@
     ],
     "browser": {
         "socket.io": false
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "dist/*",
+            "test/*",
+            "showcase/*",
+            "src/client/*"
+        ]
     }
 }
