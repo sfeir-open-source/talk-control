@@ -42,9 +42,9 @@ General instructions on _how to contribute_ can be found in the [CONTRIBUTING](C
 
 ## Troubleshoot
 
-In case of `Error: listen EADDRINUSE :::3000`, execute:
+In case of `Error: listen EADDRINUSE :::3001`, execute:
 
 ```bash
-lsof -i :3000
+lsof -i :3001
 kill -9 <PID>
 ```
