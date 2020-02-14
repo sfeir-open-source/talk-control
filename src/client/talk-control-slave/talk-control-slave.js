@@ -18,6 +18,11 @@ export class TalkControlSlave {
         this.engine = EngineResolver.getEngine(params.engineName);
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
         this._captureKeyboardEvent = this._captureKeyboardEvent.bind(this);
+        this._captureMouseEvent = this._captureMouseEvent.bind(this);
+        this._touchPosition = {
+            touchstart: { clientX: 0, clientY: 0 },
+            touchend: { clientX: 0, clientY: 0 }
+        };
     }
 
     init() {
@@ -36,6 +41,8 @@ export class TalkControlSlave {
         addEventListener('keyup', e => this._captureKeyboardEvent(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent, true);
         addEventListener('keydown', this._captureKeyboardEvent, true);
+        addEventListener('touchstart', this._captureMouseEvent, false);
+        addEventListener('touchend', e => this._captureMouseEvent(e, true), false);
     }
 
     _captureKeyboardEvent(event, forward = false) {
@@ -50,6 +57,17 @@ export class TalkControlSlave {
             if (forward) {
                 this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
             }
+        }
+    }
+
+    _captureMouseEvent(event, forward = false) {
+        this._touchPosition[event.type] = {
+            clientX: event.changedTouches[0].clientX,
+            clientY: event.changedTouches[0].clientY
+        };
+
+        if (forward) {
+            this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'touchEvent', { position: this._touchPosition });
         }
     }
 }

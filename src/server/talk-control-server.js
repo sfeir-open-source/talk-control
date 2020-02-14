@@ -27,6 +27,7 @@ export class TalkControlServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'touchEvent', this.engine.handleTouch);
         store.subscribe(this.emitStateChanges.bind(this));
     }
 
