@@ -20,6 +20,13 @@ export class GenericEngine {
     handleInput({ key }) {}
 
     /**
+     * Dispatch correct actions depending on the touch direction
+     *
+     * @param {{direction: string}} event - Touch direction
+     */
+    handleTouch({ direction }) {}
+
+    /**
      * Tell if two slides are equal
      */
     slideEquals() {}
