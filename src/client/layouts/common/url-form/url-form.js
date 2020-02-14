@@ -42,6 +42,8 @@ class UrlForm extends LitElement {
     }
 
     render() {
+        const isRemote = window.location.href.indexOf('://localhost:') === -1;
+
         return html`
             <section class="section">
                 <div class="container">
@@ -61,7 +63,7 @@ class UrlForm extends LitElement {
                                         type="url"
                                         placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
                                         id="inputPresentation"
-                                        value="${config.tcShowcase.urls.local}"
+                                        value="${isRemote ? config.tcShowcase.urls.external : config.tcShowcase.urls.local}"
                                     />
                                 </div>
                                 <div class="column">
