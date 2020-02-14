@@ -1,6 +1,24 @@
 {
     "tcServer": {
-        "url": "http://localhost:3000"
+        "urls": {
+            "external": "",
+            "local": "http://localhost:3001"
+        },
+        "port": 3001
+    },
+    "tcMaster": {
+        "urls": {
+            "external": "",
+            "local": "http://localhost:3000"
+        },
+        "port": 3000
+    },
+    "tcShowcase": {
+        "urls": {
+            "external": "",
+            "local": "http://127.0.0.1:3002"
+        },
+        "port": 3002
     },
     "tcSlave": {
         "keysBlocked": ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Space"]
