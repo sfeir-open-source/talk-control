@@ -1,6 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import config from '@config/config';
 import { LitElement, html } from 'lit-element';
 import { isUrlValid } from '../../../../common/helpers/helpers';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
@@ -60,7 +61,7 @@ class UrlForm extends LitElement {
                                         type="url"
                                         placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
                                         id="inputPresentation"
-                                        value="http://127.0.0.1:5000"
+                                        value="${config.tcShowcase.urls.local}"
                                     />
                                 </div>
                                 <div class="column">

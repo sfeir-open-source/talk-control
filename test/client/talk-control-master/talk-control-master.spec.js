@@ -18,7 +18,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        talkControlMaster = new TalkControlMaster(config.tcServer.url);
+        talkControlMaster = new TalkControlMaster(config.tcServer.urls.local);
     });
 
     after(function() {
