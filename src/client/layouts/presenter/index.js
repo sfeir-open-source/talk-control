@@ -20,6 +20,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const talkControlMaster = new TalkControlMaster(config.tcServer.url);
+    const talkControlMaster = new TalkControlMaster(config.tcServer.urls.local);
     talkControlMaster.init();
 });

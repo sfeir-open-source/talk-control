@@ -22,14 +22,14 @@ describe('EventBusResolver', function() {
         // ! Throws 'TypeError: server.listeners is not a function'
         // it('shoud instantiate a SocketServer', function() {
         //     // When
-        //     resolver = new EventBusResolver({ server: config.tcServer.url });
+        //     resolver = new EventBusResolver({ server: config.tcServer.urls.local });
         //     // Then
         //     expect(resolver.socketBus instanceof EventBusWebsocketsServer).to.be.true;
         // });
 
         it('shoud instantiate a SocketClient', function() {
             // When
-            const resolver = new EventBusResolver({ server: config.tcServer.url, client: true });
+            const resolver = new EventBusResolver({ server: config.tcServer.urls.local, client: true });
             // Then
             expect(resolver.channels[MASTER_SERVER_CHANNEL] instanceof EventBusWebsocketsClient).to.be.true;
         });
