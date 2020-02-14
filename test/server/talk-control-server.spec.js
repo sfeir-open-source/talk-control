@@ -23,9 +23,9 @@ describe('should have instantiated', function() {
             // When
             talkControlServer.init('revealjs');
             // Then
-            assert(on.calledTwice, 'not called twice');
             assert(on.calledWith(MASTER_SERVER_CHANNEL, 'init'), 'not called with init');
             assert(on.calledWith(MASTER_SERVER_CHANNEL, 'keyboardEvent'), 'not called with keyboardEvent');
+            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'touchEvent'), 'not called with touchEvent');
         });
     });
 
