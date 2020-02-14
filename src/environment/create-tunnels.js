@@ -9,14 +9,13 @@ const configFileService = require('./services/config-file');
  */
 const setTunnels = async () => {
     const configItems = ['tcServer', 'tcMaster', 'tcShowcase'];
+
     for (const item of configItems) {
-        if (!config[item].urls.external) {
-            try {
-                const url = await tunnelService.getUrl(config[item].port);
-                configFileService.setExternalUrl(item, url);
-            } catch (e) {
-                console.error(`Unable to set ${item} external url`, e);
-            }
+        try {
+            const url = await tunnelService.getUrl(config[item].port);
+            configFileService.setExternalUrl(item, url);
+        } catch (e) {
+            console.error(`Unable to set ${item} external url`, e);
         }
     }
 };
