@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const talkControlMaster = new TalkControlMaster(config.tcServer.urls.local);
+    const isRemote = window.location.href.indexOf('://localhost:') === -1;
+    const talkControlMaster = new TalkControlMaster(isRemote ? config.tcServer.urls.external : config.tcServer.urls.local);
     talkControlMaster.init();
 });
