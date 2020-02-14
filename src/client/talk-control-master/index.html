@@ -12,17 +12,59 @@
         <section class="section">
             <div class="container">
                 <h1 class="title">
-                    Talk control
+                    TalkControl
                 </h1>
-                <ul>
-                    <li>
-                        <a href="../layouts/on-stage/on-stage.html">stage view</a>
-                    </li>
-                    <li>
-                        <a href="../layouts/presenter/presenter.html">presenter view</a>
-                    </li>
-                </ul>
+                <h2 class="subtitle">
+                    Choose a view
+                </h2>
+                <div class="columns">
+                    <div class="column is-one-fifth">
+                        <a href="../layouts/on-stage/on-stage.html">
+                            <div class="card">
+                                <div class="card-content has-text-centered">
+                                    <p class="title">
+                                        <i class="fas fa-chalkboard" style="font-size: 6rem;"></i>
+                                    </p>
+                                    <p class="subtitle">
+                                        Stage view
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <a href="../layouts/on-stage/on-stage.html">
+                            <div class="card">
+                                <div class="card-content has-text-centered" onclick="window.location.href = '../layouts/presenter/presenter.html'">
+                                    <p class="title">
+                                        <i class="fas fa-chalkboard-teacher" style="font-size: 6rem;"></i>
+                                    </p>
+                                    <p class="subtitle">
+                                        Presenter view
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <br /><br />
+                <h2 class="subtitle">
+                    Or take control from a mobile device
+                </h2>
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <a href="../layouts/on-stage/on-stage.html">
+                            <div class="card">
+                                <div class="card-content has-text-centered">
+                                    <canvas id="qrCode" aria-label="Use this QRCode to connect to TalkControl from your mobile"></canvas><br />
+                                    <span id="textCode"></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
+        <script src="./index.js"></script>
     </body>
 </html>
