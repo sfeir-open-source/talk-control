@@ -7,13 +7,17 @@ import { LitElement, html, css } from 'lit-element';
 // Extend the LitElement base class
 class SlideView extends LitElement {
     static get properties() {
+        console.log('get properties');
         return {
             url: { type: String, reflect: true, attribute: true },
-            delta: { type: String, reflect: true, attribute: true }
+            delta: { type: String, reflect: true, attribute: true },
+            focus: { type: Boolean, reflect: true, attribute: true },
+            fullscreen: { type: Boolean, reflect: true, attribute: true }
         };
     }
 
     static get styles() {
+        console.log('get styles', this.fullscreen);
         return [
             bulmaStyle,
             css`
@@ -30,6 +34,8 @@ class SlideView extends LitElement {
         super();
         this.url = '';
         this.delta = '0';
+        this.fullscreen = false;
+        console.log('fullscreen', this.fullscreen);
     }
 
     attributeChangedCallback(name, oldval, newval) {
@@ -50,7 +56,7 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <section>
+            <section style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
                 <iframe>Current slide</iframe>
             </section>
         `;
