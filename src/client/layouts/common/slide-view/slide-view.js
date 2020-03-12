@@ -35,12 +35,9 @@ class SlideView extends LitElement {
         this.url = '';
         this.delta = '0';
         this.fullscreen = false;
-        console.log('fullscreen', this.fullscreen);
     }
 
     attributeChangedCallback(name, oldval, newval) {
-        // For debug purposes - called each time a property value changes
-        console.log('attribute change: ', name, newval);
         super.attributeChangedCallback(name, oldval, newval);
 
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
