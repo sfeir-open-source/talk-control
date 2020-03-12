@@ -12,11 +12,13 @@
         <script src="../common/url-form/url-form.js"></script>
         <script src="./components/timer/timer.js"></script>
         <script src="./components/notes/notes.js"></script>
+        <script type="module" src="../common/menu-dropdown/menu-dropdown.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
         <tc-url-form></tc-url-form>
         <section class="columns is-marginless is-paddingless is-hidden" id="presenter-view">
+            <tc-menu-dropdown></tc-menu-dropdown>
             <div class="column is-three-fifths" id="current">
                 <div class="content">
                     <tc-slide focus></tc-slide>
