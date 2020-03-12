@@ -7,7 +7,6 @@ import { LitElement, html, css } from 'lit-element';
 // Extend the LitElement base class
 class SlideView extends LitElement {
     static get properties() {
-        console.log('get properties');
         return {
             url: { type: String, reflect: true, attribute: true },
             delta: { type: String, reflect: true, attribute: true },
@@ -17,7 +16,6 @@ class SlideView extends LitElement {
     }
 
     static get styles() {
-        console.log('get styles', this.fullscreen);
         return [
             bulmaStyle,
             css`
