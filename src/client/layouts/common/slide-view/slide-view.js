@@ -9,7 +9,9 @@ class SlideView extends LitElement {
     static get properties() {
         return {
             url: { type: String, reflect: true, attribute: true },
-            delta: { type: String, reflect: true, attribute: true }
+            delta: { type: String, reflect: true, attribute: true },
+            focus: { type: Boolean, reflect: true, attribute: true },
+            fullscreen: { type: Boolean, reflect: true, attribute: true }
         };
     }
 
@@ -30,11 +32,10 @@ class SlideView extends LitElement {
         super();
         this.url = '';
         this.delta = '0';
+        this.fullscreen = false;
     }
 
     attributeChangedCallback(name, oldval, newval) {
-        // For debug purposes - called each time a property value changes
-        console.log('attribute change: ', name, newval);
         super.attributeChangedCallback(name, oldval, newval);
 
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
@@ -50,7 +51,7 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <section>
+            <section style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
                 <iframe>Current slide</iframe>
             </section>
         `;

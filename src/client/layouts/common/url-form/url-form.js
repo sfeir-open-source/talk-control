@@ -1,6 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import config from '@config/config';
 import { LitElement, html } from 'lit-element';
 import { isUrlValid } from '../../../../common/helpers/helpers';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
@@ -41,11 +42,13 @@ class UrlForm extends LitElement {
     }
 
     render() {
+        const isRemote = window.location.href.indexOf('://localhost:') === -1;
+
         return html`
             <section class="section">
                 <div class="container">
                     <h1 class="title">
-                        Talk control
+                        TalkControl
                     </h1>
                     <p class="subtitle">
                         Take control of your presentation by entering its url below
@@ -60,7 +63,7 @@ class UrlForm extends LitElement {
                                         type="url"
                                         placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
                                         id="inputPresentation"
-                                        value="http://127.0.0.1:5000"
+                                        value="${isRemote ? config.tcShowcase.urls.external : config.tcShowcase.urls.local}"
                                     />
                                 </div>
                                 <div class="column">

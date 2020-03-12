@@ -12,6 +12,7 @@ export class RevealEngine extends GenericEngine {
         super();
         // Binding this because they might be given as callback for some events
         this.handleInput = this.handleInput.bind(this);
+        this.handleTouch = this.handleTouch.bind(this);
         this.init = this.init.bind(this);
     }
 
@@ -54,6 +55,43 @@ export class RevealEngine extends GenericEngine {
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
                 break;
             case 'space':
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
+                else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
+                else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);
+                break;
+        }
+    }
+
+    /**
+     * @param {{direction: string}} event - Touch direction
+     */
+    handleTouch({ direction }) {
+        const { currentSlide, slides } = store.getState();
+        const currentSlideIndex = slides.findIndex(s => this.slideEquals(s, currentSlide, false));
+        const { fMax } = slides[currentSlideIndex];
+        const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
+        const nextHorizontalSlide = slides.find(slide => currentSlide.h + 1 === slide.h);
+        const prevVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v - 1);
+        const prevHorizontalSlide = slides.find(slide => currentSlide.h - 1 === slide.h);
+
+        switch (direction) {
+            case 'left':
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
+                else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);
+                break;
+            case 'right':
+                if (currentSlide.f > -1) this._prevFragment(currentSlide);
+                else if (prevHorizontalSlide) this._prevSlide(prevHorizontalSlide);
+                break;
+            case 'up':
+                if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
+                else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
+                break;
+            case 'down':
+                if (currentSlide.f > -1) this._prevFragment(currentSlide);
+                else if (prevVerticalSlide) this._prevSlide(prevVerticalSlide);
+                break;
+            case 'none':
                 if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
                 else if (nextHorizontalSlide) this._nextHorizontalSlide(currentSlide);

@@ -3,14 +3,18 @@
     "version": "0.2.0",
     "main": "index.js",
     "scripts": {
-        "start": "npx npm-run-all --parallel tc-*",
+        "create-tunnels": "node src/environment/create-tunnels",
+        "get-started": "node src/environment/get-started",
+        "start": "npx npm-run-all --parallel create-tunnels tc-server tc-slave tc-showcase start-master-after-server when-master-is-started",
+        "start-master-after-server": "wait-on tcp:3001 && wait-on tcp:3002 && npm run tc-master",
+        "when-master-is-started": "wait-on tcp:3000 && npm run get-started",
         "build": "npx npm-run-all --parallel build-*",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . && echo 'Lint complete.'",
         "commit": "npx git-cz",
-        "tc-showcase": "serve showcase",
-        "tc-master": "npx parcel src/client/talk-control-master/index.html --out-dir ./dist/client/master",
+        "tc-showcase": "npx http-server showcase -s -p 3002",
+        "tc-master": "npx parcel src/client/talk-control-master/index.html --out-dir ./dist/client/master --port 3000",
         "tc-slave": "npx parcel watch src/client/talk-control-slave/index.js --out-dir showcase/resources/slave",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
         "build-slave": "npx parcel build src/client/talk-control-slave/index.js --no-source-maps --out-dir ./dist/client/slave --target browser",
@@ -94,16 +98,20 @@
         "@fortawesome/fontawesome-free": "^5.11.2",
         "@webcomponents/webcomponentsjs": "^2.4.1",
         "bulma": "^0.8.0",
+        "colors": "^1.4.0",
         "express": "^4.17.1",
+        "http-server": "^0.12.1",
+        "localtunnel": "^2.0.0",
         "module-alias": "^2.2.2",
         "npm-run-all": "^4.1.5",
+        "qrcode": "^1.4.4",
         "query-selector-shadow-dom": "^0.3.4",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
-        "serve": "^11.3.0",
         "socket.io": "^2.3.0",
         "socket.io-client": "^2.3.0",
-        "uws": "^10.148.1"
+        "uws": "^10.148.1",
+        "wait-on": "^4.0.0"
     },
     "_moduleAliases": {
         "@src": "src",
@@ -115,5 +123,16 @@
     },
     "browserslist": [
         "Chrome > 50"
-    ]
+    ],
+    "browser": {
+        "socket.io": false
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "dist/*",
+            "test/*",
+            "showcase/*",
+            "src/client/*"
+        ]
+    }
 }

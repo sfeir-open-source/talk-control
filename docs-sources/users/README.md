@@ -22,4 +22,4 @@ node dist/server/index.js
 npx serve dist/client/master
 ```
 
-Finally open your browser on [localhost:5000](http://localhost:5000).
+Finally open your browser on [localhost:3000](http://localhost:3000).

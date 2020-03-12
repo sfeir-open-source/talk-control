@@ -57,10 +57,13 @@ export class TalkControlMaster {
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
         // Start listening on "keyboardEvent" on MASTER_SLAVE_CHANNEL
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this));
+        // Start listening on "touchEvent" on MASTER_SLAVE_CHANNEL
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'touchEvent', this.onTouchEvent.bind(this));
     }
 
     onKeyboardEvent(event) {
         let action = '';
+
         switch (event.key) {
             case 'Down': // IE specific value
             case 'ArrowDown':
@@ -82,9 +85,28 @@ export class TalkControlMaster {
                 action = 'space';
                 break;
         }
+
         if (action) {
             this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'keyboardEvent', { key: action });
         }
+    }
+
+    onTouchEvent(event) {
+        const xDiff = event.position.touchstart.clientX - event.position.touchend.clientX;
+        const xDiffPositive = xDiff < 0 ? xDiff * -1 : xDiff;
+        const yDiff = event.position.touchstart.clientY - event.position.touchend.clientY;
+        const yDiffPositive = yDiff < 0 ? yDiff * -1 : yDiff;
+        let direction = '';
+
+        if (xDiffPositive <= 20 && yDiffPositive <= 20) {
+            direction = 'none';
+        } else if (xDiffPositive > yDiffPositive) {
+            direction = xDiff > 0 ? 'left' : 'right';
+        } else if (yDiffPositive >= xDiffPositive) {
+            direction = yDiff > 0 ? 'up' : 'down';
+        }
+
+        this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'touchEvent', { direction });
     }
 
     forwardEvents() {
