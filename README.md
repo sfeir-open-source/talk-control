@@ -2,9 +2,8 @@
 
 ![version](https://img.shields.io/github/package-json/v/sfeir-open-source/talk-control?color=blue)
 ![license](https://img.shields.io/github/license/sfeir-open-source/talk-control)
-![open issues](https://img.shields.io/github/issues-raw/sfeir-open-source/talk-control/bug?color=orange)
-![open enhancements](https://img.shields.io/github/issues-raw/sfeir-open-source/talk-control/enhancement?color=lightblue)
 ![maintained](https://img.shields.io/maintenance/yes/2020)
+![open issues](https://img.shields.io/github/issues-raw/sfeir-open-source/talk-control)
 
 ![master](https://github.com/sfeir-open-source/talk-control/workflows/master/badge.svg?branch=master)
 ![v0.3](https://github.com/sfeir-open-source/talk-control/workflows/v0.3/badge.svg?branch=v0.3)
