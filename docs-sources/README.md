@@ -1,4 +1,4 @@
-# Talk Control
+# TalkControl
 Welcome on TalkControl documentation. You can find a technical documentation [here](/developers/), instructions on how to use it [here](/users/) and a JsDoc [here](/developers/code/).
 
 ## Description
