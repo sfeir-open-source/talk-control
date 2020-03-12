@@ -1,6 +1,7 @@
 # TalkControl
 
-[![Actions Status](https://github.com/sfeir-open-source/talk-control/workflows/Node.js%20CI/badge.svg)](https://github.com/sfeir-open-source/talk-control/actions)
+[![Actions Status](https://github.com/sfeir-open-source/talk-control/workflows/master/badge.svg)](https://github.com/sfeir-open-source/talk-control/actions)
+[![Actions Status](https://github.com/sfeir-open-source/talk-control/workflows/v0.3/badge.svg)](https://github.com/sfeir-open-source/talk-control/actions)
 
 This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
 
