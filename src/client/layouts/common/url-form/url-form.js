@@ -45,13 +45,10 @@ class UrlForm extends LitElement {
         const isRemote = window.location.href.indexOf('://localhost:') === -1;
 
         return html`
-            <section class="section">
+            <section>
                 <div class="container">
-                    <h1 class="title">
-                        TalkControl
-                    </h1>
                     <p class="subtitle">
-                        Take control of your presentation by entering its url below
+                        Enter your presentation url:
                     </p>
                     <!-- Enter presentation url form area -->
                     <div class="columns">
