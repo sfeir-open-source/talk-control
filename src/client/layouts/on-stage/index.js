@@ -9,11 +9,12 @@ window.addEventListener('DOMContentLoaded', function() {
         const url = event.detail.url;
         if (url) {
             const slideViews = document.querySelectorAll('tc-slide');
+            const slidesSection = document.getElementById('slides');
             const urlForm = document.querySelector('tc-url-form');
 
             slideViews.forEach(slideView => {
                 slideView.url = url;
-                slideView.classList.remove('is-hidden');
+                slidesSection.classList.remove('is-hidden');
             });
             urlForm.classList.add('is-hidden');
         }

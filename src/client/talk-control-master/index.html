@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Talk Control Master</title>
+        <title>TalkControl Master</title>
         <link rel="stylesheet" href="../../../node_modules/bulma/css/bulma.min.css" />
         <script defer src="../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
         <link rel="stylesheet" href="./index.css" />
@@ -12,7 +12,7 @@
         <section class="section">
             <div class="container">
                 <h1 class="title">
-                    Talk Control
+                    TalkControl
                 </h1>
                 <h2 class="subtitle">
                     Choose a view
@@ -32,7 +32,23 @@
                             </div>
                         </a>
                     </div>
-                    <div class="column is-one-fifth">
+                    <div class="column is-one-fifth is-hidden-tablet">
+                        <!-- Mobile version -->
+                        <a href="../layouts/presenter/presenter-mobile.html">
+                            <div class="card">
+                                <div class="card-content has-text-centered" onclick="window.location.href = '../layouts/presenter/presenter-mobile.html'">
+                                    <p class="title">
+                                        <i class="fas fa-chalkboard-teacher" style="font-size: 6rem;"></i>
+                                    </p>
+                                    <p class="subtitle">
+                                        Presenter view
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="column is-one-fifth is-hidden-mobile">
+                        <!-- Desktop version -->
                         <a href="../layouts/presenter/presenter.html">
                             <div class="card">
                                 <div class="card-content has-text-centered" onclick="window.location.href = '../layouts/presenter/presenter.html'">
@@ -49,7 +65,7 @@
                 </div>
                 <br /><br />
                 <h2 class="subtitle">
-                    Or take control from a mobile device
+                    Or take control from another device
                 </h2>
                 <div class="columns">
                     <div class="column is-one-third">

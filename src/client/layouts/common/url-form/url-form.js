@@ -48,7 +48,7 @@ class UrlForm extends LitElement {
             <section class="section">
                 <div class="container">
                     <h1 class="title">
-                        Talk Control
+                        TalkControl
                     </h1>
                     <p class="subtitle">
                         Take control of your presentation by entering its url below

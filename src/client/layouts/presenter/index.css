@@ -1,22 +1,28 @@
-#current {
+#current,
+#current-mobile {
     height: 100vh;
     padding: 0.3rem;
 }
-#next {
+#current-mobile {
+    height: 40vh;
+}
+#next,
+#next-mobile {
     height: 45vh;
     padding: 0.3rem 0.3rem 0 0;
 }
+#next-mobile {
+    height: 35vh;
+}
 #timer {
-    height: 10vh;
+    height: auto;
     padding: 0.3rem 0.3rem 0 0;
 }
 #notes {
-    height: 45vh;
+    height: auto;
     padding: 0.3rem 0.3rem 0.3rem 0;
 }
-
 .content {
     height: 100%;
     padding: 0.5rem;
-    border: 3px solid black;
 }

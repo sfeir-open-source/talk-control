@@ -9,17 +9,14 @@
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
         <script type="module" src="../common/slide-view/slide-view.js"></script>
         <script type="module" src="../common/url-form/url-form.js"></script>
-
+        <script type="module" src="../common/menu-dropdown/menu-dropdown.js"></script>
         <title>On stage</title>
     </head>
     <body>
         <tc-url-form></tc-url-form>
-        <section class="columns is-gapless" style="margin-bottom: 0;">
-            <div class="column" id="slide">
-                <div class="content">
-                    <tc-slide class="is-hidden" focus></tc-slide>
-                </div>
-            </div>
+        <section id="slides" class="is-hidden">
+            <tc-menu-dropdown></tc-menu-dropdown>
+            <tc-slide fullscreen focus></tc-slide>
         </section>
         <script src="./index.js"></script>
     </body>
