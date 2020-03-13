@@ -73,23 +73,22 @@ class UrlForm extends LitElement {
                     <p class="subtitle">
                         Enter your presentation url:
                     </p>
-                    <!-- Enter presentation url form area -->
-                    <div class="columns">
-                        <div class="column is-half">
+
+                    <div class="field has-addons">
+                        <div class="control">
                             <input
                                 class="input"
                                 type="url"
-                                placeholder="Enter the url of your presentation : http://my.presentation.url/index.html"
+                                placeholder="http://..."
                                 id="presentationUrl"
                                 value="${isRemote ? config.tcShowcase.urls.external : config.tcShowcase.urls.local}"
                             />
                         </div>
-                        <div class="column">
-                            <button id="validateButton" class="button">Validate</button>
-                            <button id="updateButton" class="button is-hidden">Edit</button>
+                        <div class="control">
+                            <a id="validateButton" class="button is-info">Validate</a>
+                            <a id="updateButton" class="button is-primary is-hidden">Edit</a>
                         </div>
                     </div>
-
                     <!-- Error message area -->
                     <div id="urlError" class="notification is-danger is-hidden">
                         <button class="delete" @click="${() => this.shadowRoot.getElementById('urlError').classList.add('is-hidden')}"></button>
