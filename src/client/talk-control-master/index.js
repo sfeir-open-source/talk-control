@@ -12,4 +12,12 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelector('tc-url-form').classList.remove('is-hidden');
+
+    addEventListener('url-form-editing', () => {
+        document.getElementById('chooseLayout').classList.add('is-hidden');
+    });
+
+    addEventListener('url-form-validated', () => {
+        document.getElementById('chooseLayout').classList.remove('is-hidden');
+    });
 });
