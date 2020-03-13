@@ -1,4 +1,7 @@
 {
+    "ngrok": {
+        "authToken": ""
+    },
     "tcServer": {
         "urls": {
             "external": "",
