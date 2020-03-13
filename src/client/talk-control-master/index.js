@@ -10,4 +10,14 @@ window.addEventListener('DOMContentLoaded', function() {
             'textCode'
         ).innerHTML = `<a href="${config.tcMaster.urls.external}" title="Use this url to connect to TalkControl from another device">${config.tcMaster.urls.external}</a>`;
     }
+
+    document.querySelector('tc-url-form').classList.remove('is-hidden');
+
+    addEventListener('url-form-editing', () => {
+        document.getElementById('chooseLayout').classList.add('is-hidden');
+    });
+
+    addEventListener('url-form-validated', () => {
+        document.getElementById('chooseLayout').classList.remove('is-hidden');
+    });
 });
