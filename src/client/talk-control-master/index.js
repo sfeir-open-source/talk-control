@@ -9,6 +9,8 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById(
             'textCode'
         ).innerHTML = `<a href="${config.tcMaster.urls.external}" title="Use this url to connect to TalkControl from another device">${config.tcMaster.urls.external}</a>`;
+    } else {
+        document.getElementById('qrCodeSection').classList.add('is-hidden');
     }
 
     document.querySelector('tc-url-form').classList.remove('is-hidden');
