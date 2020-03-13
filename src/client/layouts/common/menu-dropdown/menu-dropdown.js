@@ -46,6 +46,9 @@ class MenuDropdown extends LitElement {
                         <a href="../../talk-control-master/index.html" class="dropdown-item">
                             Accueil
                         </a>
+                        <a href="../on-stage/on-stage.html" class="dropdown-item">
+                            On stage view
+                        </a>
                         <a href="../presenter/presenter.html" class="dropdown-item is-hidden-mobile">
                             Presenter view
                         </a>

@@ -7,14 +7,14 @@
         <link rel="stylesheet" href="../../../../node_modules/bulma/css/bulma.min.css" />
         <link rel="stylesheet" href="index.css" />
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
-        <script type="module" src="../common/slide-view/slide-view.js"></script>
-        <script type="module" src="../common/url-form/url-form.js"></script>
-        <script type="module" src="../common/menu-dropdown/menu-dropdown.js"></script>
+        <!-- type="module" not needed because we work with parcel bundler -->
+        <script defer src="../common/slide-view/slide-view.js"></script>
+        <script defer src="../common/url-form/url-form.js"></script>
+        <script defer src="../common/menu-dropdown/menu-dropdown.js"></script>
         <title>On stage</title>
     </head>
     <body>
-        <tc-url-form></tc-url-form>
-        <section id="slides" class="is-hidden">
+        <section>
             <tc-menu-dropdown></tc-menu-dropdown>
             <tc-slide fullscreen focus></tc-slide>
         </section>
