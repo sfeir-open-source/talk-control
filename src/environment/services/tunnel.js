@@ -10,6 +10,10 @@ const ngrok = require('ngrok');
  * @returns {string} External url
  */
 exports.getUrl = async port => {
+    if (!config.ngrok.authToken) {
+        return '';
+    }
+
     return await ngrok.connect({
         authtoken: config.ngrok.authToken,
         proto: 'http',

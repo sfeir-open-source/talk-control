@@ -12,11 +12,23 @@ console.log(
 );
 console.log(
     `
-    Use TalkControl from localhost:
-    Get started by opening url: ${config.tcMaster.urls.local}
-
-    Use TalkControl remotely:
-    Get started by opening url: ${config.tcMaster.urls.external}`.green
+    Use TalkControl from localhost:`
 );
+console.log(`    Get started by opening url: ${config.tcMaster.urls.local}`.green);
+console.log(
+    `
+    Use TalkControl remotely:`
+);
+if (config.tcMaster.urls.external) {
+    console.log(`    Get started by opening url: ${config.tcMaster.urls.external}`.green);
+} else {
+    console.log(
+        `    TalkControl use ngrok to be accessible remotely:
+        1. Create an account and login on https://ngrok.com/
+        2. Get your auth token on page https://dashboard.ngrok.com/auth
+        3. Add your auth token to file: config/config.json
+        4. Quit and restart TalkControl with npm start`.cyan
+    );
+}
 console.log('\n'.bgBrightBlue);
 console.log('\n');
