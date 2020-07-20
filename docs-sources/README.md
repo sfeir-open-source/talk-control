@@ -1,5 +1,7 @@
 # TalkControl
-Welcome on TalkControl documentation. You can find a technical documentation [here](/developers/), instructions on how to use it [here](/users/) and a JsDoc [here](/developers/code/).
+Welcome on TalkControl documentation.
+
+You can find a technical documentation [here](https://github.com/sfeir-open-source/talk-control/tree/master/docs-sources/developers), instructions on how to use it [here](https://github.com/sfeir-open-source/talk-control/tree/master/docs-sources/users) and a JsDoc [here](https://github.com/sfeir-open-source/talk-control/tree/master/docs-sources/developers/code).
 
 ## Description
 
