@@ -1,6 +1,0 @@
-# mocha.opts
--r @babel/register
--r jsdom-global/register
--r esm
---full-trace
-test/**/*.spec.js
