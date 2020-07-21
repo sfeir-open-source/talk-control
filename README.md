@@ -6,7 +6,7 @@
 ![open issues](https://img.shields.io/github/issues-raw/sfeir-open-source/talk-control)
 
 ![master](https://github.com/sfeir-open-source/talk-control/workflows/master/badge.svg?branch=master)
-![v0.4](https://github.com/sfeir-open-source/talk-control/workflows/v0.4/badge.svg?branch=v0.4)
+![develop](https://github.com/sfeir-open-source/talk-control/workflows/develop/badge.svg?branch=develop)
 
 This project aims to make speakers' life easier by supplying an app to remotely control their slideshow.
 
