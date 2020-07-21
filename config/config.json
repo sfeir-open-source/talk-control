@@ -24,6 +24,12 @@
         "port": 3002
     },
     "tcSlave": {
-        "keysBlocked": ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Space"]
+        "keysBlocked": [
+            "ArrowDown",
+            "ArrowUp",
+            "ArrowLeft",
+            "ArrowRight",
+            "Space"
+        ]
     }
 }
