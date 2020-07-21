@@ -8,29 +8,12 @@
         <link rel="stylesheet" href="index.css" />
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
         <!-- type="module" not needed because we work with parcel bundler -->
-        <script defer src="../common/slide-view/slide-view.js"></script>
+        <script defer src="./components/touch-pointer/touch-pointer.js"></script>
         <title>Remote pointer</title>
     </head>
     <body>
-        <section>
-            <div class="py-4 px-5 has-background-primary">
-                <h1 class="title">Remote pointer</h1>
-                <ol class="ml-4">
-                    <li>Choose the color pointer:
-                        <div class="buttons my-2">
-                            <button class="button is-danger">Red</button>
-                            <button class="button is-white">White</button>
-                            <button class="button is-black">Black</button>
-                            <button class="button is-link">Blue</button>
-                        </div>
-                    </li>
-                    <li>Drag your finger on the preview area to show the pointer</li>
-                </ol>
-            </div>
-            <div class="has-background-info">
-                <tc-slide></tc-slide>
-            </div>
+        <section style="max-width: 800px">
+            <tc-touch-pointer></tc-touch-pointer>
         </section>
-        <script src="./index.js"></script>
     </body>
 </html>
