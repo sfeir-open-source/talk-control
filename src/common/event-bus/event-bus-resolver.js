@@ -42,7 +42,8 @@ export class EventBusResolver {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
             throw new Error(`'${dest}' is not a known destination.`);
         }
-        console.warn(`emit '${key}' on ${dest}`);
+        
+        // console.warn(`emit '${key}' on ${dest}`);
         this.channels[dest].emit(key, data);
     }
 
