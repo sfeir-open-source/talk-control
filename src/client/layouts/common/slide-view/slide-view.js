@@ -55,8 +55,9 @@ class SlideView extends LitElement {
             }
             // 'notesReceived' event is fired by the NotesSlave
             if (typeof message.data === 'object' && message.data.type === 'pointerPositionReceived') {
-                this.shadowRoot.getElementById('pointer').style.left = message.data.position.x;
-                this.shadowRoot.getElementById('pointer').style.top = message.data.position.y;
+                this.shadowRoot.getElementById('pointer').style.left = message.data.pointer.x;
+                this.shadowRoot.getElementById('pointer').style.top = message.data.pointer.y;
+                this.shadowRoot.getElementById('pointer').style.backgroundColor = message.data.pointer.color;
             }
         });
     }

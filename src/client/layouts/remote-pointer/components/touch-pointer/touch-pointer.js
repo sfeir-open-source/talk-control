@@ -58,26 +58,12 @@ class TouchPointerComponent extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
+        this._initPresentationUrl();
+        this._initColorsButtons();
+        
         const touchPointerSlave = new TouchPointerSlave();
-
-        // Get presentation url from session storage
-        this.presentationUrl = sessionStorage.getItem('presentationUrl');
-
-        // Init double click event
-        this.shadowRoot.getElementById('touchMask').addEventListener('dblclick', e => {
-            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
-            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
-
-            console.log('Double click on position', { x: `${percentX}%`, y: `${percentY}%` });
-        });
-
-        // Init double mouse move event
-        this.shadowRoot.getElementById('touchMask').addEventListener('mousemove', e => {
-            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
-            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
-    
-            touchPointerSlave.sendPointerPositionToMaster({ x: `${percentX}%`, y: `${percentY}%` });
-        });
+        this._initPointerDblClick();
+        this._initPointerMove(touchPointerSlave);
     }
 
     render() {
@@ -87,10 +73,10 @@ class TouchPointerComponent extends LitElement {
                 <ol>
                     <li>Choose the color pointer:
                         <div class="buttons">
-                            <button class="button colorButton is-danger"></button>
-                            <button class="button colorButton is-white"></button>
-                            <button class="button colorButton is-black"></button>
-                            <button class="button colorButton is-link"></button>
+                            <button class="button colorButton is-danger" value="#FF0000"></button>
+                            <button class="button colorButton is-white" value="#FFFFFF"></button>
+                            <button class="button colorButton is-black" value="#000000"></button>
+                            <button class="button colorButton is-link" value="#0000FF"></button>
                         </div>
                     </li>
                     <li>Drag your finger on the preview area to show the pointer</li>
@@ -101,6 +87,40 @@ class TouchPointerComponent extends LitElement {
                 <div id="touchMask" class="has-background-success"/>
             </div>
         `;
+    }
+
+
+    _initPresentationUrl() {
+        this.presentationUrl = sessionStorage.getItem('presentationUrl');
+    }
+
+    _initColorsButtons() {
+        const buttons = this.shadowRoot.querySelectorAll('button');
+        for (const button of buttons) {
+            button.addEventListener('click', e => this._chooseColor(e.target.value));
+        }
+    }
+
+    _chooseColor(color) {
+        this.pointerColor = color;
+    }
+
+    _initPointerDblClick() {
+        this.shadowRoot.getElementById('touchMask').addEventListener('dblclick', e => {
+            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
+            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
+
+            console.log('Double click on position', { x: `${percentX}%`, y: `${percentY}%` });
+        });
+    }
+
+    _initPointerMove(touchPointerSlave) {
+        this.shadowRoot.getElementById('touchMask').addEventListener('mousemove', e => {
+            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
+            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
+    
+            touchPointerSlave.sendPointerPositionToMaster({ x: `${percentX}%`, y: `${percentY}%`, color: this.pointerColor });
+        });
     }
 
     _getPositionInPercent(value, size) {
