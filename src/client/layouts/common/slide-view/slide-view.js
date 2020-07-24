@@ -30,10 +30,10 @@ class SlideView extends LitElement {
                     position: absolute;
                     left: 0px;
                     top: 0px;
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 3px;
-                    background-color: green
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 6px;
+                    background-color: #FF0000
                 }
             `
         ];
