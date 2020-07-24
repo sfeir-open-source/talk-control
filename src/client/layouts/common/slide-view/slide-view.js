@@ -1,6 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import { SlideViewSlave } from './slide-view-slave';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
@@ -21,8 +22,18 @@ class SlideView extends LitElement {
             css`
                 iframe,
                 section {
+                    position: relative;
                     width: 100%;
                     height: 100%;
+                }
+                #pointer {
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 3px;
+                    background-color: green
                 }
             `
         ];
@@ -33,6 +44,21 @@ class SlideView extends LitElement {
         this.url = '';
         this.delta = '0';
         this.fullscreen = false;
+    }
+
+    firstUpdated() {
+        super.firstUpdated();
+        new SlideViewSlave();
+        addEventListener('message', message => {
+            if (!message || !message.data) {
+                return;
+            }
+            // 'notesReceived' event is fired by the NotesSlave
+            if (typeof message.data === 'object' && message.data.type === 'pointerPositionReceived') {
+                this.shadowRoot.getElementById('pointer').style.left = message.data.position.x;
+                this.shadowRoot.getElementById('pointer').style.top = message.data.position.y;
+            }
+        });
     }
 
     attributeChangedCallback(name, oldval, newval) {
@@ -53,6 +79,7 @@ class SlideView extends LitElement {
         return html`
             <section style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
                 <iframe>Current slide</iframe>
+                <div id="pointer"/>
             </section>
         `;
     }

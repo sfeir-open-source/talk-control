@@ -1,8 +1,9 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 import '../../../common/slide-view/slide-view';
+import { TouchPointerSlave } from './touch-pointer-slave';
+import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 const layerWidth = css`800`;
 const layerHeight = css`450`;
@@ -57,6 +58,7 @@ class TouchPointerComponent extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
+        const touchPointerSlave = new TouchPointerSlave();
 
         // Get presentation url from session storage
         this.presentationUrl = sessionStorage.getItem('presentationUrl');
@@ -74,7 +76,7 @@ class TouchPointerComponent extends LitElement {
             const percentX = this._getPositionInPercent(e.layerX, layerWidth);
             const percentY = this._getPositionInPercent(e.layerY, layerHeight);
     
-            console.log('Move pointer =>', { x: `${percentX}%`, y: `${percentY}%`, color: this.pointerColor });
+            touchPointerSlave.sendPointerPositionToMaster({ x: `${percentX}%`, y: `${percentY}%` });
         });
     }
 
