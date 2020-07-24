@@ -12,7 +12,8 @@ class SlideView extends LitElement {
             url: { type: String, reflect: true, attribute: true },
             delta: { type: String, reflect: true, attribute: true },
             focus: { type: Boolean, reflect: true, attribute: true },
-            fullscreen: { type: Boolean, reflect: true, attribute: true }
+            fullscreen: { type: Boolean, reflect: true, attribute: true },
+            pointer: { type: Object, reflect: true, attribute: true }
         };
     }
 
@@ -44,6 +45,7 @@ class SlideView extends LitElement {
         this.url = '';
         this.delta = '0';
         this.fullscreen = false;
+        this.pointer = { x: 0, y: 0, color: '#FF0000' };
     }
 
     firstUpdated() {
@@ -53,11 +55,13 @@ class SlideView extends LitElement {
             if (!message || !message.data) {
                 return;
             }
-            // 'notesReceived' event is fired by the NotesSlave
-            if (typeof message.data === 'object' && message.data.type === 'pointerPositionReceived') {
-                this.shadowRoot.getElementById('pointer').style.left = message.data.pointer.x;
-                this.shadowRoot.getElementById('pointer').style.top = message.data.pointer.y;
-                this.shadowRoot.getElementById('pointer').style.backgroundColor = message.data.pointer.color;
+
+            if (typeof message.data === 'object' && message.data.type === 'pointerMove') {
+                this._setPointer(message.data.x, message.data.y);
+            }
+
+            if (typeof message.data === 'object' && message.data.type === 'pointerColor') {
+                this._setPointerColor(message.data.color);
             }
         });
     }
@@ -83,6 +87,15 @@ class SlideView extends LitElement {
                 <div id="pointer"/>
             </section>
         `;
+    }
+
+    _setPointer(x, y) {
+        this.shadowRoot.getElementById('pointer').style.left = this.pointer.x = x;
+        this.shadowRoot.getElementById('pointer').style.top = this.pointer.y = y;
+    }
+
+    _setPointerColor(color) {
+        this.shadowRoot.getElementById('pointer').style.backgroundColor = this.pointer.color = color;
     }
 }
 // Register the new element with the browser.

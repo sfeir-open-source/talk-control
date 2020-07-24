@@ -59,10 +59,10 @@ export class TalkControlMaster {
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this));
         // Start listening on "touchEvent" on MASTER_SLAVE_CHANNEL
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'touchEvent', this.onTouchEvent.bind(this));
-        // Forward "sendPointerPositionToMaster" to server to broadcast to all masters
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerPositionToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerPositionToMaster', data));
-        // Forward "pointerPosition" events to slave
-        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerPosition', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerPosition', data));
+        // Forward "sendPointerEventToMaster" to server to broadcast to all masters
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
+        // Forward "pointerEvent" events to slave
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
     }
 
     onKeyboardEvent(event) {

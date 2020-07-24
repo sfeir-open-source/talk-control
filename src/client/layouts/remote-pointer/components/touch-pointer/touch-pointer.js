@@ -7,6 +7,7 @@ import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js
 
 const layerWidth = css`800`;
 const layerHeight = css`450`;
+let touchPointerSlave;
 
 class TouchPointerComponent extends LitElement {
     static get styles() {
@@ -46,14 +47,14 @@ class TouchPointerComponent extends LitElement {
     static get properties() {
         return {
             presentationUrl: { type: String },
-            pointerColor: { type: String }
+            pointer: { type: Object }
         };
     }
 
     constructor() {
         super();
         this.presentationUrl = '';
-        this.pointerColor = '#FF00000';
+        this.pointer = { x: 0, y: 0, color: '#FF00000' };
     }
 
     firstUpdated() {
@@ -61,9 +62,9 @@ class TouchPointerComponent extends LitElement {
         this._initPresentationUrl();
         this._initColorsButtons();
         
-        const touchPointerSlave = new TouchPointerSlave();
+        touchPointerSlave = new TouchPointerSlave();
         this._initPointerDblClick();
-        this._initPointerMove(touchPointerSlave);
+        this._initPointerMove();
     }
 
     render() {
@@ -102,25 +103,31 @@ class TouchPointerComponent extends LitElement {
     }
 
     _chooseColor(color) {
-        this.pointerColor = color;
+        this.pointer.color = color;
+        touchPointerSlave.sendPointerEventToMaster({ type: 'pointerColor', color: this.pointer.color });
     }
 
     _initPointerDblClick() {
-        this.shadowRoot.getElementById('touchMask').addEventListener('dblclick', e => {
-            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
-            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
-
-            console.log('Double click on position', { x: `${percentX}%`, y: `${percentY}%` });
-        });
+        this.shadowRoot
+            .getElementById('touchMask')
+            .addEventListener(
+                'dblclick',
+                () => touchPointerSlave.sendPointerEventToMaster({ type: 'pointerClick', x: this.pointer.x, y: this.pointer.y })
+            );
     }
 
-    _initPointerMove(touchPointerSlave) {
-        this.shadowRoot.getElementById('touchMask').addEventListener('mousemove', e => {
-            const percentX = this._getPositionInPercent(e.layerX, layerWidth);
-            const percentY = this._getPositionInPercent(e.layerY, layerHeight);
-    
-            touchPointerSlave.sendPointerPositionToMaster({ x: `${percentX}%`, y: `${percentY}%`, color: this.pointerColor });
-        });
+    _initPointerMove() {
+        this.shadowRoot
+            .getElementById('touchMask')
+            .addEventListener(
+                'mousemove',
+                e => {
+                    this.pointer.x = `${this._getPositionInPercent(e.layerX, layerWidth)}%`;
+                    this.pointer.y = `${this._getPositionInPercent(e.layerY, layerHeight)}%`;
+            
+                    touchPointerSlave.sendPointerEventToMaster({ type: 'pointerMove', x: this.pointer.x, y: this.pointer.y });
+                }
+            );
     }
 
     _getPositionInPercent(value, size) {
