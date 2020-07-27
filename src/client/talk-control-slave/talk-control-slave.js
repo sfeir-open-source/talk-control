@@ -17,7 +17,6 @@ export class TalkControlSlave {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
-        this._captureKeyboardEvent = this._captureKeyboardEvent.bind(this);
         this._captureMouseEvent = this._captureMouseEvent.bind(this);
         this._touchPosition = {
             touchstart: { clientX: 0, clientY: 0 },
@@ -38,31 +37,15 @@ export class TalkControlSlave {
             }
         });
         // Capture all keyboards events and only let go the ones that are not interpreted by us
-        addEventListener('keyup', e => this._captureKeyboardEvent(e, true), true);
-        addEventListener('keypressed', this._captureKeyboardEvent, true);
-        addEventListener('keydown', this._captureKeyboardEvent, true);
         addEventListener('touchstart', this._captureMouseEvent, false);
         addEventListener('touchend', e => this._captureMouseEvent(e, true), false);
 
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({plugin})=> {
             plugin.onEvent((type, event)=>this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
         });
-    }
+   }
+   
 
-    _captureKeyboardEvent(event, forward = false) {
-        const keys = config.tcSlave.keysBlocked;
-        // Check if there's a focused element that could be using
-        // the keyboard
-        const activeElementIsInput = document.activeElement && document.activeElement.tagName && /input|textarea/i.test(document.activeElement.tagName);
-        if (this.engine.isActiveElementEditable() || activeElementIsInput) return;
-        // Check if the pressed key should be interpreted
-        if (keys.includes(event.code)) {
-            event.stopPropagation();
-            if (forward) {
-                this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'keyboardEvent', { key: event.key, code: event.code });
-            }
-        }
-    }
 
     _captureMouseEvent(event, forward = false) {
         this._touchPosition[event.type] = {
