@@ -43,6 +43,10 @@ export class TalkControlSlave {
         addEventListener('keydown', this._captureKeyboardEvent, true);
         addEventListener('touchstart', this._captureMouseEvent, false);
         addEventListener('touchend', e => this._captureMouseEvent(e, true), false);
+
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({plugin})=> {
+            plugin.onEvent((type, event)=>this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
+        });
     }
 
     _captureKeyboardEvent(event, forward = false) {

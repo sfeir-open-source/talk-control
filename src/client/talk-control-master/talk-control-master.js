@@ -59,10 +59,35 @@ export class TalkControlMaster {
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this));
         // Start listening on "touchEvent" on MASTER_SLAVE_CHANNEL
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'touchEvent', this.onTouchEvent.bind(this));
+
+        this.initPlugins(config.plugins);
+
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
         // Forward "pointerEvent" events to slave
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
+    }
+
+    _registerPlugin(plugin ){
+        if (plugin.usedByAComponent /** du type keyboard, touch */){
+            this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
+            this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { plugin });
+        }else /** du type bluetooth */ {
+            plugin.onEvent(event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
+        }
+    }
+
+    _registerDynamicPlugin(pluginPath){
+        import(pluginPath).then(plugin => {
+            this._registerPlugin(plugin);
+        });
+    }
+
+    initPlugins(plugins) {
+        for (const plugin of plugins) {
+            // TODO: check if already initialized and usedByAComponent
+            this._registerDynamicPlugin(plugin.path);
+        }
     }
 
     onKeyboardEvent(event) {
