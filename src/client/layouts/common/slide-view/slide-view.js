@@ -73,8 +73,10 @@ class SlideView extends LitElement {
             }
             
             if (typeof message.data === 'object' && message.data.type === 'pointerClick') {
-                // TODO : Set variables for values below with message.data.x and y and convert percents into pixels
-                this._toggleZoom(300, 200);
+                this._toggleZoom(
+                    this._convertPercentToCoordinates(message.data.x, window.innerWidth),
+                    this._convertPercentToCoordinates(message.data.y, window.innerHeight)
+                );
             }
         });
     }
@@ -132,6 +134,10 @@ class SlideView extends LitElement {
             element.style.cursor = 'zoom-out';
             this.zooming = !this.zooming;
         }
+    }
+
+    _convertPercentToCoordinates(percentValue, size) {
+        return (percentValue.replace('%', '') * size) / 100;
     }
 }
 // Register the new element with the browser.
