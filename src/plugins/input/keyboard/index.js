@@ -1,41 +1,24 @@
 import config from '@config/config.json';
+import { pluginPrototype } from '@plugins/plugin-prototype';
 
-/**
- * @class KeyboardPlugin
- */
-class KeyboardPlugin /*extends Plugin*/ {
-    constructor() {
-        console.log("KeyboardPlugin -> constructor")
-        //super();
-        this._init();
-        this.callbackArray = [];
-    }
+const plugin = {
+    usedByAComponent: true,
+    type: 'inputEvent',
 
-    get usedByAComponent(){
-        return true;
-    }
-
-    get type(){
-        return 'inputEvent';
-    }
-
-    onEvent(callback){
-        this.callbackArray.push(callback);
-    }
-
-    _init() {
-        console.log("KeyboardPlugin -> _init")
+    init() {
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
-    }
+    },
 
     _captureKeyboardEvent(event, forward = false) {
         const keys = config.tcSlave.keysBlocked;
-        // Check if there's a focused element that could be using
-        // the keyboard
+        // Check if there's a focused element that could be using the keyboard
         const activeElementIsInput = document.activeElement && document.activeElement.tagName && /input|textarea/i.test(document.activeElement.tagName);
-        if (this.engine.isActiveElementEditable() || activeElementIsInput) return;
+        if ((document.activeElement && document.activeElement.contentEditable !== 'inherit') || activeElementIsInput) {
+            return;
+        }
+
         // Check if the pressed key should be interpreted
         if (keys.includes(event.code)) {
             event.stopPropagation();
@@ -62,12 +45,15 @@ class KeyboardPlugin /*extends Plugin*/ {
                         action = 'space';
                         break;
                 }
-                for(let callBackMethod of this.callbackArray) {
+
+                for (let callBackMethod of this.callbacks) {
                     callBackMethod(this.type, { key: action });
                 }
             }
         }
     }
-}
+};
 
-export const keyboardInputPlugin = new KeyboardPlugin();
+plugin.__proto__ = pluginPrototype;
+
+export const instance = plugin;
