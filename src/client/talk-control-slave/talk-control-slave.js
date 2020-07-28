@@ -3,6 +3,7 @@
 import { EventBusResolver, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
 import config from '@config/config.json';
+import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
  * @class TalkControlSlave
@@ -40,12 +41,17 @@ export class TalkControlSlave {
         addEventListener('touchstart', this._captureMouseEvent, false);
         addEventListener('touchend', e => this._captureMouseEvent(e, true), false);
 
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({plugin})=> {
-            plugin.onEvent((type, event)=>this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => {
+            loadPluginModule(pluginName)
+                .then(plugin => {
+                    plugin.instance.init();
+                    plugin.instance.onEvent((type, event) => this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
+                })
+                .catch(e => {
+                    console.error('Unable to load plugin module', e);
+                });
         });
-   }
-   
-
+    }
 
     _captureMouseEvent(event, forward = false) {
         this._touchPosition[event.type] = {

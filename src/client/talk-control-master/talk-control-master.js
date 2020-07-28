@@ -2,6 +2,8 @@
 
 import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
+import config from '@config/config';
+import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
  * @class TalkControlMaster
@@ -55,12 +57,8 @@ export class TalkControlMaster {
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
         // Forward "showNotes" events to slave
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
-        // Start listening on "keyboardEvent" on MASTER_SLAVE_CHANNEL
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'keyboardEvent', this.onKeyboardEvent.bind(this));
-        // Start listening on "touchEvent" on MASTER_SLAVE_CHANNEL
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'touchEvent', this.onTouchEvent.bind(this));
 
-        this.initPlugins(config.plugins);
+        this._initPlugins();
 
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
@@ -68,56 +66,32 @@ export class TalkControlMaster {
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
     }
 
-    _registerPlugin(plugin ){
-        if (plugin.usedByAComponent /** du type keyboard, touch */){
-            this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
-            this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { plugin });
-        }else /** du type bluetooth */ {
+    _registerPlugin(plugin, name) {
+        if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboardInput)
+            this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
+            this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { pluginName: name });
+        } else { // Other plugins like bluetooth devices
+            plugin.init();
             plugin.onEvent(event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
         }
     }
 
-    _registerDynamicPlugin(pluginPath){
-        import(pluginPath).then(plugin => {
-            this._registerPlugin(plugin);
+    _registerDynamicPlugin(name){
+        loadPluginModule(name).then(pluginModule => {
+            this._registerPlugin(pluginModule.instance, name)
         });
     }
 
-    initPlugins(plugins) {
-        for (const plugin of plugins) {
-            // TODO: check if already initialized and usedByAComponent
-            this._registerDynamicPlugin(plugin.path);
-        }
-    }
+    _initPlugins() {
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins => {
+            console.log('Plugins to activate', plugins);
+            for (const plugin of plugins) {
+                // TODO: check if already initialized and usedByAComponent
+                this._registerDynamicPlugin(plugin.name);
+            }
+        });
 
-    onKeyboardEvent(event) {
-        let action = '';
-
-        switch (event.key) {
-            case 'Down': // IE specific value
-            case 'ArrowDown':
-                action = 'arrowDown';
-                break;
-            case 'Up': // IE specific value
-            case 'ArrowUp':
-                action = 'arrowUp';
-                break;
-            case 'Left': // IE specific value
-            case 'ArrowLeft':
-                action = 'arrowLeft';
-                break;
-            case 'Right': // IE specific value
-            case 'ArrowRight':
-                action = 'arrowRight';
-                break;
-            case ' ':
-                action = 'space';
-                break;
-        }
-
-        if (action) {
-            this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'keyboardEvent', { key: action });
-        }
+        this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'getPluginsToActivate');
     }
 
     onTouchEvent(event) {
