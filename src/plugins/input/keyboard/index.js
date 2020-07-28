@@ -3,8 +3,9 @@ import config from '@config/config.json';
 /**
  * @class KeyboardPlugin
  */
-class KeyboardPlugin /*extends Plugin*/{
+class KeyboardPlugin /*extends Plugin*/ {
     constructor() {
+        console.log("KeyboardPlugin -> constructor")
         //super();
         this._init();
         this.callbackArray = [];
@@ -23,6 +24,7 @@ class KeyboardPlugin /*extends Plugin*/{
     }
 
     _init() {
+        console.log("KeyboardPlugin -> _init")
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
@@ -66,9 +68,6 @@ class KeyboardPlugin /*extends Plugin*/{
             }
         }
     }
-
-
-
 }
 
 export const keyboardInputPlugin = new KeyboardPlugin();
