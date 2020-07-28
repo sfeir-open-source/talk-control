@@ -76,11 +76,4 @@ export class RevealEngine extends GenericEngine {
     getSlideNotes() {
         return this.Reveal.getSlideNotes();
     }
-
-    /**
-     * @returns {boolean} True if the active element is editable
-     */
-    isActiveElementEditable() {
-        return document.activeElement && document.activeElement.contentEditable !== 'inherit';
-    }
 }

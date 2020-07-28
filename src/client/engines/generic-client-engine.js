@@ -29,9 +29,4 @@ export class GenericEngine {
      * @param {number} delta - number of movements to make from$ the current slide
      */
     changeSlide(delta) {}
-
-    /**
-     * Tell if the active element in DOM is an editable one
-     */
-    isActiveElementEditable() {}
 }
