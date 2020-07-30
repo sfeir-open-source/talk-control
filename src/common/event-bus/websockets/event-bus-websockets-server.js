@@ -55,9 +55,9 @@ export class EventBusWebsocketsServer extends EventBus {
         // When an event is fired from a socket, we call emit so that we trigger local callbacks
         const socketCallback = message => this.emit(key, message, false);
         if (socket) {
-            socket.on(key, socketCallback);
+            socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket]));
         } else {
-            this.sockets.forEach(socket => socket.on(key, socketCallback));
+            this.sockets.forEach(socket => socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket])));
         }
     }
 
@@ -76,5 +76,22 @@ export class EventBusWebsocketsServer extends EventBus {
         if (broadcast) {
             this.io.emit(key, data);
         }
+    }
+
+    /**
+     * Emit data for the dedicated channel passed in parameter on given event key
+     * @param {string} key
+     * @param {any} data
+     * @param {any} channel
+     */
+    emitNotBroadcast(key, data, channel) {
+        // Call for sanity checks
+        try {
+            super.emitNotBroadcast(key, data, channel);
+        } catch (e) {
+            console.log(e);
+        }
+
+        channel.emit(key, data);
     }
 }

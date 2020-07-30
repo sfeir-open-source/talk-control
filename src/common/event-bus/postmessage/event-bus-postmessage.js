@@ -44,6 +44,25 @@ export class EventBusPostMessage extends EventBus {
     }
 
     /**
+     * Emit data for the dedicated channel passed in parameter on given event key
+     * @param {string} key
+     * @param {any} data
+     * @param {any} channel
+     */
+    emitNotBroadcast(key, data, channel) {
+        // Call for sanity checks
+        super.emitNotBroadcast(key, data, channel);
+
+        channel.postMessage(
+            {
+                type: key,
+                data
+            },
+            '*'
+        );
+    }
+
+    /**
      * Handle message reception from window
      *
      * @param {MessageEvent} message - message to forward

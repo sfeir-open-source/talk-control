@@ -6,6 +6,7 @@ const plugin = {
     type: 'inputEvent',
 
     init() {
+        console.log('init -> init keyboard');
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);

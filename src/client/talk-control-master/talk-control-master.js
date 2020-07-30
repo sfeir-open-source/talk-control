@@ -2,7 +2,6 @@
 
 import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
-import config from '@config/config';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
@@ -61,7 +60,9 @@ export class TalkControlMaster {
         this._initPlugins();
 
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data =>
+            this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data)
+        );
         // Forward "pointerEvent" events to slave
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
     }
@@ -70,13 +71,14 @@ export class TalkControlMaster {
         if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboardInput)
             this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
             this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { pluginName: name });
-        } else { // Other plugins like bluetooth devices
+        } else {
+            // Other plugins like bluetooth devices
             plugin.init();
             plugin.onEvent(event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
         }
     }
 
-    _registerDynamicPlugin(name){
+    _registerDynamicPlugin(name) {
         loadPluginModule(name).then(pluginModule => {
             this._registerPlugin(pluginModule.instance, name)
         });

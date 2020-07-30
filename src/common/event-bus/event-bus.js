@@ -1,6 +1,7 @@
 'use strict';
 
 const NO_KEY_PROVIDED = 'No key provided';
+const NO_CHANNEL_PROVIDED = 'No Channel provided';
 
 /**
  * @classdesc Event bus implementation
@@ -52,6 +53,23 @@ export class EventBus {
                 console.error(e);
             }
         });
+    }
+
+    /**
+     * Emit data for the dedicated channel passed in parameter on given event key
+     * @param {string} key
+     * @param {any} data
+     * @param {any} channel
+     */
+    emitNotBroadcast(key, data, channel) {
+        if (!key) {
+            throw new Error(NO_KEY_PROVIDED);
+        }
+        if (!channel) {
+            throw new Error(NO_CHANNEL_PROVIDED);
+        }
+
+        // Do nothing on super class
     }
 
     /**

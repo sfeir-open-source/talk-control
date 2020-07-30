@@ -27,16 +27,22 @@ export class TalkControlServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'inputEvent', e => {
+            console.log('inputEvent received', e);
+            this.engine.handleInput(e);
+        });
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'touchEvent', this.engine.handleTouch);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pointerEvent', data));
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'getPluginsToActivate', () => {
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data =>
+            this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pointerEvent', data)
+        );
+        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'getPluginsToActivate', socket => {
+            //console.log('TalkControlServer -> init -> e', socket);
             const fs = require('fs');
             const path = require('path');
             let plugins = [];
             try {
                 plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins);
+                this.eventBusServer.emitNotBroadcast(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
             } catch (e) {
                 // ...
             }

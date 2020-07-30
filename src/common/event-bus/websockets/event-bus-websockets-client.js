@@ -40,4 +40,17 @@ export class EventBusWebsocketsClient extends EventBus {
         // System broadcast (several devices)
         this.io.emit(key, data);
     }
+
+    /**
+     * Emit data for the dedicated channel passed in parameter on given event key
+     * @param {string} key
+     * @param {any} data
+     * @param {any} channel
+     */
+    emitNotBroadcast(key, data, channel) {
+        // Call for sanity checks
+        super.emitNotBroadcast(key, data, channel);
+
+        channel.emit(key, data);
+    }
 }

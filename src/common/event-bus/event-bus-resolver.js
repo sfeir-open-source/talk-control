@@ -42,9 +42,26 @@ export class EventBusResolver {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
             throw new Error(`'${dest}' is not a known destination.`);
         }
-        
-        console.warn(`emit '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
+
+        console.warn(`EMIT '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[dest].emit(key, data);
+    }
+
+    /**
+     * Emit data for the dedicated channel passed in parameter on given event key
+     *
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} dest - Channel to which to emit
+     * @param {string} key
+     * @param {any} data
+     * @param {any} channel
+     */
+    emitNotBroadcast(dest, key, data, channel) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
+            throw new Error(`'${dest}' is not a known destination.`);
+        }
+
+        console.warn(`EMIT '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        this.channels[dest].emitNotBroadcast(key, data, channel);
     }
 
     /**

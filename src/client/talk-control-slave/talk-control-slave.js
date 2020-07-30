@@ -2,7 +2,6 @@
 
 import { EventBusResolver, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
-import config from '@config/config.json';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
