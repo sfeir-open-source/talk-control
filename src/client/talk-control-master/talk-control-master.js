@@ -68,7 +68,7 @@ export class TalkControlMaster {
     }
 
     _registerPlugin(plugin, name) {
-        if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboardInput)
+        if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboard)
             this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
             this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { pluginName: name });
         } else {
@@ -79,14 +79,11 @@ export class TalkControlMaster {
     }
 
     _registerDynamicPlugin(name) {
-        loadPluginModule(name).then(pluginModule => {
-            this._registerPlugin(pluginModule.instance, name)
-        });
+        loadPluginModule(name).then(pluginModule => this._registerPlugin(pluginModule.instance, name));
     }
 
     _initPlugins() {
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins => {
-            console.log('Plugins to activate', plugins);
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
                 this._registerDynamicPlugin(plugin.name);

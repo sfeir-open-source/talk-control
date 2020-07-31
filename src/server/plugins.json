@@ -1,6 +1,5 @@
 [
     {
-        "type": "inputGenerator",
         "name": "keyboardInput",
         "path": "@plugins/input/keyboard/index.js",
         "isDefaultPlugin": true
