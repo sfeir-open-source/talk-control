@@ -1,8 +1,10 @@
 'use strict';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { createLogger } from 'redux-logger';
 import { ACTIONS } from './actions';
 
+const logger = createLogger();
 const initialState = {
     currentSlide: {},
     slides: []
