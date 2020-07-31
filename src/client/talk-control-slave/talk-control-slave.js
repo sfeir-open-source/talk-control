@@ -28,8 +28,6 @@ export class TalkControlSlave {
         this.engine.init();
         // Send the total slide number
         const slides = this.engine.getSlides();
-        // Emit the initialized event only on the 'main' slave
-        if (!this.delta) this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
@@ -50,6 +48,9 @@ export class TalkControlSlave {
                     console.error('Unable to load plugin module', e);
                 });
         });
+
+        // Emit the initialized event only on the 'main' slave
+        if (!this.delta) this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
     }
 
     _captureMouseEvent(event, forward = false) {

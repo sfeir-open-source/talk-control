@@ -51,14 +51,16 @@ export class TalkControlMaster {
      */
     afterInitialisation() {
         // Forward initialization event to server
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'initialized', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'init', data));
-        // Forward "gotoSlide" events to slave
-        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'initialized', data => {
+            this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'init', data);
+            this._initPlugins();
+        });
+        
         // Forward "showNotes" events to slave
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
-
-        this._initPlugins();
-
+        // Forward "gotoSlide" events to slave
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
+        
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data =>
             this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data)
