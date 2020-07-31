@@ -42,8 +42,8 @@ export class EventBusResolver {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
             throw new Error(`'${dest}' is not a known destination.`);
         }
-
-        console.warn(`EMIT '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        
+        console.warn(`EMIT (broadcast) '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[dest].emit(key, data);
     }
 
@@ -60,7 +60,7 @@ export class EventBusResolver {
             throw new Error(`'${dest}' is not a known destination.`);
         }
 
-        console.warn(`EMIT '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        console.warn(`EMIT (notBroadcast) '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[dest].emitNotBroadcast(key, data, channel);
     }
 
