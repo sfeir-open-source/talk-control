@@ -93,24 +93,6 @@ export class TalkControlMaster {
         this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'getPluginsToActivate');
     }
 
-    onTouchEvent(event) {
-        const xDiff = event.position.touchstart.clientX - event.position.touchend.clientX;
-        const xDiffPositive = xDiff < 0 ? xDiff * -1 : xDiff;
-        const yDiff = event.position.touchstart.clientY - event.position.touchend.clientY;
-        const yDiffPositive = yDiff < 0 ? yDiff * -1 : yDiff;
-        let direction = '';
-
-        if (xDiffPositive <= 20 && yDiffPositive <= 20) {
-            direction = 'none';
-        } else if (xDiffPositive > yDiffPositive) {
-            direction = xDiff > 0 ? 'left' : 'right';
-        } else if (yDiffPositive >= xDiffPositive) {
-            direction = yDiff > 0 ? 'up' : 'down';
-        }
-
-        this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'touchEvent', { direction });
-    }
-
     forwardEvents() {
         const forward = (key => data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));

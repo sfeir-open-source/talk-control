@@ -3,5 +3,10 @@
         "name": "keyboardInput",
         "path": "@plugins/input/keyboard/index.js",
         "isDefaultPlugin": true
+    },
+    {
+        "name": "touchInput",
+        "path": "@plugins/input/touch/index.js",
+        "isDefaultPlugin": true
     }
 ]
