@@ -22,9 +22,23 @@ export class EventBusWebsocketsClient extends EventBus {
      * @param {*} callback - Function to call when key event is fired
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback) {
-        super.on(key, callback);
+    onMultiple(key, callback) {
+        super.onMultiple(key, callback);
         this.io.on(key, callback);
+    }
+
+    /**
+     * Register a callback on a key locally and for each socket connected
+     *
+     * @param {string} key - Event key to which attach the callback and attach each socket
+     * @param {*} callback - Function to call when key event is fired
+     * @throws Will throw an error if key is not specified
+     */
+    on(key, callback) {
+        try{
+            super.on(key, callback);
+            this.onMultiple(key,callback);
+        }catch{}
     }
 
     /**

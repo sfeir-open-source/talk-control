@@ -26,7 +26,7 @@ export class EventBusWebsocketsServer extends EventBus {
             this.sockets.push(socket);
             // Subscribe new socket on existing keys
             for (const key in this.callBacks) {
-                this.on(key, null, socket);
+                this.onMultiple(key, null, socket);
             }
             // When disconnected, remove socket from the array
             socket.on('disconnect', () => {
@@ -48,9 +48,9 @@ export class EventBusWebsocketsServer extends EventBus {
      * @param {Socket} socket - Specific socket to attach the key to
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback, socket) {
+    onMultiple(key, callback, socket) {
         if (callback) {
-            super.on(key, callback);
+            super.onMultiple(key, callback);
         }
         // When an event is fired from a socket, we call emit so that we trigger local callbacks
         const socketCallback = message => this.emit(key, message, false);
@@ -58,6 +58,23 @@ export class EventBusWebsocketsServer extends EventBus {
             socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket]));
         } else {
             this.sockets.forEach(socket => socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket])));
+        }
+    }
+    
+    /**
+     * Register a callback on a key locally and for each socket connected or a specific one
+     *
+     * @param {string} key - Event key to which attach the callback and attach each socket
+     * @param {*} callback - Function to call when key event is fired
+     * @param {Socket} socket - Specific socket to attach the key to
+     * @throws Will throw an error if key is not specified
+     */
+    on(key, callback, socket) {
+        try{
+            super.on(key, callback);
+            this.onMultiple(key, callback, socket)
+        }catch (e) {
+            console.error('on server error: ', key, e.message);
         }
     }
 

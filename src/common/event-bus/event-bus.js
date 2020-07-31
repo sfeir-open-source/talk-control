@@ -1,6 +1,7 @@
 'use strict';
 
 const NO_KEY_PROVIDED = 'No key provided';
+const DUPLICATE_ENTRY = 'Duplicate Entry';
 const NO_CHANNEL_PROVIDED = 'No Channel provided';
 
 /**
@@ -19,7 +20,7 @@ export class EventBus {
      * @param {*} callback - Function to call when key event is fired
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback) {
+    onMultiple(key, callback) {
         if (!key) {
             throw new Error(NO_KEY_PROVIDED);
         }
@@ -29,6 +30,26 @@ export class EventBus {
             this.callBacks[key] = arrayCallback;
         }
         arrayCallback.push(callback);
+    }
+
+    /**
+     * Register a callback on a key only once times (just 1 listener for 1 type of event)
+     *
+     * @param {string} key - Event key to which attach the callback
+     * @param {*} callback - Function to call when key event is fired
+     * @throws Will throw an error if key is not specified
+     */
+    on(key, callback) {
+        if (!key) {
+            throw new Error(NO_KEY_PROVIDED);
+        }
+
+        if (this.callBacks[key]) {
+            throw new Error(DUPLICATE_ENTRY);
+        }
+
+        
+        this.callBacks[key] = [callback];
     }
 
     /**

@@ -25,14 +25,12 @@ export class TalkControlServer {
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'touchEvent', this.engine.handleTouch);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data =>
-            this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pointerEvent', data)
-        );
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'getPluginsToActivate', socket => {
-            //console.log('TalkControlServer -> init -> e', socket);
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
+        
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'pluginEventIn', data /* { subType: 'pointerEvent', data }*/ => this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pluginEventOut', data));
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pointerEvent', data));
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'getPluginsToActivate', socket => {
             const fs = require('fs');
             const path = require('path');
             let plugins = [];

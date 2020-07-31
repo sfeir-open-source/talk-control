@@ -71,6 +71,22 @@ export class EventBusResolver {
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
+    onMultiple(src, key, callback) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(src)) {
+            throw new Error(`'${src}' is not a known source.`);
+        }
+
+        console.warn(`ON Multiple '${key}' on ${src}`);
+        this.channels[src].onMultiple(key, callback);
+    }
+    
+    /**
+     *
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} src - Source channel from which to listen
+     * @param {string} key - Event key to listen
+     * @param {*} callback - Function to call when the event is fired
+     * @throws Will throw an error if key is not specified or if src is incorrect
+     */
     on(src, key, callback) {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(src)) {
             throw new Error(`'${src}' is not a known source.`);
