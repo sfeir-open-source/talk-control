@@ -3,7 +3,7 @@ import { pluginPrototype } from '@plugins/plugin-prototype';
 
 const plugin = {
     usedByAComponent: true,
-    type: 'inputEvent',
+    type: 'keyboardEvent',
 
     init() {
         console.log('init -> init keyboard');

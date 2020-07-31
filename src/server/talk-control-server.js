@@ -27,10 +27,6 @@ export class TalkControlServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'keyboardEvent', this.engine.handleInput);
-        this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'inputEvent', e => {
-            console.log('inputEvent received', e);
-            this.engine.handleInput(e);
-        });
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'touchEvent', this.engine.handleTouch);
         this.eventBusServer.on(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data =>
             this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pointerEvent', data)

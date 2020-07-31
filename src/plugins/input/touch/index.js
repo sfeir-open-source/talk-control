@@ -2,7 +2,7 @@
 
 const plugin = {
     usedByAComponent: true,
-    type: 'inputEvent',
+    type: 'touchEvent',
     _touchPosition: {
         touchstart: { clientX: 0, clientY: 0 },
         touchend: { clientX: 0, clientY: 0 }
