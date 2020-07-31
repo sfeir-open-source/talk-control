@@ -1,15 +1,20 @@
 import config from '@config/config.json';
-import { pluginPrototype } from '@plugins/plugin-prototype';
 
 const plugin = {
     usedByAComponent: true,
     type: 'inputEvent',
+
+    callbacks: [],
 
     init() {
         console.log('init -> init keyboard');
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
+    },
+
+    onEvent(callback) {
+        this.callbacks.push(callback);
     },
 
     _captureKeyboardEvent(event, forward = false) {
@@ -47,14 +52,12 @@ const plugin = {
                         break;
                 }
 
-                for (let callBackMethod of this.callbacks) {
+                for (const callBackMethod of this.callbacks) {
                     callBackMethod(this.type, { key: action });
                 }
             }
         }
     }
 };
-
-plugin.__proto__ = pluginPrototype;
 
 export const instance = plugin;

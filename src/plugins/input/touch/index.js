@@ -1,5 +1,3 @@
-// import { pluginPrototype } from '@plugins/plugin-prototype';
-
 const plugin = {
     usedByAComponent: true,
     type: 'inputEvent',
@@ -33,7 +31,5 @@ const plugin = {
         }
     }
 };
-
-// plugin.__proto__ = pluginPrototype;
 
 export const instance = plugin;
