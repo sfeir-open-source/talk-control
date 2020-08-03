@@ -1,20 +1,22 @@
-const plugin = {
-    usedByAComponent: true,
-    type: 'inputEvent',
-    touchPosition: {
-        touchstart: { clientX: 0, clientY: 0 },
-        touchend: { clientX: 0, clientY: 0 }
-    },
-    callbacks: [],
+class TouchInput {
+    constructor() {
+        this.usedByAComponent = true;
+        this.type = 'inputEvent';
+        this.touchPosition = {
+            touchstart: { clientX: 0, clientY: 0 },
+            touchend: { clientX: 0, clientY: 0 }
+        };
+        this.callbacks = [];
+    }
 
     init() {
         addEventListener('touchstart', this._captureTouchEvent.bind(this), false);
         addEventListener('touchend', e => this._captureTouchEvent.bind(this)(e, true), false);
-    },
+    }
 
     onEvent(callback) {
         this.callbacks.push(callback);
-    },
+    }
 
     _captureTouchEvent(event, forward = false) {
         this.touchPosition[event.type] = {
@@ -44,4 +46,4 @@ const plugin = {
     }
 };
 
-export const instance = plugin;
+export const instance = new TouchInput();

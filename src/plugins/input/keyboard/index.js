@@ -1,20 +1,21 @@
 import config from '@config/config.json';
 
-const plugin = {
-    usedByAComponent: true,
-    type: 'inputEvent',
-
-    callbacks: [],
+class KeyboardInput {
+    constructor() {
+        this.usedByAComponent = true;
+        this.type = 'inputEvent';
+        this.callbacks = [];
+    }
 
     init() {
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
-    },
+    }
 
     onEvent(callback) {
         this.callbacks.push(callback);
-    },
+    }
 
     _captureKeyboardEvent(event, forward = false) {
         const keys = config.tcSlave.keysBlocked;
@@ -57,6 +58,6 @@ const plugin = {
             }
         }
     }
-};
+}
 
-export const instance = plugin;
+export const instance = new KeyboardInput();
