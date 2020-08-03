@@ -4,12 +4,12 @@ import { TalkControlServer } from '@server/talk-control-server';
 import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import store from '@server/store';
 
-describe('should have instantiated', function() {
+describe('TalkControlServer', function() {
     let talkControlServer;
-    let on;
+    let onMultiple;
     beforeEach(function() {
         talkControlServer = new TalkControlServer();
-        on = stub(talkControlServer.eventBusServer, 'on');
+        onMultiple = stub(talkControlServer.eventBusServer, 'onMultiple');
     });
 
     describe('constructor()', function() {
@@ -23,9 +23,9 @@ describe('should have instantiated', function() {
             // When
             talkControlServer.init('revealjs');
             // Then
-            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'init'), 'not called with init');
-            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'keyboardEvent'), 'not called with keyboardEvent');
-            assert(on.calledWith(MASTER_SERVER_CHANNEL, 'touchEvent'), 'not called with touchEvent');
+            assert(onMultiple.calledWith(MASTER_SERVER_CHANNEL, 'init'), 'not called with init');
+            assert(onMultiple.calledWith(MASTER_SERVER_CHANNEL, 'inputEvent'), 'not called with inputEvent');
+            assert(onMultiple.calledWith(MASTER_SERVER_CHANNEL, 'pluginEventIn'), 'not called with pluginEventIn');
         });
     });
 

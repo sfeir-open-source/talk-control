@@ -34,6 +34,24 @@ describe('EventBus', function() {
         });
     });
 
+    describe('onMultiple()', function() {
+        it('should throw an error', function() {
+            expect(() => eventBus.onMultiple(undefined, () => 'test')).to.throw('No key provided');
+        });
+
+        it('should add a callback', function() {
+            // Given
+            const key = 'test';
+            const callback = () => key;
+            // When
+            eventBus.onMultiple(key, callback);
+            // Then
+            expect(eventBus.callBacks[key])
+                .to.be.an('array')
+                .that.include(callback);
+        });
+    });
+
     describe('emit()', function() {
         it('should throw an error', function() {
             expect(() => eventBus.emit(undefined, 'test')).to.throw('No key provided');
@@ -41,14 +59,12 @@ describe('EventBus', function() {
 
         it("shouldn't fire any event", function() {
             // Given
-            const key = 'test',
-                anotherKey = 'anotherTest';
             let isFirstOneCalled = false,
                 isSecondOneCalled = false;
-            eventBus.on(key, () => (isFirstOneCalled = true));
-            eventBus.on(key, () => (isSecondOneCalled = true));
+            eventBus.onMultiple('test', () => (isFirstOneCalled = true));
+            eventBus.onMultiple('test', () => (isSecondOneCalled = true));
             // When
-            eventBus.emit(anotherKey, undefined);
+            eventBus.emit('anotherTest', undefined);
             // Then
             expect(isFirstOneCalled).to.be.false;
             expect(isSecondOneCalled).to.be.false;
@@ -56,13 +72,12 @@ describe('EventBus', function() {
 
         it('should fire all the subscribed callback', function() {
             // Given
-            const key = 'test';
             let isFirstOneCalled = false,
                 isSecondOneCalled = false;
-            eventBus.on(key, () => (isFirstOneCalled = true));
-            eventBus.on(key, () => (isSecondOneCalled = true));
+            eventBus.onMultiple('test', () => (isFirstOneCalled = true));
+            eventBus.onMultiple('test', () => (isSecondOneCalled = true));
             // When
-            eventBus.emit(key, undefined);
+            eventBus.emit('test', undefined);
             // Then
             expect(isFirstOneCalled).to.be.true;
             expect(isSecondOneCalled).to.be.true;
@@ -88,8 +103,8 @@ describe('EventBus', function() {
             const key = 'test';
             const callback1 = () => 'callback 1',
                 callback2 = () => 'callback 2';
-            eventBus.on(key, callback1);
-            eventBus.on(key, callback2);
+            eventBus.onMultiple(key, callback1);
+            eventBus.onMultiple(key, callback2);
             // When
             const callbacks = eventBus.getCallbacks(key);
             // Then
