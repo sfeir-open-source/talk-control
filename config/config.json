@@ -31,13 +31,5 @@
             "ArrowRight",
             "Space"
         ]
-    },
-    "plugins": [
-        {
-            "type": "inputGenerator",
-            "name": "keyboardInput",
-            "path": "@plugins/input/keyboard/index",
-            "isDefaultPlugin": true
-        }
-    ]
+    }
 }
