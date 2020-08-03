@@ -33,6 +33,7 @@
         ]
     },
     "logger": {
-        "redux": false
+        "redux": false,
+        "eventBusEvents": true
     }
 }
