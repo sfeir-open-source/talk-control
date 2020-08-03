@@ -3,6 +3,7 @@
 import { EventBusWebsocketsServer } from './websockets/event-bus-websockets-server.js';
 import { EventBusWebsocketsClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
+import { eventBusLogger } from './event-bus-logger';
 
 export const MASTER_SERVER_CHANNEL = 'MASTER_SERVER_CHANNEL';
 export const MASTER_SLAVE_CHANNEL = 'MASTER_SLAVE_CHANNEL';
@@ -43,7 +44,7 @@ export class EventBusResolver {
             throw new Error(`'${dest}' is not a known destination.`);
         }
         
-        console.warn(`EMIT (broadcast) '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        eventBusLogger.log(`EMIT (broadcast) '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[dest].emit(key, data);
     }
 
@@ -60,7 +61,7 @@ export class EventBusResolver {
             throw new Error(`'${dest}' is not a known destination.`);
         }
 
-        console.warn(`EMIT (notBroadcast) '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        eventBusLogger.log(`EMIT (notBroadcast) '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[dest].emitNotBroadcast(key, data, channel);
     }
 
@@ -76,7 +77,7 @@ export class EventBusResolver {
             throw new Error(`'${src}' is not a known source.`);
         }
 
-        console.warn(`ON Multiple '${key}' on ${src}`);
+        eventBusLogger.log(`ON Multiple '${key}' on ${src}`);
         this.channels[src].onMultiple(key, callback);
     }
     
@@ -95,7 +96,7 @@ export class EventBusResolver {
         try {
             this.channels[src].on(key, callback);
         } catch (e) {
-            console.error('on event bus resolver error: ', key, e.message);
+            eventBusLogger.log('on event bus resolver error: ', [key, e.message], true);
         }
     }
 }

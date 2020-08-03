@@ -1,6 +1,7 @@
 'use strict';
 
 import { EventBus } from '@event-bus/event-bus.js';
+import { eventBusLogger } from '@event-bus/event-bus-logger';
 import socketIO, { Socket } from 'socket.io';
 
 /**
@@ -19,7 +20,7 @@ export class EventBusWebsocketsServer extends EventBus {
         this.sockets = [];
         this.io = socketIO(server);
         this.io.on('connection', socket => {
-            console.log('### connected', {
+            eventBusLogger.log('### connected', {
                 id: socket.id,
                 from: socket.handshake.headers && socket.handshake.headers.referer ? socket.handshake.headers.referer : 'unknown'
             });
@@ -30,7 +31,7 @@ export class EventBusWebsocketsServer extends EventBus {
             }
             // When disconnected, remove socket from the array
             socket.on('disconnect', () => {
-                console.log('### disconnected', {
+                eventBusLogger.log('### disconnected', {
                     id: socket.id,
                     from: socket.handshake.headers && socket.handshake.headers.referer ? socket.handshake.headers.referer : 'unknown'
                 });
@@ -74,7 +75,7 @@ export class EventBusWebsocketsServer extends EventBus {
             super.on(key, callback);
             this.onMultiple(key, callback, socket)
         } catch (e) {
-            console.error('on event bus server error: ', key, e.message);
+            eventBusLogger.log('on event bus server error: ', [key, e.message], true);
         }
     }
 
@@ -106,7 +107,7 @@ export class EventBusWebsocketsServer extends EventBus {
         try {
             super.emitNotBroadcast(key, data, channel);
         } catch (e) {
-            console.log(e);
+            eventBusLogger.log('emitNotBroadcast error: ', [e], true);
         }
 
         channel.emit(key, data);

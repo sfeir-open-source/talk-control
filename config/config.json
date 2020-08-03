@@ -31,5 +31,9 @@
             "ArrowRight",
             "Space"
         ]
+    },
+    "logger": {
+        "redux": false,
+        "eventBusEvents": true
     }
 }

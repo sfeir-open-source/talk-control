@@ -2,6 +2,7 @@
 
 import socketIO from 'socket.io-client';
 import { EventBus } from '../event-bus';
+import { eventBusLogger } from '@event-bus/event-bus-logger';
 
 /**
  * @classdesc SocketClient based EventBus implementation
@@ -39,7 +40,7 @@ export class EventBusWebsocketsClient extends EventBus {
             super.on(key, callback);
             this.onMultiple(key,callback);
         } catch (e) {
-            console.error('on event bus client error: ', key, e.message);
+            eventBusLogger.log('on event bus client error: ', [key, e.message], true);
         }
     }
 
