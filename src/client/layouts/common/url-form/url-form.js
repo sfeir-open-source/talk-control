@@ -3,7 +3,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import config from '@config/config';
 import { LitElement, html } from 'lit-element';
-import { isUrlValid } from '../../../../common/helpers/helpers';
+import { isUrlValid } from '@services/url';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 // Extend the LitElement base class

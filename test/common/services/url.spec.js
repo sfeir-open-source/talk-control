@@ -2,9 +2,9 @@
 
 import 'module-alias/register';
 import { assert } from 'chai';
-import { isUrlValid } from '@helpers/helpers';
+import { isUrlValid } from '@services/url';
 
-describe('Helpers', function() {
+describe('Url service', function() {
     describe('isUrlValid', function() {
         it('should return true', function() {
             assert(isUrlValid('http://example.com:8080'));
