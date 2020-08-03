@@ -91,6 +91,11 @@ export class EventBusResolver {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(src)) {
             throw new Error(`'${src}' is not a known source.`);
         }
-        this.channels[src].on(key, callback);
+
+        try {
+            this.channels[src].on(key, callback);
+        } catch (e) {
+            console.error('on event bus resolver error: ', key, e.message);
+        }
     }
 }

@@ -70,11 +70,11 @@ export class EventBusWebsocketsServer extends EventBus {
      * @throws Will throw an error if key is not specified
      */
     on(key, callback, socket) {
-        try{
+        try {
             super.on(key, callback);
             this.onMultiple(key, callback, socket)
-        }catch (e) {
-            console.error('on server error: ', key, e.message);
+        } catch (e) {
+            console.error('on event bus server error: ', key, e.message);
         }
     }
 

@@ -35,10 +35,12 @@ export class EventBusWebsocketsClient extends EventBus {
      * @throws Will throw an error if key is not specified
      */
     on(key, callback) {
-        try{
+        try {
             super.on(key, callback);
             this.onMultiple(key,callback);
-        }catch{}
+        } catch (e) {
+            console.error('on event bus client error: ', key, e.message);
+        }
     }
 
     /**

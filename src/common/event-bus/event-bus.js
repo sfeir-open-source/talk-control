@@ -48,7 +48,6 @@ export class EventBus {
             throw new Error(DUPLICATE_ENTRY);
         }
 
-        
         this.callBacks[key] = [callback];
     }
 
