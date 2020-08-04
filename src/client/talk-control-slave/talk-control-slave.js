@@ -16,6 +16,7 @@ export class TalkControlSlave {
         });
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
+        this.shadowRoot = params.shadowRoot || undefined;
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
         this._touchPosition = {
             touchstart: { clientX: 0, clientY: 0 },
@@ -24,7 +25,9 @@ export class TalkControlSlave {
     }
 
     init() {
-        this.engine.init();
+        if (this.engine) {
+            this.engine.init();
+        }
         // Send the total slide number
         const slides = this.engine.getSlides();
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
@@ -37,7 +40,7 @@ export class TalkControlSlave {
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => {
             loadPluginModule(pluginName)
                 .then(plugin => {
-                    plugin.instance.init();
+                    plugin.instance.init(this.shadowRoot);
                     plugin.instance.onEvent((type, event) => this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
                 })
                 .catch(e => {

@@ -7,6 +7,11 @@
  */
 export class GenericEngine {
     /**
+     * Init engine
+     */
+    init () {}
+
+    /**
      * Switch to the given slide
      *
      * @param {*} params - Params indicating to which slide go to
