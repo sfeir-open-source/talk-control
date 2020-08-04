@@ -7,6 +7,6 @@ export class TouchPointerSlave extends TalkControlSlave {
     init() {}
 
     sendPointerEventToMaster(eventData) {
-        this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', eventData);
+        this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'pluginEventIn', eventData);
     }
 }
