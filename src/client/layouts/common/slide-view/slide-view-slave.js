@@ -5,6 +5,7 @@ import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave'
 
 export class SlideViewSlave extends TalkControlSlave {
     init() {
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'pointerEvent', postMessage);
+        super.init();
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'touchPointer', postMessage);
     }
 }

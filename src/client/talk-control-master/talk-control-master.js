@@ -61,6 +61,10 @@ export class TalkControlMaster {
         // Forward "gotoSlide" events to slave
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
         
+        // Forward plugin event to server to broadcast it to all masters
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'pluginEventIn', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'pluginEventIn', data));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, data.origin, data));
+        
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
         // Forward "pointerEvent" events to slave
