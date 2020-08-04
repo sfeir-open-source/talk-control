@@ -7,14 +7,14 @@ class KeyboardInput {
         this.callbacks = [];
     }
 
+    onEvent(callback) {
+        this.callbacks.push(callback);
+    }
+
     init() {
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
-    }
-
-    onEvent(callback) {
-        this.callbacks.push(callback);
     }
 
     _captureKeyboardEvent(event, forward = false) {

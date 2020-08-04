@@ -9,13 +9,13 @@ class TouchInput {
         this.callbacks = [];
     }
 
+    onEvent(callback) {
+        this.callbacks.push(callback);
+    }
+
     init() {
         addEventListener('touchstart', this._captureTouchEvent.bind(this), false);
         addEventListener('touchend', e => this._captureTouchEvent.bind(this)(e, true), false);
-    }
-
-    onEvent(callback) {
-        this.callbacks.push(callback);
     }
 
     _captureTouchEvent(event, forward = false) {
