@@ -34,18 +34,18 @@ export class EventBusResolver {
 
     /**
      *
-     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} dest - Channel to which to broadcast
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} channel - Channel on which to broadcast
      * @param {string} key - Event key to fire
      * @param {*} data - Data to broadcast
      * @throws Will throw an error if key is not specified or if dest is incorrect
      */
-    broadcast(dest, key, data) {
-        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
-            throw new Error(`'${dest}' is not a known destination.`);
+    broadcast(channel, key, data) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
+            throw new Error(`'${channel}' is not a known channelination.`);
         }
         
-        eventBusLogger.log(`BROADCAST '${key}' on ${dest} with: ${data ? JSON.stringify(data) : 'no data'}`);
-        this.channels[dest].broadcast(key, data);
+        eventBusLogger.log(`BROADCAST "${key}" on channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        this.channels[channel].broadcast(key, data);
     }
 
     /**
@@ -61,7 +61,7 @@ export class EventBusResolver {
             throw new Error(`'${channel}' is not a known destination.`);
         }
 
-        eventBusLogger.log(`EMIT "${key}" on channel "${channel}" to target "${target}" with: ${data ? JSON.stringify(data) : 'no data'}`);
+        eventBusLogger.log(`EMIT "${key}" on channel ${channel} to target "${target.id}" with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[channel].emitTo(key, data, target);
     }
 
@@ -77,7 +77,7 @@ export class EventBusResolver {
             throw new Error(`'${src}' is not a known source.`);
         }
 
-        eventBusLogger.log(`ON Multiple '${key}' on ${src}`);
+        eventBusLogger.log(`SET onMultiple '${key}' on ${src}`);
         this.channels[src].onMultiple(key, callback);
     }
     
