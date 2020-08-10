@@ -33,7 +33,7 @@ describe('TCController', function() {
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const broadcast = stub(tcController.eventBusMaster, 'broadcast');
+            const broadcast = stub(tcController.eventBusController, 'broadcast');
             stub(tcController, 'afterInitialisation');
             stub(tcController, 'forwardEvents');
 

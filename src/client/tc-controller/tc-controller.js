@@ -20,7 +20,7 @@ export class TCController {
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
 
-        this.eventBusMaster = new EventBusResolver({
+        this.eventBusController = new EventBusResolver({
             client: true,
             server,
             postMessage: {
@@ -51,34 +51,34 @@ export class TCController {
      */
     afterInitialisation() {
         // Forward initialization event to server
-        this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'initialized', data => {
-            this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'initialized', data => {
+            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
             this._initPlugins();
         });
         
         // Forward "showNotes" events to slave
-        this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data));
         // Forward "gotoSlide" events to slave
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
         // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
         
         // Forward "sendPointerEventToController" to server to broadcast to all controllers
-        this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data));
         // Forward "pointerEvent" events to slave
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
     }
 
     _registerPlugin(plugin, name) {
         if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboard)
-            this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, plugin.type, event => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
-            this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', { pluginName: name });
+            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.type, event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', { pluginName: name });
         } else {
             // Other plugins like bluetooth devices
             plugin.init();
-            plugin.onEvent(event => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
+            plugin.onEvent(event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
         }
     }
 
@@ -87,24 +87,24 @@ export class TCController {
     }
 
     _initPlugins() {
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'activatePlugins', plugins => {
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'activatePlugins', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
                 this._registerDynamicPlugin(plugin.name);
             }
         });
 
-        this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPluginsToActivate');
+        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPluginsToActivate');
     }
 
     forwardEvents() {
-        const forward = (key => data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, key, data)).bind(this);
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
-        this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
+        const forward = (key => data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, key, data)).bind(this);
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 
     onFramesLoaded() {
-        this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
+        this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
         this.focusFrame.focus();
         document.addEventListener('click', () => this.focusFrame.focus());
     }
