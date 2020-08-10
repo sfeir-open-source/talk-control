@@ -70,7 +70,6 @@ class TouchPointerInput {
             element.style.transform = 'translate3D(0px, 0px, 0px)';
             element.style.cursor = 'zoom-in';
             this.zooming = !this.zooming;
-            console.log('ici');
             return;
         }
 
@@ -85,7 +84,6 @@ class TouchPointerInput {
             element.style.transform = `translateX(${targetX}px) translateY(${targetY}px) scale(${scaleValue})`;
             element.style.cursor = 'zoom-out';
             this.zooming = !this.zooming;
-            console.log('la');
         }
     }
 
