@@ -9,7 +9,7 @@ import { loadPluginModule } from '@plugins/plugin-loader';
  */
 export class TCComponent {
     constructor(params = {}) {
-        this.eventBusSlave = new EventBusResolver({
+        this.eventBusComponent = new EventBusResolver({
             postMessage: {
                 slave: true
             }
@@ -17,7 +17,7 @@ export class TCComponent {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
-        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
     }
 
     init() {
@@ -26,18 +26,18 @@ export class TCComponent {
         }
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
+                this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
             }
         });
 
-        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
 
         // Broadcast the initialized event only on the 'main' slave
         if (!this.delta) {
-            this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
+            this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
         }
     }
 
@@ -45,7 +45,7 @@ export class TCComponent {
         loadPluginModule(pluginName)
             .then(plugin => {
                 plugin.instance.init(this.shadowRoot);
-                plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
+                plugin.instance.onEvent((type, event) => this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
             })
             .catch(e => {
                 console.error('Unable to load plugin module', e);

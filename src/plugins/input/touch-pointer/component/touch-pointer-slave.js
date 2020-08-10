@@ -5,10 +5,10 @@ import { TCComponent } from '@client/tc-component/tc-component';
 
 export class TouchPointerSlave extends TCComponent {
     init() {
-        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'touchPointer', e => postMessage);
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'touchPointer', e => postMessage);
     }
 
     sendPointerEventToController(eventData) {
-        this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', eventData);
+        this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', eventData);
     }
 }

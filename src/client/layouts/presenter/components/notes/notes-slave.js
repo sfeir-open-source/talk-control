@@ -5,6 +5,6 @@ import { TCComponent } from '@client/tc-component/tc-component';
 
 export class NotesSlave extends TCComponent {
     init() {
-        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data => postMessage({ type: 'notesReceived', notes: data }));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data => postMessage({ type: 'notesReceived', notes: data }));
     }
 }
