@@ -20,7 +20,7 @@ export class EventBusResolver {
 
         if (params.server) {
             if (params.client) {
-                // Master
+                // TCController
                 this.channels[CONTROLLER_SERVER_CHANNEL] = new EventBusWebsocketsClient(params.server);
             } else {
                 // Server

@@ -28,7 +28,7 @@ class TimerComponent extends LitElement {
     }
 
     firstUpdated() {
-        // Instantiate the slave that will receive events from the master
+        // Instantiate the slave that will receive events from the controller
         new TimerSlave();
         // Initialize clock and timer
         this.timerElement = this.shadowRoot.querySelector('#timer');

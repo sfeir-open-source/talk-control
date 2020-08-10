@@ -61,11 +61,11 @@ export class TCController {
         // Forward "gotoSlide" events to slave
         this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
-        // Forward plugin event to server to broadcast it to all masters
+        // Forward plugin event to server to broadcast it to all controllers
         this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
         this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
         
-        // Forward "sendPointerEventToMaster" to server to broadcast to all masters
+        // Forward "sendPointerEventToMaster" to server to broadcast to all controllers
         this.eventBusMaster.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
         // Forward "pointerEvent" events to slave
         this.eventBusMaster.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
