@@ -35,7 +35,7 @@ export class TCComponent {
 
         this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
 
-        // Broadcast the initialized event only on the 'main' slave
+        // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {
             this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
         }

@@ -56,9 +56,9 @@ export class TCController {
             this._initPlugins();
         });
         
-        // Forward "showNotes" events to slave
+        // Forward "showNotes" events to tc-component
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data));
-        // Forward "gotoSlide" events to slave
+        // Forward "gotoSlide" events to tc-component
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
         // Forward plugin event to server to broadcast it to all controllers
@@ -67,12 +67,12 @@ export class TCController {
         
         // Forward "sendPointerEventToController" to server to broadcast to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data));
-        // Forward "pointerEvent" events to slave
+        // Forward "pointerEvent" events to tc-component
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
     }
 
     _registerPlugin(plugin, name) {
-        if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboard)
+        if (plugin.usedByAComponent) { // Plugins used by a component and need tc-component (ex: keyboard)
             this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.type, event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
             this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', { pluginName: name });
         } else {
