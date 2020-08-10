@@ -23,7 +23,7 @@
         },
         "port": 3002
     },
-    "tcSlave": {
+    "tcComponent": {
         "keysBlocked": [
             "ArrowDown",
             "ArrowUp",

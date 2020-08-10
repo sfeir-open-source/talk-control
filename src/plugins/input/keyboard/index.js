@@ -18,7 +18,7 @@ class KeyboardInput {
     }
 
     _captureKeyboardEvent(event, forward = false) {
-        const keys = config.tcSlave.keysBlocked;
+        const keys = config.tcComponent.keysBlocked;
         // Check if there's a focused element that could be using the keyboard
         const activeElementIsInput = document.activeElement && document.activeElement.tagName && /input|textarea/i.test(document.activeElement.tagName);
         if ((document.activeElement && document.activeElement.contentEditable !== 'inherit') || activeElementIsInput) {
