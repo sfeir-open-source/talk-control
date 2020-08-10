@@ -8,6 +8,8 @@ import { eventBusLogger } from './event-bus-logger';
 export const MASTER_SERVER_CHANNEL = 'MASTER_SERVER_CHANNEL';
 export const MASTER_SLAVE_CHANNEL = 'MASTER_SLAVE_CHANNEL';
 
+export const UNKNOWN_CHANNEL = 'Unknown channel';
+
 /**
  * @classdesc Instantiate event buses based on params given
  * @class EventBusResolver
@@ -41,7 +43,7 @@ export class EventBusResolver {
      */
     broadcast(channel, key, data) {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
-            throw new Error(`'${channel}' is not a known channelination.`);
+            throw new Error(UNKNOWN_CHANNEL);
         }
         
         eventBusLogger.log(`BROADCAST "${key}" on channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
@@ -58,7 +60,7 @@ export class EventBusResolver {
      */
     emitTo(channel, key, data, target) {
         if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
-            throw new Error(`'${channel}' is not a known destination.`);
+            throw new Error(UNKNOWN_CHANNEL);
         }
 
         eventBusLogger.log(`EMIT "${key}" on channel ${channel} to target "${target.id}" with: ${data ? JSON.stringify(data) : 'no data'}`);
@@ -67,34 +69,34 @@ export class EventBusResolver {
 
     /**
      *
-     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} src - Source channel from which to listen
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} channel - Channel from which to listen
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
-    onMultiple(src, key, callback) {
-        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(src)) {
-            throw new Error(`'${src}' is not a known source.`);
+    onMultiple(channel, key, callback) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
+            throw new Error(UNKNOWN_CHANNEL);
         }
 
-        eventBusLogger.log(`SET onMultiple '${key}' on ${src}`);
-        this.channels[src].onMultiple(key, callback);
+        eventBusLogger.log(`SET onMultiple '${key}' on ${channel}`);
+        this.channels[channel].onMultiple(key, callback);
     }
     
     /**
      *
-     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} src - Source channel from which to listen
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} channel - Channel from which to listen
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
-    on(src, key, callback) {
-        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(src)) {
-            throw new Error(`'${src}' is not a known source.`);
+    on(channel, key, callback) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
+            throw new Error(UNKNOWN_CHANNEL);
         }
 
         try {
-            this.channels[src].on(key, callback);
+            this.channels[channel].on(key, callback);
         } catch (e) {
             eventBusLogger.log('on event bus resolver error: ', [key, e.message], true);
         }

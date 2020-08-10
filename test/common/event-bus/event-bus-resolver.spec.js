@@ -3,7 +3,7 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 import config from '@config/config.json';
@@ -50,30 +50,30 @@ describe('EventBusResolver', function() {
     });
 
     describe('broadcast()', function() {
-        it('should throw an error', function() {
+        it('should throw an error if channel is unknown', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.broadcast('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
+            expect(() => resolver.broadcast('channel', 'key', 'data')).to.throw(UNKNOWN_CHANNEL);
         });
     });
     
     describe('emitTo()', function() {
         it('should throw an error if channel is unknown', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.emitTo('channel', 'key', 'data')).to.throw("'channel' is not a known destination.");
+            expect(() => resolver.emitTo('channel', 'key', 'data')).to.throw(UNKNOWN_CHANNEL);
         });
     });
 
     describe('on()', function() {
-        it('should throw an error', function() {
+        it('should throw an error if channel is unknown', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.on('src', 'key', () => 'callback')).to.throw("'src' is not a known source.");
+            expect(() => resolver.on('channel', 'key', () => 'callback')).to.throw(UNKNOWN_CHANNEL);
         });
     });
 
     describe('onMultiple()', function() {
-        it('should throw an error', function() {
+        it('should throw an error if channel is unknown', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.on('src', 'key', () => 'callback')).to.throw("'src' is not a known source.");
+            expect(() => resolver.on('channel', 'key', () => 'callback')).to.throw(UNKNOWN_CHANNEL);
         });
     });
 });
