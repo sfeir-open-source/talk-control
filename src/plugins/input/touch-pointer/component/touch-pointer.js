@@ -2,12 +2,12 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import '@client/layouts/common/slide-view/slide-view'
-import { TouchPointerSlave } from './touch-pointer-slave';
+import { TouchPointerTCComponent } from './touch-pointer-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 const layerWidth = css`800`;
 const layerHeight = css`450`;
-let touchPointerSlave;
+let touchPointerTCComponent;
 
 class TouchPointerComponent extends LitElement {
     static get styles() {
@@ -62,7 +62,7 @@ class TouchPointerComponent extends LitElement {
         this._initPresentationUrl();
         this._initColorsButtons();
         
-        touchPointerSlave = new TouchPointerSlave();
+        touchPointerTCComponent = new TouchPointerTCComponent();
         this._initPointerDblClick();
         this._initPointerMove();
     }
@@ -104,7 +104,7 @@ class TouchPointerComponent extends LitElement {
 
     _chooseColor(color) {
         this.pointer.color = color;
-        touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerColor', payload: { color: this.pointer.color }});
+        touchPointerTCComponent.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerColor', payload: { color: this.pointer.color }});
     }
 
     _initPointerDblClick() {
@@ -114,7 +114,7 @@ class TouchPointerComponent extends LitElement {
                 'dblclick',
                 () => {
                     console.log('sending dblclick');
-                    touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerClick', payload: { x: this.pointer.x, y: this.pointer.y }})
+                    touchPointerTCComponent.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerClick', payload: { x: this.pointer.x, y: this.pointer.y }})
                 }
             );
     }
@@ -128,7 +128,7 @@ class TouchPointerComponent extends LitElement {
                     this.pointer.x = `${this._getPositionInPercent(e.layerX, layerWidth)}%`;
                     this.pointer.y = `${this._getPositionInPercent(e.layerY, layerHeight)}%`;
             
-                    touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerMove', payload: { x: this.pointer.x, y: this.pointer.y }});
+                    touchPointerTCComponent.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerMove', payload: { x: this.pointer.x, y: this.pointer.y }});
                 }
             );
     }
