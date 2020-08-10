@@ -44,16 +44,16 @@ export class EventBusPostMessage extends EventBus {
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * Emit data for the window passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} window - Window to which the event will be sent
      */
-    emit(key, data, channel) {
+    emitTo(key, data, window) {
         // Call for sanity checks
-        super.emit(key, data, channel);
+        super.emitTo(key, data, window);
 
-        channel.postMessage(
+        window.postMessage(
             {
                 type: key,
                 data

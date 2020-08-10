@@ -28,7 +28,7 @@ describe('EventBusPostMessage', function() {
     describe('broadcast()', function() {
         it('should call window.postMessage', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const data = 'data';
             eventBus.windows = [window];
             // When
@@ -39,10 +39,23 @@ describe('EventBusPostMessage', function() {
         });
     });
 
+    describe('emitTo()', function() {
+        it('should call window.postMessage', function() {
+            // Given
+            const key = 'key';
+            const data = 'data';
+            // When
+            eventBus.emitTo(key, data, window);
+            // Then
+            const object = { type: key, data };
+            assert(window.postMessage.calledOnceWith(object));
+        });
+    });
+
     describe('_receiveMessageWindow', function() {
         it('should call each callback subscribed on "key" with the data', function() {
             // Given
-            const key = 'test',
+            const key = 'key',
                 anotherKey = 'anotherTest';
             const data = 'This is the data';
             const message = { type: key, data };
@@ -63,7 +76,7 @@ describe('EventBusPostMessage', function() {
 
         it('should do nothing because no message is given', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const callback = spy();
 
             eventBus.callBacks = { [key]: [callback] };

@@ -1,8 +1,8 @@
 'use strict';
 
-const NO_KEY_PROVIDED = 'No key provided';
+export const NO_KEY_PROVIDED = 'No key provided';
 const DUPLICATE_ENTRY = 'Duplicate Entry';
-const NO_CHANNEL_PROVIDED = 'No Channel provided';
+export const NO_TARGET_PROVIDED = 'No socket or window provided';
 
 /**
  * @classdesc Event bus implementation
@@ -76,17 +76,17 @@ export class EventBus {
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * Emit data for the target passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} target - Socket or window to which the event will be sent
      */
-    emit(key, data, channel) {
+    emitTo(key, data, target) {
         if (!key) {
             throw new Error(NO_KEY_PROVIDED);
         }
-        if (!channel) {
-            throw new Error(NO_CHANNEL_PROVIDED);
+        if (!target) {
+            throw new Error(NO_TARGET_PROVIDED);
         }
 
         // Do nothing on super class

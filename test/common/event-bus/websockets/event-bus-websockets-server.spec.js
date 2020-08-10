@@ -50,7 +50,7 @@ describe('EventBusWebsocketsServer', function() {
     });
 
     describe('broadcast()', function() {
-        it('sould broadcast the data', function() {
+        it('should broadcast the data', function() {
             // Given
             stub(eventBus.io, 'emit');
             const key = 'test';
@@ -60,6 +60,23 @@ describe('EventBusWebsocketsServer', function() {
             // Then
             assert(eventBus.io.emit.notCalled);
             eventBus.io.emit.restore();
+        });
+    });
+
+    describe('emitTo()', function() {
+        it('should emit the data', function() {
+            // Given
+            const socket = {
+                emit: () => {}
+            };
+            stub(socket, 'emit');
+            const key = 'key';
+            const data = 'data';
+            // When
+            eventBus.emitTo(key, data, socket);
+            // Then
+            assert.isOk(socket.emit.calledWith(key, data));
+            socket.emit.restore();
         });
     });
 });

@@ -59,15 +59,15 @@ export class EventBusWebsocketsClient extends EventBus {
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * Emit data for the socket passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} socket - Socket to which the event will be sent
      */
-    emit(key, data, channel) {
+    emitTo(key, data, socket) {
         // Call for sanity checks
-        super.emit(key, data, channel);
+        super.emitTo(key, data, socket);
 
-        channel.broadcast(key, data);
+        socket.emit(key, data);
     }
 }

@@ -55,6 +55,13 @@ describe('EventBusResolver', function() {
             expect(() => resolver.broadcast('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
         });
     });
+    
+    describe('emitTo', function() {
+        it('should throw an error if channel is unknown', function() {
+            const resolver = new EventBusResolver({});
+            expect(() => resolver.emitTo('channel', 'key', 'data')).to.throw("'channel' is not a known destination.");
+        });
+    });
 
     describe('on', function() {
         it('should throw an error', function() {

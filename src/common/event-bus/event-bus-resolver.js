@@ -49,20 +49,20 @@ export class EventBusResolver {
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
+     * Emit data for the target passed in parameter on given event key
      *
-     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} dest - Channel to which to emit
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * @param {MASTER_SERVER_CHANNEL | MASTER_SLAVE_CHANNEL} channel - Channel on which to emit
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} target - Socket or window to which the event will be sent
      */
-    emit(dest, key, data, channel) {
-        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(dest)) {
-            throw new Error(`'${dest}' is not a known destination.`);
+    emitTo(channel, key, data, target) {
+        if (![MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL].includes(channel)) {
+            throw new Error(`'${channel}' is not a known destination.`);
         }
 
-        eventBusLogger.log(`EMIT '${key}' on ${dest} to dedicate channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
-        this.channels[dest].emit(key, data, channel);
+        eventBusLogger.log(`EMIT "${key}" on channel "${channel}" to target "${target}" with: ${data ? JSON.stringify(data) : 'no data'}`);
+        this.channels[channel].emitTo(key, data, target);
     }
 
     /**

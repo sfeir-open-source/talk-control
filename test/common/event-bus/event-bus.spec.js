@@ -2,7 +2,7 @@
 
 import 'module-alias/register';
 import { expect } from 'chai';
-import { EventBus } from '@event-bus/event-bus';
+import { EventBus, NO_KEY_PROVIDED, NO_TARGET_PROVIDED } from '@event-bus/event-bus';
 
 describe('EventBus', function() {
     let eventBus = new EventBus();
@@ -18,7 +18,7 @@ describe('EventBus', function() {
 
     describe('on()', function() {
         it('should throw an error', function() {
-            expect(() => eventBus.on(undefined, () => 'test')).to.throw('No key provided');
+            expect(() => eventBus.on(undefined, () => 'test')).to.throw(NO_KEY_PROVIDED);
         });
 
         it('should add a callback', function() {
@@ -36,7 +36,7 @@ describe('EventBus', function() {
 
     describe('onMultiple()', function() {
         it('should throw an error', function() {
-            expect(() => eventBus.onMultiple(undefined, () => 'test')).to.throw('No key provided');
+            expect(() => eventBus.onMultiple(undefined, () => 'test')).to.throw(NO_KEY_PROVIDED);
         });
 
         it('should add a callback', function() {
@@ -54,7 +54,7 @@ describe('EventBus', function() {
 
     describe('broadcast()', function() {
         it('should throw an error', function() {
-            expect(() => eventBus.broadcast(undefined, 'test')).to.throw('No key provided');
+            expect(() => eventBus.broadcast(undefined, 'test')).to.throw(NO_KEY_PROVIDED);
         });
 
         it("shouldn't fire any event", function() {
@@ -84,9 +84,19 @@ describe('EventBus', function() {
         });
     });
 
+    describe('emitTo()', function() {
+        it('should throw an error if no key provided', function() {
+            expect(() => eventBus.emitTo(undefined, 'data')).to.throw(NO_KEY_PROVIDED);
+        });
+        
+        it('should throw an error if no target provided', function() {
+            expect(() => eventBus.emitTo('key', 'data')).to.throw(NO_TARGET_PROVIDED);
+        });
+    });
+
     describe('getCallbacks()', function() {
         it('should throw an error', function() {
-            expect(() => eventBus.getCallbacks()).to.throw('No key provided');
+            expect(() => eventBus.getCallbacks()).to.throw(NO_KEY_PROVIDED);
         });
 
         it('sould retrun an empty array', function() {

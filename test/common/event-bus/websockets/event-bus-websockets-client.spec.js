@@ -48,4 +48,21 @@ describe('EventBusWebsocketsClient', function() {
             assert(eventBus.io.emit.calledOnceWith(key, data));
         });
     });
+
+    describe('emitTo()', function() {
+        it('should emit the data', function() {
+            // Given
+            const socket = {
+                emit: () => {}
+            };
+            stub(socket, 'emit');
+            const key = 'key';
+            const data = 'data';
+            // When
+            eventBus.emitTo(key, data, socket);
+            // Then
+            assert.isOk(socket.emit.calledWith(key, data));
+            socket.emit.restore();
+        });
+    });
 });
