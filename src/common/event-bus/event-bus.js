@@ -1,8 +1,8 @@
 'use strict';
 
 export const NO_KEY_PROVIDED = 'No key provided';
-const DUPLICATE_ENTRY = 'Duplicate Entry';
 export const NO_TARGET_PROVIDED = 'No socket or window provided';
+export const DUPLICATE_CALLBACKS_ENTRY = 'Duplicate entry in callbacks';
 
 /**
  * @classdesc Event bus implementation
@@ -45,7 +45,7 @@ export class EventBus {
         }
 
         if (this.callBacks[key]) {
-            throw new Error(DUPLICATE_ENTRY);
+            throw new Error(DUPLICATE_CALLBACKS_ENTRY);
         }
 
         this.callBacks[key] = [callback];

@@ -2,7 +2,7 @@
 
 import 'module-alias/register';
 import { expect } from 'chai';
-import { EventBus, NO_KEY_PROVIDED, NO_TARGET_PROVIDED } from '@event-bus/event-bus';
+import { EventBus, NO_KEY_PROVIDED, NO_TARGET_PROVIDED, DUPLICATE_CALLBACKS_ENTRY } from '@event-bus/event-bus';
 
 describe('EventBus', function() {
     let eventBus = new EventBus();
@@ -17,8 +17,13 @@ describe('EventBus', function() {
     });
 
     describe('on()', function() {
-        it('should throw an error', function() {
+        it('should throw an error if no key provided', function() {
             expect(() => eventBus.on(undefined, () => 'test')).to.throw(NO_KEY_PROVIDED);
+        });
+
+        it('should throw an error if callback already registered', function() {
+            eventBus.callBacks['key'] = () => 'key';
+            expect(() => eventBus.on('key', () => 'test')).to.throw(DUPLICATE_CALLBACKS_ENTRY);
         });
 
         it('should add a callback', function() {
@@ -35,7 +40,7 @@ describe('EventBus', function() {
     });
 
     describe('onMultiple()', function() {
-        it('should throw an error', function() {
+        it('should throw an error if no key provided', function() {
             expect(() => eventBus.onMultiple(undefined, () => 'test')).to.throw(NO_KEY_PROVIDED);
         });
 
