@@ -1,6 +1,6 @@
-import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave.js';
+import { TCComponent } from '@client/tc-component/tc-component.js';
 
-export class TimerSlave extends TalkControlSlave {
+export class TimerSlave extends TCComponent {
     init() {
         postMessage({ type: 'initTimer' });
     }

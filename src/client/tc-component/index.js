@@ -1,12 +1,12 @@
 'use strict';
 
-import { TalkControlSlave } from './talk-control-slave';
+import { TCComponent } from './tc-component';
 
 window.addEventListener('DOMContentLoaded', function() {
     const hash = window.location.hash || '#delta=0';
     const params = parseParams(hash);
     // TODO: retrieve engineName from configuration
-    new TalkControlSlave({ engineName: 'revealjs', ...params });
+    new TCComponent({ engineName: 'revealjs', ...params });
 });
 
 const parseParams = hash => {

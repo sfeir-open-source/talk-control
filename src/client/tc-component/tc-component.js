@@ -5,9 +5,9 @@ import { EngineResolver } from '../engines/engine-resolver';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
- * @class TalkControlSlave
+ * @class TCComponent
  */
-export class TalkControlSlave {
+export class TCComponent {
     constructor(params = {}) {
         this.eventBusSlave = new EventBusResolver({
             postMessage: {

@@ -1,9 +1,9 @@
 'use strict';
 
 import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave';
+import { TCComponent } from '@client/tc-component/tc-component';
 
-export class NotesSlave extends TalkControlSlave {
+export class NotesSlave extends TCComponent {
     init() {
         this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data => postMessage({ type: 'notesReceived', notes: data }));
     }
