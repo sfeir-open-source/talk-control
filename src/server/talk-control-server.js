@@ -34,7 +34,7 @@ export class TalkControlServer {
             let plugins = [];
             try {
                 plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
+                this.eventBusServer.emitTo(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
             } catch (e) {
                 // ...
             }
