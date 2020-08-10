@@ -29,7 +29,7 @@ export class TCComponent {
         this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
+                this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
             }
         });
 
