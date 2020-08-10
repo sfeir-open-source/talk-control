@@ -33,18 +33,22 @@ export class TalkControlSlave {
             }
         });
 
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => {
-            loadPluginModule(pluginName)
-                .then(plugin => {
-                    plugin.instance.init(this.shadowRoot);
-                    plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, type, event));
-                })
-                .catch(e => {
-                    console.error('Unable to load plugin module', e);
-                });
-        });
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
 
         // Broadcast the initialized event only on the 'main' slave
-        if (!this.delta) this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+        if (!this.delta) {
+            this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+        }
+    }
+
+    registerPlugin(pluginName) {
+        loadPluginModule(pluginName)
+            .then(plugin => {
+                plugin.instance.init(this.shadowRoot);
+                plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, type, event));
+            })
+            .catch(e => {
+                console.error('Unable to load plugin module', e);
+            });
     }
 }
