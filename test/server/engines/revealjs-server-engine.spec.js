@@ -11,7 +11,7 @@ describe('RevealServerEngine', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated TalkControlServer', function() {
+        it('should have instantiated TCServer', function() {
             expect(engine).to.be.ok;
         });
     });

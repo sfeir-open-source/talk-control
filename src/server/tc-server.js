@@ -6,9 +6,9 @@ import { EngineResolver } from './engines/engine-resolver';
 
 /**
  * @classdesc Handle state changes and socket events
- * @class TalkControlServer
+ * @class TCServer
  */
-export class TalkControlServer {
+export class TCServer {
     /**
      * @param {*} server - Server to connect to
      */
