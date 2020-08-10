@@ -18,10 +18,6 @@ export class TalkControlSlave {
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
-        this._touchPosition = {
-            touchstart: { clientX: 0, clientY: 0 },
-            touchend: { clientX: 0, clientY: 0 }
-        };
     }
 
     init() {
