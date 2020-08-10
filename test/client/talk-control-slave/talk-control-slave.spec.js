@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave';
-import { MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 
 describe('TalkControlSlave', function() {
     let talkControlSlave;
@@ -23,9 +23,9 @@ describe('TalkControlSlave', function() {
             // When
             talkControlSlave.init();
             // Then
-            assert(broadcast.calledOnceWith(MASTER_SLAVE_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
-            assert(on.calledWith(MASTER_SLAVE_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
-            assert(on.calledWith(MASTER_SLAVE_CHANNEL, 'registerPlugin'), '"on" not called with registerPlugin');
+            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
+            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
+            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin'), '"on" not called with registerPlugin');
         });
     });
 });

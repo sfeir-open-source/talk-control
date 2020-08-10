@@ -1,6 +1,6 @@
 'use strict';
 
-import { MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave';
 
 /**
@@ -8,6 +8,6 @@ import { TalkControlSlave } from '@client/talk-control-slave/talk-control-slave'
  */
 export class SlideViewSlave extends TalkControlSlave {
     init() {
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
+        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
     }
 }

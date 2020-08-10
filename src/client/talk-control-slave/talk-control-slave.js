@@ -1,6 +1,6 @@
 'use strict';
 
-import { EventBusResolver, MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
@@ -17,7 +17,7 @@ export class TalkControlSlave {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
+        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
     }
 
     init() {
@@ -26,18 +26,18 @@ export class TalkControlSlave {
         }
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
+        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
+                this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
             }
         });
 
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
+        this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
 
         // Broadcast the initialized event only on the 'main' slave
         if (!this.delta) {
-            this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+            this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
         }
     }
 
@@ -45,7 +45,7 @@ export class TalkControlSlave {
         loadPluginModule(pluginName)
             .then(plugin => {
                 plugin.instance.init(this.shadowRoot);
-                plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, type, event));
+                plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
             })
             .catch(e => {
                 console.error('Unable to load plugin module', e);

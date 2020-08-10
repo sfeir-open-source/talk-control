@@ -6,7 +6,7 @@ import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
 import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
-import { MASTER_SLAVE_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
 import config from '@config/config.json';
 
 describe('', function() {
@@ -44,7 +44,7 @@ describe('', function() {
             talkControlMaster.init();
             talkControlMaster.frames.forEach(frame => frame.onload());
             // Then
-            assert(broadcast.calledOnceWith(MASTER_SLAVE_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
+            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
             broadcast.restore();
         });
     });

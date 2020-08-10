@@ -3,7 +3,7 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver, MASTER_SERVER_CHANNEL, MASTER_SLAVE_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, MASTER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 import config from '@config/config.json';
@@ -42,7 +42,7 @@ describe('EventBusResolver', function() {
             // When
             const resolver = new EventBusResolver({});
             // Then
-            expect(resolver.channels[MASTER_SLAVE_CHANNEL]).to.be.ok;
+            expect(resolver.channels[CONTROLLER_COMPONENT_CHANNEL]).to.be.ok;
 
             window.addEventListener.restore();
             window.postMessage.restore();
