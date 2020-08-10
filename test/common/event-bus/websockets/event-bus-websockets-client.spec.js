@@ -29,7 +29,7 @@ describe('EventBusWebsocketsClient', function() {
     describe('on()', function() {
         it('should fire events', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             // When
             eventBus.on(key, () => key);
             // Then
@@ -40,7 +40,7 @@ describe('EventBusWebsocketsClient', function() {
     describe('broadcast()', function() {
         it('should broadcast through io', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const data = 'data';
             // When
             eventBus.broadcast(key, data);

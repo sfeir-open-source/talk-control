@@ -23,7 +23,7 @@ describe('EventBusWebsocketsServer', function() {
             const socketA = { on: spy() },
                 socketB = { on: spy() },
                 socketC = { on: spy() };
-            const key = 'test';
+            const key = 'key';
             eventBus.sockets = [socketA, socketB, socketC];
             // When
             eventBus.on(key, () => key);
@@ -38,7 +38,7 @@ describe('EventBusWebsocketsServer', function() {
             const socketA = { on: spy() },
                 socketB = { on: spy() },
                 socketC = { on: spy() };
-            const key = 'test';
+            const key = 'key';
             eventBus.sockets = [socketA, socketB];
             // When
             eventBus.on(key, null, socketC);
@@ -53,7 +53,7 @@ describe('EventBusWebsocketsServer', function() {
         it('should broadcast the data', function() {
             // Given
             stub(eventBus.io, 'emit');
-            const key = 'test';
+            const key = 'key';
             const message = 'message';
             // When
             eventBus.broadcast(key, message, false);

@@ -23,7 +23,7 @@ describe('EventBus', function() {
 
         it('should add a callback', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const callback = () => key;
             // When
             eventBus.on(key, callback);
@@ -41,7 +41,7 @@ describe('EventBus', function() {
 
         it('should add a callback', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const callback = () => key;
             // When
             eventBus.onMultiple(key, callback);
@@ -101,7 +101,7 @@ describe('EventBus', function() {
 
         it('sould retrun an empty array', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             // When
             const callbacks = eventBus.getCallbacks(key);
             // Then
@@ -110,7 +110,7 @@ describe('EventBus', function() {
 
         it('should return all the callbacks', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
             const callback1 = () => 'callback 1',
                 callback2 = () => 'callback 2';
             eventBus.onMultiple(key, callback1);
