@@ -8,7 +8,7 @@ export class TouchPointerSlave extends TCComponent {
         this.eventBusSlave.on(CONTROLLER_COMPONENT_CHANNEL, 'touchPointer', e => postMessage);
     }
 
-    sendPointerEventToMaster(eventData) {
+    sendPointerEventToController(eventData) {
         this.eventBusSlave.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', eventData);
     }
 }

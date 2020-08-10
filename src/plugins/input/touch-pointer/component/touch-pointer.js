@@ -104,7 +104,7 @@ class TouchPointerComponent extends LitElement {
 
     _chooseColor(color) {
         this.pointer.color = color;
-        touchPointerSlave.sendPointerEventToMaster({ origin: 'touchPointer', type: 'pointerColor', payload: { color: this.pointer.color }});
+        touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerColor', payload: { color: this.pointer.color }});
     }
 
     _initPointerDblClick() {
@@ -114,7 +114,7 @@ class TouchPointerComponent extends LitElement {
                 'dblclick',
                 () => {
                     console.log('sending dblclick');
-                    touchPointerSlave.sendPointerEventToMaster({ origin: 'touchPointer', type: 'pointerClick', payload: { x: this.pointer.x, y: this.pointer.y }})
+                    touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerClick', payload: { x: this.pointer.x, y: this.pointer.y }})
                 }
             );
     }
@@ -128,7 +128,7 @@ class TouchPointerComponent extends LitElement {
                     this.pointer.x = `${this._getPositionInPercent(e.layerX, layerWidth)}%`;
                     this.pointer.y = `${this._getPositionInPercent(e.layerY, layerHeight)}%`;
             
-                    touchPointerSlave.sendPointerEventToMaster({ origin: 'touchPointer', type: 'pointerMove', payload: { x: this.pointer.x, y: this.pointer.y }});
+                    touchPointerSlave.sendPointerEventToController({ origin: 'touchPointer', type: 'pointerMove', payload: { x: this.pointer.x, y: this.pointer.y }});
                 }
             );
     }
