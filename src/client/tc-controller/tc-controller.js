@@ -5,10 +5,10 @@ import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 /**
- * @class TalkControlMaster
+ * @class TCController
  * @classdesc Class that handle the events from the remote client
  */
-export class TalkControlMaster {
+export class TCController {
     /**
      * Class constructor
      *

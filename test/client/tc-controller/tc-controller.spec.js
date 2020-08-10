@@ -4,13 +4,12 @@ import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
-import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
-import { CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
-import { CONTROLLER_COMPONENT_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
+import { TCController } from '@client/tc-controller/tc-controller';
+import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import config from '@config/config.json';
 
-describe('', function() {
-    let talkControlMaster;
+describe('TCController', function() {
+    let tcController;
 
     before(function() {
         // Needed otherwise there will be an error because there is no server to connect to
@@ -18,7 +17,7 @@ describe('', function() {
     });
 
     beforeEach(function() {
-        talkControlMaster = new TalkControlMaster(config.tcServer.urls.local);
+        tcController = new TCController(config.tcServer.urls.local);
     });
 
     after(function() {
@@ -26,23 +25,23 @@ describe('', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated TalkControlMaster', function() {
-            expect(talkControlMaster).to.be.ok;
+        it('should have instantiated TCController', function() {
+            expect(tcController).to.be.ok;
         });
     });
 
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const broadcast = stub(talkControlMaster.eventBusMaster, 'broadcast');
-            stub(talkControlMaster, 'afterInitialisation');
-            stub(talkControlMaster, 'forwardEvents');
+            const broadcast = stub(tcController.eventBusMaster, 'broadcast');
+            stub(tcController, 'afterInitialisation');
+            stub(tcController, 'forwardEvents');
 
-            talkControlMaster.frames = [{}, {}, {}];
-            talkControlMaster.focusFrame = { focus: stub() };
+            tcController.frames = [{}, {}, {}];
+            tcController.focusFrame = { focus: stub() };
             // When
-            talkControlMaster.init();
-            talkControlMaster.frames.forEach(frame => frame.onload());
+            tcController.init();
+            tcController.frames.forEach(frame => frame.onload());
             // Then
             assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
             broadcast.restore();
