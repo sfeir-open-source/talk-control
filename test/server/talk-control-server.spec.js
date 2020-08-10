@@ -29,17 +29,17 @@ describe('TalkControlServer', function() {
         });
     });
 
-    describe('emitStateChanges()', function() {
+    describe('broadcastStateChanges()', function() {
         it('should fire "gotoSlide" event', function() {
-            const emit = stub(talkControlServer.eventBusServer, 'emit');
+            const broadcast = stub(talkControlServer.eventBusServer, 'broadcast');
             // Given
             const state = { currentSlide: { h: 1, v: 0, f: 0 }, slides: [{ h: 0, v: 0, f: 0, fMax: 0 }, { h: 1, v: 0, f: 0, fMax: 0 }] };
             stub(store, 'getState').returns(state);
             // When
             talkControlServer.init('revealjs');
-            talkControlServer.emitStateChanges();
+            talkControlServer.broadcastStateChanges();
             // Then
-            assert(emit.calledOnceWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
+            assert(broadcast.calledOnceWith(MASTER_SERVER_CHANNEL, 'gotoSlide'));
             store.getState.restore();
         });
     });

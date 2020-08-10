@@ -25,14 +25,14 @@ describe('EventBusPostMessage', function() {
         });
     });
 
-    describe('emit()', function() {
+    describe('broadcast()', function() {
         it('should call window.postMessage', function() {
             // Given
             const key = 'test';
             const data = 'data';
             eventBus.windows = [window];
             // When
-            eventBus.emit(key, data);
+            eventBus.broadcast(key, data);
             // Then
             const object = { type: key, data };
             assert(window.postMessage.calledOnceWith(object));

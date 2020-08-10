@@ -37,13 +37,13 @@ describe('EventBusWebsocketsClient', function() {
         });
     });
 
-    describe('emit()', function() {
-        it('should emit through io', function() {
+    describe('broadcast()', function() {
+        it('should broadcast through io', function() {
             // Given
             const key = 'test';
             const data = 'data';
             // When
-            eventBus.emit(key, data);
+            eventBus.broadcast(key, data);
             // Then
             assert(eventBus.io.emit.calledOnceWith(key, data));
         });

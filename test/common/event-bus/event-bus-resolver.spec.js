@@ -49,10 +49,10 @@ describe('EventBusResolver', function() {
         });
     });
 
-    describe('emit', function() {
+    describe('broadcast', function() {
         it('should throw an error', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.emit('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
+            expect(() => resolver.broadcast('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
         });
     });
 

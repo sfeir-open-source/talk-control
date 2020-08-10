@@ -49,14 +49,14 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('emit()', function() {
+    describe('broadcast()', function() {
         it('sould broadcast the data', function() {
             // Given
             stub(eventBus.io, 'emit');
             const key = 'test';
             const message = 'message';
             // When
-            eventBus.emit(key, message, false);
+            eventBus.broadcast(key, message, false);
             // Then
             assert(eventBus.io.emit.notCalled);
             eventBus.io.emit.restore();

@@ -53,8 +53,8 @@ export class EventBusWebsocketsServer extends EventBus {
         if (callback) {
             super.onMultiple(key, callback);
         }
-        // When an event is fired from a socket, we call emit so that we trigger local callbacks
-        const socketCallback = message => this.emit(key, message, false);
+        // When an event is fired from a socket, we call broadcast so that we trigger local callbacks
+        const socketCallback = message => this.broadcast(key, message, false);
         if (socket) {
             socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket]));
         } else {
@@ -80,16 +80,16 @@ export class EventBusWebsocketsServer extends EventBus {
     }
 
     /**
-     * Emit data for each local callback and each connected socket
+     * Broadcast data for each local callback and each connected socket
      *
      * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {any} data - Data to broadcast
      * @param {boolean} broadcast - Set false if the event must not be broadcasted on network
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data, broadcast = true) {
+    broadcast(key, data, broadcast = true) {
         // Inner
-        super.emit(key, data);
+        super.broadcast(key, data);
 
         if (broadcast) {
             this.io.emit(key, data);
@@ -102,14 +102,14 @@ export class EventBusWebsocketsServer extends EventBus {
      * @param {any} data
      * @param {any} channel
      */
-    emitNotBroadcast(key, data, channel) {
+    emit(key, data, channel) {
         // Call for sanity checks
         try {
-            super.emitNotBroadcast(key, data, channel);
+            super.emit(key, data, channel);
         } catch (e) {
-            eventBusLogger.log('emitNotBroadcast error: ', [e], true);
+            eventBusLogger.log('emit error: ', [e], true);
         }
 
-        channel.emit(key, data);
+        channel.broadcast(key, data);
     }
 }

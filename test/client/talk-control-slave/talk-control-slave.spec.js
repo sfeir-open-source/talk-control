@@ -5,11 +5,11 @@ import { MASTER_SLAVE_CHANNEL } from '@event-bus/event-bus-resolver';
 
 describe('TalkControlSlave', function() {
     let talkControlSlave;
-    let on, emit;
+    let on, broadcast;
     beforeEach(function() {
         talkControlSlave = new TalkControlSlave({ engineName: 'revealjs' });
         on = stub(talkControlSlave.eventBusSlave, 'on');
-        emit = stub(talkControlSlave.eventBusSlave, 'emit');
+        broadcast = stub(talkControlSlave.eventBusSlave, 'broadcast');
     });
 
     describe('constructor()', function() {
@@ -23,7 +23,7 @@ describe('TalkControlSlave', function() {
             // When
             talkControlSlave.init();
             // Then
-            assert(emit.calledOnceWith(MASTER_SLAVE_CHANNEL, 'initialized'), '"emit" not called with initialized');
+            assert(broadcast.calledOnceWith(MASTER_SLAVE_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
             assert(on.calledWith(MASTER_SLAVE_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
             assert(on.calledWith(MASTER_SLAVE_CHANNEL, 'registerPlugin'), '"on" not called with registerPlugin');
         });

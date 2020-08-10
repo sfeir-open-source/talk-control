@@ -52,9 +52,9 @@ describe('EventBus', function() {
         });
     });
 
-    describe('emit()', function() {
+    describe('broadcast()', function() {
         it('should throw an error', function() {
-            expect(() => eventBus.emit(undefined, 'test')).to.throw('No key provided');
+            expect(() => eventBus.broadcast(undefined, 'test')).to.throw('No key provided');
         });
 
         it("shouldn't fire any event", function() {
@@ -64,7 +64,7 @@ describe('EventBus', function() {
             eventBus.onMultiple('test', () => (isFirstOneCalled = true));
             eventBus.onMultiple('test', () => (isSecondOneCalled = true));
             // When
-            eventBus.emit('anotherTest', undefined);
+            eventBus.broadcast('anotherTest', undefined);
             // Then
             expect(isFirstOneCalled).to.be.false;
             expect(isSecondOneCalled).to.be.false;
@@ -77,7 +77,7 @@ describe('EventBus', function() {
             eventBus.onMultiple('test', () => (isFirstOneCalled = true));
             eventBus.onMultiple('test', () => (isSecondOneCalled = true));
             // When
-            eventBus.emit('test', undefined);
+            eventBus.broadcast('test', undefined);
             // Then
             expect(isFirstOneCalled).to.be.true;
             expect(isSecondOneCalled).to.be.true;

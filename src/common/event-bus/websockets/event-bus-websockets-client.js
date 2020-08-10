@@ -45,15 +45,15 @@ export class EventBusWebsocketsClient extends EventBus {
     }
 
     /**
-     * Emit data for each local callback and each connected socket
+     * Broadcast data for each local callback and each connected socket
      *
      * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {any} data - Data to broadcast
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data) {
+    broadcast(key, data) {
         // Inner broadcast (same app)
-        super.emit(key, data);
+        super.broadcast(key, data);
         // System broadcast (several devices)
         this.io.emit(key, data);
     }
@@ -64,10 +64,10 @@ export class EventBusWebsocketsClient extends EventBus {
      * @param {any} data
      * @param {any} channel
      */
-    emitNotBroadcast(key, data, channel) {
+    emit(key, data, channel) {
         // Call for sanity checks
-        super.emitNotBroadcast(key, data, channel);
+        super.emit(key, data, channel);
 
-        channel.emit(key, data);
+        channel.broadcast(key, data);
     }
 }

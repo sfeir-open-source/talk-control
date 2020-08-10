@@ -33,7 +33,7 @@ export class TalkControlSlave {
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
+                this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
             }
         });
 
@@ -41,14 +41,14 @@ export class TalkControlSlave {
             loadPluginModule(pluginName)
                 .then(plugin => {
                     plugin.instance.init(this.shadowRoot);
-                    plugin.instance.onEvent((type, event) => this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
+                    plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, type, event));
                 })
                 .catch(e => {
                     console.error('Unable to load plugin module', e);
                 });
         });
 
-        // Emit the initialized event only on the 'main' slave
-        if (!this.delta) this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+        // Broadcast the initialized event only on the 'main' slave
+        if (!this.delta) this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
     }
 }

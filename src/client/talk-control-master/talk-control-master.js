@@ -52,33 +52,33 @@ export class TalkControlMaster {
     afterInitialisation() {
         // Forward initialization event to server
         this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'initialized', data => {
-            this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'init', data);
+            this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, 'init', data);
             this._initPlugins();
         });
         
         // Forward "showNotes" events to slave
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', data => this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, 'sendNotesToSlave', data));
         // Forward "gotoSlide" events to slave
-        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, 'gotoSlide', data));
         
         // Forward plugin event to server to broadcast it to all masters
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'pluginEventIn', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'pluginEventIn', data));
-        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, data.origin, data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'pluginEventIn', data => this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, 'pluginEventIn', data));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, data.origin, data));
         
         // Forward "sendPointerEventToMaster" to server to broadcast to all masters
-        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
+        this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, 'sendPointerEventToMaster', data => this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, 'sendPointerEventToMaster', data));
         // Forward "pointerEvent" events to slave
-        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
+        this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, 'pointerEvent', data));
     }
 
     _registerPlugin(plugin, name) {
         if (plugin.usedByAComponent) { // Plugins used by a component and need slave (ex: keyboard)
-            this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
-            this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'registerPlugin', { pluginName: name });
+            this.eventBusMaster.on(MASTER_SLAVE_CHANNEL, plugin.type, event => this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, plugin.type, event));
+            this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, 'registerPlugin', { pluginName: name });
         } else {
             // Other plugins like bluetooth devices
             plugin.init();
-            plugin.onEvent(event => this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, plugin.type, event));
+            plugin.onEvent(event => this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, plugin.type, event));
         }
     }
 
@@ -94,17 +94,17 @@ export class TalkControlMaster {
             }
         });
 
-        this.eventBusMaster.emit(MASTER_SERVER_CHANNEL, 'getPluginsToActivate');
+        this.eventBusMaster.broadcast(MASTER_SERVER_CHANNEL, 'getPluginsToActivate');
     }
 
     forwardEvents() {
-        const forward = (key => data => this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
+        const forward = (key => data => this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, key, data)).bind(this);
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
         this.eventBusMaster.on(MASTER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 
     onFramesLoaded() {
-        this.eventBusMaster.emit(MASTER_SLAVE_CHANNEL, 'init');
+        this.eventBusMaster.broadcast(MASTER_SLAVE_CHANNEL, 'init');
         this.focusFrame.focus();
         document.addEventListener('click', () => this.focusFrame.focus());
     }
