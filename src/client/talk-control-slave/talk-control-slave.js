@@ -18,10 +18,6 @@ export class TalkControlSlave {
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'init', this.init.bind(this));
-        this._touchPosition = {
-            touchstart: { clientX: 0, clientY: 0 },
-            touchend: { clientX: 0, clientY: 0 }
-        };
     }
 
     init() {
@@ -33,22 +29,26 @@ export class TalkControlSlave {
         this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
+                this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'sendNotesToMaster', this.engine.getSlideNotes());
             }
         });
 
-        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => {
-            loadPluginModule(pluginName)
-                .then(plugin => {
-                    plugin.instance.init(this.shadowRoot);
-                    plugin.instance.onEvent((type, event) => this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, type, event));
-                })
-                .catch(e => {
-                    console.error('Unable to load plugin module', e);
-                });
-        });
+        this.eventBusSlave.on(MASTER_SLAVE_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
 
-        // Emit the initialized event only on the 'main' slave
-        if (!this.delta) this.eventBusSlave.emit(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+        // Broadcast the initialized event only on the 'main' slave
+        if (!this.delta) {
+            this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, 'initialized', { slides });
+        }
+    }
+
+    registerPlugin(pluginName) {
+        loadPluginModule(pluginName)
+            .then(plugin => {
+                plugin.instance.init(this.shadowRoot);
+                plugin.instance.onEvent((type, event) => this.eventBusSlave.broadcast(MASTER_SLAVE_CHANNEL, type, event));
+            })
+            .catch(e => {
+                console.error('Unable to load plugin module', e);
+            });
     }
 }

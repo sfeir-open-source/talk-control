@@ -49,14 +49,28 @@ describe('EventBusResolver', function() {
         });
     });
 
-    describe('emit', function() {
+    describe('broadcast()', function() {
         it('should throw an error', function() {
             const resolver = new EventBusResolver({});
-            expect(() => resolver.emit('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
+            expect(() => resolver.broadcast('desc', 'key', 'data')).to.throw("'desc' is not a known destination.");
+        });
+    });
+    
+    describe('emitTo()', function() {
+        it('should throw an error if channel is unknown', function() {
+            const resolver = new EventBusResolver({});
+            expect(() => resolver.emitTo('channel', 'key', 'data')).to.throw("'channel' is not a known destination.");
         });
     });
 
-    describe('on', function() {
+    describe('on()', function() {
+        it('should throw an error', function() {
+            const resolver = new EventBusResolver({});
+            expect(() => resolver.on('src', 'key', () => 'callback')).to.throw("'src' is not a known source.");
+        });
+    });
+
+    describe('onMultiple()', function() {
         it('should throw an error', function() {
             const resolver = new EventBusResolver({});
             expect(() => resolver.on('src', 'key', () => 'callback')).to.throw("'src' is not a known source.");

@@ -18,12 +18,26 @@ describe('EventBusWebsocketsServer', function() {
     });
 
     describe('on()', function() {
+        it('should call onMultiple', function() {
+            // Given
+            const key = 'key';
+            const callback = () => 'callback';
+            const socket = 'socket';
+            stub(eventBus, 'onMultiple');
+            // When
+            eventBus.on(key, callback, socket);
+            // Then
+            assert.isOk(eventBus.onMultiple.calledWith(key, callback, socket));
+        });
+    });
+
+    describe('onMultiple()', function() {
         it('should fire events', function() {
             // Given
             const socketA = { on: spy() },
                 socketB = { on: spy() },
                 socketC = { on: spy() };
-            const key = 'test';
+            const key = 'key';
             eventBus.sockets = [socketA, socketB, socketC];
             // When
             eventBus.on(key, () => key);
@@ -38,7 +52,7 @@ describe('EventBusWebsocketsServer', function() {
             const socketA = { on: spy() },
                 socketB = { on: spy() },
                 socketC = { on: spy() };
-            const key = 'test';
+            const key = 'key';
             eventBus.sockets = [socketA, socketB];
             // When
             eventBus.on(key, null, socketC);
@@ -49,17 +63,34 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('emit()', function() {
-        it('sould broadcast the data', function() {
+    describe('broadcast()', function() {
+        it('should broadcast the data', function() {
             // Given
             stub(eventBus.io, 'emit');
-            const key = 'test';
+            const key = 'key';
             const message = 'message';
             // When
-            eventBus.emit(key, message, false);
+            eventBus.broadcast(key, message, false);
             // Then
             assert(eventBus.io.emit.notCalled);
             eventBus.io.emit.restore();
+        });
+    });
+
+    describe('emitTo()', function() {
+        it('should emit the data', function() {
+            // Given
+            const socket = {
+                emit: () => {}
+            };
+            stub(socket, 'emit');
+            const key = 'key';
+            const data = 'data';
+            // When
+            eventBus.emitTo(key, data, socket);
+            // Then
+            assert.isOk(socket.emit.calledWith(key, data));
+            socket.emit.restore();
         });
     });
 });

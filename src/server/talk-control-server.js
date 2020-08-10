@@ -27,27 +27,27 @@ export class TalkControlServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
-        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'pluginEventIn', data => this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'pluginEventOut', data));
+        this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'pluginEventIn', data => this.eventBusServer.broadcast(MASTER_SERVER_CHANNEL, 'pluginEventOut', data));
         this.eventBusServer.onMultiple(MASTER_SERVER_CHANNEL, 'getPluginsToActivate', socket => {
             const fs = require('fs');
             const path = require('path');
             let plugins = [];
             try {
                 plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emitNotBroadcast(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
+                this.eventBusServer.emitTo(MASTER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
             } catch (e) {
                 // ...
             }
         });
-        store.subscribe(this.emitStateChanges.bind(this));
+        store.subscribe(this.broadcastStateChanges.bind(this));
     }
 
     /**
-     * Emit an event depending on state changes
+     * Broadcast an event depending on state changes
      */
-    emitStateChanges() {
+    broadcastStateChanges() {
         const currentState = store.getState();
-        this.eventBusServer.emit(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
+        this.eventBusServer.broadcast(MASTER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
         this.previousState = currentState;
     }
 }

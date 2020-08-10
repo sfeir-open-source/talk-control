@@ -38,36 +38,36 @@ export class EventBusWebsocketsClient extends EventBus {
     on(key, callback) {
         try {
             super.on(key, callback);
-            this.onMultiple(key,callback);
+            this.onMultiple(key, callback);
         } catch (e) {
             eventBusLogger.log('on event bus client error: ', [key, e.message], true);
         }
     }
 
     /**
-     * Emit data for each local callback and each connected socket
+     * Broadcast data for each local callback and each connected socket
      *
      * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {any} data - Data to broadcast
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data) {
+    broadcast(key, data) {
         // Inner broadcast (same app)
-        super.emit(key, data);
+        super.broadcast(key, data);
         // System broadcast (several devices)
         this.io.emit(key, data);
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * Emit data for the socket passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} socket - Socket to which the event will be sent
      */
-    emitNotBroadcast(key, data, channel) {
+    emitTo(key, data, socket) {
         // Call for sanity checks
-        super.emitNotBroadcast(key, data, channel);
+        super.emitTo(key, data, socket);
 
-        channel.emit(key, data);
+        socket.emit(key, data);
     }
 }

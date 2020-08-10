@@ -34,7 +34,7 @@ describe('', function() {
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const emit = stub(talkControlMaster.eventBusMaster, 'emit');
+            const broadcast = stub(talkControlMaster.eventBusMaster, 'broadcast');
             stub(talkControlMaster, 'afterInitialisation');
             stub(talkControlMaster, 'forwardEvents');
 
@@ -44,8 +44,8 @@ describe('', function() {
             talkControlMaster.init();
             talkControlMaster.frames.forEach(frame => frame.onload());
             // Then
-            assert(emit.calledOnceWith(MASTER_SLAVE_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
-            emit.restore();
+            assert(broadcast.calledOnceWith(MASTER_SLAVE_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
+            broadcast.restore();
         });
     });
 });

@@ -53,8 +53,8 @@ export class EventBusWebsocketsServer extends EventBus {
         if (callback) {
             super.onMultiple(key, callback);
         }
-        // When an event is fired from a socket, we call emit so that we trigger local callbacks
-        const socketCallback = message => this.emit(key, message, false);
+        // When an event is fired from a socket, we call broadcast so that we trigger local callbacks
+        const socketCallback = message => this.broadcast(key, message, false);
         if (socket) {
             socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket]));
         } else {
@@ -73,23 +73,23 @@ export class EventBusWebsocketsServer extends EventBus {
     on(key, callback, socket) {
         try {
             super.on(key, callback);
-            this.onMultiple(key, callback, socket)
+            this.onMultiple(key, callback, socket);
         } catch (e) {
             eventBusLogger.log('on event bus server error: ', [key, e.message], true);
         }
     }
 
     /**
-     * Emit data for each local callback and each connected socket
+     * Broadcast data for each local callback and each connected socket
      *
      * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {any} data - Data to broadcast
      * @param {boolean} broadcast - Set false if the event must not be broadcasted on network
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data, broadcast = true) {
+    broadcast(key, data, broadcast = true) {
         // Inner
-        super.emit(key, data);
+        super.broadcast(key, data);
 
         if (broadcast) {
             this.io.emit(key, data);
@@ -97,19 +97,19 @@ export class EventBusWebsocketsServer extends EventBus {
     }
 
     /**
-     * Emit data for the dedicated channel passed in parameter on given event key
-     * @param {string} key
-     * @param {any} data
-     * @param {any} channel
+     * Emit data for the socket passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} socket - Socket to which the event will be sent
      */
-    emitNotBroadcast(key, data, channel) {
+    emitTo(key, data, socket) {
         // Call for sanity checks
         try {
-            super.emitNotBroadcast(key, data, channel);
+            super.emitTo(key, data, socket);
         } catch (e) {
-            eventBusLogger.log('emitNotBroadcast error: ', [e], true);
+            eventBusLogger.log('emitTo error: ', [e], true);
         }
 
-        channel.emit(key, data);
+        socket.emit(key, data);
     }
 }
