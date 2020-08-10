@@ -18,6 +18,20 @@ describe('EventBusWebsocketsServer', function() {
     });
 
     describe('on()', function() {
+        it('should call onMultiple', function() {
+            // Given
+            const key = 'key';
+            const callback = () => 'callback';
+            const socket = 'socket';
+            stub(eventBus, 'onMultiple');
+            // When
+            eventBus.on(key, callback, socket);
+            // Then
+            assert.isOk(eventBus.onMultiple.calledWith(key, callback, socket));
+        });
+    });
+
+    describe('onMultiple()', function() {
         it('should fire events', function() {
             // Given
             const socketA = { on: spy() },

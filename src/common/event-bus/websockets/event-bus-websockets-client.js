@@ -38,7 +38,7 @@ export class EventBusWebsocketsClient extends EventBus {
     on(key, callback) {
         try {
             super.on(key, callback);
-            this.onMultiple(key,callback);
+            this.onMultiple(key, callback);
         } catch (e) {
             eventBusLogger.log('on event bus client error: ', [key, e.message], true);
         }

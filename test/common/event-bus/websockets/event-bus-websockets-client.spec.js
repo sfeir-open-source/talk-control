@@ -27,13 +27,26 @@ describe('EventBusWebsocketsClient', function() {
     });
 
     describe('on()', function() {
+        it('should call onMultiple', function() {
+            // Given
+            const key = 'key';
+            const callback = () => 'callback';
+            stub(eventBus, 'onMultiple');
+            // When
+            eventBus.on(key, callback);
+            // Then
+            assert.isOk(eventBus.onMultiple.calledWith(key, callback));
+        });
+    });
+
+    describe('onMultiple()', function() {
         it('should fire events', function() {
             // Given
             const key = 'key';
             // When
             eventBus.on(key, () => key);
             // Then
-            assert(eventBus.io.on.calledOnceWith(key));
+            assert.isOk(eventBus.io.on.calledWith(key));
         });
     });
 

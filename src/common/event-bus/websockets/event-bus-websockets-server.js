@@ -73,7 +73,7 @@ export class EventBusWebsocketsServer extends EventBus {
     on(key, callback, socket) {
         try {
             super.on(key, callback);
-            this.onMultiple(key, callback, socket)
+            this.onMultiple(key, callback, socket);
         } catch (e) {
             eventBusLogger.log('on event bus server error: ', [key, e.message], true);
         }
