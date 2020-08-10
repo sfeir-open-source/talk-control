@@ -3,7 +3,7 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { stub, spy } from 'sinon';
-import { EventBusResolver, MASTER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIOClient from 'socket.io-client';
 import config from '@config/config.json';
@@ -31,7 +31,7 @@ describe('EventBusResolver', function() {
             // When
             const resolver = new EventBusResolver({ server: config.tcServer.urls.local, client: true });
             // Then
-            expect(resolver.channels[MASTER_SERVER_CHANNEL] instanceof EventBusWebsocketsClient).to.be.true;
+            expect(resolver.channels[CONTROLLER_SERVER_CHANNEL] instanceof EventBusWebsocketsClient).to.be.true;
         });
 
         it('shoud instantiate a Postmessage', function() {

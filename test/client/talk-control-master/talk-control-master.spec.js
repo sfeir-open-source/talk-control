@@ -5,7 +5,7 @@ import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TalkControlMaster } from '@client/talk-control-master/talk-control-master';
-import { MASTER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
+import { CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import { CONTROLLER_COMPONENT_CHANNEL } from '../../../src/common/event-bus/event-bus-resolver';
 import config from '@config/config.json';
 
