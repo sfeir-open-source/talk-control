@@ -1,7 +1,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
-import { NotesSlave } from './notes-slave';
+import { NotesTCComponent } from './notes-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 class NotesComponent extends LitElement {
@@ -16,12 +16,12 @@ class NotesComponent extends LitElement {
         ];
     }
     firstUpdated() {
-        new NotesSlave();
+        new NotesTCComponent();
         addEventListener('message', message => {
             if (!message || !message.data) {
                 return;
             }
-            // 'notesReceived' event is fired by the NotesSlave
+            // 'notesReceived' event is fired by the NotesTCComponent
             if (typeof message.data === 'object' && message.data.type === 'notesReceived') {
                 this.shadowRoot.getElementById('notes').innerHTML = message.data.notes;
             }

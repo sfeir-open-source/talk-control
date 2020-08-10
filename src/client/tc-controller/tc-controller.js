@@ -57,7 +57,7 @@ export class TCController {
         });
         
         // Forward "showNotes" events to slave
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToSlave', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data));
         // Forward "gotoSlide" events to slave
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
