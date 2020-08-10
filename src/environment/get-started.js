@@ -6,7 +6,7 @@ const config = require('../../config/config');
 console.log('\n\n\tWelcome to TalkControl\n'.bgBrightBlue.bold);
 console.log(
     `
-    TalkControl MASTER is running on port ${config.tcMaster.port}
+    TC Controller is running on port ${config.tcController.port}
     TalkControl SERVER is running on port ${config.tcServer.port}
     SHOWCASE is served on port ${config.tcShowcase.port}`.gray
 );
@@ -14,13 +14,13 @@ console.log(
     `
     Use TalkControl from localhost:`
 );
-console.log(`    Get started by opening url: ${config.tcMaster.urls.local}`.green);
+console.log(`    Get started by opening url: ${config.tcController.urls.local}`.green);
 console.log(
     `
     Use TalkControl remotely:`
 );
-if (config.tcMaster.urls.external) {
-    console.log(`    Get started by opening url: ${config.tcMaster.urls.external}`.green);
+if (config.tcController.urls.external) {
+    console.log(`    Get started by opening url: ${config.tcController.urls.external}`.green);
 } else {
     console.log(
         `    TalkControl use ngrok to be accessible remotely:

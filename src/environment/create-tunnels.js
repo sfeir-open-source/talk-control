@@ -5,10 +5,10 @@ const tunnelService = require('./services/tunnel');
 const configFileService = require('./services/config-file');
 
 /**
- * Create a tunnel for each service items in config (tc-server, tc-master, tc-showcase)
+ * Create a tunnel for each service items in config (tc-server, tc-controller, tc-showcase)
  */
 const setTunnels = async () => {
-    const configItems = ['tcServer', 'tcMaster', 'tcShowcase'];
+    const configItems = ['tcServer', 'tcController', 'tcShowcase'];
 
     for (const item of configItems) {
         try {

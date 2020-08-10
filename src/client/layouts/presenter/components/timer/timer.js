@@ -2,7 +2,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
-import { TimerSlave } from './timer-slave';
+import { TimerTCComponent } from './timer-tc-component';
 class TimerComponent extends LitElement {
     static get styles() {
         return [
@@ -28,8 +28,8 @@ class TimerComponent extends LitElement {
     }
 
     firstUpdated() {
-        // Instantiate the slave that will receive events from the master
-        new TimerSlave();
+        // Instantiate the component that will receive events from the controller
+        new TimerTCComponent();
         // Initialize clock and timer
         this.timerElement = this.shadowRoot.querySelector('#timer');
         this.clockElement = this.shadowRoot.querySelector('#clock');
@@ -39,7 +39,7 @@ class TimerComponent extends LitElement {
             if (!message || !message.data) {
                 return;
             }
-            // 'initTimer' event is fired by the TimerSlave
+            // 'initTimer' event is fired by the TimerTCComponent
             if (typeof message.data === 'object' && message.data.type === 'initTimer') {
                 this.restartTimer = this.startTimer();
             }

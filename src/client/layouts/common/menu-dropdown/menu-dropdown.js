@@ -43,7 +43,7 @@ class MenuDropdown extends LitElement {
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                     <div class="dropdown-content">
-                        <a href="../../talk-control-master/index.html" class="dropdown-item">
+                        <a href="../../tc-controller/index.html" class="dropdown-item">
                             Accueil
                         </a>
                         <a href="../on-stage/on-stage.html" class="dropdown-item">

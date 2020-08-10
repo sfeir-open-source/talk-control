@@ -1,7 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
-import { SlideViewSlave } from './slide-view-slave';
+import { SlideViewTCComponent } from './slide-view-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
@@ -56,7 +56,7 @@ class SlideView extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
-        new SlideViewSlave({ shadowRoot: this.shadowRoot });
+        new SlideViewTCComponent({ shadowRoot: this.shadowRoot });
     }
 
     attributeChangedCallback(name, oldval, newval) {
