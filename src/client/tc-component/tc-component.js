@@ -10,9 +10,7 @@ import { loadPluginModule } from '@plugins/plugin-loader';
 export class TCComponent {
     constructor(params = {}) {
         this.eventBusComponent = new EventBusResolver({
-            postMessage: {
-                slave: true
-            }
+            postMessage: {}
         });
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
