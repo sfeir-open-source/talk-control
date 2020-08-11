@@ -1,7 +1,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
-import '@client/layouts/common/slide-view/slide-view'
+import '@client/web-components/slide-view/slide-view';
 import { TouchPointerTCComponent } from './touch-pointer-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
