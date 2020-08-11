@@ -6,6 +6,7 @@ class TouchPointerInput {
         this.shadowRoot;
         this.zooming = false;
         this.pointer = { x: 0, y: 0, color: '#FF0000' };
+        this.interval;
     }
 
     onEvent(callback) {
@@ -35,7 +36,8 @@ class TouchPointerInput {
                 width: 12px;
                 height: 12px;
                 border-radius: 6px;
-                background-color: #FF0000
+                background-color: #FF0000;
+                visibility: hidden;
             }
             .zoomable {
                 width: 100%;
@@ -93,8 +95,13 @@ class TouchPointerInput {
     }
 
     _setPointer(x, y) {
+        clearInterval(this.interval);
+        this.shadowRoot.getElementById('pointer').style.visibility = 'visible';
         this.shadowRoot.getElementById('pointer').style.left = this.pointer.x = x;
         this.shadowRoot.getElementById('pointer').style.top = this.pointer.y = y;
+        this.interval = setInterval(() => {
+            this.shadowRoot.getElementById('pointer').style.visibility = 'hidden';
+        }, 2000);
     }
 
     _setPointerColor(color) {
@@ -116,7 +123,6 @@ class TouchPointerInput {
         const windowCenterY = window.innerHeight / 2;
         const targetX = Math.round((windowCenterX - mouseX) * scaleValue);
         const targetY = Math.round((windowCenterY - mouseY) * scaleValue);
-
 
         if (!this.zooming) {
             element.style.transform = `translateX(${targetX}px) translateY(${targetY}px) scale(${scaleValue})`;
