@@ -2,14 +2,14 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import '@client/web-components/slide-view/slide-view';
-import { TouchPointerTCComponent } from './touch-pointer-tc-component';
+import { TouchPointerTCComponent } from './touch-pointer-presenter-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 const layerWidth = css`800`;
 const layerHeight = css`450`;
 let touchPointerTCComponent;
 
-class TouchPointerComponent extends LitElement {
+class TouchPointerPresenterComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyle,
@@ -138,4 +138,4 @@ class TouchPointerComponent extends LitElement {
     };
 }
 
-customElements.define('tc-touch-pointer', TouchPointerComponent);
+customElements.define('tc-touch-pointer-presenter', TouchPointerPresenterComponent);
