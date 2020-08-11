@@ -9,7 +9,7 @@
         },
         "port": 3001
     },
-    "tcMaster": {
+    "tcController": {
         "urls": {
             "external": "",
             "local": "http://localhost:3000"
@@ -23,7 +23,7 @@
         },
         "port": 3002
     },
-    "tcSlave": {
+    "tcComponent": {
         "keysBlocked": [
             "ArrowDown",
             "ArrowUp",
@@ -31,5 +31,9 @@
             "ArrowRight",
             "Space"
         ]
+    },
+    "logger": {
+        "redux": false,
+        "eventBusEvents": false
     }
 }

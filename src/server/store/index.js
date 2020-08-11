@@ -1,10 +1,10 @@
 'use strict';
 
+import config from '@config/config';
 import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import { ACTIONS } from './actions';
 
-const logger = createLogger();
 const initialState = {
     currentSlide: {},
     slides: []
@@ -21,4 +21,4 @@ export const reducers = (state, action) => {
     return state;
 };
 
-export default createStore(reducers, initialState, applyMiddleware(logger));
+export default createStore(reducers, initialState, config.logger.redux ? applyMiddleware(createLogger()) : undefined);

@@ -23,14 +23,14 @@ export class EventBusPostMessage extends EventBus {
     }
 
     /**
-     * Emit data via window and for each callback registered on given event key
+     * Broadcast data via window and for each callback registered on given event key
      *
      * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {any} data - Data to broadcast
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data) {
-        super.emit(key, data);
+    broadcast(key, data) {
+        super.broadcast(key, data);
         // Inner broadcast (same app)
         this.windows.forEach(w =>
             w.postMessage(
@@ -40,6 +40,25 @@ export class EventBusPostMessage extends EventBus {
                 },
                 '*'
             )
+        );
+    }
+
+    /**
+     * Emit data for the window passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} window - Window to which the event will be sent
+     */
+    emitTo(key, data, window) {
+        // Call for sanity checks
+        super.emitTo(key, data, window);
+
+        window.postMessage(
+            {
+                type: key,
+                data
+            },
+            '*'
         );
     }
 

@@ -3,7 +3,7 @@ import { expect, assert } from 'chai';
 import { stub } from 'sinon';
 import store from '@server/store';
 
-describe('RevealEngineServer', function() {
+describe('RevealServerEngine', function() {
     const slides = [{ h: 0, v: 0, f: -1, fMax: 3 }, { h: 1, v: 0, f: -1, fMax: 2 }, { h: 1, v: 1, f: -1, fMax: 2 }];
     let engine;
     beforeEach(function() {
@@ -11,7 +11,7 @@ describe('RevealEngineServer', function() {
     });
 
     describe('constructor()', function() {
-        it('should have instantiated TalkControlServer', function() {
+        it('should have instantiated TCServer', function() {
             expect(engine).to.be.ok;
         });
     });

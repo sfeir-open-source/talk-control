@@ -7,10 +7,11 @@
                 "alias": {
                     "@src": "./src",
                     "@event-bus": "./src/common/event-bus",
-                    "@helpers": "./src/common/helpers",
+                    "@services": "./src/common/services",
                     "@client": "./src/client",
                     "@server": "./src/server",
-                    "@config": "./config"
+                    "@config": "./config",
+                    "@plugins": "./src/plugins"
                 }
             }
         ]

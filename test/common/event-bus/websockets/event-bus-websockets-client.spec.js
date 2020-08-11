@@ -27,25 +27,55 @@ describe('EventBusWebsocketsClient', function() {
     });
 
     describe('on()', function() {
-        it('should fire events', function() {
+        it('should call onMultiple', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
+            const callback = () => 'callback';
+            stub(eventBus, 'onMultiple');
             // When
-            eventBus.on(key, () => key);
+            eventBus.on(key, callback);
             // Then
-            assert(eventBus.io.on.calledOnceWith(key));
+            assert.isOk(eventBus.onMultiple.calledWith(key, callback));
         });
     });
 
-    describe('emit()', function() {
-        it('should emit through io', function() {
+    describe('onMultiple()', function() {
+        it('should fire events', function() {
             // Given
-            const key = 'test';
+            const key = 'key';
+            // When
+            eventBus.on(key, () => key);
+            // Then
+            assert.isOk(eventBus.io.on.calledWith(key));
+        });
+    });
+
+    describe('broadcast()', function() {
+        it('should broadcast through io', function() {
+            // Given
+            const key = 'key';
             const data = 'data';
             // When
-            eventBus.emit(key, data);
+            eventBus.broadcast(key, data);
             // Then
             assert(eventBus.io.emit.calledOnceWith(key, data));
+        });
+    });
+
+    describe('emitTo()', function() {
+        it('should emit the data', function() {
+            // Given
+            const socket = {
+                emit: () => {}
+            };
+            stub(socket, 'emit');
+            const key = 'key';
+            const data = 'data';
+            // When
+            eventBus.emitTo(key, data, socket);
+            // Then
+            assert.isOk(socket.emit.calledWith(key, data));
+            socket.emit.restore();
         });
     });
 });

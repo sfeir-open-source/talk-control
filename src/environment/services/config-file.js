@@ -7,7 +7,7 @@ const configFilePath = __dirname + '/../../../config/config.json';
 /**
  * Update service item with external url in config file
  *
- * @param {string} item - service item in config (tc-server, tc-master, ...)
+ * @param {string} item - service item in config (tc-server, tc-controller, ...)
  * @param {string} url - url external to write in config for service item
  */
 exports.setExternalUrl = (item, url) => {

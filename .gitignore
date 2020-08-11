@@ -50,7 +50,7 @@ dist
 Thumbs.db
 
 # Slide show example
-showcase/resources/slave/
+showcase/resources/tc-component/
 
 # Parcel
 .cache

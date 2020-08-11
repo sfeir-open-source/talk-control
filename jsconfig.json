@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2020",
+        "baseUrl": ".",
+        "paths": {
+            "@src/*": ["src/*"],
+            "@event-bus/*": ["src/common/event-bus/*"],
+            "@services/*": ["src/common/services/*"],
+            "@client/*": ["src/client/*"],
+            "@server/*": ["src/server/*"],
+            "@config/*": ["config/*"],
+            "@plugins/*": ["src/plugins/*"]
+        }
+    },
+    "exclude": ["node_modules"]
+}

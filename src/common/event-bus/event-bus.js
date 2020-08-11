@@ -1,6 +1,8 @@
 'use strict';
 
-const NO_KEY_PROVIDED = 'No key provided';
+export const NO_KEY_PROVIDED = 'No key provided';
+export const NO_TARGET_PROVIDED = 'No socket or window provided';
+export const DUPLICATE_CALLBACKS_ENTRY = 'Duplicate entry in callbacks';
 
 /**
  * @classdesc Event bus implementation
@@ -18,7 +20,7 @@ export class EventBus {
      * @param {*} callback - Function to call when key event is fired
      * @throws Will throw an error if key is not specified
      */
-    on(key, callback) {
+    onMultiple(key, callback) {
         if (!key) {
             throw new Error(NO_KEY_PROVIDED);
         }
@@ -31,13 +33,32 @@ export class EventBus {
     }
 
     /**
-     * Emit data for each callback registered on given event key
+     * Register a callback on a key only once times (just 1 listener for 1 type of event)
      *
-     * @param {string} key - Event key to fire
-     * @param {any} data - Data to emit
+     * @param {string} key - Event key to which attach the callback
+     * @param {*} callback - Function to call when key event is fired
      * @throws Will throw an error if key is not specified
      */
-    emit(key, data) {
+    on(key, callback) {
+        if (!key) {
+            throw new Error(NO_KEY_PROVIDED);
+        }
+
+        if (this.callBacks[key]) {
+            throw new Error(DUPLICATE_CALLBACKS_ENTRY);
+        }
+
+        this.callBacks[key] = [callback];
+    }
+
+    /**
+     * Broadcast data for each callback registered on given event key
+     *
+     * @param {string} key - Event key to fire
+     * @param {any} data - Data to broadcast
+     * @throws Will throw an error if key is not specified
+     */
+    broadcast(key, data) {
         if (!key) {
             throw new Error(NO_KEY_PROVIDED);
         }
@@ -52,6 +73,23 @@ export class EventBus {
                 console.error(e);
             }
         });
+    }
+
+    /**
+     * Emit data for the target passed in parameter on given event key
+     * @param {string} key - Event name
+     * @param {any} data - Values
+     * @param {any} target - Socket or window to which the event will be sent
+     */
+    emitTo(key, data, target) {
+        if (!key) {
+            throw new Error(NO_KEY_PROVIDED);
+        }
+        if (!target) {
+            throw new Error(NO_TARGET_PROVIDED);
+        }
+
+        // Do nothing on super class
     }
 
     /**
