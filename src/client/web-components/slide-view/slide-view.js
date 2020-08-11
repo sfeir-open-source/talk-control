@@ -13,8 +13,6 @@ class SlideView extends LitElement {
             delta: { type: String, reflect: true, attribute: true },
             focus: { type: Boolean, reflect: true, attribute: true },
             fullscreen: { type: Boolean, reflect: true, attribute: true },
-            zooming: { type: Boolean, reflect: true, attribute: true },
-            pointer: { type: Object, reflect: true, attribute: true }
         };
     }
 
@@ -27,21 +25,6 @@ class SlideView extends LitElement {
                     position: relative;
                     width: 100%;
                     height: 100%;
-                }
-                #pointer {
-                    position: absolute;
-                    left: 0px;
-                    top: 0px;
-                    width: 12px;
-                    height: 12px;
-                    border-radius: 6px;
-                    background-color: #FF0000
-                }
-                .zoomable { 
-                    width: 100%;
-                    height: 100%;
-                    transition-duration: 0.8s;
-                    cursor: zoom-in;
                 }
             `
         ];
@@ -75,9 +58,8 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <section style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
-                <iframe id="zoomableElement" class="zoomable">Current slide</iframe>
-                <div id="pointer"/>
+            <section id="slideViewSection" style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
+                <iframe id="slideViewFrame">Current slide</iframe>
             </section>
         `;
     }

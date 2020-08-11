@@ -18,39 +18,78 @@ class TouchPointerInput {
         }
 
         this.shadowRoot = shadowRoot;
-        console.log('Listen to message in touch pointer plugin', shadowRoot);
-        addEventListener('message', message => {
-            if (!message || !message.data) {
-                return;
-            }
+        this._addCSS();
+        this._addHTML();
 
-            if (typeof message.data !== 'object' || !message.data.data || typeof message.data.data !== 'object') {
-                return;
-            }
+        addEventListener('message', message => this._onMessageEvent(message));
+    }
 
-            if (message.data.type === 'pluginEventIn') {
-                return;
+    _addCSS() {
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = `
+            #pointer {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 12px;
+                height: 12px;
+                border-radius: 6px;
+                background-color: #FF0000
             }
+            .zoomable {
+                width: 100%;
+                height: 100%;
+                transition-duration: 0.8s;
+                cursor: zoom-in;
+            }`;
 
-            const messageData = message.data.data;
+        this.shadowRoot.appendChild(style);
+    }
 
-            switch (messageData.type) {
-                case 'pointerMove':
-                    this._setPointer(messageData.payload.x, messageData.payload.y);
-                    break;
-                case 'pointerColor':
-                    console.log("TouchPointerInput -> init -> pointerColor", message.data)
-                    this._setPointerColor(messageData.payload.color);
-                    break;
-                case 'pointerClick':
-                    console.log("TouchPointerInput -> init -> pointerClick", message.data)
-                    this._toggleZoom(
-                        this._convertPercentToCoordinates(messageData.payload.x, window.innerWidth),
-                        this._convertPercentToCoordinates(messageData.payload.y, window.innerHeight)
-                    );
-                    break;
-            }
-        });
+    _addHTML() {
+        if (this.shadowRoot.getElementById('slideViewFrame')) {
+            this.shadowRoot.getElementById('slideViewFrame').classList.add('zoomable');
+        }
+
+        if (this.shadowRoot.getElementById('slideViewSection')) {
+            const divPointer = document.createElement('div');
+            divPointer.id = 'pointer';
+            this.shadowRoot.getElementById('slideViewSection').append(divPointer);
+        }
+    }
+
+    _onMessageEvent(message) {
+        if (!message || !message.data) {
+            return;
+        }
+
+        if (!message.data || !message.data.data || typeof message.data.data !== 'object') {
+            return;
+        }
+
+        if (message.data.type === 'pluginEventIn') {
+            return;
+        }
+
+        const messageData = message.data.data;
+
+        if (messageData.type === 'pointerMove') {
+            this._setPointer(messageData.payload.x, messageData.payload.y);
+            return;
+        }
+        
+        if (messageData.type === 'pointerColor') {
+            this._setPointerColor(messageData.payload.color);
+            return;
+        }
+
+        if (messageData.type === 'pointerClick') {
+            this._toggleZoom(
+                this._convertPercentToCoordinates(messageData.payload.x, window.innerWidth),
+                this._convertPercentToCoordinates(messageData.payload.y, window.innerHeight)
+            );
+        }
     }
 
     _setPointer(x, y) {
@@ -63,8 +102,7 @@ class TouchPointerInput {
     }
 
     _toggleZoom(mouseX, mouseY) {
-        const element = this.shadowRoot.getElementById('zoomableElement');
-
+        const element = this.shadowRoot.getElementById('slideViewFrame');
 
         if (this.zooming) {
             element.style.transform = 'translate3D(0px, 0px, 0px)';
