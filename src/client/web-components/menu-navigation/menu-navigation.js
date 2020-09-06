@@ -5,20 +5,14 @@ import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
 // Extend the LitElement base class
-class MenuDropdown extends LitElement {
+class MenuNavigation extends LitElement {
     static get properties() {
         return {};
     }
 
     static get styles() {
         return [
-            bulmaStyle,
-            css`
-                #menuDropdown {
-                    position: absolute;
-                    right: 0;
-                }
-            `
+            bulmaStyle
         ];
     }
 
@@ -35,10 +29,10 @@ class MenuDropdown extends LitElement {
 
     render() {
         return html`
-            <div id="menuDropdown" class="dropdown is-right">
+            <div id="menuDropdown" class="dropdown">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span>Menu</span>
+                        <span>M</span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
@@ -62,4 +56,4 @@ class MenuDropdown extends LitElement {
     }
 }
 // Register the new element with the browser.
-customElements.define('tc-menu-dropdown', MenuDropdown);
+customElements.define('tc-menu-navigation', MenuNavigation);
