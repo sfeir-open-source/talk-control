@@ -14,9 +14,9 @@
 #next-mobile {
     height: 35vh;
 }
-#timer {
-    height: auto;
-    padding: 0.3rem 0.3rem 0 0;
+.timer-title {
+    margin-top: 0.5rem;
+    height: 1rem;
 }
 #notes {
     height: auto;

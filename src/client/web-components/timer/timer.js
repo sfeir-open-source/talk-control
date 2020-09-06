@@ -3,6 +3,7 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 import { TimerTCComponent } from './timer-tc-component';
+
 class TimerComponent extends LitElement {
     static get styles() {
         return [
@@ -12,10 +13,6 @@ class TimerComponent extends LitElement {
                     cursor: pointer;
                     user-select: none;
                 }
-                .block-title {
-                    margin-top: 0.5rem;
-                    height: 1rem;
-                }
             `
         ];
     }
@@ -23,7 +20,6 @@ class TimerComponent extends LitElement {
     constructor() {
         super();
         this.timerElement = {};
-        this.clockElement = {};
         this.restartTimer = () => undefined;
     }
 
@@ -32,8 +28,6 @@ class TimerComponent extends LitElement {
         new TimerTCComponent();
         // Initialize clock and timer
         this.timerElement = this.shadowRoot.querySelector('#timer');
-        this.clockElement = this.shadowRoot.querySelector('#clock');
-        this.startClock();
 
         addEventListener('message', message => {
             if (!message || !message.data) {
@@ -81,31 +75,9 @@ class TimerComponent extends LitElement {
         this.restartTimer = this.startTimer();
     }
 
-    /****** CLOCK FUNCTIONS ******/
-    startClock() {
-        const updateTime = () => {
-            const today = new Date();
-            const hours = today.getHours();
-            const minutes = today.getMinutes();
-            this.clockElement.textContent = `${this.formatTime(hours)}:${this.formatTime(minutes)}`;
-        };
-        updateTime();
-        setInterval(updateTime, 1000);
-    }
-
     render() {
         return html`
-            <div class="block-title">
-                <p class="is-size-6">TIMER</p>
-            </div>
-            <div class="columns is-mobile is-paddingless is-marginless">
-                <div class="column is-paddingless">
-                    <p class="is-size-3 is-unselectable" id="timer" @click="${this.handleTimerClick}">00:00:00</p>
-                </div>
-                <div class="column has-text-right is-paddingless" style="padding-right: 1.5rem;">
-                    <p class="is-size-3 is-unselectable" id="clock">00:00</p>
-                </div>
-            </div>
+            <div class="is-size-3 is-unselectable" id="timer" @click="${this.handleTimerClick}">00:00:00</div>
         `;
     }
 }
