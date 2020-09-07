@@ -32,7 +32,8 @@ class MenuPlugins extends LitElement {
             <div id="menuDropdown" class="dropdown is-right">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span>P</span>
+                        <span class="is-hidden-tablet">P</span>
+                        <span class="is-hidden-mobile">Plugins</span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
