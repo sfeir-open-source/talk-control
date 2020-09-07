@@ -13,30 +13,25 @@
         <script src="../../web-components/timer/timer.js"></script>
         <script src="../../web-components/notes/notes.js"></script>
         <script src="../../web-components/menu-navigation/menu-navigation.js"></script>
+        <script src="../../web-components/menu-plugins/menu-plugins.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
+        <section id="header">
+            <div><tc-menu-navigation></tc-menu-navigation></div>
+            <div><tc-timer></tc-timer></div>
+            <div><tc-menu-plugins></tc-menu-plugins></div>
+        </section>
         <section class="columns is-marginless is-paddingless">
-            <tc-menu-dropdown></tc-menu-dropdown>
-            <div class="column" id="current-mobile">
-                <div class="content">
-                    <tc-slide focus></tc-slide>
-                </div>
-            </div>
             <div class="column is-paddingless has-background-white">
-                <div class="has-background-white" id="next-mobile">
-                    <div class="content">
-                        <tc-slide delta="1"></tc-slide>
-                    </div>
-                </div>
-                <div class="has-background-white" id="timer">
-                    <div class="content">
-                        <tc-timer></tc-timer>
-                    </div>
-                </div>
-                <div class="has-background-white" id="notes">
+                <div class="has-background-white mobile-half-screen-height" id="notes">
                     <div class="content">
                         <tc-notes></tc-notes>
+                    </div>
+                </div>
+                <div class="column mobile-half-screen-height" id="current-mobile">
+                    <div class="content">
+                        <tc-slide focus></tc-slide>
                     </div>
                 </div>
             </div>

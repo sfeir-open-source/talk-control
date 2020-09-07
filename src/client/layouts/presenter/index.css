@@ -1,3 +1,15 @@
+#header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#header div:first-child, #header div:last-child {
+    width: 10vw; 
+}
+#header div {
+    width: 80vw;
+}
 #current,
 #current-mobile {
     height: 100vh;
@@ -25,4 +37,7 @@
 .content {
     height: 100%;
     padding: 0.5rem;
+}
+.mobile-half-screen-height {
+    height: 45vh !important
 }
