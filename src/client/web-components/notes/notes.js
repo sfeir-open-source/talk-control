@@ -30,9 +30,6 @@ class NotesComponent extends LitElement {
 
     render() {
         return html`
-            <div class="block-title">
-                <p class="is-size-6">NOTES</p>
-            </div>
             <div id="notes"></div>
         `;
     }

@@ -38,7 +38,7 @@ class ClockComponent extends LitElement {
 
     render() {
         return html`
-            <p class="is-size-3 is-unselectable" id="clock">00:00</p>
+            <p class="is-size-4" id="clock">00:00</p>
         `;
     }
 }

@@ -17,25 +17,22 @@
         <title>Presenter view</title>
     </head>
     <body>
-        <section id="header">
-            <div><tc-menu-navigation></tc-menu-navigation></div>
+        <section id="header" style="height: 8vh">
+            <div class="pl-1"><tc-menu-navigation></tc-menu-navigation></div>
             <div><tc-timer></tc-timer></div>
-            <div><tc-menu-plugins></tc-menu-plugins></div>
+            <div class="pr-1"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
-        <section class="columns is-marginless is-paddingless">
-            <div class="column is-paddingless has-background-white">
-                <div class="has-background-white mobile-half-screen-height" id="notes">
-                    <div class="content">
-                        <tc-notes></tc-notes>
-                    </div>
-                </div>
-                <div class="column mobile-half-screen-height" id="current-mobile">
-                    <div class="content">
-                        <tc-slide focus></tc-slide>
-                    </div>
-                </div>
+        <article class="message is-light mobile-half-screen-height mb-0">
+            <div class="message-header">
+                <p>Notes</p>
             </div>
-        </section>
+            <div class="message-body">
+                <tc-notes></tc-notes>
+            </div>
+        </article>
+        <div id="current-mobile" class="mobile-half-screen-height px-0 py-0">
+            <tc-slide focus></tc-slide>
+        </div>
         <script src="./index.js"></script>
     </body>
 </html>

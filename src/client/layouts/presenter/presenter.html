@@ -14,12 +14,17 @@
         <script defer src="../../web-components/timer/timer.js"></script>
         <script defer src="../../web-components/notes/notes.js"></script>
         <script defer src="../../web-components/menu-navigation/menu-navigation.js"></script>
+        <script src="../../web-components/menu-plugins/menu-plugins.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
-        <section class="columns is-marginless is-paddingless">
-            <tc-menu-navigation></tc-menu-navigation>
-            <div class="column is-three-fifths" id="current">
+        <section id="header">
+            <div class="mt-1 ml-2 has-text-left"><tc-menu-navigation></tc-menu-navigation></div>
+            <div><tc-clock></tc-clock></div>
+            <div class="mt-1 mr-2 has-text-right"><tc-menu-plugins></tc-menu-plugins></div>
+        </section>
+        <section class="columns is-marginless">
+            <div class="column is-paddingless is-three-fifths" id="current">
                 <div class="content">
                     <tc-slide focus></tc-slide>
                 </div>
@@ -32,14 +37,20 @@
                 </div>
                 <div class="has-background-white" id="timer">
                     <div class="content">
-                        <tc-timer></tc-timer>
+                        <div class="block-title">
+                            <p class="is-size-6">TIMER</p>
+                        </div>
+                        <div class="is-paddingless is-margin-less"><tc-timer></tc-timer></div>
                     </div>
                 </div>
-                <div class="has-background-white" id="notes">
-                    <div class="content">
+                <article class="message is-light mb-0 ml-1 mr-3" id="notes">
+                    <div class="message-header">
+                        <p>Notes</p>
+                    </div>
+                    <div class="message-body">
                         <tc-notes></tc-notes>
                     </div>
-                </div>
+                </article>
             </div>
         </section>
         <script src="./index.js"></script>

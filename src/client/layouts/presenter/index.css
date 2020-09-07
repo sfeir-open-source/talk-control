@@ -3,41 +3,42 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    height: 5vh;
 }
 #header div:first-child, #header div:last-child {
-    width: 10vw; 
+    width: 13vw;
 }
 #header div {
     width: 80vw;
 }
 #current,
 #current-mobile {
-    height: 100vh;
-    padding: 0.3rem;
+    height: 95vh;
 }
 #current-mobile {
-    height: 40vh;
+    width: 100vw;
 }
-#next,
-#next-mobile {
-    height: 45vh;
+#next {
+    height: 42vh;
     padding: 0.3rem 0.3rem 0 0;
 }
-#next-mobile {
-    height: 35vh;
+#timer {
+    height: 7vh;
+    min-height: 80px
 }
 .timer-title {
     margin-top: 0.5rem;
     height: 1rem;
 }
 #notes {
-    height: auto;
+    height: 43vh;
     padding: 0.3rem 0.3rem 0.3rem 0;
+    overflow: auto;
 }
 .content {
     height: 100%;
     padding: 0.5rem;
 }
 .mobile-half-screen-height {
-    height: 45vh !important
+    height: 46vh !important
 }
