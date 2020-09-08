@@ -2,16 +2,16 @@
     {
         "name": "keyboardInput",
         "path": "@plugins/input/keyboard/index.js",
-        "isDefaultPlugin": true
+        "autoActivate": true
     },
     {
         "name": "touchInput",
         "path": "@plugins/input/touch/index.js",
-        "isDefaultPlugin": true
+        "autoActivate": true
     },
     {
         "name": "touchPointerInput",
         "path": "@plugins/input/touch-pointer/index.js",
-        "isDefaultPlugin": true
+        "autoActivate": false
     }
 ]

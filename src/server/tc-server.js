@@ -28,13 +28,13 @@ export class TCServer {
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data => this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data));
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'getPluginsToActivate', socket => {
+        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'getPlugins', socket => {
             const fs = require('fs');
             const path = require('path');
             let plugins = [];
             try {
                 plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emitTo(CONTROLLER_SERVER_CHANNEL, 'activatePlugins', plugins, socket);
+                this.eventBusServer.emitTo(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins, socket);
             } catch (e) {
                 // ...
             }

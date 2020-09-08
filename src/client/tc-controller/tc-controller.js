@@ -3,6 +3,7 @@
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import { loadPluginModule } from '@plugins/plugin-loader';
+import { activatePluginOnController } from '@services/plugin';
 
 /**
  * @class TCController
@@ -71,30 +72,24 @@ export class TCController {
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
     }
 
-    _registerPlugin(plugin, name) {
-        if (plugin.usedByAComponent) { // Plugins used by a component and need tc-component (ex: keyboard)
-            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.type, event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', { pluginName: name });
-        } else {
-            // Other plugins like bluetooth devices
-            plugin.init();
-            plugin.onEvent(event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
-        }
-    }
-
-    _registerDynamicPlugin(name) {
-        loadPluginModule(name).then(pluginModule => this._registerPlugin(pluginModule.instance, name));
-    }
-
     _initPlugins() {
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'activatePlugins', plugins => {
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
-                this._registerDynamicPlugin(plugin.name);
+                if (plugin.autoActivate) {
+                    activatePluginOnController(plugin.name, this);
+                    continue;
+                }
+
+                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
         });
 
-        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPluginsToActivate');
+        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
+    }
+
+    _initPlugin(name) {
+        activatePluginOnController(name, this);
     }
 
     forwardEvents() {

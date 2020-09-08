@@ -2,7 +2,7 @@
 
 import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
-import { loadPluginModule } from '@plugins/plugin-loader';
+import { activatePluginOnComponent } from '@services/plugin';
 
 /**
  * @class TCComponent
@@ -31,22 +31,11 @@ export class TCComponent {
             }
         });
 
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', ({ pluginName }) => this.registerPlugin(pluginName));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) => activatePluginOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {
             this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
         }
-    }
-
-    registerPlugin(pluginName) {
-        loadPluginModule(pluginName)
-            .then(plugin => {
-                plugin.instance.init(this.shadowRoot);
-                plugin.instance.onEvent((type, event) => this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
-            })
-            .catch(e => {
-                console.error('Unable to load plugin module', e);
-            });
     }
 }

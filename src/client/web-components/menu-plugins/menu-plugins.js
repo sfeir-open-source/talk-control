@@ -1,6 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
@@ -18,6 +19,7 @@ class MenuPlugins extends LitElement {
 
     constructor() {
         super();
+        this.menuPluginsTcComponent;
     }
 
     firstUpdated() {
@@ -25,6 +27,22 @@ class MenuPlugins extends LitElement {
         this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
             this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
         });
+        this.menuPluginsTcComponent = new MenuPluginsTCComponent();
+        this.menuPluginsTcComponent.init(pluginName => this.addItemToMenu('pluginsList', pluginName));
+    }
+
+    addItemToMenu(menuTagName, itemTitle) {
+        const element = document.createElement('a');
+
+        element.className = "dropdown-item";
+        element.innerHTML = itemTitle;
+        element.addEventListener('click', () => this.itemClick(itemTitle));
+
+        this.shadowRoot.getElementById(menuTagName).appendChild(element);
+    }
+
+    itemClick(itemTitle) {
+        console.log("MenuPlugins -> itemClick -> itemTitle", itemTitle)
     }
 
     render() {
@@ -37,14 +55,7 @@ class MenuPlugins extends LitElement {
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                    <div class="dropdown-content">
-                        <a href="#" class="dropdown-item">
-                            Plugin 1
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            Plugin 2
-                        </a>
-                    </div>
+                    <div class="dropdown-content" id="pluginsList"></div>
                 </div>
             </div>
         `;
