@@ -23,18 +23,7 @@ describe('TCComponent', function() {
             // When
             tcComponent.init();
             // Then
-            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
             assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
-            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin'), '"on" not called with activatePlugin');
-        });
-
-        it('should broadcast initialized if no delta', function() {
-            // When
-            tcComponent.init();
-            // Then
-            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
-            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
-            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin'), '"on" not called with activatePlugin');
             assert(broadcast.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
         });
     });
