@@ -2,7 +2,6 @@
 
 import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EngineResolver } from '../engines/engine-resolver';
-import { activatePluginOnComponent } from '@services/plugin';
 
 /**
  * @class TCComponent
@@ -30,8 +29,6 @@ export class TCComponent {
                 this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
             }
         });
-
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) => activatePluginOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {

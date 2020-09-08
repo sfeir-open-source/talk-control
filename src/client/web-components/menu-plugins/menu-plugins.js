@@ -42,7 +42,7 @@ class MenuPlugins extends LitElement {
     }
 
     itemClick(itemTitle) {
-        console.log("MenuPlugins -> itemClick -> itemTitle", itemTitle)
+        this.menuPluginsTcComponent.startPlugin(itemTitle);
     }
 
     render() {

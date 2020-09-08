@@ -82,13 +82,11 @@ export class TCController {
 
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
+
+            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'startPlugin', ({ pluginName }) => activatePluginOnController(pluginName, this));
         });
 
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
-    }
-
-    _initPlugin(name) {
-        activatePluginOnController(name, this);
     }
 
     forwardEvents() {

@@ -18,4 +18,8 @@ export class MenuPluginsTCComponent extends TCComponent {
             ({ pluginName }) => callback(pluginName)
         );
     }
+
+    startPlugin(pluginName) {
+        this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'startPlugin', { pluginName });
+    }
 }
