@@ -2,7 +2,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 
 // Extend the LitElement base class
 class MenuNavigation extends LitElement {

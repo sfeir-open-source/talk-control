@@ -77,6 +77,7 @@ export class EventBus {
 
     /**
      * Emit data for the target passed in parameter on given event key
+     *
      * @param {string} key - Event name
      * @param {any} data - Values
      * @param {any} target - Socket or window to which the event will be sent

@@ -28,6 +28,6 @@ module.exports = {
             return false;
         }
     
-        return windowLocationHref.indexOf('://localhost:') === -1
+        return windowLocationHref.indexOf('://localhost:') === -1;
     }
 };

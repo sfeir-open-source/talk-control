@@ -2,7 +2,6 @@
 
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
-import { loadPluginModule } from '@plugins/plugin-loader';
 import { activatePluginOnController } from '@services/plugin';
 
 /**

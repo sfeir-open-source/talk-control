@@ -3,7 +3,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 
 // Extend the LitElement base class
 class MenuPlugins extends LitElement {
@@ -34,7 +34,7 @@ class MenuPlugins extends LitElement {
     addItemToMenu(menuTagName, itemTitle) {
         const element = document.createElement('a');
 
-        element.className = "dropdown-item";
+        element.className = 'dropdown-item';
         element.innerHTML = itemTitle;
         element.addEventListener('click', () => this.itemClick(itemTitle));
 

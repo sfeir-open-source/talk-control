@@ -4,7 +4,7 @@ import 'module-alias/register';
 import { assert } from 'chai';
 import { stub, spy } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
-import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { activatePluginOnController, activatePluginOnComponent } from '@services/plugin';
 
 describe('Plugin service', function() {
