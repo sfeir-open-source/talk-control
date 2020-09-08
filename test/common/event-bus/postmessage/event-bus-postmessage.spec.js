@@ -8,7 +8,6 @@ import { EventBusPostMessage } from '@event-bus/postmessage/event-bus-postmessag
 describe('EventBusPostMessage', function() {
     let eventBus;
     beforeEach(function() {
-        // global.window = { addEventListener: () => undefined, postMessage: spy() };
         stub(window, 'addEventListener');
         spy(window, 'postMessage');
         eventBus = new EventBusPostMessage({ postMessage: {} });
