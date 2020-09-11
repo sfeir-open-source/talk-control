@@ -20,6 +20,6 @@ export class MenuPluginsTCComponent extends TCComponent {
     }
 
     startPlugin(pluginName) {
-        this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'startPlugin', { pluginName });
+        this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', { pluginName });
     }
 }

@@ -62,6 +62,9 @@ export class TCController {
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
         // Forward plugin event to server to broadcast it to all controllers
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data));
+
+        // Forward plugin event to server to broadcast it to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
         
@@ -83,7 +86,7 @@ export class TCController {
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
 
-            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'startPlugin', ({ pluginName }) => activatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => activatePluginOnController(pluginName, this));
         });
 
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');

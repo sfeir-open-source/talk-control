@@ -27,6 +27,7 @@ export class TCServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'init', this.engine.init);
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
+        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data => this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', data));
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data => this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data));
         this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'getPlugins', socket => {
             const fs = require('fs');
