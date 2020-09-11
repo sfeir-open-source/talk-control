@@ -14,6 +14,8 @@
         <script defer src="../../web-components/notes/notes.js"></script>
         <script defer src="../../web-components/menu-navigation/menu-navigation.js"></script>
         <script defer src="../../web-components/menu-plugins/menu-plugins.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-settings.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-mask.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
@@ -22,16 +24,21 @@
             <div><tc-timer></tc-timer></div>
             <div class="pr-1"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
-        <article class="message is-light mobile-half-screen-height mb-0">
-            <div class="message-header">
-                <p>Notes</p>
-            </div>
-            <div class="message-body">
-                <tc-notes></tc-notes>
-            </div>
-        </article>
-        <div id="current-mobile" class="mobile-half-screen-height px-0 py-0">
+        <div id="placeholder1" class="mobile-half-screen-height">
+            <tc-touch-pointer-settings></tc-touch-pointer-settings>
+            <!--<article class="message is-light mobile-half-screen-height mb-0">
+                <div class="message-header">
+                    <p>Notes</p>
+                </div>
+                <div class="message-body">
+                    <tc-notes></tc-notes>
+                </div>
+            </article>
+            -->
+        </div>
+        <div id="placeholder2" class="current-mobile mobile-half-screen-height px-0 py-0">
             <tc-slide focus></tc-slide>
+            <tc-touch-pointer-mask></tc-touch-pointer-mask>
         </div>
         <script src="./index.js"></script>
     </body>

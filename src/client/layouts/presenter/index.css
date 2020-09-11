@@ -12,11 +12,15 @@
     width: 80vw;
 }
 #current,
-#current-mobile {
+.current-mobile {
     height: 95vh;
 }
-#current-mobile {
+.current-mobile {
+    position: relative;
     width: 100vw;
+    max-width: 1000px;
+    height: 50vh;
+    overflow: hidden
 }
 #next {
     height: 42vh;
