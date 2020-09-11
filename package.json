@@ -3,6 +3,7 @@
     "version": "0.4.1",
     "main": "index.js",
     "scripts": {
+        "clean": "rm -rf .cache dist",
         "create-tunnels": "node src/environment/create-tunnels",
         "get-started": "node src/environment/get-started",
         "start": "npx npm-run-all --parallel create-tunnels tc-server tc-component tc-showcase start-controller-after-server when-controller-is-started",
