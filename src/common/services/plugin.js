@@ -29,7 +29,7 @@ module.exports = {
     activatePluginOnComponent(pluginName, component) {
         return loadPluginModule(pluginName)
             .then(plugin => {
-                plugin.instance.init(component.shadowRoot);
+                plugin.instance.init();
                 plugin.instance.onEvent((type, event) => component.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
             })
             .catch(e => console.error('Unable to load plugin module', e));

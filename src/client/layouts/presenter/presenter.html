@@ -15,6 +15,8 @@
         <script defer src="../../web-components/notes/notes.js"></script>
         <script defer src="../../web-components/menu-navigation/menu-navigation.js"></script>
         <script defer src="../../web-components/menu-plugins/menu-plugins.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-settings.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-mask.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
@@ -26,13 +28,14 @@
         <section class="columns is-marginless">
             <div class="column is-paddingless is-three-fifths" id="current">
                 <div class="content">
-                    <tc-slide focus></tc-slide>
+                    <tc-slide id="currentSlide" focus></tc-slide>
+                    <div id="placeholder2"></div>
                 </div>
             </div>
             <div class="column is-paddingless has-background-white">
                 <div class="has-background-white" id="next">
                     <div class="content">
-                        <tc-slide delta="1"></tc-slide>
+                        <tc-slide id="nextSlide" delta="1"></tc-slide>
                     </div>
                 </div>
                 <div class="has-background-white" id="timer">
@@ -43,14 +46,16 @@
                         <div class="is-paddingless is-margin-less"><tc-timer></tc-timer></div>
                     </div>
                 </div>
-                <article class="message is-light mb-0 ml-1 mr-3" id="notes">
-                    <div class="message-header">
-                        <p>Notes</p>
-                    </div>
-                    <div class="message-body">
-                        <tc-notes></tc-notes>
-                    </div>
-                </article>
+                <div id="placeholder1" class="mb-0 ml-1 mr-3">
+                    <article class="message is-light" id="notes">
+                        <div class="message-header">
+                            <p>Notes</p>
+                        </div>
+                        <div class="message-body">
+                            <tc-notes></tc-notes>
+                        </div>
+                    </article>
+                </div>
             </div>
         </section>
         <script src="./index.js"></script>

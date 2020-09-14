@@ -34,12 +34,15 @@
     margin-top: 0.5rem;
     height: 1rem;
 }
-#notes {
+#placeholder2 {
     height: 43vh;
+}
+#notes {
     padding: 0.3rem 0.3rem 0.3rem 0;
     overflow: auto;
 }
 .content {
+    position: relative;
     height: 100%;
     padding: 0.5rem;
 }

@@ -3,7 +3,6 @@ class TouchPointerInput {
         this.usedByAComponent = true;
         this.type = 'touchPointerEvent';
         this.callbacks = [];
-        this.shadowRoot;
         this.zooming = false;
         this.pointer = { x: 0, y: 0, color: '#FF0000' };
         this.interval;
@@ -13,12 +12,7 @@ class TouchPointerInput {
         this.callbacks.push(callback);
     }
 
-    init(shadowRoot) {
-        if (!shadowRoot) {
-            return;
-        }
-
-        this.shadowRoot = shadowRoot;
+    init() {
         this._addSettingsArea();
         this._addMaskArea();
         this._addPointer();
@@ -27,6 +21,12 @@ class TouchPointerInput {
     }
 
     _addPointer() {
+        // Identifying current slide component
+        const currentSlide = document.getElementById('currentSlide');
+        if (!currentSlide || !currentSlide.shadowRoot) {
+            return;
+        }
+
         // CSS
         const style = document.createElement('style');
         style.innerHTML = `
@@ -47,19 +47,19 @@ class TouchPointerInput {
                 cursor: zoom-in;
             }`;
 
-        this.shadowRoot.appendChild(style);
+        currentSlide.shadowRoot.appendChild(style);
 
         // HTML
-        const slideViewFrames = this.shadowRoot.querySelectorAll('.slideViewFrame');
-        if (slideViewFrames && slideViewFrames.length) {
-            slideViewFrames[0].classList.add('zoomable');
+        const slideViewFrame = currentSlide.shadowRoot.getElementById('slideViewFrame');
+        if (slideViewFrame) {
+            slideViewFrame.classList.add('zoomable');
         }
 
-        const slideViewSections = this.shadowRoot.querySelectorAll('.slideViewSection');
-        if (slideViewSections && slideViewSections.length) {
+        const slideViewSection = currentSlide.shadowRoot.getElementById('slideViewSection');
+        if (slideViewSection) {
             const divPointer = document.createElement('div');
             divPointer.id = 'pointer';
-            slideViewSections[0].append(divPointer);
+            slideViewSection.append(divPointer);
         }
     }
 
@@ -113,21 +113,44 @@ class TouchPointerInput {
     }
 
     _setPointer(x, y) {
-        clearInterval(this.interval);
-        this.shadowRoot.getElementById('pointer').style.visibility = 'visible';
-        this.shadowRoot.getElementById('pointer').style.left = this.pointer.x = x;
-        this.shadowRoot.getElementById('pointer').style.top = this.pointer.y = y;
-        this.interval = setInterval(() => {
-            this.shadowRoot.getElementById('pointer').style.visibility = 'hidden';
-        }, 2000);
+        // Identifying current slide component
+        const currentSlide = document.getElementById('currentSlide');
+        if (!currentSlide || !currentSlide.shadowRoot) {
+            return;
+        }
+
+        const pointer = currentSlide.shadowRoot.getElementById('pointer');
+        if (pointer) {
+            clearInterval(this.interval);
+            pointer.style.visibility = 'visible';
+            pointer.style.left = this.pointer.x = x;
+            pointer.style.top = this.pointer.y = y;
+            this.interval = setInterval(() => {
+                pointer.style.visibility = 'hidden';
+            }, 2000);
+        }
     }
 
     _setPointerColor(color) {
-        this.shadowRoot.getElementById('pointer').style.backgroundColor = this.pointer.color = color;
+        const currentSlide = document.getElementById('currentSlide');
+        if (!currentSlide || !currentSlide.shadowRoot) {
+            return;
+        }
+
+        currentSlide.shadowRoot.getElementById('pointer').style.backgroundColor = this.pointer.color = color;
     }
 
     _toggleZoom(mouseX, mouseY) {
-        const element = this.shadowRoot.getElementById('slideViewFrame');
+        const currentSlide = document.getElementById('currentSlide');
+        if (!currentSlide || !currentSlide.shadowRoot) {
+            return;
+        }
+
+        const element = currentSlide.shadowRoot.getElementById('slideViewFrame');
+
+        if (!element) {
+            return;
+        }
 
         if (this.zooming) {
             element.style.transform = 'translate3D(0px, 0px, 0px)';
