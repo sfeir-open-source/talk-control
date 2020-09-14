@@ -58,8 +58,8 @@ class SlideView extends LitElement {
 
     render() {
         return html`
-            <section id="slideViewSection" style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
-                <iframe id="slideViewFrame">Current slide</iframe>
+            <section class="slideViewSection" style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
+                <iframe class="slideViewFrame">Current slide</iframe>
             </section>
         `;
     }

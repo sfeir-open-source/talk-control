@@ -19,15 +19,16 @@ class TouchPointerInput {
         }
 
         this.shadowRoot = shadowRoot;
-        this._addCSS();
-        this._addHTML();
+        this._addSettingsArea();
+        this._addMaskArea();
+        this._addPointer();
 
         addEventListener('message', message => this._onMessageEvent(message));
     }
 
-    _addCSS() {
+    _addPointer() {
+        // CSS
         const style = document.createElement('style');
-        style.type = 'text/css';
         style.innerHTML = `
             #pointer {
                 position: absolute;
@@ -47,18 +48,35 @@ class TouchPointerInput {
             }`;
 
         this.shadowRoot.appendChild(style);
-    }
 
-    _addHTML() {
-        if (this.shadowRoot.getElementById('slideViewFrame')) {
-            this.shadowRoot.getElementById('slideViewFrame').classList.add('zoomable');
+        // HTML
+        const slideViewFrames = this.shadowRoot.querySelectorAll('.slideViewFrame');
+        if (slideViewFrames && slideViewFrames.length) {
+            slideViewFrames[0].classList.add('zoomable');
         }
 
-        if (this.shadowRoot.getElementById('slideViewSection')) {
+        const slideViewSections = this.shadowRoot.querySelectorAll('.slideViewSection');
+        if (slideViewSections && slideViewSections.length) {
             const divPointer = document.createElement('div');
             divPointer.id = 'pointer';
-            this.shadowRoot.getElementById('slideViewSection').append(divPointer);
+            slideViewSections[0].append(divPointer);
         }
+    }
+
+    _addArea(tag, placeholderId) {
+        const placeholder = document.getElementById(placeholderId);
+
+        if (placeholder) {
+            placeholder.innerHTML = tag;
+        }
+    }
+
+    _addSettingsArea() {
+        this._addArea('<tc-touch-pointer-settings></tc-touch-pointer-settings>', 'placeholder1');
+    }
+
+    _addMaskArea() {
+        this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2');
     }
 
     _onMessageEvent(message) {
