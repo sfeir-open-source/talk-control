@@ -60,18 +60,37 @@ class TouchPointerMaskComponent extends LitElement {
 
     _initPointerMove() {
         const touchMask = this.shadowRoot.getElementById('touchMask');
+        const movePointer = (x, y) => {
+            this.pointer.x = `${this._getPositionInPercent(x, touchMask.offsetWidth)}%`;
+            this.pointer.y = `${this._getPositionInPercent(y, touchMask.offsetHeight)}%`;
+    
+            this.touchPointerMaskTCComponent.sendPointerEventToController({
+                origin: 'touchPointer',
+                type: 'pointerMove',
+                payload: { x: this.pointer.x, y: this.pointer.y }
+            });
+        };
+
         touchMask.addEventListener(
             'mousemove',
             e => {
-                console.log('mousemove', e);
-                this.pointer.x = `${this._getPositionInPercent(e.layerX, touchMask.offsetWidth)}%`;
-                this.pointer.y = `${this._getPositionInPercent(e.layerY, touchMask.offsetHeight)}%`;
+                const x = e.layerX;
+                const y = e.layerY;
+
+                movePointer(x, y);
+            }
+        );
+        touchMask.addEventListener(
+            'touchmove',
+            e => {
+                const touch = e.changedTouches.length ? e.changedTouches[0] : null;
+                if (touch) {
+                    const rect = touch.target.getBoundingClientRect();
+                    const x = touch.pageX - rect.left;
+                    const y = touch.pageY - rect.top;
         
-                this.touchPointerMaskTCComponent.sendPointerEventToController({
-                    origin: 'touchPointer',
-                    type: 'pointerMove',
-                    payload: { x: this.pointer.x, y: this.pointer.y }
-                });
+                    movePointer(x, y);
+                }
             }
         );
     }
