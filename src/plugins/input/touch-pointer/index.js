@@ -6,6 +6,7 @@ class TouchPointerInput {
         this.zooming = false;
         this.pointer = { x: 0, y: 0, color: '#FF0000' };
         this.interval;
+        this.messageEventRegistered = false;
     }
 
     onEvent(callback) {
@@ -17,7 +18,10 @@ class TouchPointerInput {
         this._addMaskArea();
         this._addPointer();
 
-        addEventListener('message', message => this._onMessageEvent(message));
+        if (!this.messageEventRegistered) {
+            addEventListener('message', message => this._onMessageEvent(message));
+            this.messageEventRegistered = true;
+        }
     }
 
     _addPointer() {

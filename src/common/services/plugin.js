@@ -27,6 +27,10 @@ module.exports = {
     },
 
     activatePluginOnComponent(pluginName, component) {
+        if (!component.shadowRoot) {
+            return;
+        }
+
         return loadPluginModule(pluginName)
             .then(plugin => {
                 plugin.instance.init();
