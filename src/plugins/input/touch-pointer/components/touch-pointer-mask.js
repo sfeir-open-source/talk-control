@@ -46,7 +46,7 @@ class TouchPointerMaskComponent extends LitElement {
         this.shadowRoot
             .getElementById('touchMask')
             .addEventListener(
-                'dblclick',
+                'click',
                 () => this.touchPointerMaskTCComponent.sendPointerEventToController({
                     origin: 'touchPointer',
                     type: 'pointerClick',
