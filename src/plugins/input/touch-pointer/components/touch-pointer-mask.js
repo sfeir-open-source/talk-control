@@ -10,9 +10,6 @@ class TouchPointerMaskComponent extends LitElement {
             bulmaStyle,
             css`
                 #touchMask {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
                     width: 100%;
                     height: 100%;
                     border: 4px solid red

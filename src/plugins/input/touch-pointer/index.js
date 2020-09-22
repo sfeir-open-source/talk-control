@@ -67,11 +67,12 @@ class TouchPointerInput {
         }
     }
 
-    _addArea(tag, placeholderId) {
+    _addArea(tag, placeholderId, options) {
         const placeholder = document.getElementById(placeholderId);
 
         if (placeholder) {
             placeholder.innerHTML = tag;
+            this._showPlaceholder(placeholder, options || {});
         }
     }
 
@@ -80,7 +81,31 @@ class TouchPointerInput {
     }
 
     _addMaskArea() {
-        this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2');
+        this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2', { width: '100%', height: '100%' });
+    }
+
+    _showPlaceholder(placeholder, { width, height }) {
+        if (width) {
+            placeholder.style.width = width;
+        }
+
+        if (height) {
+            placeholder.style.height = height;
+        }
+
+        placeholder.style.display = 'block';
+    }
+
+    _hidePlaceholder(placeholder, { width, height }) {
+        if (width) {
+            placeholder.style.width = width;
+        }
+
+        if (height) {
+            placeholder.style.height = height;
+        }
+
+        placeholder.style.display = 'none';
     }
 
     _onMessageEvent(message) {
