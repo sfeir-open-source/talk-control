@@ -1,24 +1,24 @@
 {
     "ngrok": {
-        "authToken": ""
+        "authToken": "6RL9znpxVtuHQUSg1tfd1_5BNeDtZLyizFGehSQGdMw"
     },
     "tcServer": {
         "urls": {
-            "external": "",
+            "external": "https://a0f33a68da0b.ngrok.io",
             "local": "http://localhost:3001"
         },
         "port": 3001
     },
     "tcController": {
         "urls": {
-            "external": "",
+            "external": "https://5c82ddaaa240.ngrok.io",
             "local": "http://localhost:3000"
         },
         "port": 3000
     },
     "tcShowcase": {
         "urls": {
-            "external": "",
+            "external": "https://ef653b966f5b.ngrok.io",
             "local": "http://127.0.0.1:3002"
         },
         "port": 3002
