@@ -23,9 +23,8 @@ describe('TCComponent', function() {
             // When
             tcComponent.init();
             // Then
-            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
             assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide'), '"on" not called with gotoSlide');
-            assert(on.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin'), '"on" not called with registerPlugin');
+            assert(broadcast.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'initialized'), '"broadcast" not called with initialized');
         });
     });
 });

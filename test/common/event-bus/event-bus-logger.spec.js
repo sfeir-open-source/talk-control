@@ -10,13 +10,13 @@ describe('Event bus logger', function() {
         let sinonSandbox;
 
         const stubConsole = function () {
-            sinonSandbox.stub(console, `error`);
-            sinonSandbox.stub(console, `log`);
+            sinonSandbox.stub(console, 'error');
+            sinonSandbox.stub(console, 'log');
         };
 
         const stubIsLoggerEnabled = function(returnValue) {
             sinonSandbox.stub(eventBusLogger, 'isLoggerEnabled').callsFake(() => returnValue);
-        }
+        };
         
         beforeEach(function(done) {
             sinonSandbox = sinon.createSandbox();

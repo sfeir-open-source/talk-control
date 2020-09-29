@@ -9,6 +9,6 @@ export const isUrlValid = url => {
         return false;
     }
 
-    const urlRegexp = RegExp(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/);
+    const urlRegexp = RegExp(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/);
     return urlRegexp.test(url);
 };

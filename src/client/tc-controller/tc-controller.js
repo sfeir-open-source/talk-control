@@ -2,7 +2,7 @@
 
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
-import { loadPluginModule } from '@plugins/plugin-loader';
+import { activatePluginOnController, deactivatePluginOnController } from '@services/plugin';
 
 /**
  * @class TCController
@@ -62,6 +62,10 @@ export class TCController {
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
         
         // Forward plugin event to server to broadcast it to all controllers
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data));
+
+        // Forward plugin event to server to broadcast it to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
         
@@ -71,30 +75,23 @@ export class TCController {
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
     }
 
-    _registerPlugin(plugin, name) {
-        if (plugin.usedByAComponent) { // Plugins used by a component and need tc-component (ex: keyboard)
-            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.type, event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'registerPlugin', { pluginName: name });
-        } else {
-            // Other plugins like bluetooth devices
-            plugin.init();
-            plugin.onEvent(event => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.type, event));
-        }
-    }
-
-    _registerDynamicPlugin(name) {
-        loadPluginModule(name).then(pluginModule => this._registerPlugin(pluginModule.instance, name));
-    }
-
     _initPlugins() {
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'activatePlugins', plugins => {
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
-                this._registerDynamicPlugin(plugin.name);
+                if (plugin.autoActivate) {
+                    activatePluginOnController(plugin.name, this);
+                    continue;
+                }
+
+                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
+
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => activatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) => deactivatePluginOnController(pluginName, this));
         });
 
-        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPluginsToActivate');
+        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
     }
 
     forwardEvents() {

@@ -1,28 +1,56 @@
+#header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 5vh;
+}
+#header div:first-child, #header div:last-child {
+    width: 13vw;
+}
+#header div {
+    width: 80vw;
+}
 #current,
-#current-mobile {
-    height: 100vh;
-    padding: 0.3rem;
+.current-mobile {
+    height: 95vh;
 }
-#current-mobile {
-    height: 40vh;
+.current-mobile {
+    position: relative;
+    width: 100vw;
+    max-width: 1000px;
+    height: 50vh;
+    overflow: hidden
 }
-#next,
-#next-mobile {
-    height: 45vh;
+#next {
+    height: 42vh;
     padding: 0.3rem 0.3rem 0 0;
-}
-#next-mobile {
-    height: 35vh;
 }
 #timer {
-    height: auto;
-    padding: 0.3rem 0.3rem 0 0;
+    height: 7vh;
+    min-height: 80px
+}
+.timer-title {
+    margin-top: 0.5rem;
+    height: 1rem;
+}
+#placeholder2 {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
 }
 #notes {
-    height: auto;
     padding: 0.3rem 0.3rem 0.3rem 0;
+    overflow: auto;
 }
 .content {
+    position: relative;
     height: 100%;
     padding: 0.5rem;
+}
+.mobile-half-screen-height {
+    height: 46vh !important
 }

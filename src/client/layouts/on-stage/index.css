@@ -1,10 +1,22 @@
+#header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 5vh;
+}
+#header div:first-child, #header div:last-child {
+    width: 13vw;
+}
+#header div {
+    width: 80vw;
+}
+.content {
+    height: 100%;
+}
 #slide {
     width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-.content {
-    height: 100%;
 }

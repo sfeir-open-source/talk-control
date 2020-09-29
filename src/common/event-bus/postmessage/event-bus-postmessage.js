@@ -45,6 +45,7 @@ export class EventBusPostMessage extends EventBus {
 
     /**
      * Emit data for the window passed in parameter on given event key
+     *
      * @param {string} key - Event name
      * @param {any} data - Values
      * @param {any} window - Window to which the event will be sent

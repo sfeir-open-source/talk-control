@@ -2,14 +2,14 @@
 
 import 'module-alias/register';
 import { assert } from 'chai';
-import { stub, spy } from 'sinon';
+import { stub } from 'sinon';
 import { logger } from '@services/logger';
 
 describe('Logger service', function() {
     describe('log', function() {
         const stubConsole = function () {
-            stub(console, `error`);
-            stub(console, `log`);
+            stub(console, 'error');
+            stub(console, 'log');
         };
         
         const restoreConsole = function () {

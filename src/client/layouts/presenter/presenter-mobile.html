@@ -8,39 +8,36 @@
         <link rel="stylesheet" href="index.css" />
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
         <!-- type="module" not needed because we work with parcel bundler -->
-        <script src="../../web-components/slide-view/slide-view.js"></script>
-        <script src="../../web-components/url-form/url-form.js"></script>
-        <script src="../../web-components/timer/timer.js"></script>
-        <script src="../../web-components/notes/notes.js"></script>
-        <script src="../../web-components/menu-dropdown/menu-dropdown.js"></script>
+        <script defer src="../../web-components/slide-view/slide-view.js"></script>
+        <script defer src="../../web-components/url-form/url-form.js"></script>
+        <script defer src="../../web-components/timer/timer.js"></script>
+        <script defer src="../../web-components/notes/notes.js"></script>
+        <script defer src="../../web-components/menu-navigation/menu-navigation.js"></script>
+        <script defer src="../../web-components/menu-plugins/menu-plugins.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-settings.js"></script>
+        <script defer src="../../../plugins/input/touch-pointer/components/touch-pointer-mask.js"></script>
         <title>Presenter view</title>
     </head>
     <body>
-        <section class="columns is-marginless is-paddingless">
-            <tc-menu-dropdown></tc-menu-dropdown>
-            <div class="column" id="current-mobile">
-                <div class="content">
-                    <tc-slide focus></tc-slide>
-                </div>
-            </div>
-            <div class="column is-paddingless has-background-white">
-                <div class="has-background-white" id="next-mobile">
-                    <div class="content">
-                        <tc-slide delta="1"></tc-slide>
-                    </div>
-                </div>
-                <div class="has-background-white" id="timer">
-                    <div class="content">
-                        <tc-timer></tc-timer>
-                    </div>
-                </div>
-                <div class="has-background-white" id="notes">
-                    <div class="content">
-                        <tc-notes></tc-notes>
-                    </div>
-                </div>
-            </div>
+        <section id="header" style="height: 8vh">
+            <div class="pl-1"><tc-menu-navigation></tc-menu-navigation></div>
+            <div><tc-timer></tc-timer></div>
+            <div class="pr-1"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
+        <div id="placeholder1" class="mobile-half-screen-height">
+            <article class="message is-light mobile-half-screen-height mb-0">
+                <div class="message-header">
+                    <p>Notes</p>
+                </div>
+                <div class="message-body">
+                    <tc-notes></tc-notes>
+                </div>
+            </article>
+        </div>
+        <div class="current-mobile mobile-half-screen-height px-0 py-0">
+            <tc-slide id="currentSlide" focus></tc-slide>
+            <div id="placeholder2"/>
+        </div>
         <script src="./index.js"></script>
     </body>
 </html>

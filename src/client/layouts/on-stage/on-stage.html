@@ -9,13 +9,19 @@
         <script defer src="../../../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
         <!-- type="module" not needed because we work with parcel bundler -->
         <script defer src="../../web-components/slide-view/slide-view.js"></script>
-        <script defer src="../../web-components/menu-dropdown/menu-dropdown.js"></script>
+        <script defer src="../../web-components/clock/clock.js"></script>
+        <script defer src="../../web-components/menu-navigation/menu-navigation.js"></script>
+        <script defer src="../../web-components/menu-plugins/menu-plugins.js"></script>
         <title>On stage</title>
     </head>
     <body>
+        <section id="header">
+            <div class="mt-1 ml-2 has-text-left"><tc-menu-navigation></tc-menu-navigation></div>
+            <div><tc-clock></tc-clock></div>
+            <div class="mt-1 mr-2 has-text-right"><tc-menu-plugins></tc-menu-plugins></div>
+        </section>
         <section>
-            <tc-menu-dropdown></tc-menu-dropdown>
-            <tc-slide fullscreen focus></tc-slide>
+            <tc-slide id="currentSlide" fullscreen focus></tc-slide>
         </section>
         <script src="./index.js"></script>
     </body>

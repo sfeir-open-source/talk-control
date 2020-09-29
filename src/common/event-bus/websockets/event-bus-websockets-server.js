@@ -98,6 +98,7 @@ export class EventBusWebsocketsServer extends EventBus {
 
     /**
      * Emit data for the socket passed in parameter on given event key
+     *
      * @param {string} key - Event name
      * @param {any} data - Values
      * @param {any} socket - Socket to which the event will be sent
