@@ -2,7 +2,7 @@
 
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
-import { activatePluginOnController } from '@services/plugin';
+import { activatePluginOnController, deactivatePluginOnController } from '@services/plugin';
 
 /**
  * @class TCController
@@ -63,6 +63,7 @@ export class TCController {
         
         // Forward plugin event to server to broadcast it to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data));
 
         // Forward plugin event to server to broadcast it to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
@@ -87,6 +88,7 @@ export class TCController {
             }
 
             this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => activatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) => deactivatePluginOnController(pluginName, this));
         });
 
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');

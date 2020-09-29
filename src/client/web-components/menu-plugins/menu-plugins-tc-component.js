@@ -11,15 +11,21 @@ export class MenuPluginsTCComponent extends TCComponent {
         super();
     }
 
-    init(callback) {
+    init(addToPluginsMenu, deactivatePlugin) {
         this.eventBusComponent.on(
             CONTROLLER_COMPONENT_CHANNEL,
             'addToPluginsMenu',
-            ({ pluginName }) => callback(pluginName)
+            ({ pluginName }) => addToPluginsMenu(pluginName)
         );
+        
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'deactivatePlugin', () => deactivatePlugin());
     }
 
     startPlugin(pluginName) {
         this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', { pluginName });
+    }
+    
+    endPlugin(pluginName) {
+        this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', { pluginName });
     }
 }

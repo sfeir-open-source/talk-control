@@ -26,6 +26,12 @@ module.exports = {
             .catch(e => console.error('Unable to load plugin module', e));
     },
 
+    deactivatePluginOnController(pluginName) {
+        return loadPluginModule(pluginName)
+            .then(plugin => plugin.instance.unload())
+            .catch(e => console.error('Unable to unload plugin module', e));
+    },
+
     activatePluginOnComponent(pluginName, component) {
         return loadPluginModule(pluginName)
             .then(plugin => {
