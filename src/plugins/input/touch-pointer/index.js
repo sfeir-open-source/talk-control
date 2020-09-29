@@ -24,6 +24,12 @@ class TouchPointerInput {
         }
     }
 
+    unload() {
+        this._removeSettingsArea();
+        this._removeMaskArea();
+        this._removePointer();
+    }
+
     _addPointer() {
         // Identifying current slide component
         const currentSlide = document.getElementById('currentSlide');
@@ -31,81 +37,83 @@ class TouchPointerInput {
             return;
         }
 
-        // CSS
-        const style = document.createElement('style');
-        style.innerHTML = `
-            #pointer {
-                position: absolute;
-                left: 0px;
-                top: 0px;
-                width: 12px;
-                height: 12px;
-                border-radius: 6px;
-                background-color: #FF0000;
-                visibility: hidden;
-            }
-            .zoomable {
-                width: 100%;
-                height: 100%;
-                transition-duration: 0.8s;
-                cursor: zoom-in;
-            }`;
-
-        currentSlide.shadowRoot.appendChild(style);
-
         // HTML
         const slideViewFrame = currentSlide.shadowRoot.getElementById('slideViewFrame');
         if (slideViewFrame) {
-            slideViewFrame.classList.add('zoomable');
+            slideViewFrame.style.width = '100%';
+            slideViewFrame.style.height = '100%';
+            slideViewFrame.style.transitionDuration = '0.8s';
+            slideViewFrame.style.cursor = 'zoom-in';
         }
 
         const slideViewSection = currentSlide.shadowRoot.getElementById('slideViewSection');
         if (slideViewSection) {
             const divPointer = document.createElement('div');
+
             divPointer.id = 'pointer';
+            divPointer.style.position = 'absolute';
+            divPointer.style.left = 0;
+            divPointer.style.top = 0;
+            divPointer.style.width = '12px';
+            divPointer.style.height = '12px';
+            divPointer.style.borderRadius = '6px';
+            divPointer.style.backgroundColor = '#FF0000';
+            divPointer.style.visibility = 'hidden';
+
             slideViewSection.append(divPointer);
         }
     }
 
-    _addArea(tag, placeholderId, options) {
+    _removePointer() {
+        // Identifying current slide component
+        const currentSlide = document.getElementById('currentSlide');
+        if (!currentSlide || !currentSlide.shadowRoot) {
+            console.log('no current slide nor shadowroot');
+            return;
+        }
+
+        // HTML
+        const slideViewSection = currentSlide.shadowRoot.getElementById('slideViewSection');
+        if (slideViewSection) {
+            const pointer = currentSlide.shadowRoot.getElementById('pointer');
+            if (pointer) {
+                pointer.remove();
+            }
+        }
+    }
+
+    _addArea(tag, placeholderId) {
         const placeholder = document.getElementById(placeholderId);
 
         if (placeholder) {
             placeholder.innerHTML = tag;
-            this._showPlaceholder(placeholder, options || {});
+            placeholder.style.display = 'block';
+        }
+    }
+    
+    _removeArea(placeholderId) {
+        const placeholder = document.getElementById(placeholderId);
+
+        if (placeholder) {
+            placeholder.innerHTML = '';
+            placeholder.style.display = 'none';
         }
     }
 
     _addSettingsArea() {
         this._addArea('<tc-touch-pointer-settings></tc-touch-pointer-settings>', 'placeholder1');
     }
+    
+    _removeSettingsArea() {
+        this._removeArea('placeholder1');
+    }
 
     _addMaskArea() {
-        this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2', { width: '100%', height: '100%' });
+        this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2');
     }
-
-    _showPlaceholder(placeholder, { width, height }) {
-        if (width) {
-            placeholder.style.width = width;
-        }
-
-        if (height) {
-            placeholder.style.height = height;
-        }
-
-        placeholder.style.display = 'block';
-    }
-
-    _hidePlaceholder(placeholder, { width, height }) {
-        if (width) {
-            placeholder.style.width = width;
-        }
-
-        if (height) {
-            placeholder.style.height = height;
-        }
-
-        placeholder.style.display = 'none';
+    
+    _removeMaskArea() {
+        this._removeArea('placeholder2');
     }
 
     _onMessageEvent(message) {
