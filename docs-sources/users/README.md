@@ -10,16 +10,12 @@ cd talk-control
 npm i
 ```
 
-Next you have to build the app.
+Next you have to start the app.
 ```sh
-npm run build
-```
-*You will be asked to give the full path to your presentation's entry point (index.html).*
-
-Then run the commands below and start your presentation.
-```sh
-node dist/server/index.js
-npx serve dist/client/master
+npm start
 ```
 
-Finally open your browser on [localhost:3000](http://localhost:3000).
+Then open your browser on [localhost:3000](http://localhost:3000).
+
+A default reveal presentation is used as example in /showcase folder of the project.
+In the near future it will be possible to choose a presentation anywhere on your hard drive.

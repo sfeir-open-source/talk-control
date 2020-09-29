@@ -31,7 +31,7 @@ It is composed by three main parts:
 
 ### Technology stack
 
-This app is written in plain javascript, tested with mocha and chai and bundled with parcelJs.
+This app is written in plain javascript, uses web components, is tested with mocha and chai and bundled with parcelJs.
 
 ### Status
 
