@@ -2,7 +2,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
 // Extend the LitElement base class
@@ -14,13 +14,7 @@ class MenuNavigation extends LitElement {
     static get styles() {
         return [
             Fontawesome,
-            bulmaStyle,
-            css`
-                #menuDropdown {
-                    position: absolute;
-                    right: 0;
-                }
-            `
+            bulmaStyle
         ];
     }
 
@@ -40,8 +34,8 @@ class MenuNavigation extends LitElement {
             <div id="menuDropdown" class="dropdown">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span class="is-hidden-tablet"><i class="fas fa-caret-down"></i></span>
-                        <span class="is-hidden-mobile">Navigation</span>
+                        <span class="is-hidden-tablet"><i class="fas fa-bars"></i></span>
+                        <span class="is-hidden-mobile"><i class="fas fa-bars"></i> Navigation</span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
