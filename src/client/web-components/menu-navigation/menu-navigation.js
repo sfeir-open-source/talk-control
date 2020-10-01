@@ -1,7 +1,7 @@
 // Import the LitElement base class and html helper function
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html } from 'lit-element';
 
 // Extend the LitElement base class
@@ -12,7 +12,7 @@ class MenuNavigation extends LitElement {
 
     static get styles() {
         return [
-            bulmaStyle
+            bulmaStyles
         ];
     }
 

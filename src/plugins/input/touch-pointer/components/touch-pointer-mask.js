@@ -2,12 +2,12 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import { TouchPointerMaskTCComponent } from './touch-pointer-mask-tc-component';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 class TouchPointerMaskComponent extends LitElement {
     static get styles() {
         return [
-            bulmaStyle,
+            bulmaStyles,
             css`
                 #touchMask {
                     width: 100%;
