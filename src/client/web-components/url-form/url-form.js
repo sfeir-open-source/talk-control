@@ -5,12 +5,12 @@ import config from '@config/config';
 import { LitElement, html } from 'lit-element';
 import { isUrlValid } from '@services/url';
 import { isUsingRemoteUrl } from '@services/context';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 // Extend the LitElement base class
 class UrlForm extends LitElement {
     static get styles() {
-        return [bulmaStyle];
+        return [bulmaStyles];
     }
 
     firstUpdated() {

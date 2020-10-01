@@ -2,7 +2,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
@@ -14,8 +14,8 @@ class MenuPlugins extends LitElement {
 
     static get styles() {
         return [
+            bulmaStyles,
             Fontawesome,
-            bulmaStyle,
             css`
                 #closeButton {
                     display: none

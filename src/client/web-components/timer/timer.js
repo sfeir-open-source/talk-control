@@ -1,13 +1,13 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 import { TimerTCComponent } from './timer-tc-component';
 
 class TimerComponent extends LitElement {
     static get styles() {
         return [
-            bulmaStyle,
+            bulmaStyles,
             css`
                 #timer {
                     cursor: pointer;

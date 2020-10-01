@@ -2,12 +2,12 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import { TouchPointerSettingsTCComponent } from './touch-pointer-settings-tc-component';
-import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
+import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 class TouchPointerSettingsComponent extends LitElement {
     static get styles() {
         return [
-            bulmaStyle,
+            bulmaStyles,
             css`
                 :host {
                     --size-button:40px;
