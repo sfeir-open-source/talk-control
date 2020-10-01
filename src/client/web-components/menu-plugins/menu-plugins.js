@@ -4,6 +4,7 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
 import bulmaStyle from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
+import Fontawesome from 'lit-fontawesome';
 
 // Extend the LitElement base class
 class MenuPlugins extends LitElement {
@@ -13,6 +14,7 @@ class MenuPlugins extends LitElement {
 
     static get styles() {
         return [
+            Fontawesome,
             bulmaStyle,
             css`
                 #closeButton {
@@ -79,11 +81,8 @@ class MenuPlugins extends LitElement {
             <div id="menuDropdown" class="dropdown is-right">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span class="is-hidden-tablet">P</span>
-                        <span class="is-hidden-mobile">Plugins</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
+                        <span class="is-hidden-tablet"><i class="fas fa-cube" aria-hidden="true"></i></span>
+                        <span class="is-hidden-mobile">Plugins <i class="fas fa-cube" aria-hidden="true"></i></span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
