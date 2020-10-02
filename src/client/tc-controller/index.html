@@ -20,68 +20,9 @@
                     <h2 class="subtitle">
                         Choose a view
                     </h2>
-                    <div class="columns">
-                        <div class="column is-one-fifth">
-                            <a href="on-stage.html">
-                                <div id="onStageButton" class="card">
-                                    <div class="card-content has-text-centered">
-                                        <p class="title">
-                                            <i class="fas fa-chalkboard"></i>
-                                        </p>
-                                        <p class="subtitle">
-                                            Stage view
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="column is-one-fifth is-hidden-tablet">
-                            <!-- Mobile version -->
-                            <a href="presenter-mobile.html">
-                                <div class="card">
-                                    <div class="card-content has-text-centered" onclick="window.location.href = '../layouts/presenter/presenter-mobile.html'">
-                                        <p class="title">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                        </p>
-                                        <p class="subtitle">
-                                            Presenter view
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="column is-one-fifth is-hidden-mobile">
-                            <!-- Desktop version -->
-                            <a href="presenter.html">
-                                <div class="card">
-                                    <div class="card-content has-text-centered" onclick="window.location.href = '../layouts/presenter/presenter.html'">
-                                        <p class="title">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                        </p>
-                                        <p class="subtitle">
-                                            Presenter view
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    <tc-view-selector></tc-view-selector>
                     <br /><br />
-                    <div id="qrCodeSection">
-                        <h2 class="subtitle">
-                            Or take control from another device
-                        </h2>
-                        <div class="columns">
-                            <div class="column is-one-third">
-                                <div class="card">
-                                    <div class="card-content has-text-centered">
-                                        <canvas id="qrCode" aria-label="Use this QRCode to connect to TalkControl from your mobile"></canvas><br />
-                                        <span id="textCode"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <tc-remote-control></tc-remote-control>
                 </div>
             </div>
         </section>
