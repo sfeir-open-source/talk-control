@@ -1,0 +1,292 @@
+{
+  "formatVersion": 3,
+  "id": "root",
+  "ideas": {
+    "4": {
+      "title": "menu-plugins\n(Manual activation)",
+      "id": "23.c853.20aee3908-15e6.356f3038c",
+      "attr": {
+        "position": [
+          187.9375,
+          159.5,
+          1
+        ],
+        "style": {
+          "backgroundColor": "#33CCCC"
+        }
+      },
+      "ideas": {
+        "-10": {
+          "title": "closeButtonClick",
+          "id": "36.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+          "ideas": {
+            "1": {
+              "title": "endPlugin",
+              "id": "37.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+              "ideas": {
+                "1": {
+                  "title": "broadcast\npluginEndingIn\nCONTROLLER_COMPONENT_CHANNEL",
+                  "id": "41.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#33CCCC"
+                    }
+                  },
+                  "ideas": {}
+                }
+              },
+              "attr": {
+                "style": {
+                  "backgroundColor": "#33CCCC"
+                }
+              }
+            }
+          },
+          "attr": {
+            "position": [
+              153.99998474121094,
+              5.749969482421875,
+              1
+            ],
+            "style": {
+              "backgroundColor": "#33CCCC"
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "title": "Layout",
+      "id": "35.c853.20aee3908-15e6.356f3038c",
+      "attr": {
+        "position": [
+          -953,
+          -368,
+          1
+        ],
+        "style": {
+          "backgroundColor": "#808000",
+          "text": {
+            "color": "#FFFFFF"
+          }
+        }
+      },
+      "ideas": {
+        "12": {
+          "title": "tc-controller",
+          "id": 1,
+          "attr": {
+            "style": {
+              "backgroundColor": "#FF9900"
+            }
+          },
+          "ideas": {
+            "1": {
+              "title": "afterInitialisation",
+              "attr": {
+                "style": {
+                  "backgroundColor": "#FF9900"
+                },
+                "position": [
+                  116,
+                  137,
+                  3
+                ]
+              },
+              "ideas": {
+                "1": {
+                  "title": "ON\npluginEndingIn\nCONTROLLER_COMPONENT_CHANNEL",
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#FF9900"
+                    },
+                    "position": [
+                      134,
+                      260,
+                      1
+                    ]
+                  },
+                  "ideas": {
+                    "1": {
+                      "title": "BROADCAST\npluginEndingIn\nCONTROLLER_SERVER_CHANNEL",
+                      "attr": {
+                        "style": {
+                          "backgroundColor": "#FF9900"
+                        },
+                        "position": [
+                          281,
+                          -53,
+                          1
+                        ]
+                      },
+                      "id": "44.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+                      "ideas": {}
+                    }
+                  },
+                  "id": "43.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                }
+              },
+              "id": "42.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+            },
+            "0.5": {
+              "title": "ON\ninitialized",
+              "attr": {
+                "style": {
+                  "backgroundColor": "#FF9900"
+                },
+                "position": [
+                  103,
+                  -129,
+                  2
+                ]
+              },
+              "ideas": {
+                "1": {
+                  "title": "_initPlugins",
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#FF9900"
+                    }
+                  },
+                  "ideas": {
+                    "2": {
+                      "title": "ON\npluginEndingOut\nCONTROLLER_SERVER_CHANNEL",
+                      "attr": {
+                        "style": {
+                          "backgroundColor": "#FF9900"
+                        }
+                      },
+                      "ideas": {
+                        "1": {
+                          "title": "deactivatePluginOnController",
+                          "attr": {
+                            "style": {
+                              "backgroundColor": "#FF9900"
+                            },
+                            "position": [
+                              258,
+                              17,
+                              1
+                            ]
+                          },
+                          "ideas": {
+                            "1": {
+                              "title": "loadPluginModule",
+                              "attr": {
+                                "style": {
+                                  "backgroundColor": "#FF9900"
+                                }
+                              },
+                              "ideas": {
+                                "1": {
+                                  "title": "plugin unload",
+                                  "attr": {
+                                    "style": {
+                                      "backgroundColor": "#FF9900"
+                                    }
+                                  },
+                                  "id": "75.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                                }
+                              },
+                              "id": "74.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                            }
+                          },
+                          "id": "67.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                        }
+                      },
+                      "id": "66.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                    }
+                  },
+                  "id": "55.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+                }
+              },
+              "id": "54.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+            }
+          }
+        }
+      }
+    },
+    "6": {
+      "title": "tc-server",
+      "id": "50.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "attr": {
+        "position": [
+          -357,
+          -253,
+          1
+        ],
+        "style": {
+          "backgroundColor": "#99CC00"
+        }
+      },
+      "ideas": {
+        "11": {
+          "title": "ON\npluginEndingIn",
+          "attr": {
+            "style": {
+              "backgroundColor": "#99CC00"
+            },
+            "position": [
+              122,
+              -10,
+              1
+            ]
+          },
+          "ideas": {
+            "1": {
+              "title": "BROADCAST\npluginEndingOut",
+              "attr": {
+                "position": [
+                  155,
+                  1,
+                  1
+                ],
+                "style": {
+                  "backgroundColor": "#99CC00"
+                }
+              },
+              "id": "49.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+            }
+          },
+          "id": "48.3bd3.4dcadbbb7-f33e.4aa8c1f74"
+        }
+      }
+    }
+  },
+  "title": "menu-plugins\n(Manual activation)",
+  "links": [
+    {
+      "ideaIdFrom": "44.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "ideaIdTo": "48.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": "41.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "ideaIdTo": "43.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": "49.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "ideaIdTo": "66.3bd3.4dcadbbb7-f33e.4aa8c1f74",
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "to"
+        }
+      }
+    }
+  ]
+}
