@@ -5,6 +5,7 @@ class KeyboardInput {
         this.usedByAComponent = true;
         this.type = 'inputEvent';
         this.callbacks = [];
+        this.initialized = false;
     }
 
     onEvent(callback) {
@@ -15,6 +16,7 @@ class KeyboardInput {
         addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
         addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
+        this.initialized = true;
     }
 
     _captureKeyboardEvent(event, forward = false) {

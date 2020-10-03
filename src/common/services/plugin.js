@@ -20,8 +20,10 @@ module.exports = {
                 }
 
                 // Other plugins like bluetooth devices
-                plugin.instance.init();
-                plugin.instance.onEvent(event => controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event));
+                if (!plugin.instance.initialized) {
+                    plugin.instance.init();
+                    plugin.instance.onEvent(event => controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event));
+                }
             })
             .catch(e => console.error('Unable to load plugin module', e));
     },
@@ -35,8 +37,10 @@ module.exports = {
     activatePluginOnComponent(pluginName, component) {
         return loadPluginModule(pluginName)
             .then(plugin => {
-                plugin.instance.init();
-                plugin.instance.onEvent((type, event) => component.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
+                if (!plugin.instance.initialized) {
+                    plugin.instance.init();
+                    plugin.instance.onEvent((type, event) => component.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
+                }
             })
             .catch(e => console.error('Unable to load plugin module', e));
     }

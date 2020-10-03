@@ -7,6 +7,7 @@ class TouchPointerInput {
         this.pointer = { x: 0, y: 0, color: '#FF0000' };
         this.interval;
         this.messageEventRegistered = false;
+        this.initialized = false;
     }
 
     onEvent(callback) {
@@ -22,12 +23,14 @@ class TouchPointerInput {
             addEventListener('message', message => this._onMessageEvent(message));
             this.messageEventRegistered = true;
         }
+        this.initialized = true;
     }
 
     unload() {
         this._removeSettingsArea();
         this._removeMaskArea();
         this._removePointer();
+        this.initialized = false;
     }
 
     _addPointer() {
@@ -90,7 +93,7 @@ class TouchPointerInput {
             placeholder.style.display = 'block';
         }
     }
-    
+
     _removeArea(placeholderId) {
         const placeholder = document.getElementById(placeholderId);
 
@@ -103,7 +106,7 @@ class TouchPointerInput {
     _addSettingsArea() {
         this._addArea('<tc-touch-pointer-settings></tc-touch-pointer-settings>', 'placeholder1');
     }
-    
+
     _removeSettingsArea() {
         this._removeArea('placeholder1');
     }
@@ -111,7 +114,7 @@ class TouchPointerInput {
     _addMaskArea() {
         this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2');
     }
-    
+
     _removeMaskArea() {
         this._removeArea('placeholder2');
     }
@@ -135,7 +138,7 @@ class TouchPointerInput {
             this._setPointer(messageData.payload.x, messageData.payload.y);
             return;
         }
-        
+
         if (messageData.type === 'pointerColor') {
             this._setPointerColor(messageData.payload.color);
             return;
