@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const path = require('path');
 
 const layouts =  [
@@ -20,9 +21,21 @@ const layouts =  [
 module.exports = {
     mode: 'development',
     entry: {
+        'tc-component': './src/client/tc-component/index.js',
         'tc-controller': './src/client/tc-controller/index.js',
         'on-stage': './src/client/layouts/on-stage/index.js',
         presenter: './src/client/layouts/presenter/index.js'
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                'tc-component': {
+                    test: /tc-component/,
+                    reuseExistingChunk: false,
+                }
+            }
+        }
     },
     module: {
         rules: [
@@ -44,6 +57,10 @@ module.exports = {
                 ]
             }
         ]
+    },
+    devServer: {
+        // writeToDisk: true,
+        // contentBase: [path.resolve(__dirname, 'showcase')]
     },
     output: {
         filename: '[name].bundle.js',
@@ -73,6 +90,10 @@ module.exports = {
                     template: `./src/client/layouts/${layout.folder}/${layout.filename}`,
                     chunks: [layout.folder]
                 })
-        )
+        ),
+        new BundleAnalyzerPlugin({
+            analyzerPort: 3002
+        })
+
     ]
 };

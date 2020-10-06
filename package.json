@@ -6,8 +6,8 @@
         "clean": "rm -rf .cache dist",
         "create-tunnels": "node src/environment/create-tunnels",
         "get-started": "node src/environment/get-started",
-        "start": "npx npm-run-all --parallel create-tunnels tc-server tc-component tc-showcase start-controller-after-server when-controller-is-started",
-        "start-controller-after-server": "wait-on tcp:3001 && wait-on tcp:3002 && npm run tc-controller",
+        "start": "npx npm-run-all --parallel create-tunnels tc-server  tc-showcase start-controller-after-server when-controller-is-started",
+        "start-controller-after-server": "wait-on tcp:3001 && wait-on tcp:3002 && npm run tc-controller-and-component",
         "when-controller-is-started": "wait-on tcp:3000 && npm run get-started",
         "build": "npx npm-run-all --parallel build-*",
         "test": "npx mocha",
@@ -15,9 +15,9 @@
         "lint": "eslint --fix . --cache",
         "commit": "npx git-cz",
         "tc-showcase": "npx http-server showcase -s -p 3002",
-        "tc-controller": "npx webpack --config=webpack.config.js && npx http-server dist-webpack -s -p 3000",
-        "tc-component": "npx parcel watch src/client/tc-component/index.js --out-dir showcase/resources/tc-component",
+        "tc-controller-and-component": "npx webpack-dev-server --port 3000",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
+        "build-controller-and-component": "npx webpack",
         "build-component": "npx parcel build src/client/tc-component/index.js --no-source-maps --out-dir ./dist/client/tc-component --target browser",
         "build-controller": "npx parcel build src/client/tc-controller/index.html --no-source-maps --out-dir ./dist/client/tc-controller --target browser",
         "build-server": "npx parcel build src/server/index.js --no-source-maps --out-dir ./dist/server --target node",
@@ -55,6 +55,7 @@
         "babel-eslint": "^10.1.0",
         "babel-plugin-module-resolver": "^3.2.0",
         "chai": "^4.2.0",
+        "clean-webpack-plugin": "^3.0.0",
         "commitizen": "^4.2.1",
         "css-loader": "^4.3.0",
         "cz-conventional-changelog": "^3.2.0",
@@ -82,7 +83,9 @@
         "vuepress": "^1.5.2",
         "vuepress-jsdoc": "^2.1.1",
         "webpack": "^4.44.2",
-        "webpack-cli": "^3.3.12"
+        "webpack-bundle-analyzer": "^3.9.0",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
     },
     "directories": {
         "test": "test"
