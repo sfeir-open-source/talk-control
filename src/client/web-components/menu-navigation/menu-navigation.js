@@ -40,12 +40,12 @@ class MenuNavigation extends LitElement {
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                     <div class="dropdown-content">
-                        <a href="../../tc-controller/index.html" class="dropdown-item"> <i class="fas fa-home"></i> Home </a>
-                        <a href="../on-stage/on-stage.html" class="dropdown-item"> <i class="fas fa-desktop"></i> On stage view </a>
-                        <a href="../presenter/presenter.html" class="dropdown-item is-hidden-mobile">
+                        <a href="index.html" class="dropdown-item"> <i class="fas fa-home"></i> Home </a>
+                        <a href="on-stage.html" class="dropdown-item"> <i class="fas fa-desktop"></i> On stage view </a>
+                        <a href="presenter.html" class="dropdown-item is-hidden-mobile">
                             <i class="fas fa-chalkboard-teacher"></i> Presenter view
                         </a>
-                        <a href="../presenter/presenter-mobile.html" class="dropdown-item is-hidden-tablet">
+                        <a href="presenter-mobile.html" class="dropdown-item is-hidden-tablet">
                             <i class="fas fa-mobile-alt"></i> Presenter view
                         </a>
                     </div>
