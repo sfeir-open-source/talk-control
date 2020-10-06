@@ -1,5 +1,19 @@
 'use strict';
 
+require('./index.css');
+require('bulma/css/bulma.min.css');
+require('lit-fontawesome/css/font.css');
+require('@fortawesome/fontawesome-free/js/all.min.js');
+require('../../web-components/slide-view/slide-view.js');
+require('../../web-components/url-form/url-form.js');
+require('../../web-components/clock/clock.js');
+require('../../web-components/timer/timer.js');
+require('../../web-components/notes/notes.js');
+require('../../web-components/menu-navigation/menu-navigation.js');
+require('../../web-components/menu-plugins/menu-plugins.js');
+require('../../../plugins/input/touch-pointer/components/touch-pointer-settings.js');
+require('../../../plugins/input/touch-pointer/components/touch-pointer-mask.js');
+
 import { TCController } from '@client/tc-controller/tc-controller.js';
 import config from '@config/config.json';
 import contextService from '@services/context';
