@@ -47,11 +47,10 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist-webpack')
     },
     resolve: {
         alias: {
-            // Paths are relatives to this config file
             '@config': path.resolve(__dirname, './config/'),
             '@client': path.resolve(__dirname, './src/client/'),
             '@event-bus': path.resolve(__dirname, './src/common/event-bus/'),

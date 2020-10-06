@@ -15,7 +15,7 @@
         "lint": "eslint --fix . --cache",
         "commit": "npx git-cz",
         "tc-showcase": "npx http-server showcase -s -p 3002",
-        "tc-controller": "npx parcel src/client/tc-controller/index.html --out-dir ./dist/client/tc-controller --port 3000",
+        "tc-controller": "npx webpack --config=webpack.config.js && npx http-server dist-webpack -s -p 3000",
         "tc-component": "npx parcel watch src/client/tc-component/index.js --out-dir showcase/resources/tc-component",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
         "build-component": "npx parcel build src/client/tc-component/index.js --no-source-maps --out-dir ./dist/client/tc-component --target browser",
