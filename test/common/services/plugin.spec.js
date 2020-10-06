@@ -5,7 +5,7 @@ import { assert } from 'chai';
 import { stub, spy } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
 import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { activatePluginOnController, activatePluginOnComponent } from '@services/plugin';
+import pluginServices from '@services/plugin';
 
 describe('Plugin service', function() {
     describe('activatePluginOnController', function() {
@@ -77,7 +77,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await activatePluginOnComponent(pluginName, {});
+            await pluginServices.activatePluginOnComponent(pluginName, {});
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));

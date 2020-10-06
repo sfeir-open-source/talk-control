@@ -4,7 +4,7 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import config from '@config/config';
 import { LitElement, html } from 'lit-element';
 import { isUrlValid } from '@services/url';
-import { isUsingRemoteUrl } from '@services/context';
+import contextService from '@services/context';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 // Extend the LitElement base class
@@ -66,7 +66,7 @@ class UrlForm extends LitElement {
     }
 
     render() {
-        const isRemote = isUsingRemoteUrl(window.location.href);
+        const isRemote = contextService.isUsingRemoteUrl(window.location.href);
 
         return html`
             <section>

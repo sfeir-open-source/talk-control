@@ -3,7 +3,7 @@
 import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import { loadPluginModule } from '@plugins/plugin-loader';
 
-module.exports = {
+export default {
     activatePluginOnController(pluginName, controller) {
         return loadPluginModule(pluginName)
             .then(plugin => {
