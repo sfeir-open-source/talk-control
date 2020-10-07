@@ -18,8 +18,6 @@
         "tc-controller-and-component": "npx webpack-dev-server --port 3000",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
         "build-controller-and-component": "npx webpack",
-        "build-component": "npx parcel build src/client/tc-component/index.js --no-source-maps --out-dir ./dist/client/tc-component --target browser",
-        "build-controller": "npx parcel build src/client/tc-controller/index.html --no-source-maps --out-dir ./dist/client/tc-controller --target browser",
         "build-server": "npx parcel build src/server/index.js --no-source-maps --out-dir ./dist/server --target node",
         "docs:dev": "vuepress dev docs-sources",
         "docs:build": "npm run jsdoc:build && vuepress build docs-sources --dest docs-dist",
