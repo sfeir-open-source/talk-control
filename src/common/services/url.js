@@ -5,10 +5,10 @@
  * @returns {boolean} true if the url is valid
  */
 export const isUrlValid = url => {
-    if (!url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (e) {
         return false;
     }
-
-    const urlRegexp = RegExp(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/);
-    return urlRegexp.test(url);
 };
