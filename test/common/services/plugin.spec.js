@@ -25,7 +25,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await activatePluginOnController(pluginName, params);
+            await pluginServices.activatePluginOnController(pluginName, params);
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
@@ -53,7 +53,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await activatePluginOnController(pluginName, params);
+            await pluginServices.activatePluginOnController(pluginName, params);
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
