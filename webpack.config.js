@@ -1,20 +1,19 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const path = require('path');
 
-const layouts =  [
+const layouts = [
     {
         folder: 'on-stage',
-        filename:  'on-stage.html'
+        filename: 'on-stage.html'
     },
     {
         folder: 'presenter',
-        filename:  'presenter.html'
+        filename: 'presenter.html'
     },
     {
         folder: 'presenter',
-        filename:  'presenter-mobile.html'
+        filename: 'presenter-mobile.html'
     }
 ];
 
@@ -26,22 +25,11 @@ module.exports = {
         'on-stage': './src/client/layouts/on-stage/index.js',
         presenter: './src/client/layouts/presenter/index.js'
     },
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-            cacheGroups: {
-                'tc-component': {
-                    test: /tc-component/,
-                    reuseExistingChunk: false,
-                }
-            }
-        }
-    },
     module: {
         rules: [
             {
                 test: /\.css$/i,
-                use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             },
             {
                 test: /\.(png|jpg|gif|eot|svg|woff|woff2|ttf)$/i,
@@ -59,12 +47,12 @@ module.exports = {
         ]
     },
     devServer: {
-        // writeToDisk: true,
-        // contentBase: [path.resolve(__dirname, 'showcase')]
+        overlay: true
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist-webpack')
+        path: path.resolve(__dirname, 'dist-webpack'),
+        publicPath: 'http://localhost:3000/' // Needed because tc-component is added from another host
     },
     resolve: {
         alias: {
@@ -90,10 +78,6 @@ module.exports = {
                     template: `./src/client/layouts/${layout.folder}/${layout.filename}`,
                     chunks: [layout.folder]
                 })
-        ),
-        new BundleAnalyzerPlugin({
-            analyzerPort: 3002
-        })
-
+        )
     ]
 };
