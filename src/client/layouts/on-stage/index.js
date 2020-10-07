@@ -2,7 +2,7 @@
 
 require('./index.css');
 require('bulma/css/bulma.min.css');
-require('@fortawesome/fontawesome-free/js/all.min.js');
+require('lit-fontawesome/css/font.css');
 require('../../web-components/slide-view/slide-view.js');
 require('../../web-components/clock/clock.js');
 require('../../web-components/menu-navigation/menu-navigation.js');
