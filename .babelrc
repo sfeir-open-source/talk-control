@@ -5,7 +5,6 @@
             "module-resolver",
             {
                 "alias": {
-                    "@src": "./src",
                     "@event-bus": "./src/common/event-bus",
                     "@services": "./src/common/services",
                     "@client": "./src/client",

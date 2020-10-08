@@ -4,7 +4,6 @@
         "target": "es2020",
         "baseUrl": ".",
         "paths": {
-            "@src/*": ["src/*"],
             "@event-bus/*": ["src/common/event-bus/*"],
             "@services/*": ["src/common/services/*"],
             "@client/*": ["src/client/*"],

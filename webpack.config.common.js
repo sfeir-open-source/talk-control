@@ -54,11 +54,11 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '@config': path.resolve(__dirname, './config/'),
-            '@client': path.resolve(__dirname, './src/client/'),
             '@event-bus': path.resolve(__dirname, './src/common/event-bus/'),
             '@services': path.resolve(__dirname, './src/common/services/'),
-            '@plugins': path.resolve(__dirname, './src/plugins/')
+            '@client': path.resolve(__dirname, './src/client/'),
+            '@plugins': path.resolve(__dirname, './src/plugins/'),
+            '@config': path.resolve(__dirname, './config/')
         },
         extensions: ['.js', '.json']
     },
