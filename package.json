@@ -124,7 +124,6 @@
         "wait-on": "^4.0.2"
     },
     "_moduleAliases": {
-        "@src": "src",
         "@event-bus": "src/common/event-bus",
         "@services": "src/common/services",
         "@client": "src/client",
