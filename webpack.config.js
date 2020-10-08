@@ -51,7 +51,7 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist-webpack')
+        path: path.resolve(__dirname, 'dist')
     },
     resolve: {
         alias: {
