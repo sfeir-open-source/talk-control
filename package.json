@@ -6,10 +6,9 @@
         "clean": "rm -rf .cache dist",
         "create-tunnels": "node src/environment/create-tunnels",
         "get-started": "node src/environment/get-started",
-        "start": "npx npm-run-all --parallel create-tunnels tc-server  tc-showcase start-controller-after-server when-controller-is-started",
+        "start": "npx npm-run-all --parallel create-tunnels tc-server tc-showcase start-controller-after-server when-controller-is-started",
         "start-controller-after-server": "wait-on tcp:3001 && wait-on tcp:3002 && npm run tc-controller-and-component",
         "when-controller-is-started": "wait-on tcp:3000 && npm run get-started",
-        "build": "npx npm-run-all --parallel build-*",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . --cache",
@@ -106,7 +105,6 @@
         }
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.13.1",
         "@webcomponents/webcomponentsjs": "^2.4.3",
         "bulma": "^0.9.0",
         "colors": "^1.4.0",
@@ -125,7 +123,6 @@
         "wait-on": "^4.0.2"
     },
     "_moduleAliases": {
-        "@src": "src",
         "@event-bus": "src/common/event-bus",
         "@services": "src/common/services",
         "@client": "src/client",

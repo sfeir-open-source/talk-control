@@ -3,10 +3,10 @@
 require('./index.css');
 require('bulma/css/bulma.min.css');
 require('lit-fontawesome/css/font.css');
-require('../../web-components/slide-view/slide-view.js');
-require('../../web-components/clock/clock.js');
-require('../../web-components/menu-navigation/menu-navigation.js');
-require('../../web-components/menu-plugins/menu-plugins.js');
+require('@client/web-components/slide-view/slide-view.js');
+require('@client/web-components/clock/clock.js');
+require('@client/web-components/menu-navigation/menu-navigation.js');
+require('@client/web-components/menu-plugins/menu-plugins.js');
 
 import { TCController } from '@client/tc-controller/tc-controller.js';
 import config from '@config/config.json';
