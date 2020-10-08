@@ -1,15 +1,12 @@
+'use strict';
+
 import config from '@config/config.json';
+import { Plugin } from '@plugins/plugin.js';
 
-class KeyboardInput {
+class KeyboardInput extends Plugin {
     constructor() {
-        this.usedByAComponent = true;
+        super();
         this.type = 'inputEvent';
-        this.callbacks = [];
-        this.initialized = false;
-    }
-
-    onEvent(callback) {
-        this.callbacks.push(callback);
     }
 
     init() {

@@ -1,17 +1,15 @@
-class TouchPointerInput {
+'use strict';
+
+import { Plugin } from '@plugins/plugin.js';
+
+class TouchPointerInput extends Plugin {
     constructor() {
-        this.usedByAComponent = true;
+        super();
         this.type = 'touchPointerEvent';
-        this.callbacks = [];
         this.zooming = false;
         this.pointer = { x: 0, y: 0, color: '#FF0000' };
         this.interval;
         this.messageEventRegistered = false;
-        this.initialized = false;
-    }
-
-    onEvent(callback) {
-        this.callbacks.push(callback);
     }
 
     init() {
