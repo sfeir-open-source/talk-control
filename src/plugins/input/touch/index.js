@@ -1,19 +1,16 @@
-import contextService from '@services/context';
+'use strict';
 
-class TouchInput {
+import contextService from '@services/context';
+import { Plugin } from '@plugins/plugin.js';
+
+class TouchInput extends Plugin {
     constructor() {
-        this.usedByAComponent = true;
+        super();
         this.type = 'inputEvent';
         this.touchPosition = {
             touchstart: { clientX: 0, clientY: 0 },
             touchend: { clientX: 0, clientY: 0 }
         };
-        this.callbacks = [];
-        this.initialized = false;
-    }
-
-    onEvent(callback) {
-        this.callbacks.push(callback);
     }
 
     init() {
