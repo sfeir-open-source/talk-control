@@ -51,8 +51,7 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist-webpack'),
-        publicPath: 'http://localhost:3000/' // Needed because tc-component is added from another host
+        path: path.resolve(__dirname, 'dist-webpack')
     },
     resolve: {
         alias: {
