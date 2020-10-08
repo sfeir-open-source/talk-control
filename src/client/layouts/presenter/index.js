@@ -1,11 +1,24 @@
 'use strict';
 
+require('./index.css');
+require('bulma/css/bulma.min.css');
+require('lit-fontawesome/css/font.css');
+require('../../web-components/slide-view/slide-view.js');
+require('../../web-components/url-form/url-form.js');
+require('../../web-components/clock/clock.js');
+require('../../web-components/timer/timer.js');
+require('../../web-components/notes/notes.js');
+require('../../web-components/menu-navigation/menu-navigation.js');
+require('../../web-components/menu-plugins/menu-plugins.js');
+require('../../../plugins/input/touch-pointer/components/touch-pointer-settings.js');
+require('../../../plugins/input/touch-pointer/components/touch-pointer-mask.js');
+
 import { TCController } from '@client/tc-controller/tc-controller.js';
 import config from '@config/config.json';
-import { isUsingRemoteUrl } from '@services/context';
+import contextService from '@services/context';
 
 window.addEventListener('DOMContentLoaded', function() {
-    const isRemote = isUsingRemoteUrl(window.location.href);
+    const isRemote = contextService.isUsingRemoteUrl(window.location.href);
 
     const tcController = new TCController(isRemote ? config.tcServer.urls.external : config.tcServer.urls.local);
     tcController.init();

@@ -2,7 +2,7 @@
 
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
-import { activatePluginOnController, deactivatePluginOnController } from '@services/plugin';
+import pluginService from '@services/plugin';
 
 /**
  * @class TCController
@@ -80,15 +80,15 @@ export class TCController {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
                 if (plugin.autoActivate) {
-                    activatePluginOnController(plugin.name, this);
+                    pluginService.activatePluginOnController(plugin.name, this);
                     continue;
                 }
 
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
 
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => activatePluginOnController(pluginName, this));
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) => deactivatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => pluginService.activatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) => pluginService.deactivatePluginOnController(pluginName, this));
         });
 
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');

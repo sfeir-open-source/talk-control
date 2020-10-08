@@ -10,6 +10,10 @@ describe('Url service', function() {
             assert(isUrlValid('http://example.com:8080'));
         });
 
+        it('should not reject localhost', function() {
+            assert(isUrlValid('http://localhost:3000'));
+        });
+
         it('should return false because no url given', function() {
             assert(!isUrlValid());
         });

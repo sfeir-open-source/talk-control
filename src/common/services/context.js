@@ -2,7 +2,7 @@
 
 import config from '@config/config.json';
 
-module.exports = {
+export default {
     /**
      * Return true if windowLocationHref is presentation's iframe
      *
@@ -13,7 +13,7 @@ module.exports = {
         if (!windowLocationHref) {
             return false;
         }
-    
+
         return windowLocationHref.indexOf(`:${config.tcController.port}`) === -1;
     },
 
@@ -27,7 +27,7 @@ module.exports = {
         if (!windowLocationHref) {
             return false;
         }
-    
+
         return windowLocationHref.indexOf('://localhost:') === -1;
     }
 };

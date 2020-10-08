@@ -1,5 +1,10 @@
 'use strict';
 
+require('./index.css');
+require('bulma/css/bulma.min.css');
+require('@fortawesome/fontawesome-free/js/all.min.js');
+require('../web-components/url-form/url-form.js');
+
 import config from '@config/config.json';
 const QRCode = require('qrcode');
 

@@ -1,4 +1,4 @@
-import { isPresentationIframe } from '@services/context';
+import contextService from '@services/context';
 
 class TouchInput {
     constructor() {
@@ -23,7 +23,7 @@ class TouchInput {
     }
 
     _captureTouchEvent(event, forward = false) {
-        if (isPresentationIframe(event.view.location.href)) {
+        if (contextService.isPresentationIframe(event.view.location.href)) {
             this.touchPosition[event.type] = {
                 clientX: event.changedTouches[0].clientX,
                 clientY: event.changedTouches[0].clientY

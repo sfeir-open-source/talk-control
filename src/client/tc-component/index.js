@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * This line must be present *before* any import.
+ * It is needed by wepback for a dynamic publicPath, that is
+ * the hostname serving the tc-component.bundle.js
+ * and other associated split chunks
+ */
+// eslint-disable-next-line no-undef
+__webpack_public_path__ = window.tcResourcePath;
+
 import { TCComponent } from './tc-component';
 
 window.addEventListener('DOMContentLoaded', function() {
