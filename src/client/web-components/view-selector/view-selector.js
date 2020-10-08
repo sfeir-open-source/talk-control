@@ -28,7 +28,7 @@ class ViewSelector extends LitElement {
         return html`
             <div class="columns">
                 <div class="column is-one-fifth">
-                    <a href="/layouts/on-stage/on-stage.html">
+                    <a href="on-stage.html">
                         <div id="onStageButton" class="card">
                             <div class="card-content has-text-centered">
                                 <p class="title">
@@ -43,9 +43,9 @@ class ViewSelector extends LitElement {
                 </div>
                 <div class="column is-one-fifth is-hidden-tablet">
                     <!-- Mobile version -->
-                    <a href="/layouts/presenter/presenter-mobile.html">
+                    <a href="presenter-mobile.html">
                         <div class="card">
-                            <div class="card-content has-text-centered" onclick="window.location.href = '/layouts/presenter/presenter-mobile.html'">
+                            <div class="card-content has-text-centered" onclick="window.location.href = 'presenter-mobile.html'">
                                 <p class="title">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                 </p>
@@ -58,9 +58,9 @@ class ViewSelector extends LitElement {
                 </div>
                 <div class="column is-one-fifth is-hidden-mobile">
                     <!-- Desktop version -->
-                    <a href="/layouts/presenter/presenter.html">
+                    <a href="presenter.html">
                         <div class="card">
-                            <div class="card-content has-text-centered" onclick="window.location.href = '/layouts/presenter/presenter.html'">
+                            <div class="card-content has-text-centered" onclick="window.location.href = 'presenter.html'">
                                 <p class="title">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                 </p>
