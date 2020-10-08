@@ -9,7 +9,6 @@
         "start": "npx npm-run-all --parallel create-tunnels tc-server tc-showcase start-controller-after-server when-controller-is-started",
         "start-controller-after-server": "wait-on tcp:3001 && wait-on tcp:3002 && npm run tc-controller-and-component",
         "when-controller-is-started": "wait-on tcp:3000 && npm run get-started",
-        "build": "npx npm-run-all --parallel build-*",
         "test": "npx mocha",
         "coverage": "npx nyc npm test",
         "lint": "eslint --fix . --cache",
