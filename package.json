@@ -15,7 +15,7 @@
         "lint": "eslint --fix . --cache",
         "commit": "npx git-cz",
         "tc-showcase": "npx http-server showcase -s -p 3002",
-        "tc-controller-and-component": "npx webpack-dev-server --port 3000",
+        "tc-controller-and-component": "npx webpack-dev-server --config webpack.config.dev.js --port 3000",
         "tc-server": "npx nodemon --exec babel-node src/server/index.js",
         "docs:dev": "vuepress dev docs-sources",
         "docs:build": "npm run jsdoc:build && vuepress build docs-sources --dest docs-dist",
