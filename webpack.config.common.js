@@ -18,7 +18,6 @@ const layouts = [
 ];
 
 module.exports = {
-    mode: 'development',
     entry: {
         'tc-component': './src/client/tc-component/index.js',
         'tc-controller': './src/client/tc-controller/index.js',
