@@ -54,6 +54,12 @@ export class RevealEngine extends GenericEngine {
                 if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
                 break;
+            case 'pageUp':
+                if (currentSlide.f > -1) this._prevFragment(currentSlide);
+                else if (prevVerticalSlide) this._prevSlide(prevVerticalSlide);
+                else if (prevHorizontalSlide) this._prevSlide(prevHorizontalSlide);
+                break;
+            case 'pageDown':
             case 'space':
                 if (currentSlide.f < fMax - 1) this._nextFragment(currentSlide);
                 else if (nextVerticalSlide) this._nextVerticalSlide(currentSlide);
