@@ -46,6 +46,12 @@ class KeyboardInput extends Plugin {
                     case 'ArrowRight':
                         action = 'arrowRight';
                         break;
+                    case 'PageUp':
+                        action = 'pageUp';
+                        break;
+                    case 'PageDown':
+                        action = 'pageDown';
+                        break;
                     case ' ':
                         action = 'space';
                         break;

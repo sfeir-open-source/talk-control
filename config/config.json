@@ -24,13 +24,7 @@
         "port": 3002
     },
     "tcComponent": {
-        "keysBlocked": [
-            "ArrowDown",
-            "ArrowUp",
-            "ArrowLeft",
-            "ArrowRight",
-            "Space"
-        ]
+        "keysBlocked": ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "PageUp", "PageDown", "Space"]
     },
     "logger": {
         "redux": false,
