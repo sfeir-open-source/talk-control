@@ -46,8 +46,8 @@ module.exports = {
         ]
     },
     output: {
-        filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        publicPath: '', // Required by MiniCssExtractPlugin, but can be overridden dynamically (see tc-component/index.js)
+        filename: '[name].bundle.js'
     },
     resolve: {
         alias: {

@@ -77,7 +77,7 @@
         "url-loader": "^4.1.0",
         "vuepress": "^1.5.2",
         "vuepress-jsdoc": "^2.1.1",
-        "webpack": "^4.44.2",
+        "webpack": "^5.0.0",
         "webpack-bundle-analyzer": "^3.9.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0"
