@@ -130,6 +130,10 @@
         "@config": "config",
         "@plugins": "src/plugins"
     },
+    "browserslist": [
+        "defaults",
+        "maintained node versions"
+    ],
     "browser": {
         "socket.io": false
     },
