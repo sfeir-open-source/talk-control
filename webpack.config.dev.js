@@ -6,6 +6,8 @@ module.exports = {
     mode: 'development',
     devServer: {
         overlay: true,
-        port: config.tcController.port
+        port: config.tcController.port,
+        hot: true,
+        quiet: true
     }
 };

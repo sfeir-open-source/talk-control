@@ -45,6 +45,7 @@ module.exports = {
             }
         ]
     },
+    target: 'web',
     output: {
         publicPath: '', // Required by MiniCssExtractPlugin, but can be overridden dynamically (see tc-component/index.js)
         filename: '[name].bundle.js'

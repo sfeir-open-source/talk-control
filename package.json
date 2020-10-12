@@ -130,9 +130,6 @@
         "@config": "config",
         "@plugins": "src/plugins"
     },
-    "browserslist": [
-        "Chrome > 50"
-    ],
     "browser": {
         "socket.io": false
     },
