@@ -45,9 +45,6 @@ module.exports = {
             }
         ]
     },
-    devServer: {
-        overlay: true
-    },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
