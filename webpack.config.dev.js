@@ -7,7 +7,7 @@ module.exports = {
     devServer: {
         overlay: true,
         port: config.tcController.port,
-        hot: true,
+        hot: false,
         quiet: true
     }
 };
