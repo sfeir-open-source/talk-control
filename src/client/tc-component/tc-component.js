@@ -32,7 +32,9 @@ export class TCComponent {
             }
         });
 
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) => pluginServices.activatePluginOnComponent(pluginName, this));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) =>
+            pluginServices.activatePluginOnComponent(pluginName, this)
+        );
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {

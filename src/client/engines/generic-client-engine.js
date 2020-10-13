@@ -9,7 +9,7 @@ export class GenericEngine {
     /**
      * Init engine
      */
-    init () {}
+    init() {}
 
     /**
      * Switch to the given slide

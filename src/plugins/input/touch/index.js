@@ -47,6 +47,6 @@ class TouchInput extends Plugin {
             }
         }
     }
-};
+}
 
 export const instance = new TouchInput();

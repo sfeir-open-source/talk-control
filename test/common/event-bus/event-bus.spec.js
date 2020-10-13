@@ -93,7 +93,7 @@ describe('EventBus', function() {
         it('should throw an error if no key provided', function() {
             expect(() => eventBus.emitTo(undefined, 'data')).to.throw(NO_KEY_PROVIDED);
         });
-        
+
         it('should throw an error if no target provided', function() {
             expect(() => eventBus.emitTo('key', 'data')).to.throw(NO_TARGET_PROVIDED);
         });

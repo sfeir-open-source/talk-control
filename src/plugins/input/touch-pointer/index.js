@@ -213,6 +213,6 @@ class TouchPointerInput extends Plugin {
     _convertPercentToCoordinates(percentValue, size) {
         return (percentValue.replace('%', '') * size) / 100;
     }
-};
+}
 
 export const instance = new TouchPointerInput();

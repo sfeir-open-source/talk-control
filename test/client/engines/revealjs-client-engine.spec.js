@@ -41,7 +41,10 @@ describe('RevealEngineClient', function() {
     describe('goToSlide()', function() {
         it('should call Reveal.slide() with the given params', function() {
             // Given
-            stub(engine, 'getSlides').returns([{ h: 1, v: 1, f: -1, fMax: -1 }, { h: 1, v: 2, f: -1, fMax: 4 }]);
+            stub(engine, 'getSlides').returns([
+                { h: 1, v: 1, f: -1, fMax: -1 },
+                { h: 1, v: 2, f: -1, fMax: 4 }
+            ]);
             // When
             engine.goToSlide({ h: 1, v: 2, f: 3 });
             // Then

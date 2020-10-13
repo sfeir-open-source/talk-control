@@ -55,7 +55,7 @@ describe('EventBusResolver', function() {
             expect(() => resolver.broadcast('channel', 'key', 'data')).to.throw(UNKNOWN_CHANNEL);
         });
     });
-    
+
     describe('emitTo()', function() {
         it('should throw an error if channel is unknown', function() {
             const resolver = new EventBusResolver({});

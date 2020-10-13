@@ -12,10 +12,7 @@ class RemoteControl extends LitElement {
     }
 
     static get styles() {
-        return [
-            bulmaStyles,
-            Fontawesome
-        ];
+        return [bulmaStyles, Fontawesome];
     }
 
     constructor() {

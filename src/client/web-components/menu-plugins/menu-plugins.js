@@ -18,7 +18,7 @@ class MenuPlugins extends LitElement {
             Fontawesome,
             css`
                 #closeButton {
-                    display: none
+                    display: none;
                 }
             `
         ];

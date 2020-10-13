@@ -9,7 +9,7 @@ describe('Event bus logger', function() {
     describe('log', function() {
         let sinonSandbox;
 
-        const stubConsole = function () {
+        const stubConsole = function() {
             sinonSandbox.stub(console, 'error');
             sinonSandbox.stub(console, 'log');
         };
@@ -17,13 +17,13 @@ describe('Event bus logger', function() {
         const stubIsLoggerEnabled = function(returnValue) {
             sinonSandbox.stub(eventBusLogger, 'isLoggerEnabled').callsFake(() => returnValue);
         };
-        
+
         beforeEach(function(done) {
             sinonSandbox = sinon.createSandbox();
             stubConsole();
             done();
         });
-    
+
         afterEach(function(done) {
             sinonSandbox.restore();
             // restoreConsole();
@@ -41,7 +41,7 @@ describe('Event bus logger', function() {
             eventBusLogger.log('log message');
             assert.isOk(console.log.neverCalledWith('log message'));
         });
-        
+
         it('should call console.log with params', function() {
             stubIsLoggerEnabled(true);
             const params = ['my', 'params'];
@@ -54,7 +54,7 @@ describe('Event bus logger', function() {
             eventBusLogger.log('log error', '', true);
             assert.isOk(console.error.calledWith('log error'));
         });
-        
+
         it('should not call console.error when logger is disabled', function() {
             stubIsLoggerEnabled(false);
             eventBusLogger.log('log error');

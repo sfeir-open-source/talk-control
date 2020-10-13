@@ -45,7 +45,7 @@ export class EventBusResolver {
         if (![CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL].includes(channel)) {
             throw new Error(UNKNOWN_CHANNEL);
         }
-        
+
         eventBusLogger.log(`BROADCAST "${key}" on channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
         this.channels[channel].broadcast(key, data);
     }
@@ -82,7 +82,7 @@ export class EventBusResolver {
         eventBusLogger.log(`SET onMultiple '${key}' on ${channel}`);
         this.channels[channel].onMultiple(key, callback);
     }
-    
+
     /**
      *
      * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} channel - Channel from which to listen

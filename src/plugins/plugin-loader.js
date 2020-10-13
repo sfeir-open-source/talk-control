@@ -1,6 +1,6 @@
 /**
  * Dynamically load a plugin module
- * 
+ *
  * @param {string} name Plugin name
  * @returns {Promise} a resolved promise with plugin module
  */
@@ -15,4 +15,4 @@ export function loadPluginModule(name) {
         default:
             return Promise.resolve();
     }
-};
+}

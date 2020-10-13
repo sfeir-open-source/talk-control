@@ -55,24 +55,40 @@ export class TCController {
             this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
             this._initPlugins();
         });
-        
+
         // Forward "showNotes" events to tc-component
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data =>
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data)
+        );
         // Forward "gotoSlide" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data));
-        
-        // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data));
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data =>
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data)
+        );
 
         // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data));
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data));
-        
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data =>
+            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data)
+        );
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data =>
+            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data)
+        );
+
+        // Forward plugin event to server to broadcast it to all controllers
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data =>
+            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data)
+        );
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data =>
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data)
+        );
+
         // Forward "sendPointerEventToController" to server to broadcast to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data => this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data));
+        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data =>
+            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data)
+        );
         // Forward "pointerEvent" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data));
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data =>
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data)
+        );
     }
 
     _initPlugins() {
@@ -87,8 +103,12 @@ export class TCController {
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
             }
 
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) => pluginService.activatePluginOnController(pluginName, this));
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) => pluginService.deactivatePluginOnController(pluginName, this));
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) =>
+                pluginService.activatePluginOnController(pluginName, this)
+            );
+            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) =>
+                pluginService.deactivatePluginOnController(pluginName, this)
+            );
         });
 
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');

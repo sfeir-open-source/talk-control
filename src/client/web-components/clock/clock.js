@@ -5,9 +5,7 @@ import { LitElement, html } from 'lit-element';
 
 class ClockComponent extends LitElement {
     static get styles() {
-        return [
-            bulmaStyles
-        ];
+        return [bulmaStyles];
     }
 
     constructor() {

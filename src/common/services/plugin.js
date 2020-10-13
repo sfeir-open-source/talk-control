@@ -9,10 +9,8 @@ export default {
             .then(plugin => {
                 if (plugin.instance.usedByAComponent) {
                     // Plugins used by a component and need tc-component (ex: keyboard)
-                    controller.eventBusController.on(
-                        CONTROLLER_COMPONENT_CHANNEL,
-                        plugin.instance.type,
-                        event => controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event)
+                    controller.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.instance.type, event =>
+                        controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event)
                     );
 
                     controller.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', { pluginName });

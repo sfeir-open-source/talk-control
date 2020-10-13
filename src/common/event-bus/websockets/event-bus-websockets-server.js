@@ -61,7 +61,7 @@ export class EventBusWebsocketsServer extends EventBus {
             this.sockets.forEach(socket => socket.on(key, (...data) => socketCallback(...[...data.filter(elem => !!elem), socket])));
         }
     }
-    
+
     /**
      * Register a callback on a key locally and for each socket connected or a specific one
      *

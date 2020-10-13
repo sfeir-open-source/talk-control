@@ -12,7 +12,7 @@ class SlideView extends LitElement {
             url: { type: String, reflect: true, attribute: true },
             delta: { type: String, reflect: true, attribute: true },
             focus: { type: Boolean, reflect: true, attribute: true },
-            fullscreen: { type: Boolean, reflect: true, attribute: true },
+            fullscreen: { type: Boolean, reflect: true, attribute: true }
         };
     }
 

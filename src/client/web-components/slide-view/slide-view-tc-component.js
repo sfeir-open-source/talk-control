@@ -9,6 +9,8 @@ import pluginServices from '@services/plugin';
  */
 export class SlideViewTCComponent extends TCComponent {
     init() {
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) => pluginServices.activatePluginOnComponent(pluginName, this));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) =>
+            pluginServices.activatePluginOnComponent(pluginName, this)
+        );
     }
 }
