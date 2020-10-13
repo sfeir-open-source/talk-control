@@ -8,7 +8,8 @@
     },
     "plugins": [
         "mocha",
-        "jsdoc"
+        "jsdoc",
+        "prettier"
     ],
     "extends": [
         "eslint:recommended",
@@ -44,6 +45,7 @@
             "error",
             "always"
         ],
-        "mocha/no-setup-in-describe": "off"
+        "mocha/no-setup-in-describe": "off",
+        "prettier/prettier": ["error"]
     }
 }
