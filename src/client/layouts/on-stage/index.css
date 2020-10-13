@@ -11,12 +11,7 @@
 #header div {
     width: 80vw;
 }
-.content {
-    height: 100%;
-}
-#slide {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+#current {
+    height: 95vh;
+    overflow: hidden;
 }
