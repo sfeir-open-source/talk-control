@@ -15,6 +15,7 @@ export class TCComponent {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'ping', () => this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pong'));
         this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
     }
 

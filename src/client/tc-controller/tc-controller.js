@@ -121,8 +121,24 @@ export class TCController {
     }
 
     onFramesLoaded() {
-        this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
-        this.focusFrame.focus();
-        document.addEventListener('click', () => this.focusFrame.focus());
+        // We create a timeoutPromise to race this promise with a ping message in order
+        // to check if talkControl component is present in the iframe.
+        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), 100));
+        const pongPromise = new Promise(resolve => {
+            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pong', () => resolve('ok'));
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'ping');
+        });
+
+        Promise.race([timeoutPromise, pongPromise]).then(value => {
+            if (value === 'ok') {
+                console.log('script present');
+                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
+                this.focusFrame.focus();
+                document.addEventListener('click', () => this.focusFrame.focus());
+            } else {
+                // TODO
+                console.log('Script not present');
+            }
+        });
     }
 }
