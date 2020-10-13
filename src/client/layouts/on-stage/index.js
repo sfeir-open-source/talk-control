@@ -1,12 +1,12 @@
 'use strict';
 
-require('./index.css');
-require('bulma/css/bulma.min.css');
-require('lit-fontawesome/css/font.css');
-require('@client/web-components/slide-view/slide-view.js');
-require('@client/web-components/clock/clock.js');
-require('@client/web-components/menu-navigation/menu-navigation.js');
-require('@client/web-components/menu-plugins/menu-plugins.js');
+import './index.css';
+import 'bulma/css/bulma.min.css';
+import 'lit-fontawesome/css/font.css';
+import '@client/web-components/slide-view/slide-view.js';
+import '@client/web-components/clock/clock.js';
+import '@client/web-components/menu-navigation/menu-navigation.js';
+import '@client/web-components/menu-plugins/menu-plugins.js';
 
 import { TCController } from '@client/tc-controller/tc-controller.js';
 import config from '@config/config.json';
