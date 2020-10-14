@@ -1,22 +1,20 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusComponent } from '@event-bus/event-bus-component';
 import { EngineResolver } from '../engines/engine-resolver';
 import pluginServices from '@services/plugin';
 
 /**
  * @class TCComponent
  */
-export class TCComponent {
+export class TCComponent extends EventBusComponent {
     constructor(params = {}) {
-        this.eventBusComponent = new EventBusResolver({
-            postMessage: {}
-        });
+        super();
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
         this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'ping', () => this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pong'));
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
     }
 
     init() {

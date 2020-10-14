@@ -1,9 +1,9 @@
 'use strict';
 
 import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { TCComponent } from '@client/tc-component/tc-component';
+import { EventBusComponent } from '@event-bus/event-bus-component';
 
-export class TouchPointerSettingsTCComponent extends TCComponent {
+export class TouchPointerSettingsTCComponent extends EventBusComponent {
     init() {
         this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'touchPointer', () => postMessage);
     }
