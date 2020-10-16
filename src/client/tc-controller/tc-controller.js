@@ -4,6 +4,8 @@ import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANN
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
 
+export const ERROR_TYPE_SCRIPT_NOT_PRESENT = Symbol('script_not_present');
+
 /**
  * @class TCController
  * @classdesc Class that handle the events from the remote client
@@ -16,6 +18,7 @@ export class TCController {
      */
     constructor(server) {
         this.frames = [];
+        this.callBackErrorArray = [];
         // 'querySelectorAllDeep' enable search inside children's shadow-dom
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
@@ -38,18 +41,34 @@ export class TCController {
         this.frames.forEach(
             frame =>
                 (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this.onFramesLoaded();
+                    if (++frameCount >= this.frames.length) this._onFramesLoaded();
                 })
         );
 
-        this.afterInitialisation();
-        this.forwardEvents();
+        this._afterInitialisation();
+        this._forwardEvents();
+    }
+
+    onReady(callback) {
+        this.onReadyCallBack = callback;
+    }
+
+    /**
+     * Add a callback to receive all errors throw by the system
+     * @param {function} callbackError: a callback function
+     */
+    addErrorListener(callbackError) {
+        this.callBackErrorArray.push(callbackError);
+    }
+
+    unregisterErrorListener(callbackError) {
+        this.callBackErrorArray = this.callBackErrorArray.filter(cb => cb !== callbackError);
     }
 
     /**
      * Do actions once the server send the 'initialized' event
      */
-    afterInitialisation() {
+    _afterInitialisation() {
         // Forward initialization event to server
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'initialized', data => {
             this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
@@ -114,13 +133,13 @@ export class TCController {
         this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
     }
 
-    forwardEvents() {
+    _forwardEvents() {
         const forward = (key => data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, key, data)).bind(this);
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
         this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
     }
 
-    onFramesLoaded() {
+    _onFramesLoaded() {
         // We create a timeoutPromise to race this promise with a ping message in order
         // to check if talkControl component is present in the iframe.
         const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), 100));
@@ -135,10 +154,25 @@ export class TCController {
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
                 this.focusFrame.focus();
                 document.addEventListener('click', () => this.focusFrame.focus());
+                if (this.onReadyCallBack) {
+                    this.onReadyCallBack();
+                }
             } else {
-                // TODO
-                console.log('Script not present');
+                this._throwError({
+                    type: ERROR_TYPE_SCRIPT_NOT_PRESENT
+                });
             }
         });
+    }
+
+    _throwError(error) {
+        for (let callback of this.callBackErrorArray) {
+            try {
+                callback(error);
+            } catch (e) {
+                this.unregisterErrorListener(callback);
+                console.error(e);
+            }
+        }
     }
 }
