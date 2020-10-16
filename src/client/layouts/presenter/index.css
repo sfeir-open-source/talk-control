@@ -5,7 +5,8 @@
     text-align: center;
     height: 5vh;
 }
-#header div:first-child, #header div:last-child {
+#header div:first-child,
+#header div:last-child {
     width: 13vw;
 }
 #header div {
@@ -21,7 +22,7 @@
     width: 100vw;
     max-width: 1000px;
     height: 50vh;
-    overflow: hidden
+    overflow: hidden;
 }
 #next {
     height: 42vh;
@@ -29,7 +30,7 @@
 }
 #timer {
     height: 7vh;
-    min-height: 80px
+    min-height: 80px;
 }
 .timer-title {
     margin-top: 0.5rem;
@@ -53,5 +54,9 @@
     padding: 0.5rem;
 }
 .mobile-half-screen-height {
-    height: 46vh !important
+    height: 46vh !important;
+}
+
+tc-loader {
+    height: 95vh;
 }
