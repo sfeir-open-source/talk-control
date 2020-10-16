@@ -1,32 +1,45 @@
-# Description
+## PR Checklist
+Please check if your PR fulfills the following requirements:
 
-Please include a summary of the change and which issue is fixed.
+<!-- Please check the one that applies to this PR using "x" -->
 
-Please also include relevant motivation and context. List any dependencies that are required for this change.
+- [ ] The commit message follows our guidelines: https://github.com/talk-control/talk-control/blob/master/CONTRIBUTING.md#commit
+- [ ] Tests for the changes have been added (for bug fixes / features)
+- [ ] Comments have been added only for tricky sections of the code (for bug fixes / features)
+- [ ] Self review has been performed (for bug fixes / features)
+- [ ] New and existing unit tests pass locally with my changes
 
-Fixes # (issue)
 
-## Type of change
+## PR Type
+What kind of change does this PR introduce?
 
-Please delete options that are not relevant.
+<!-- Please check the one that applies to this PR using "x" -->
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
+- [ ] Code style update (formatting, local variables)
+- [ ] Refactoring (no functional changes, no api changes)
+- [ ] Build related changes
+- [ ] CI related changes
+- [ ] Documentation content changes
+- [ ] Other... Please describe:
 
-# How has this been tested?
 
-Please describe the tests that you ran to verify your changes.
+## What is the current behavior?
+<!-- Please describe the current behavior that you are modifying, or link to a relevant issue -->
 
-Provide instructions so we can reproduce.
+Issue Number: N/A
 
-Please also list any relevant details for your test configuration
 
-# Checklist:
+## What is the new behavior?
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code (only) for areas that are hard to understand
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
+<!-- Please describe the new behavior -->
+
+## Does this PR introduce a breaking change?
+
+- [ ] Yes
+- [ ] No
+
+<!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below -->
