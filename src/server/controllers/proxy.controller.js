@@ -5,17 +5,17 @@ const router = express.Router();
 
 const proxy = require('http-proxy').createProxyServer({
     host: 'http://localhost',
-    port: 5002
+    port: 3002
 });
 
 router.all('*', (req, res, next) => {
-    console.log(req.originalUrl);
+    console.log('Proxing url', req.originalUrl);
     if (req.originalUrl !== '/iframeFull' && req.originalUrl !== '/iframe') {
         proxy.web(
             req,
             res,
             {
-                target: 'http://localhost:5002'
+                target: 'http://localhost:3002'
             },
             next
         );
