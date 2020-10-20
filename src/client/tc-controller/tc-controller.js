@@ -3,6 +3,7 @@
 import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
+import { LoaderMixin } from '@client/web-components/loader/tc-loader.mixin';
 
 export const ERROR_TYPE_SCRIPT_NOT_PRESENT = Symbol('script_not_present');
 
@@ -10,13 +11,14 @@ export const ERROR_TYPE_SCRIPT_NOT_PRESENT = Symbol('script_not_present');
  * @class TCController
  * @classdesc Class that handle the events from the remote client
  */
-export class TCController {
+export class TCController extends LoaderMixin() {
     /**
      * Class constructor
      *
      * @param {string} server - server adress to connect to
      */
     constructor(server) {
+        super();
         this.frames = [];
         this.callBackErrorArray = [];
         // 'querySelectorAllDeep' enable search inside children's shadow-dom
@@ -47,10 +49,6 @@ export class TCController {
 
         this._afterInitialisation();
         this._forwardEvents();
-    }
-
-    onReady(callback) {
-        this.onReadyCallBack = callback;
     }
 
     /**
@@ -154,10 +152,9 @@ export class TCController {
                 this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
                 this.focusFrame.focus();
                 document.addEventListener('click', () => this.focusFrame.focus());
-                if (this.onReadyCallBack) {
-                    this.onReadyCallBack();
-                }
+                this._mixinDoReady();
             } else {
+                this._mixinDoError();
                 this._throwError({
                     type: ERROR_TYPE_SCRIPT_NOT_PRESENT
                 });

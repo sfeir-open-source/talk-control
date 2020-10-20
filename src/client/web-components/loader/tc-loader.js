@@ -38,19 +38,24 @@ class LoaderComponent extends LitElement {
 
     constructor() {
         super();
+        this._loaderMixin;
         this._tcController;
     }
 
-    set tcController(tcController) {
-        this._tcController = tcController;
-        this._tcController.onReady(() => {
+    set loaderMixin(loaderMixin) {
+        this._loaderMixin = loaderMixin;
+        this._loaderMixin.onReady(() => {
             this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
-            this.shadowRoot.querySelector('slot').classList.remove('is-hidden');
+            this.shadowRoot.querySelector('slot[name="success"]').classList.remove('is-hidden');
+        });
+        this._loaderMixin.onError(() => {
+            this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
+            this.shadowRoot.querySelector('slot[name="error"]').classList.remove('is-hidden');
         });
     }
 
-    get tcController() {
-        return this._tcController;
+    get loaderMixin() {
+        return this._loaderMixin;
     }
 
     firstUpdated() {
@@ -59,11 +64,11 @@ class LoaderComponent extends LitElement {
 
     render() {
         return html`
-            <slot class="is-hidden"></slot>
+            <slot name="success" class="is-hidden"></slot>
             <div class="tc-loader is-active">
                 <div class="loader is-loading"></div>
             </div>
-            <div class="on-error"></div>
+            <slot name="error" class="is-hidden on-error"></slot>
         `;
     }
 }
