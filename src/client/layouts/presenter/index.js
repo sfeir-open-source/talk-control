@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const isRemote = contextService.isUsingRemoteUrl(window.location.href);
 
     const tcController = new TCController(isRemote ? config.tcServer.urls.external : config.tcServer.urls.local);
-    tcLoader.tcController = tcController;
+    tcLoader.loaderMixin = tcController;
     tcController.init();
     tcController.addErrorListener(error => {
         switch (error.type) {
@@ -36,4 +36,9 @@ window.addEventListener('DOMContentLoaded', function() {
         const slideViews = document.querySelectorAll('tc-slide');
         slideViews.forEach(slideView => (slideView.url = url));
     }
+
+    const doMagicButton = document.getElementById('doMagic');
+    doMagicButton.addEventListener('click', () => {
+        console.log('click magic');
+    });
 });

@@ -13,7 +13,7 @@
             <div class="mt-1 mr-2 has-text-right"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
         <tc-loader>
-            <section id="content" class="columns is-marginless">
+            <section slot="success" id="content" class="columns is-marginless">
                 <div class="column is-paddingless is-three-fifths" id="current">
                     <div class="content">
                         <tc-slide id="currentSlide" focus></tc-slide>
@@ -43,6 +43,48 @@
                                 <tc-notes></tc-notes>
                             </div>
                         </article>
+                    </div>
+                </div>
+            </section>
+            <section slot="error">
+                <div class="container is-max-desktop">
+                    <div class="content is-medium">
+                        <h1>TalkControl cannot control your presentation</h1>
+                        <p>
+                            You need to add tc-component.js script to your presentation to take control of it.
+                        </p>
+                        <h2>Do it with magic</h2>
+                        <p>
+                            We implement a mecanism that could inject for you the script in your presentation but this one could not work with one of those cases:
+                            <ul>
+                            <li>Use of external server call in slides</li>
+                            <li>Use of websockets</li>
+                            <li>Use of an Iframe pointing to an external website</li>
+                            </ul>
+                            If you are in one of those cases, we encourage you to test the "magic" before.<br/>
+                            If something is not working, please refer to manually process.<br/>
+                            To use the magic, please click here :
+                        </p>
+                        <p class="has-text-centered">
+                            <button id="doMagic" class="is-size-4">Do the magic 🧙‍♀️</button>
+                        </p>
+                        <h2>Or do it manually</h2>
+                        <p>
+                            <ul>
+                                <li>Open your the index.html file of your presentation</li>
+                                <li>Insert the following code just before the &lt;/body&gt; tag :
+                                    <pre>
+                                        <code>
+&lt;script type="application/javascript"&gt;
+    // Configure the url of the server serving the tc-component and other split shunks
+    window.tcResourcePath = 'http://localhost:3000/'
+&lt;/script&gt;
+&lt;script type="text/javascript" src="http://localhost:3000/tc-component.bundle.js"&gt;&lt;/script&gt;	
+                                        </code>
+                                    </pre>
+                                </li>
+                            </ul>
+                        </p>
                     </div>
                 </div>
             </section>

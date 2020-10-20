@@ -396,12 +396,6 @@ Reveal.addEventListener( 'customevent', function() {
 		</div>
 
 		<script src="resources/reveal/js/reveal.js"></script>
-		<script type="application/javascript">
-		// Configure the url of the server serving the tc-component and other split shunks
-		window.tcResourcePath = 'http://localhost:3000/'
-		</script>
-        <script type="text/javascript" src="http://localhost:3000/tc-component.bundle.js"></script>
-
 		<script>
 
 			// More info https://github.com/hakimel/reveal.js#configuration
@@ -425,6 +419,10 @@ Reveal.addEventListener( 'customevent', function() {
 			});
 
 		</script>
-
+		<script type="application/javascript">
+			// Configure the url of the server serving the tc-component and other split shunks
+			window.tcResourcePath = 'http://localhost:3000/'
+		</script>
+		<script type="text/javascript" src="http://localhost:3000/tc-component.bundle.js"></script>	
 	</body>
 </html>
