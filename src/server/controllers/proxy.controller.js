@@ -2,7 +2,6 @@
 
 const express = require('express');
 const router = express.Router();
-
 const proxy = require('http-proxy').createProxyServer({
     host: 'http://localhost',
     port: 3002
@@ -10,7 +9,7 @@ const proxy = require('http-proxy').createProxyServer({
 
 router.all('*', (req, res, next) => {
     console.log('Proxing url', req.originalUrl);
-    if (req.originalUrl !== '/iframeFull' && req.originalUrl !== '/iframe') {
+    if (req.originalUrl !== '/iframe') {
         proxy.web(
             req,
             res,
