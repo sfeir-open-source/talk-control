@@ -1,11 +1,11 @@
 'use strict';
 
-require('./index.css');
-require('bulma/css/bulma.min.css');
-require('lit-fontawesome/css/font.css');
-require('@client/web-components/url-form/url-form.js');
-require('@client/web-components/view-selector/view-selector');
-require('@client/web-components/remote-control/remote-control');
+import 'bulma/css/bulma.min.css';
+import 'lit-fontawesome/css/font.css';
+import './index.css';
+import '@client/web-components/url-form/url-form.js';
+import '@client/web-components/view-selector/view-selector';
+import '@client/web-components/remote-control/remote-control';
 
 window.addEventListener('DOMContentLoaded', function() {
     document.querySelector('tc-url-form').classList.remove('is-hidden');
