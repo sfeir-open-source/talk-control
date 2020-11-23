@@ -53,7 +53,8 @@ export class TCController extends LoaderMixin() {
 
     /**
      * Add a callback to receive all errors throw by the system
-     * @param {function} callbackError: a callback function
+     *
+     * @param {Function} callbackError: a callback function
      */
     addErrorListener(callbackError) {
         this.callBackErrorArray.push(callbackError);
