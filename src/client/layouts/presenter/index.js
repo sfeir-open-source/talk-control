@@ -35,11 +35,32 @@ window.addEventListener('DOMContentLoaded', function() {
     const url = sessionStorage.getItem('presentationUrl');
     if (url) {
         const slideViews = document.querySelectorAll('tc-slide');
-        slideViews.forEach(slideView => (slideView.url = url));
+        slideViews.forEach(slideView => {
+            if (url.includes('tc-presentation-url')) {
+                slideView.injectUrl(location.origin, url.split('tc-presentation-url=')[1]);
+            } else {
+                slideView.url = url;
+            }
+        });
     }
 
     const doMagicButton = document.getElementById('doMagic');
     doMagicButton.addEventListener('click', () => {
+        const newUrl = `${location.origin}?tc-presentation-url=${url}`;
+        sessionStorage.setItem('presentationUrl', newUrl);
+        location.reload();
+
+        /*
+
+
+
+        fetch(localhost:3000?urlPresentation={$url})
+        .then(res=> res.text())
+        .then(contentHtmlWithInjection =>{
+            const slideViews = document.querySelectorAll('tc-slide');
+            slideViews.forEach(slideView => (slideView.injectHtml(contentHtmlWithInjection)));
+        })
+        */
         console.log('click magic');
     });
 });

@@ -37,6 +37,18 @@ class SlideView extends LitElement {
         this.fullscreen = false;
     }
 
+    injectUrl(urlServer, presentationUrl) {
+        fetch(`${urlServer}?tc-presentation-url=${presentationUrl}`)
+            .then(res => res.text())
+            .then(contentHtmlWithInjection => {
+                const iframe = this.shadowRoot.querySelector('iframe');
+                const document = iframe.documentElement;
+                document.open();
+                document.write(contentHtmlWithInjection);
+                document.close();
+            });
+    }
+
     firstUpdated() {
         super.firstUpdated();
         new SlideViewTCComponent({ shadowRoot: this.shadowRoot });
