@@ -21,8 +21,9 @@ import contextService from '@services/context';
 window.addEventListener('DOMContentLoaded', function() {
     const tcLoader = document.querySelector('tc-loader');
     const isRemote = contextService.isUsingRemoteUrl(window.location.href);
+    const tcServerUrl = isRemote ? config.tcServer.urls.external : config.tcServer.urls.local;
 
-    const tcController = new TCController(isRemote ? config.tcServer.urls.external : config.tcServer.urls.local);
+    const tcController = new TCController(tcServerUrl);
     tcLoader.loaderMixin = tcController;
     tcController.init();
     tcController.addErrorListener(error => {
@@ -32,12 +33,13 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const url = sessionStorage.getItem('presentationUrl');
+    let url = sessionStorage.getItem('presentationUrl');
     if (url) {
         const slideViews = document.querySelectorAll('tc-slide');
         slideViews.forEach(slideView => {
             if (url.includes('tc-presentation-url')) {
-                slideView.injectUrl(location.origin, url.split('tc-presentation-url=')[1]);
+                //TODO récupérer le config.json
+                slideView.injectUrl(tcServerUrl, url.split('tc-presentation-url=')[1]);
             } else {
                 slideView.url = url;
             }
@@ -46,6 +48,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const doMagicButton = document.getElementById('doMagic');
     doMagicButton.addEventListener('click', () => {
+        if (url.includes('tc-presentation-url')) {
+            url = url.split('tc-presentation-url=')[1];
+        }
         const newUrl = `${location.origin}?tc-presentation-url=${url}`;
         sessionStorage.setItem('presentationUrl', newUrl);
         location.reload();
