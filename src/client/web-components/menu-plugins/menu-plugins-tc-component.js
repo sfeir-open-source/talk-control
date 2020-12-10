@@ -7,10 +7,13 @@ import { EventBusComponent } from '@event-bus/event-bus-component';
  * Class to use plugins with SlideView component, and have access to eventBusComponent.
  */
 export class MenuPluginsTCComponent extends EventBusComponent {
-    init(addToPluginsMenu, deactivatePlugin) {
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', ({ pluginName }) => addToPluginsMenu(pluginName));
-
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'deactivatePlugin', () => deactivatePlugin());
+    constructor(menuPlugins) {
+        super();
+        this.menuPlugins = menuPlugins;
+    }
+    init() {
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', ({ pluginName }) => this.menuPlugins.addItemToMenu(pluginName));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'deactivatePlugin', () => this.menuPlugins.showMenu());
     }
 
     startPlugin(pluginName) {
