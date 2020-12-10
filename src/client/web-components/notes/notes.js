@@ -15,6 +15,7 @@ class NotesComponent extends LitElement {
             `
         ];
     }
+
     firstUpdated() {
         new NotesTCComponent();
         addEventListener('message', message => {

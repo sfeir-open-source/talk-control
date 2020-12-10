@@ -15,12 +15,11 @@ export class TCController extends LoaderMixin() {
     /**
      * Class constructor
      *
-     * @param {string} server - server adress to connect to
+     * @param {string} server - server address to connect to
      */
     constructor(server) {
         super();
         this.frames = [];
-        this.callBackErrorArray = [];
         // 'querySelectorAllDeep' enable search inside children's shadow-dom
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
@@ -49,19 +48,6 @@ export class TCController extends LoaderMixin() {
 
         this._afterInitialisation();
         this._forwardEvents();
-    }
-
-    /**
-     * Add a callback to receive all errors throw by the system
-     *
-     * @param callbackError {Function}: a callback function
-     */
-    addErrorListener(callbackError) {
-        this.callBackErrorArray.push(callbackError);
-    }
-
-    unregisterErrorListener(callbackError) {
-        this.callBackErrorArray = this.callBackErrorArray.filter(cb => cb !== callbackError);
     }
 
     /**
@@ -162,16 +148,5 @@ export class TCController extends LoaderMixin() {
                 });
             }
         });
-    }
-
-    _throwError(error) {
-        for (let callback of this.callBackErrorArray) {
-            try {
-                callback(error);
-            } catch (e) {
-                this.unregisterErrorListener(callback);
-                console.error(e);
-            }
-        }
     }
 }

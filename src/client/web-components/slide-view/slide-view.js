@@ -5,7 +5,6 @@ import { SlideViewTCComponent } from './slide-view-tc-component';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
-// Extend the LitElement base class
 class SlideView extends LitElement {
     static get properties() {
         return {
@@ -26,6 +25,10 @@ class SlideView extends LitElement {
                     width: 100%;
                     height: 100%;
                 }
+                section.fullscreen {
+                    width: 100vw;
+                    height: 100vh;
+                }
             `
         ];
     }
@@ -37,46 +40,37 @@ class SlideView extends LitElement {
         this.fullscreen = false;
     }
 
-    injectUrl(urlServer, presentationUrl) {
-        const iframe = this.shadowRoot.querySelector('iframe');
-        iframe.src = `${urlServer}/iframe?tc-presentation-url=${presentationUrl}`;
-        // fetch(`${urlServer}/iframe?tc-presentation-url=${presentationUrl}`)
-        //     .then(res => res.text())
-        //     .then(contentHtmlWithInjection => {
-        //         const iframe = this.shadowRoot.querySelector('iframe');
-        //         const document = iframe.contentWindow.document;
-        //         document.open();
-        //         document.write(contentHtmlWithInjection);
-        //         document.close();
-        //     });
-    }
-
     firstUpdated() {
         super.firstUpdated();
-        new SlideViewTCComponent({ shadowRoot: this.shadowRoot });
+        new SlideViewTCComponent();
     }
 
     attributeChangedCallback(name, oldval, newval) {
         super.attributeChangedCallback(name, oldval, newval);
 
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
-            const iframe = this.shadowRoot.querySelector('iframe');
-            let src = `${this.url}#delta=${this.delta}`;
-            if (this.focus) {
-                src += '&focus';
-            }
-            iframe.src = src;
-            iframe.classList.remove('is-hidden');
+            this._loadFrame();
         }
+    }
+
+    _loadFrame() {
+        const iframe = this.shadowRoot.querySelector('iframe');
+        let src = `${this.url}#delta=${this.delta}`;
+        if (this.focus) {
+            src += '&focus';
+        }
+        iframe.src = src;
+        iframe.classList.remove('is-hidden');
     }
 
     render() {
         return html`
-            <section id="slideViewSection" style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
+            <section id="slideViewSection" class="${this.fullscreen ? 'fullscreen' : ''}">
                 <iframe id="slideViewFrame">Current slide</iframe>
             </section>
         `;
     }
 }
+
 // Register the new element with the browser.
 customElements.define('tc-slide', SlideView);

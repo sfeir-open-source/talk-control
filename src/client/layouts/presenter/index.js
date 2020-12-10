@@ -14,7 +14,7 @@ require('@client/web-components/loader/tc-loader.js');
 require('@plugins/input/touch-pointer/components/touch-pointer-settings.js');
 require('@plugins/input/touch-pointer/components/touch-pointer-mask.js');
 
-import { TCController, ERROR_TYPE_SCRIPT_NOT_PRESENT } from '@client/tc-controller/tc-controller.js';
+import { TCController } from '@client/tc-controller/tc-controller.js';
 import config from '@config/config.json';
 import contextService from '@services/context';
 
@@ -26,23 +26,16 @@ window.addEventListener('DOMContentLoaded', function() {
     const tcController = new TCController(tcServerUrl);
     tcLoader.loaderMixin = tcController;
     tcController.init();
-    tcController.addErrorListener(error => {
-        switch (error.type) {
-            case ERROR_TYPE_SCRIPT_NOT_PRESENT:
-                break;
-        }
-    });
 
     let url = sessionStorage.getItem('presentationUrl');
     if (url) {
         const slideViews = document.querySelectorAll('tc-slide');
         slideViews.forEach(slideView => {
             if (url.includes('tc-presentation-url')) {
-                //TODO récupérer le config.json
-                slideView.injectUrl(tcServerUrl, url.split('tc-presentation-url=')[1]);
-            } else {
-                slideView.url = url;
+                const presentationUrl = url.split('tc-presentation-url=')[1];
+                url = `${tcServerUrl}/iframe?tc-presentation-url=${presentationUrl}`;
             }
+            slideView.url = url;
         });
     }
 

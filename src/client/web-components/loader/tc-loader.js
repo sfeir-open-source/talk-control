@@ -64,10 +64,10 @@ class LoaderComponent extends LitElement {
 
     render() {
         return html`
-            <slot name="success" class="is-hidden"></slot>
             <div class="tc-loader is-active">
                 <div class="loader is-loading"></div>
             </div>
+            <slot name="success" class="is-hidden"></slot>
             <slot name="error" class="is-hidden on-error"></slot>
         `;
     }
