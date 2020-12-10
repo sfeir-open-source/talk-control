@@ -10,7 +10,7 @@ require('@client/web-components/timer/timer.js');
 require('@client/web-components/notes/notes.js');
 require('@client/web-components/menu-navigation/menu-navigation.js');
 require('@client/web-components/menu-plugins/menu-plugins.js');
-require('@client/web-components/loader/tc-loader.js');
+require('@client/web-components/loader/loader.js');
 require('@plugins/input/touch-pointer/components/touch-pointer-settings.js');
 require('@plugins/input/touch-pointer/components/touch-pointer-mask.js');
 

@@ -2,8 +2,9 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
+import { LoaderTCComponent } from '@client/web-components/loader/loader-tc-component';
 
-class LoaderComponent extends LitElement {
+class Loader extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
@@ -36,30 +37,19 @@ class LoaderComponent extends LitElement {
         ];
     }
 
-    constructor() {
-        super();
-        this._loaderMixin;
-        this._tcController;
-    }
-
-    set loaderMixin(loaderMixin) {
-        this._loaderMixin = loaderMixin;
-        this._loaderMixin.onReady(() => {
-            this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
-            this.shadowRoot.querySelector('slot[name="success"]').classList.remove('is-hidden');
-        });
-        this._loaderMixin.onError(() => {
-            this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
-            this.shadowRoot.querySelector('slot[name="error"]').classList.remove('is-hidden');
-        });
-    }
-
-    get loaderMixin() {
-        return this._loaderMixin;
-    }
-
     firstUpdated() {
+        new LoaderTCComponent(this);
         // Initialize clock
+    }
+
+    showSuccess() {
+        this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
+        this.shadowRoot.querySelector('slot[name="success"]').classList.remove('is-hidden');
+    }
+
+    showError() {
+        this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
+        this.shadowRoot.querySelector('slot[name="error"]').classList.remove('is-hidden');
     }
 
     render() {
@@ -74,4 +64,4 @@ class LoaderComponent extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-loader', LoaderComponent);
+customElements.define('tc-loader', Loader);

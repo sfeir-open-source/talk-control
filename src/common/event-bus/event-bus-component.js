@@ -7,13 +7,16 @@ import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event
  */
 export class EventBusComponent {
     constructor() {
-        this.eventBusComponent = new EventBusResolver({
-            postMessage: {}
-        });
+        this.eventBusComponent = new EventBusResolver();
         this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'error', this.error.bind(this));
     }
 
     init() {
-        // Empty method that will be override
+        throw new Error('Not implemented method');
+    }
+
+    error() {
+        throw new Error('Not implemented method');
     }
 }

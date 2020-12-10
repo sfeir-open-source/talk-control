@@ -4,7 +4,7 @@ import { LitElement, html, css } from 'lit-element';
 import { NotesTCComponent } from './notes-tc-component';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
-class NotesComponent extends LitElement {
+class Notes extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
@@ -37,4 +37,4 @@ class NotesComponent extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-notes', NotesComponent);
+customElements.define('tc-notes', Notes);

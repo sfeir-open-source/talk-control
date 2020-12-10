@@ -15,7 +15,7 @@ export const UNKNOWN_CHANNEL = 'Unknown channel';
  * @class EventBusResolver
  */
 export class EventBusResolver {
-    constructor(params) {
+    constructor(params = {}) {
         this.channels = {};
 
         if (params.server) {
