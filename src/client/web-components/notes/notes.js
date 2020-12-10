@@ -17,16 +17,11 @@ class Notes extends LitElement {
     }
 
     firstUpdated() {
-        new NotesTCComponent();
-        addEventListener('message', message => {
-            if (!message || !message.data) {
-                return;
-            }
-            // 'notesReceived' event is fired by the NotesTCComponent
-            if (typeof message.data === 'object' && message.data.type === 'notesReceived') {
-                this.shadowRoot.getElementById('notes').innerHTML = message.data.notes;
-            }
-        });
+        new NotesTCComponent(this);
+    }
+
+    addNotes(notes) {
+        this.shadowRoot.getElementById('notes').innerHTML = notes;
     }
 
     render() {

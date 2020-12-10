@@ -4,7 +4,12 @@ import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EventBusComponent } from '@event-bus/event-bus-component';
 
 export class NotesTCComponent extends EventBusComponent {
+    constructor(notes) {
+        super();
+        this.notes = notes;
+    }
+
     init() {
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data => postMessage({ type: 'notesReceived', notes: data }));
+        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data => this.notes.addNotes(data));
     }
 }

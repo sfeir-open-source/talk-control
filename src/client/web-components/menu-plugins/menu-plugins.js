@@ -6,7 +6,6 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
-// Extend the LitElement base class
 class MenuPlugins extends LitElement {
     static get properties() {
         return {};
