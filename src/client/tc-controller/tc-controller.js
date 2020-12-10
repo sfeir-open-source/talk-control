@@ -79,9 +79,10 @@ export class TCController extends LoaderMixin() {
             this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data)
         );
         // Forward "gotoSlide" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data)
-        );
+        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => {
+            console.log('GoToSlide');
+            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data);
+        });
 
         // Forward plugin event to server to broadcast it to all controllers
         this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data =>
@@ -141,7 +142,7 @@ export class TCController extends LoaderMixin() {
     _onFramesLoaded() {
         // We create a timeoutPromise to race this promise with a ping message in order
         // to check if talkControl component is present in the iframe.
-        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), 100));
+        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), 1000));
         const pongPromise = new Promise(resolve => {
             this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pong', () => resolve('ok'));
             this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'ping');

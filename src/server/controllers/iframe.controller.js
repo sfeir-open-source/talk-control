@@ -86,6 +86,7 @@ const replaceRelativeUrlsByServer = function(originalHtml, tcServerUrl) {
 };
 
 router.get('/', (req, res) => {
+    console.log('im here');
     const urlPresentation = new URL(req.query['tc-presentation-url']);
     const isRemote = contextService.isUsingRemoteUrl(urlPresentation.href);
     console.log('Recieve request ', req.query);
@@ -99,7 +100,7 @@ router.get('/', (req, res) => {
         .then(response => response.text())
         .then(text => {
             text = replaceRelativeUrlsByServer(text, tcServerUrl);
-            text = text.replace('<head>', `<head><base href="${urlPresentation.origin}"/>`);
+            // text = text.replace('<head>', `<head><base href="http://localhost:3001"/>`);
             text = text.replace(
                 '</body>',
                 `

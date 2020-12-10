@@ -28,6 +28,6 @@ export default {
             return false;
         }
 
-        return windowLocationHref.indexOf('://localhost:') === -1;
+        return !/(:\/\/localhost|:\/\/127.0.0.1)/.test(windowLocationHref);
     }
 };

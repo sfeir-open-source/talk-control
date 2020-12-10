@@ -38,15 +38,17 @@ class SlideView extends LitElement {
     }
 
     injectUrl(urlServer, presentationUrl) {
-        fetch(`${urlServer}/iframe?tc-presentation-url=${presentationUrl}`)
-            .then(res => res.text())
-            .then(contentHtmlWithInjection => {
-                const iframe = this.shadowRoot.querySelector('iframe');
-                const document = iframe.contentWindow.document;
-                document.open();
-                document.write(contentHtmlWithInjection);
-                document.close();
-            });
+        const iframe = this.shadowRoot.querySelector('iframe');
+        iframe.src = `${urlServer}/iframe?tc-presentation-url=${presentationUrl}`;
+        // fetch(`${urlServer}/iframe?tc-presentation-url=${presentationUrl}`)
+        //     .then(res => res.text())
+        //     .then(contentHtmlWithInjection => {
+        //         const iframe = this.shadowRoot.querySelector('iframe');
+        //         const document = iframe.contentWindow.document;
+        //         document.open();
+        //         document.write(contentHtmlWithInjection);
+        //         document.close();
+        //     });
     }
 
     firstUpdated() {

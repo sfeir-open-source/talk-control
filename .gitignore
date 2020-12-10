@@ -58,3 +58,6 @@ showcase/resources/tc-component/
 # Documentation
 docs-dist
 docs-sources/developers/code/parts/
+
+# Jetbrains
+.idea
