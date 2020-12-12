@@ -2,9 +2,8 @@
 
 import 'module-alias/register';
 import { assert } from 'chai';
-import { stub, spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
-import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import pluginServices from '@services/plugin';
 
 describe('Plugin service', function() {
@@ -17,7 +16,11 @@ describe('Plugin service', function() {
                 usedByAComponent: true
             };
             const params = {
-                eventBusController: {
+                componentChannel: {
+                    on: spy(),
+                    broadcast: spy()
+                },
+                serverChannel: {
                     on: spy(),
                     broadcast: spy()
                 }
@@ -29,8 +32,8 @@ describe('Plugin service', function() {
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
-            assert.isOk(params.eventBusController.on.calledWith(CONTROLLER_COMPONENT_CHANNEL, pluginInstance.type));
-            assert.isOk(params.eventBusController.broadcast.calledWith(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin'));
+            assert.isOk(params.componentChannel.on.calledWith(pluginInstance.type));
+            assert.isOk(params.componentChannel.broadcast.calledWith('activatePlugin'));
 
             // Finally
             pluginLoader.loadPluginModule.restore();
@@ -46,7 +49,10 @@ describe('Plugin service', function() {
                 onEvent: spy()
             };
             const params = {
-                eventBusController: {
+                componentChannel: {
+                    broadcast: stub()
+                },
+                serverChannel: {
                     broadcast: stub()
                 }
             };

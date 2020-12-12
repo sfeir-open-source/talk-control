@@ -13,7 +13,7 @@ export class TCServer {
      * @param {*} server - Server to connect to
      */
     constructor(server) {
-        this.eventBusServer = new EventBusResolver({ server });
+        this.channel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
         this.previousState = store.getState();
         this.engine = null;
     }
@@ -25,24 +25,18 @@ export class TCServer {
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'init', this.engine.init);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'getPlugins', socket => {
+        this.channel.onMultiple('init', this.engine.init);
+        this.channel.onMultiple('inputEvent', this.engine.handleInput);
+        this.channel.onMultiple('pluginStartingIn', data => this.channel.broadcast('pluginStartingOut', data));
+        this.channel.onMultiple('pluginEndingIn', data => this.channel.broadcast('pluginEndingOut', data));
+        this.channel.onMultiple('pluginEventIn', data => this.channel.broadcast('pluginEventOut', data));
+        this.channel.onMultiple('getPlugins', socket => {
             const fs = require('fs');
             const path = require('path');
             let plugins = [];
             try {
                 plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emitTo(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins, socket);
+                this.channel.emitTo('pluginsList', plugins, socket);
             } catch (e) {
                 // ...
             }
@@ -55,7 +49,7 @@ export class TCServer {
      */
     broadcastStateChanges() {
         const currentState = store.getState();
-        this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
+        this.channel.broadcast('gotoSlide', { slide: currentState.currentSlide });
         this.previousState = currentState;
     }
 }

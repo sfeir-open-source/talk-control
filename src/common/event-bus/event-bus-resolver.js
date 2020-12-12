@@ -4,6 +4,7 @@ import { EventBusWebsocketsServer } from './websockets/event-bus-websockets-serv
 import { EventBusWebsocketsClient } from './websockets/event-bus-websockets-client.js';
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 import { eventBusLogger } from './event-bus-logger';
+import { EventBus } from '@event-bus/event-bus';
 
 export const CONTROLLER_SERVER_CHANNEL = 'CONTROLLER_SERVER_CHANNEL';
 export const CONTROLLER_COMPONENT_CHANNEL = 'CONTROLLER_COMPONENT_CHANNEL';
@@ -11,92 +12,88 @@ export const CONTROLLER_COMPONENT_CHANNEL = 'CONTROLLER_COMPONENT_CHANNEL';
 export const UNKNOWN_CHANNEL = 'Unknown channel';
 
 /**
- * @classdesc Instantiate event buses based on params given
+ * @classdesc Resolve and instantiate event buses
  * @class EventBusResolver
  */
 export class EventBusResolver {
-    constructor(params = {}) {
-        this.channels = {};
+    /**
+     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} name - Channel name to resolve
+     * @param {*} options - Channel options
+     * @returns {EventBus}
+     */
+    static channel(name, options = {}) {
+        const serverSide = typeof window == 'undefined';
 
-        if (params.server) {
-            if (params.client) {
-                // TCController
-                this.channels[CONTROLLER_SERVER_CHANNEL] = new EventBusWebsocketsClient(params.server);
-            } else {
-                // Server
-                this.channels[CONTROLLER_SERVER_CHANNEL] = new EventBusWebsocketsServer(params.server);
+        if (serverSide) {
+            switch (name) {
+                case CONTROLLER_SERVER_CHANNEL:
+                    return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsServer(options.server));
+                default:
+                    throw new Error(UNKNOWN_CHANNEL);
+            }
+        } else {
+            switch (name) {
+                case CONTROLLER_SERVER_CHANNEL:
+                    return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsClient(options.server));
+                case CONTROLLER_COMPONENT_CHANNEL:
+                    return new EventBusProxy(CONTROLLER_COMPONENT_CHANNEL, new EventBusPostMessage(options.frames));
+                default:
+                    throw new Error(UNKNOWN_CHANNEL);
             }
         }
+    }
+}
 
-        if (typeof window != 'undefined') {
-            // Slave
-            this.channels[CONTROLLER_COMPONENT_CHANNEL] = new EventBusPostMessage(params.postMessage || {});
-        }
+class EventBusProxy extends EventBus {
+    constructor(name, eventBus) {
+        super();
+        this.name = name;
+        this.eventBus = eventBus;
     }
 
     /**
      *
-     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} channel - Channel on which to broadcast
      * @param {string} key - Event key to fire
      * @param {*} data - Data to broadcast
      * @throws Will throw an error if key is not specified or if dest is incorrect
      */
-    broadcast(channel, key, data) {
-        if (![CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL].includes(channel)) {
-            throw new Error(UNKNOWN_CHANNEL);
-        }
-
-        eventBusLogger.log(`BROADCAST "${key}" on channel ${channel} with: ${data ? JSON.stringify(data) : 'no data'}`);
-        this.channels[channel].broadcast(key, data);
+    broadcast(key, data) {
+        eventBusLogger.log(`BROADCAST "${key}" on channel ${this.name} with: ${data ? JSON.stringify(data) : 'no data'}`);
+        this.eventBus.broadcast(key, data);
     }
 
     /**
      * Emit data for the target passed in parameter on given event key
      *
-     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} channel - Channel on which to emit
      * @param {string} key - Event name
      * @param {any} data - Values
      * @param {any} target - Socket or window to which the event will be sent
      */
-    emitTo(channel, key, data, target) {
-        if (![CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL].includes(channel)) {
-            throw new Error(UNKNOWN_CHANNEL);
-        }
-
-        eventBusLogger.log(`EMIT "${key}" on channel ${channel} to target "${target.id}" with: ${data ? JSON.stringify(data) : 'no data'}`);
-        this.channels[channel].emitTo(key, data, target);
+    emitTo(key, data, target) {
+        eventBusLogger.log(`EMIT "${key}" on channel ${this.name} to target "${target.id}" with: ${data ? JSON.stringify(data) : 'no data'}`);
+        this.eventBus.emitTo(key, data, target);
     }
 
     /**
      *
-     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} channel - Channel from which to listen
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
-    onMultiple(channel, key, callback) {
-        if (![CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL].includes(channel)) {
-            throw new Error(UNKNOWN_CHANNEL);
-        }
-
-        eventBusLogger.log(`SET onMultiple '${key}' on ${channel}`);
-        this.channels[channel].onMultiple(key, callback);
+    onMultiple(key, callback) {
+        eventBusLogger.log(`SET onMultiple '${key}' on ${this.name}`);
+        this.eventBus.onMultiple(key, callback);
     }
 
     /**
      *
-     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} channel - Channel from which to listen
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
-    on(channel, key, callback) {
-        if (![CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL].includes(channel)) {
-            throw new Error(UNKNOWN_CHANNEL);
-        }
-
+    on(key, callback) {
         try {
-            this.channels[channel].on(key, callback);
+            this.eventBus.on(key, callback);
         } catch (e) {
             eventBusLogger.log('on event bus resolver error: ', [key, e.message], true);
         }

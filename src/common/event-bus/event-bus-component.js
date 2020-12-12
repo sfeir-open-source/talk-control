@@ -7,16 +7,11 @@ import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event
  */
 export class EventBusComponent {
     constructor() {
-        this.eventBusComponent = new EventBusResolver();
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'error', this.error.bind(this));
+        this.channel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL);
+        this.channel.on('init', this.init.bind(this));
+        this.channel.on('error', this.error.bind(this));
     }
 
-    init() {
-        throw new Error('Not implemented method');
-    }
-
-    error() {
-        throw new Error('Not implemented method');
-    }
+    init() {}
+    error() {}
 }

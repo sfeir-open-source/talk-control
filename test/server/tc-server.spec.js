@@ -9,7 +9,7 @@ describe('TCServer', function() {
     let onMultiple;
     beforeEach(function() {
         tcServer = new TCServer();
-        onMultiple = stub(tcServer.eventBusServer, 'onMultiple');
+        onMultiple = stub(tcServer.channel, 'onMultiple');
     });
 
     describe('constructor()', function() {

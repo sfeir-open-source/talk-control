@@ -11,13 +11,13 @@ export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
      *
-     * @param {*} params -
+     * @param {*} frames - Additional frames to be broadcasted/sent to
      */
-    constructor(params) {
+    constructor(frames) {
         super();
         this.windows = [window.parent];
-        if (params.frames) {
-            this.windows = [...this.windows, ...params.frames];
+        if (frames) {
+            this.windows = [...this.windows, ...frames];
         }
         window.addEventListener('message', this._receiveMessageWindow.bind(this), false);
     }

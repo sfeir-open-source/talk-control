@@ -22,12 +22,9 @@ export class TCController {
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
 
-        this.eventBusController = new EventBusResolver({
-            client: true,
-            server,
-            postMessage: {
-                frames: this.frames.map(frame => frame.contentWindow)
-            }
+        this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
+        this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, {
+            frames: this.frames.map(frame => frame.contentWindow)
         });
     }
 
@@ -53,49 +50,35 @@ export class TCController {
      */
     _afterInitialisation() {
         // Forward initialization event to server
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'initialized', data => {
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
+        this.componentChannel.on('initialized', data => {
+            this.serverChannel.broadcast('init', data);
             this._initPlugins();
         });
 
         // Forward "showNotes" events to tc-component
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data)
-        );
+        this.componentChannel.on('sendNotesToController', data => this.componentChannel.broadcast('sendNotesToComponent', data));
         // Forward "gotoSlide" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data => {
+        this.serverChannel.on('gotoSlide', data => {
             console.log('GoToSlide');
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data);
+            this.componentChannel.broadcast('gotoSlide', data);
         });
 
         // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data)
-        );
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data)
-        );
+        this.componentChannel.on('pluginStartingIn', data => this.serverChannel.broadcast('pluginStartingIn', data));
+        this.componentChannel.on('pluginEndingIn', data => this.serverChannel.broadcast('pluginEndingIn', data));
 
         // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data)
-        );
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data)
-        );
+        this.componentChannel.on('pluginEventIn', data => this.serverChannel.broadcast('pluginEventIn', data));
+        this.serverChannel.on('pluginEventOut', data => this.componentChannel.broadcast(data.origin, data));
 
         // Forward "sendPointerEventToController" to server to broadcast to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data)
-        );
+        this.componentChannel.on('sendPointerEventToController', data => this.serverChannel.broadcast('sendPointerEventToController', data));
         // Forward "pointerEvent" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data)
-        );
+        this.serverChannel.on('pointerEvent', data => this.componentChannel.broadcast('pointerEvent', data));
     }
 
     _initPlugins() {
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins => {
+        this.serverChannel.on('pluginsList', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
                 if (plugin.autoActivate) {
@@ -103,24 +86,20 @@ export class TCController {
                     continue;
                 }
 
-                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
+                this.componentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
             }
 
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) =>
-                pluginService.activatePluginOnController(pluginName, this)
-            );
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) =>
-                pluginService.deactivatePluginOnController(pluginName, this)
-            );
+            this.serverChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activatePluginOnController(pluginName, this));
+            this.serverChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivatePluginOnController(pluginName, this));
         });
 
-        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
+        this.serverChannel.broadcast('getPlugins');
     }
 
     _forwardEvents() {
-        const forward = (key => data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, key, data)).bind(this);
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
+        const forward = (key => data => this.componentChannel.broadcast(key, data)).bind(this);
+        this.serverChannel.on('slideNumber', forward('slideNumber'));
+        this.serverChannel.on('currentSlide', forward('currentSlide'));
     }
 
     _onFramesLoaded() {
@@ -128,17 +107,17 @@ export class TCController {
         // to check if talkControl component is present in the iframe.
         const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), 1000));
         const pongPromise = new Promise(resolve => {
-            this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pong', () => resolve('ok'));
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'ping');
+            this.componentChannel.on('pong', () => resolve('ok'));
+            this.componentChannel.broadcast('ping');
         });
 
         Promise.race([timeoutPromise, pongPromise]).then(value => {
             if (value === 'ok') {
                 this.focusFrame.focus();
                 document.addEventListener('click', () => this.focusFrame.focus());
-                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
+                this.componentChannel.broadcast('init');
             } else {
-                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'error', {
+                this.componentChannel.broadcast('error', {
                     type: ERROR_TYPE_SCRIPT_NOT_PRESENT
                 });
             }

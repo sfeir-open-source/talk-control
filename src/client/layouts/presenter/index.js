@@ -19,12 +19,10 @@ import config from '@config/config.json';
 import contextService from '@services/context';
 
 window.addEventListener('DOMContentLoaded', function() {
-    const tcLoader = document.querySelector('tc-loader');
     const isRemote = contextService.isUsingRemoteUrl(window.location.href);
     const tcServerUrl = isRemote ? config.tcServer.urls.external : config.tcServer.urls.local;
 
     const tcController = new TCController(tcServerUrl);
-    tcLoader.loaderMixin = tcController;
     tcController.init();
 
     let url = sessionStorage.getItem('presentationUrl');

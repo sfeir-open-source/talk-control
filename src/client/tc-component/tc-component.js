@@ -1,6 +1,5 @@
 'use strict';
 
-import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import { EventBusComponent } from '@event-bus/event-bus-component';
 import { EngineResolver } from '../engines/engine-resolver';
 import pluginServices from '@services/plugin';
@@ -14,7 +13,7 @@ export class TCComponent extends EventBusComponent {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'ping', () => this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pong'));
+        this.channel.on('ping', () => this.channel.broadcast('pong'));
     }
 
     init() {
@@ -24,20 +23,18 @@ export class TCComponent extends EventBusComponent {
 
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
+        this.channel.on('gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
+                this.channel.broadcast('sendNotesToController', this.engine.getSlideNotes());
             }
         });
 
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) =>
-            pluginServices.activatePluginOnComponent(pluginName, this)
-        );
+        this.channel.on('activatePlugin', ({ pluginName }) => pluginServices.activatePluginOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {
-            this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
+            this.channel.broadcast('initialized', { slides });
         }
     }
 }

@@ -39,7 +39,6 @@ class Loader extends LitElement {
 
     firstUpdated() {
         new LoaderTCComponent(this);
-        // Initialize clock
     }
 
     showSuccess() {

@@ -1,11 +1,10 @@
 'use strict';
 
 import 'module-alias/register';
-import { expect, assert } from 'chai';
+import { assert, expect } from 'chai';
 import { stub } from 'sinon';
 import socketIOClient from 'socket.io-client';
 import { TCController } from '@client/tc-controller/tc-controller';
-import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
 import config from '@config/config.json';
 
 describe('TCController', function() {
@@ -33,7 +32,7 @@ describe('TCController', function() {
     describe('init()', function() {
         it('should fire init when all iframes are loaded', function() {
             // Given
-            const broadcast = stub(tcController.eventBusController, 'broadcast');
+            const broadcast = stub(tcController.componentChannel, 'broadcast');
             stub(tcController, 'afterInitialisation');
             stub(tcController, 'forwardEvents');
 
@@ -43,7 +42,7 @@ describe('TCController', function() {
             tcController.init();
             tcController.frames.forEach(frame => frame.onload());
             // Then
-            assert(broadcast.calledOnceWith(CONTROLLER_COMPONENT_CHANNEL, 'init'), 'init was not fired after all iframes loaded');
+            assert(broadcast.calledOnceWith('init'), 'init was not fired after all iframes loaded');
             broadcast.restore();
         });
     });
