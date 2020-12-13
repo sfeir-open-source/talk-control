@@ -11,7 +11,7 @@ export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
      *
-     * @param {*} frames - Additional frames to be broadcasted/sent to
+     * @param {*} frames - Additional windows to be sent to
      */
     constructor(frames) {
         super();

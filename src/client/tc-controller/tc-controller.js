@@ -1,6 +1,10 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
+import {
+    EventBusResolver,
+    CONTROLLER_SERVER_CHANNEL,
+    CONTROLLER_COMPONENT_CHANNEL
+} from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
 
@@ -18,6 +22,7 @@ export class TCController {
      */
     constructor(server) {
         this.frames = [];
+        this.server = server;
         // 'querySelectorAllDeep' enable search inside children's shadow-dom
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
         this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
@@ -32,17 +37,9 @@ export class TCController {
      * Listen on event keys and display iframe when slideshow url is given
      */
     init() {
-        // Fire init event when all iframes are loaded
-        let frameCount = 0;
-        this.frames.forEach(
-            frame =>
-                (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this._onFramesLoaded();
-                })
-        );
-
         this._afterInitialisation();
         this._forwardEvents();
+        this.loadPresentation();
     }
 
     /**
@@ -75,6 +72,8 @@ export class TCController {
         this.componentChannel.on('sendPointerEventToController', data => this.serverChannel.broadcast('sendPointerEventToController', data));
         // Forward "pointerEvent" events to tc-component
         this.serverChannel.on('pointerEvent', data => this.componentChannel.broadcast('pointerEvent', data));
+
+        this.componentChannel.on('presentationLoaded', () => this._onFramesLoaded());
     }
 
     _initPlugins() {
@@ -122,5 +121,24 @@ export class TCController {
                 });
             }
         });
+    }
+
+    /**
+     * Get URL of the presentation to be controlled
+     *
+     * @returns {string} presentation URL
+     */
+    getPresentationUrl() {
+        let url = sessionStorage.getItem('presentationUrl');
+        if (url.includes('tc-presentation-url')) {
+            const presentationUrl = url.split('tc-presentation-url=')[1];
+            return `${this.server}/iframe?tc-presentation-url=${presentationUrl}`;
+        }
+        return url;
+    }
+
+    loadPresentation() {
+        const url = this.getPresentationUrl();
+        this.componentChannel.broadcast('loadPresentation', url);
     }
 }

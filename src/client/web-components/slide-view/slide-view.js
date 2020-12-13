@@ -42,7 +42,7 @@ class SlideView extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
-        new SlideViewTCComponent();
+        this.slideViewTcComponent =  new SlideViewTCComponent(this);
     }
 
     attributeChangedCallback(name, oldval, newval) {
@@ -61,6 +61,7 @@ class SlideView extends LitElement {
         }
         iframe.src = src;
         iframe.classList.remove('is-hidden');
+        iframe.onload = () => this.slideViewTcComponent.setLoaded();
     }
 
     render() {

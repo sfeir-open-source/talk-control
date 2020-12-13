@@ -26,17 +26,6 @@ window.addEventListener('DOMContentLoaded', function() {
     tcController.init();
 
     let url = sessionStorage.getItem('presentationUrl');
-    if (url) {
-        const slideViews = document.querySelectorAll('tc-slide');
-        slideViews.forEach(slideView => {
-            if (url.includes('tc-presentation-url')) {
-                const presentationUrl = url.split('tc-presentation-url=')[1];
-                url = `${tcServerUrl}/iframe?tc-presentation-url=${presentationUrl}`;
-            }
-            slideView.url = url;
-        });
-    }
-
     const doMagicButton = document.getElementById('doMagic');
     doMagicButton.addEventListener('click', () => {
         if (url.includes('tc-presentation-url')) {
@@ -45,18 +34,5 @@ window.addEventListener('DOMContentLoaded', function() {
         const newUrl = `${location.origin}?tc-presentation-url=${url}`;
         sessionStorage.setItem('presentationUrl', newUrl);
         location.reload();
-
-        /*
-
-
-
-        fetch(localhost:3000?urlPresentation={$url})
-        .then(res=> res.text())
-        .then(contentHtmlWithInjection =>{
-            const slideViews = document.querySelectorAll('tc-slide');
-            slideViews.forEach(slideView => (slideView.injectHtml(contentHtmlWithInjection)));
-        })
-        */
-        console.log('click magic');
     });
 });
