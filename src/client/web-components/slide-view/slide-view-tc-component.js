@@ -7,10 +7,13 @@ export class SlideViewTCComponent extends EventBusComponent {
     constructor(slideView) {
         super();
         this.slideView = slideView;
-        SlideViewTCComponent.count = SlideViewTCComponent.count || {slides: 0, loadedSlides: 0};
+        SlideViewTCComponent.count = SlideViewTCComponent.count || { slides: 0, loadedSlides: 0 };
         SlideViewTCComponent.count.slides++;
 
-        this.channel.on('loadPresentation', url => (this.slideView.url = url));
+        this.channel.on('loadPresentation', url => {
+            this.slideView.url = url;
+            SlideViewTCComponent.count.loadedSlides = 0;
+        });
     }
 
     init() {

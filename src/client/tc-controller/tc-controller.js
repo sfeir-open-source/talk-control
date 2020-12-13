@@ -1,10 +1,6 @@
 'use strict';
 
-import {
-    EventBusResolver,
-    CONTROLLER_SERVER_CHANNEL,
-    CONTROLLER_COMPONENT_CHANNEL
-} from '@event-bus/event-bus-resolver';
+import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
 
@@ -25,7 +21,6 @@ export class TCController {
         this.server = server;
         // 'querySelectorAllDeep' enable search inside children's shadow-dom
         querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
-        this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
 
         this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
         this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, {
@@ -112,8 +107,6 @@ export class TCController {
 
         Promise.race([timeoutPromise, pongPromise]).then(value => {
             if (value === 'ok') {
-                this.focusFrame.focus();
-                document.addEventListener('click', () => this.focusFrame.focus());
                 this.componentChannel.broadcast('init');
             } else {
                 this.componentChannel.broadcast('error', {

@@ -42,7 +42,11 @@ class SlideView extends LitElement {
 
     firstUpdated() {
         super.firstUpdated();
-        this.slideViewTcComponent =  new SlideViewTCComponent(this);
+        this.slideViewTcComponent = new SlideViewTCComponent(this);
+        this.frame = this.shadowRoot.querySelector('iframe');
+        if (this.focus) {
+            this._bindFocus();
+        }
     }
 
     attributeChangedCallback(name, oldval, newval) {
@@ -54,14 +58,18 @@ class SlideView extends LitElement {
     }
 
     _loadFrame() {
-        const iframe = this.shadowRoot.querySelector('iframe');
         let src = `${this.url}#delta=${this.delta}`;
         if (this.focus) {
             src += '&focus';
         }
-        iframe.src = src;
-        iframe.classList.remove('is-hidden');
-        iframe.onload = () => this.slideViewTcComponent.setLoaded();
+        this.frame.src = src;
+        this.frame.classList.remove('is-hidden');
+        this.frame.onload = () => this.slideViewTcComponent.setLoaded();
+    }
+
+    _bindFocus() {
+        this.frame.focus();
+        document.addEventListener('click', () => this.frame.focus());
     }
 
     render() {
