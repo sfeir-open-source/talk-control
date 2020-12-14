@@ -10,7 +10,7 @@ import { EngineResolver } from './engines/engine-resolver';
  */
 export class TCServer {
     /**
-     * @param {*} server - Server to connect to
+     * @param {string} server - Server to connect to
      */
     constructor(server) {
         this.channel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });

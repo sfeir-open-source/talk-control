@@ -12,14 +12,14 @@ export const CONTROLLER_COMPONENT_CHANNEL = 'CONTROLLER_COMPONENT_CHANNEL';
 export const UNKNOWN_CHANNEL = 'Unknown channel';
 
 /**
- * @classdesc Resolve and instantiate event buses
  * @class EventBusResolver
+ * @classdesc Resolve and instantiate event buses
  */
 export class EventBusResolver {
     /**
      * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} name - Channel name to resolve
      * @param {*} options - Channel options
-     * @returns {EventBus}
+     * @returns {EventBus} Resolved event bus
      */
     static channel(name, options = {}) {
         const serverSide = typeof window == 'undefined';
@@ -44,7 +44,15 @@ export class EventBusResolver {
     }
 }
 
+/**
+ * @class EventBusProxy
+ * @classdesc Proxy event bus by name and logs events
+ */
 class EventBusProxy extends EventBus {
+    /**
+     * @param {string} name - Event bus channel name
+     * @param {EventBus} eventBus - Proxied event bus
+     */
     constructor(name, eventBus) {
         super();
         this.name = name;
@@ -52,7 +60,7 @@ class EventBusProxy extends EventBus {
     }
 
     /**
-     *
+     * @override
      * @param {string} key - Event key to fire
      * @param {*} data - Data to broadcast
      * @throws Will throw an error if key is not specified or if dest is incorrect
@@ -63,8 +71,7 @@ class EventBusProxy extends EventBus {
     }
 
     /**
-     * Emit data for the target passed in parameter on given event key
-     *
+     * @override
      * @param {string} key - Event name
      * @param {any} data - Values
      * @param {any} target - Socket or window to which the event will be sent
@@ -75,7 +82,7 @@ class EventBusProxy extends EventBus {
     }
 
     /**
-     *
+     * @override
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
@@ -86,7 +93,7 @@ class EventBusProxy extends EventBus {
     }
 
     /**
-     *
+     * @override
      * @param {string} key - Event key to listen
      * @param {*} callback - Function to call when the event is fired
      * @throws Will throw an error if key is not specified or if src is incorrect
