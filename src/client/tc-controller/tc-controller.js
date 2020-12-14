@@ -1,7 +1,6 @@
 'use strict';
 
 import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
-import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
 
 export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
@@ -19,13 +18,9 @@ export class TCController {
     constructor(server) {
         this.frames = [];
         this.server = server;
-        // 'querySelectorAllDeep' enable search inside children's shadow-dom
-        querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
 
         this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
-        this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, {
-            frames: this.frames.map(frame => frame.contentWindow)
-        });
+        this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, { deep: true });
     }
 
     /**

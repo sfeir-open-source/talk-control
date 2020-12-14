@@ -36,7 +36,7 @@ export class EventBusResolver {
                 case CONTROLLER_SERVER_CHANNEL:
                     return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsClient(options.server));
                 case CONTROLLER_COMPONENT_CHANNEL:
-                    return new EventBusProxy(CONTROLLER_COMPONENT_CHANNEL, new EventBusPostMessage(options.frames));
+                    return new EventBusProxy(CONTROLLER_COMPONENT_CHANNEL, new EventBusPostMessage(options.deep));
                 default:
                     throw new Error(UNKNOWN_CHANNEL);
             }
