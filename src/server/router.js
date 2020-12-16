@@ -1,11 +1,15 @@
 'use strict';
 
-const cors = require('cors');
+import cors from 'cors';
+import patcher from './controllers/patcher.controller';
+import proxy from './controllers/proxy.controller';
+import cookieParser from 'cookie-parser';
 
-module.exports = {
+export default {
     init(app) {
         app.use(cors());
-        app.use('/iframe', require('./controllers/iframe.controller'));
-        app.use('*', require('./controllers/proxy.controller'));
+        app.use(cookieParser());
+        app.use('/patcher', patcher);
+        app.use('/proxy', proxy);
     }
 };

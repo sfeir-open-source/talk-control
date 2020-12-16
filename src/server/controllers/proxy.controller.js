@@ -1,16 +1,18 @@
 'use strict';
 
-const router = require('express').Router();
-const proxy = require('http-proxy').createProxyServer({
-    target: 'http://localhost:3002'
-});
+import express from 'express';
+import httpProxy from 'http-proxy';
+
+const router = express.Router();
+const proxy = httpProxy.createProxyServer();
 
 router.all('*', (req, res) => {
-    console.log('Proxing url', req.originalUrl);
-    if (req.originalUrl !== '/iframe') {
-        req.url = req.originalUrl;
-        proxy.web(req, res);
+    const presentationUrl = req.cookies && req.cookies['tc-presentation-url'];
+    if (presentationUrl) {
+        req.url = req.originalUrl.replace('/proxy', '');
+        const target = new URL(presentationUrl).origin;
+        proxy.web(req, res, { target, secure: false });
     }
 });
 
-module.exports = router;
+export default router;

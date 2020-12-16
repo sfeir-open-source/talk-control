@@ -14,7 +14,6 @@ export class TCController {
      * @param {string} server - server address to connect to
      */
     constructor(server) {
-        this.frames = [];
         this.server = server;
 
         this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
@@ -42,8 +41,6 @@ export class TCController {
 
         // slides
         this.serverChannel.on('gotoSlide', data => this.componentChannel.broadcast('gotoSlide', data));
-        this.serverChannel.on('slideNumber', data => this.componentChannel.broadcast('slideNumber', data));
-        this.serverChannel.on('currentSlide', data => this.componentChannel.broadcast('currentSlide', data));
 
         // plugin start and stop flow
         this.componentChannel.on('pluginStartingIn', data => this.serverChannel.broadcast('pluginStartingIn', data));
@@ -132,7 +129,7 @@ export class TCController {
 
         if (url.includes('tc-presentation-url')) {
             const presentationUrl = url.split('tc-presentation-url=')[1];
-            return `${this.server}/iframe?tc-presentation-url=${presentationUrl}`;
+            return `${this.server}/patcher?tc-presentation-url=${presentationUrl}`;
         }
         return url;
     }
