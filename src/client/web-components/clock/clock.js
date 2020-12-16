@@ -3,19 +3,13 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html } from 'lit-element';
 
-class ClockComponent extends LitElement {
+class Clock extends LitElement {
     static get styles() {
         return [bulmaStyles];
     }
 
-    constructor() {
-        super();
-        this.clockElement = {};
-    }
-
     firstUpdated() {
-        // Initialize clock
-        this.clockElement = this.shadowRoot.querySelector('#clock');
+        this.clock = this.shadowRoot.querySelector('#clock');
         this.startClock();
     }
 
@@ -28,7 +22,7 @@ class ClockComponent extends LitElement {
             const today = new Date();
             const hours = today.getHours();
             const minutes = today.getMinutes();
-            this.clockElement.textContent = `${this.formatTime(hours)}:${this.formatTime(minutes)}`;
+            this.clock.textContent = `${this.formatTime(hours)}:${this.formatTime(minutes)}`;
         };
         updateTime();
         setInterval(updateTime, 1000);
@@ -42,4 +36,4 @@ class ClockComponent extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-clock', ClockComponent);
+customElements.define('tc-clock', Clock);

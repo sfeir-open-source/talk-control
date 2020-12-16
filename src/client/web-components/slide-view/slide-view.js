@@ -41,7 +41,6 @@ class SlideView extends LitElement {
     }
 
     firstUpdated() {
-        super.firstUpdated();
         this.slideViewTcComponent = new SlideViewTCComponent(this);
         this.frame = this.shadowRoot.querySelector('iframe');
         if (this.focus) {

@@ -14,7 +14,6 @@ class UrlForm extends LitElement {
     }
 
     firstUpdated() {
-        super.firstUpdated();
         const presentationUrl = this.shadowRoot.getElementById('presentationUrl');
         const validateButton = this.shadowRoot.getElementById('validateButton');
         const updateButton = this.shadowRoot.getElementById('updateButton');

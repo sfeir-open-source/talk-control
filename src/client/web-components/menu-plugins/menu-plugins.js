@@ -24,7 +24,6 @@ class MenuPlugins extends LitElement {
     }
 
     firstUpdated() {
-        super.firstUpdated();
         this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
             this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
         });

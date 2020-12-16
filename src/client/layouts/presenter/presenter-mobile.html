@@ -22,9 +22,16 @@
                 </div>
             </article>
         </div>
-        <div class="current-mobile mobile-half-screen-height px-0 py-0">
-            <tc-slide id="currentSlide" focus></tc-slide>
-            <div id="placeholder2"/>
-        </div>
+        <tc-loader>
+            <section slot="success" class="current-mobile mobile-half-screen-height px-0 py-0">
+                <tc-slide id="currentSlide" focus></tc-slide>
+                <div id="placeholder2"/>
+            </section>
+            <section slot="error">
+                <div class="container is-max-desktop">
+                    <tc-magic-info></tc-magic-info>
+                </div>
+            </section>
+        </tc-loader>
     </body>
 </html>

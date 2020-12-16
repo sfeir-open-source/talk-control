@@ -7,7 +7,7 @@ export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
 
 /**
  * @class TCController
- * @classdesc Class that manage the control flow through event buses
+ * @classdesc Manage the control flow through event buses
  */
 export class TCController {
     /**

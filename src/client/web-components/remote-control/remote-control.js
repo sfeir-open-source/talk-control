@@ -15,13 +15,7 @@ class RemoteControl extends LitElement {
         return [bulmaStyles, Fontawesome];
     }
 
-    constructor() {
-        super();
-    }
-
     firstUpdated() {
-        super.firstUpdated();
-
         if (config.tcController.urls.external) {
             QRCode.toCanvas(this.shadowRoot.getElementById('qrCode'), config.tcController.urls.external);
             this.shadowRoot.getElementById(

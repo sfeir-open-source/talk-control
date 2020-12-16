@@ -13,14 +13,6 @@ class ViewSelector extends LitElement {
         return [bulmaStyles, Fontawesome];
     }
 
-    constructor() {
-        super();
-    }
-
-    firstUpdated() {
-        super.firstUpdated();
-    }
-
     render() {
         return html`
             <div class="columns">
