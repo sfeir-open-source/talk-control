@@ -7,12 +7,10 @@ export class SlideViewTCComponent extends EventBusComponent {
     constructor(slideView) {
         super();
         this.slideView = slideView;
-        SlideViewTCComponent.count = SlideViewTCComponent.count || { slides: 0, loadedSlides: 0 };
-        SlideViewTCComponent.count.slides++;
 
         this.channel.on('loadPresentation', url => {
             this.slideView.url = url;
-            SlideViewTCComponent.count.loadedSlides = 0;
+            this.channel.broadcast('slideLoading');
         });
     }
 
@@ -21,9 +19,6 @@ export class SlideViewTCComponent extends EventBusComponent {
     }
 
     setLoaded() {
-        SlideViewTCComponent.count.loadedSlides++;
-        if (SlideViewTCComponent.count.slides === SlideViewTCComponent.count.loadedSlides) {
-            this.channel.broadcast('presentationLoaded');
-        }
+        this.channel.broadcast('slideLoaded');
     }
 }
