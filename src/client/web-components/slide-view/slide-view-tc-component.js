@@ -1,7 +1,7 @@
 'use strict';
 
 import { EventBusComponent } from '@event-bus/event-bus-component';
-import pluginServices from '@services/plugin';
+import pluginService from '@services/plugin';
 
 export class SlideViewTCComponent extends EventBusComponent {
     constructor(slideView) {
@@ -15,7 +15,7 @@ export class SlideViewTCComponent extends EventBusComponent {
     }
 
     init() {
-        this.channel.on('activatePlugin', ({ pluginName }) => pluginServices.activatePluginOnComponent(pluginName, this));
+        this.channel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
     }
 
     setLoaded() {

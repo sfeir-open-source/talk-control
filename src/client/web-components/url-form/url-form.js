@@ -3,7 +3,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import config from '@config/config';
 import { LitElement, html } from 'lit-element';
-import { isUrlValid } from '@services/url';
+import { isValidUrl } from '@services/url';
 import contextService from '@services/context';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
@@ -38,7 +38,7 @@ class UrlForm extends LitElement {
             const url = presentationUrl.value;
 
             hideUrlError();
-            if (!isUrlValid(url)) {
+            if (!isValidUrl(url)) {
                 showUrlError();
                 return;
             }

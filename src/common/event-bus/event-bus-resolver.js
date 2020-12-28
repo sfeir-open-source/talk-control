@@ -5,6 +5,7 @@ import { EventBusWebsocketsClient } from './websockets/event-bus-websockets-clie
 import { EventBusPostMessage } from './postmessage/event-bus-postmessage.js';
 import { eventBusLogger } from './event-bus-logger';
 import { EventBus } from '@event-bus/event-bus';
+import contextService from '@services/context';
 
 export const CONTROLLER_SERVER_CHANNEL = 'CONTROLLER_SERVER_CHANNEL';
 export const CONTROLLER_COMPONENT_CHANNEL = 'CONTROLLER_COMPONENT_CHANNEL';
@@ -22,9 +23,7 @@ export class EventBusResolver {
      * @returns {EventBus} Resolved event bus
      */
     static channel(name, options = {}) {
-        const serverSide = typeof window == 'undefined';
-
-        if (serverSide) {
+        if (!contextService.isClientSide()) {
             switch (name) {
                 case CONTROLLER_SERVER_CHANNEL:
                     return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsServer(options.server));

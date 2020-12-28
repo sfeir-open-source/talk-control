@@ -1,17 +1,14 @@
 [
     {
         "name": "keyboardInput",
-        "path": "@plugins/input/keyboard/index.js",
         "autoActivate": true
     },
     {
         "name": "touchInput",
-        "path": "@plugins/input/touch/index.js",
         "autoActivate": true
     },
     {
         "name": "touchPointerInput",
-        "path": "@plugins/input/touch-pointer/index.js",
         "autoActivate": false
     }
 ]

@@ -1,55 +1,44 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
-import store from './store';
 import { EngineResolver } from './engines/engine-resolver';
+import { CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
+import pluginConfigService from '@services/plugin-config';
 
 /**
- * @classdesc Handle state changes and socket events
  * @class TCServer
+ * @classdesc Manage the control state changes
  */
 export class TCServer {
     /**
-     * @param {string} server - Server to connect to
+     * @param {http.Server} server - Http server
      */
     constructor(server) {
         this.channel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
-        this.previousState = store.getState();
-        this.engine = null;
     }
 
     /**
-     * Subscribe to socket and store events and initialize the engine
+     * Initialize the control by initializing an engine and registering event handlers
      *
      * @param {string} engineName - Name of the engine to use
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.channel.onMultiple('init', this.engine.init);
-        this.channel.onMultiple('inputEvent', this.engine.handleInput);
+        this.channel.onMultiple('init', data => {
+            this.engine.init(data);
+            this.channel.broadcast('pluginsList', pluginConfigService.getPlugins());
+        });
+        this.channel.onMultiple('inputEvent', input => this.engine.handleInput(input));
         this.channel.onMultiple('pluginStartingIn', data => this.channel.broadcast('pluginStartingOut', data));
         this.channel.onMultiple('pluginEndingIn', data => this.channel.broadcast('pluginEndingOut', data));
         this.channel.onMultiple('pluginEventIn', data => this.channel.broadcast('pluginEventOut', data));
-        this.channel.onMultiple('getPlugins', socket => {
-            const fs = require('fs');
-            const path = require('path');
-            let plugins = [];
-            try {
-                plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.channel.emitTo('pluginsList', plugins, socket);
-            } catch (e) {
-                // ...
-            }
-        });
-        store.subscribe(this.broadcastStateChanges.bind(this));
+
+        this.engine.store.subscribe(() => this._broadcastStateChanges());
     }
 
     /**
      * Broadcast an event depending on state changes
      */
-    broadcastStateChanges() {
-        const currentState = store.getState();
-        this.channel.broadcast('gotoSlide', { slide: currentState.currentSlide });
-        this.previousState = currentState;
+    _broadcastStateChanges() {
+        this.channel.broadcast('gotoSlide', { slide: this.engine.store.getState().currentSlide });
     }
 }

@@ -2,6 +2,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
+import presentationService from '@services/presentation';
 
 class MagicInfo extends LitElement {
     static get styles() {
@@ -23,10 +24,7 @@ class MagicInfo extends LitElement {
 
     doMagic() {
         let url = sessionStorage.getItem('presentationUrl');
-        if (url.includes('tc-presentation-url')) return;
-
-        const magicUrl = `tc-presentation-url=${url}`;
-        sessionStorage.setItem('presentationUrl', magicUrl);
+        presentationService.saveUrlForPatching(url);
         location.reload();
     }
 

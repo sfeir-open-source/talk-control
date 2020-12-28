@@ -2,7 +2,7 @@
 
 import { EventBusComponent } from '@event-bus/event-bus-component';
 import { EngineResolver } from '../engines/engine-resolver';
-import pluginServices from '@services/plugin';
+import pluginService from '@services/plugin';
 
 /**
  * @class TCComponent
@@ -30,7 +30,7 @@ export class TCComponent extends EventBusComponent {
             }
         });
 
-        this.channel.on('activatePlugin', ({ pluginName }) => pluginServices.activatePluginOnComponent(pluginName, this));
+        this.channel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {

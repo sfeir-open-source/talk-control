@@ -1,7 +1,6 @@
 import { RevealEngine } from '@server/engines/revealjs-server-engine';
 import { expect, assert } from 'chai';
 import { stub } from 'sinon';
-import store from '@server/store';
 
 describe('RevealServerEngine', function() {
     const slides = [
@@ -9,9 +8,10 @@ describe('RevealServerEngine', function() {
         { h: 1, v: 0, f: -1, fMax: 2 },
         { h: 1, v: 1, f: -1, fMax: 2 }
     ];
-    let engine;
+    let engine, store;
     beforeEach(function() {
         engine = new RevealEngine();
+        store = engine.store;
     });
 
     describe('constructor()', function() {

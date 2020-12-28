@@ -4,6 +4,15 @@ import config from '@config/config.json';
 
 export default {
     /**
+     * Return whether execution context is running client side (browser)
+     *
+     * @returns {boolean} true if environment is browser
+     */
+    isClientSide() {
+        return typeof window !== 'undefined';
+    },
+
+    /**
      * Return true if windowLocationHref is presentation's iframe
      *
      * @param {string} windowLocationHref - href string to test

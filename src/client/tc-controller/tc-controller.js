@@ -1,7 +1,7 @@
 'use strict';
 
-import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
 import pluginService from '@services/plugin';
+import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
 
 export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
 
@@ -11,26 +11,25 @@ export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
  */
 export class TCController {
     /**
-     * @param {string} server - server address to connect to
+     * @param {string} server - Server URL
      */
     constructor(server) {
-        this.server = server;
-
         this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
         this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, { deep: true });
     }
 
     /**
      * Initialize the control by plumbing event channels and loading the presentation
+     *
+     * @param {string} presentationUrl - Presentation URL
      */
-    init() {
+    init(presentationUrl) {
         this._bindPreControlEvents();
         this._bindControlEvents();
         this._bindPluginStartStopEvents();
         this._bindPluginEvents();
 
-        const presentationUrl = this._resolvePresentationUrl();
-        this.loadPresentation(presentationUrl);
+        this._loadPresentation(presentationUrl);
     }
 
     /**
@@ -59,14 +58,8 @@ export class TCController {
      * @private
      */
     _bindControlEvents() {
-        this.componentChannel.on('initialized', data => {
-            this.serverChannel.broadcast('init', data);
-            this._loadPlugins();
-        });
-
+        this.componentChannel.on('initialized', data => this.serverChannel.broadcast('init', data));
         this.serverChannel.on('gotoSlide', data => this.componentChannel.broadcast('gotoSlide', data));
-        this.componentChannel.on('sendPointerEventToController', data => this.serverChannel.broadcast('sendPointerEventToController', data));
-        this.serverChannel.on('pointerEvent', data => this.componentChannel.broadcast('pointerEvent', data));
         this.componentChannel.on('sendNotesToController', data => this.componentChannel.broadcast('sendNotesToComponent', data));
     }
 
@@ -76,11 +69,18 @@ export class TCController {
      * @private
      */
     _bindPluginStartStopEvents() {
+        this.serverChannel.on('pluginsList', plugins => {
+            for (const plugin of plugins) {
+                // TODO: check if already initialized and usedByAComponent
+                if (plugin.autoActivate) pluginService.activateOnController(plugin.name, this);
+                else this.componentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
+            }
+        });
+
         this.componentChannel.on('pluginStartingIn', data => this.serverChannel.broadcast('pluginStartingIn', data));
         this.componentChannel.on('pluginEndingIn', data => this.serverChannel.broadcast('pluginEndingIn', data));
-
-        this.serverChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activatePluginOnController(pluginName, this));
-        this.serverChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivatePluginOnController(pluginName, this));
+        this.serverChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activateOnController(pluginName, this));
+        this.serverChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivateOnController(pluginName, this));
     }
 
     /**
@@ -91,22 +91,6 @@ export class TCController {
     _bindPluginEvents() {
         this.componentChannel.on('pluginEventIn', data => this.serverChannel.broadcast('pluginEventIn', data));
         this.serverChannel.on('pluginEventOut', data => this.componentChannel.broadcast(data.origin, data));
-    }
-
-    /**
-     * Fetch and load plugins from server. Activate plugins configured as self-activating
-     *
-     * @private
-     */
-    _loadPlugins() {
-        this.serverChannel.on('pluginsList', plugins => {
-            for (const plugin of plugins) {
-                // TODO: check if already initialized and usedByAComponent
-                if (plugin.autoActivate) pluginService.activatePluginOnController(plugin.name, this);
-                else this.componentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
-            }
-        });
-        this.serverChannel.broadcast('getPlugins');
     }
 
     /**
@@ -132,23 +116,7 @@ export class TCController {
      *
      * @param {string} url - Presentation URL
      */
-    loadPresentation(url) {
+    _loadPresentation(url) {
         this.componentChannel.broadcast('loadPresentation', url);
-    }
-
-    /**
-     * Resolve what the controlled presentation URL should be and returns it
-     *
-     * @returns {string} presentation URL
-     * @private
-     */
-    _resolvePresentationUrl() {
-        let url = sessionStorage.getItem('presentationUrl');
-
-        if (url.includes('tc-presentation-url')) {
-            const presentationUrl = url.split('tc-presentation-url=')[1];
-            return `${this.server}/patcher?tc-presentation-url=${presentationUrl}`;
-        }
-        return url;
     }
 }

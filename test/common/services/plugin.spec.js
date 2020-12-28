@@ -4,7 +4,7 @@ import 'module-alias/register';
 import { assert } from 'chai';
 import { spy, stub } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
-import pluginServices from '@services/plugin';
+import pluginService from '@services/plugin';
 
 describe('Plugin service', function() {
     describe('activatePluginOnController', function() {
@@ -28,7 +28,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await pluginServices.activatePluginOnController(pluginName, params);
+            await pluginService.activateOnController(pluginName, params);
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
@@ -59,7 +59,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await pluginServices.activatePluginOnController(pluginName, params);
+            await pluginService.activateOnController(pluginName, params);
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
@@ -83,7 +83,7 @@ describe('Plugin service', function() {
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
-            await pluginServices.activatePluginOnComponent(pluginName, {});
+            await pluginService.activateOnComponent(pluginName, {});
 
             // Then
             assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));

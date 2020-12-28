@@ -21,4 +21,9 @@ export const reducers = (state, action) => {
     return state;
 };
 
-export default createStore(reducers, initialState, config.logger.redux ? applyMiddleware(createLogger()) : undefined);
+/**
+ *
+ */
+export function createTcStore() {
+    return createStore(reducers, initialState, config.logger.redux ? applyMiddleware(createLogger()) : undefined);
+}
