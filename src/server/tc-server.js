@@ -1,7 +1,7 @@
 'use strict';
 
 import { EngineResolver } from './engines/engine-resolver';
-import { CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import pluginConfigService from '@services/plugin-config';
 
 /**
@@ -13,7 +13,7 @@ export class TCServer {
      * @param {http.Server} server - Http server
      */
     constructor(server) {
-        this.channel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
+        this.channel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
     }
 
     /**

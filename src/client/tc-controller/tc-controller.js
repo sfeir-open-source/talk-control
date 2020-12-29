@@ -1,7 +1,7 @@
 'use strict';
 
 import pluginService from '@services/plugin';
-import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 
 export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
 
@@ -14,8 +14,8 @@ export class TCController {
      * @param {string} server - Server URL
      */
     constructor(server) {
-        this.serverChannel = EventBusResolver.channel(CONTROLLER_SERVER_CHANNEL, { server });
-        this.componentChannel = EventBusResolver.channel(CONTROLLER_COMPONENT_CHANNEL, { deep: true });
+        this.serverChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+        this.componentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep: true });
     }
 
     /**

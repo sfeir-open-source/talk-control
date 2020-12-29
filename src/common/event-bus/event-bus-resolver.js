@@ -7,10 +7,15 @@ import { eventBusLogger } from './event-bus-logger';
 import { EventBus } from '@event-bus/event-bus';
 import contextService from '@services/context';
 
-export const CONTROLLER_SERVER_CHANNEL = 'CONTROLLER_SERVER_CHANNEL';
-export const CONTROLLER_COMPONENT_CHANNEL = 'CONTROLLER_COMPONENT_CHANNEL';
-
-export const UNKNOWN_CHANNEL = 'Unknown channel';
+/**
+ * Type of channels
+ *
+ * @enum {string}
+ */
+export const Channels = {
+    CONTROLLER_SERVER: 'CONTROLLER_SERVER',
+    CONTROLLER_COMPONENT: 'CONTROLLER_COMPONENT'
+};
 
 /**
  * @class EventBusResolver
@@ -18,26 +23,26 @@ export const UNKNOWN_CHANNEL = 'Unknown channel';
  */
 export class EventBusResolver {
     /**
-     * @param {CONTROLLER_SERVER_CHANNEL | CONTROLLER_COMPONENT_CHANNEL} name - Channel name to resolve
+     * @param {Channels} name - Channel name to resolve
      * @param {*} options - Channel options
      * @returns {EventBus} Resolved event bus
      */
     static channel(name, options = {}) {
         if (!contextService.isClientSide()) {
             switch (name) {
-                case CONTROLLER_SERVER_CHANNEL:
-                    return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsServer(options.server));
+                case Channels.CONTROLLER_SERVER:
+                    return new EventBusProxy(Channels.CONTROLLER_SERVER, new EventBusWebsocketsServer(options.server));
                 default:
-                    throw new Error(UNKNOWN_CHANNEL);
+                    throw new Error('Unknown channel');
             }
         } else {
             switch (name) {
-                case CONTROLLER_SERVER_CHANNEL:
-                    return new EventBusProxy(CONTROLLER_SERVER_CHANNEL, new EventBusWebsocketsClient(options.server));
-                case CONTROLLER_COMPONENT_CHANNEL:
-                    return new EventBusProxy(CONTROLLER_COMPONENT_CHANNEL, new EventBusPostMessage(options.deep));
+                case Channels.CONTROLLER_SERVER:
+                    return new EventBusProxy(Channels.CONTROLLER_SERVER, new EventBusWebsocketsClient(options.server));
+                case Channels.CONTROLLER_COMPONENT:
+                    return new EventBusProxy(Channels.CONTROLLER_COMPONENT, new EventBusPostMessage(options.deep));
                 default:
-                    throw new Error(UNKNOWN_CHANNEL);
+                    throw new Error('Unknown channel');
             }
         }
     }
@@ -47,9 +52,9 @@ export class EventBusResolver {
  * @class EventBusProxy
  * @classdesc Proxy event bus by name and logs events
  */
-class EventBusProxy extends EventBus {
+export class EventBusProxy extends EventBus {
     /**
-     * @param {string} name - Event bus channel name
+     * @param {Channels} name - Event bus channel name
      * @param {EventBus} eventBus - Proxied event bus
      */
     constructor(name, eventBus) {
@@ -87,7 +92,7 @@ class EventBusProxy extends EventBus {
      * @throws Will throw an error if key is not specified or if src is incorrect
      */
     onMultiple(key, callback) {
-        eventBusLogger.log(`SET onMultiple '${key}' on ${this.name}`);
+        eventBusLogger.log(`SET onMultiple event '${key}' on ${this.name}`);
         this.eventBus.onMultiple(key, callback);
     }
 
@@ -99,6 +104,7 @@ class EventBusProxy extends EventBus {
      */
     on(key, callback) {
         try {
+            eventBusLogger.log(`SET on event '${key}' on ${this.name}`);
             this.eventBus.on(key, callback);
         } catch (e) {
             eventBusLogger.log('on event bus resolver error: ', [key, e.message], true);

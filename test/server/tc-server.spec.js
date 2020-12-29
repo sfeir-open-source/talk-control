@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { assert, spy, stub, useFakeTimers } from 'sinon';
 import configureStore from 'redux-mock-store';
 import { TCServer } from '@server/tc-server';
-import { CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { EventBus } from '@event-bus/event-bus';
 import { EngineResolver } from '@server/engines/engine-resolver';
 import { GenericEngine } from '@server/engines/generic-server-engine';
@@ -30,7 +30,7 @@ describe('TCServer', function() {
 
     beforeEach(function() {
         controllerChannel = spy(new EventBus());
-        resolveChannel.withArgs(CONTROLLER_SERVER_CHANNEL).returns(controllerChannel);
+        resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(controllerChannel);
 
         engine = spy(new GenericEngine());
         stub(engine, 'store').value(mockStore({}));
@@ -40,7 +40,7 @@ describe('TCServer', function() {
     });
 
     it('should resolve controller channel', function() {
-        assert.calledWithExactly(EventBusResolver.channel, CONTROLLER_SERVER_CHANNEL, { server: httpServer });
+        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: httpServer });
         expect(EventBusResolver.channel.getCalls().length).to.be.equal(1);
         expect(server.channel).to.be.equal(controllerChannel);
     });

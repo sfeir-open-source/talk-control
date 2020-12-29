@@ -6,7 +6,7 @@ import { assert, spy, stub, useFakeTimers } from 'sinon';
 import { ERROR_TYPE_SCRIPT_NOT_PRESENT, TCController } from '@client/tc-controller/tc-controller';
 import { EventBus } from '@event-bus/event-bus';
 import pluginService from '@services/plugin';
-import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 
 describe('TCController', function() {
     let resolveChannel, serverChannel, componentChannel, controller;
@@ -27,14 +27,14 @@ describe('TCController', function() {
     beforeEach(function() {
         serverChannel = spy(new EventBus());
         componentChannel = spy(new EventBus());
-        resolveChannel.withArgs(CONTROLLER_SERVER_CHANNEL).returns(serverChannel);
-        resolveChannel.withArgs(CONTROLLER_COMPONENT_CHANNEL).returns(componentChannel);
+        resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(serverChannel);
+        resolveChannel.withArgs(Channels.CONTROLLER_COMPONENT).returns(componentChannel);
         controller = new TCController(serverUrl);
     });
 
     it('should resolve server and component channels', function() {
-        assert.calledWithExactly(EventBusResolver.channel, CONTROLLER_SERVER_CHANNEL, { server: serverUrl });
-        assert.calledWithExactly(EventBusResolver.channel, CONTROLLER_COMPONENT_CHANNEL, { deep: true });
+        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: serverUrl });
+        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_COMPONENT, { deep: true });
         expect(EventBusResolver.channel.getCalls().length).to.be.equal(2);
         expect(controller.serverChannel).to.be.equal(serverChannel);
         expect(controller.componentChannel).to.be.equal(componentChannel);
