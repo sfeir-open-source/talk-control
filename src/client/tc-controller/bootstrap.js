@@ -1,5 +1,5 @@
 import contextService from '@services/context';
-import config from '@config/config.json';
+import { config } from '@services/config';
 import presentationService from '@services/presentation';
 import { TCController } from '@client/tc-controller/tc-controller';
 

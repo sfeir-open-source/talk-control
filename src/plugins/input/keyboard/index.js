@@ -1,6 +1,6 @@
 'use strict';
 
-import config from '@config/config.json';
+import { config } from '@services/config';
 import { Plugin } from '@plugins/plugin.js';
 
 class KeyboardInput extends Plugin {

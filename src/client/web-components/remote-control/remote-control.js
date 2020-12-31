@@ -3,7 +3,7 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
-import config from '@config/config.json';
+import { config } from '@services/config';
 const QRCode = require('qrcode');
 
 class RemoteControl extends LitElement {

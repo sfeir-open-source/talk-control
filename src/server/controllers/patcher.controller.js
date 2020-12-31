@@ -2,27 +2,63 @@
 
 import express from 'express';
 import fetch from 'node-fetch';
-import config from '@config/config.json';
 import contextService from '@services/context';
+import { config } from '@services/config';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    const presentationUrl = new URL(req.query['tc-presentation-url']);
+router.get('/', patchPresentation);
+
+/**
+ * @param req
+ * @param res
+ */
+export async function patchPresentation(req, res) {
+    let presentationUrl;
+    try {
+        presentationUrl = new URL(req.query['tc-presentation-url']);
+    } catch (e) {
+        res.send('Invalid presentation URL', 400);
+        return;
+    }
+
     const isRemote = contextService.isUsingRemoteUrl(presentationUrl.href);
     const controllerUrl = isRemote ? config.tcController.urls.external : config.tcController.urls.local;
     const serverUrl = isRemote ? config.tcServer.urls.external : config.tcServer.urls.local;
 
-    fetch(presentationUrl.href)
-        .then(response => response.text())
-        .then(content => {
-            content = setNoCaching(content);
-            content = setFrontProxy(content, serverUrl);
-            content = injectComponent(content, controllerUrl);
-            res.cookie('tc-presentation-url', presentationUrl);
-            res.send(content);
-        });
-});
+    const response = await fetch(presentationUrl.href);
+
+    if (response.status === 404) {
+        res.send('Presentation not found', 404);
+        return;
+    }
+
+    let content = await response.text();
+    content = fixHtmlDocument(content);
+    content = setNoCaching(content);
+    content = setFrontProxy(content, serverUrl);
+    content = injectComponent(content, controllerUrl);
+    res.cookie('tc-presentation-url', presentationUrl.href);
+    res.send(content);
+}
+
+/**
+ * @param html
+ */
+function fixHtmlDocument(html) {
+    let fixed = html;
+    if (!fixed.includes('<html')) {
+        fixed = '<html>' + fixed + '</html>';
+    }
+    if (!fixed.includes('<head')) {
+        fixed = fixed.replace('<html>', '<html><head></head>');
+    }
+    if (!fixed.includes('<body')) {
+        fixed = fixed.replace('</head>', '</head><body>');
+        fixed = fixed.replace('</html>', '</body></html>');
+    }
+    return fixed;
+}
 
 /**
  * @param html

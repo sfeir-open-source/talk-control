@@ -3,7 +3,7 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import contextService from '@services/context';
-import config from '@config/config.json';
+import { config } from '@services/config';
 
 describe('Context service', function() {
     describe('isPresentationIframe', function() {

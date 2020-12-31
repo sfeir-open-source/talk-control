@@ -2,7 +2,7 @@
 
 import { EngineResolver } from './engines/engine-resolver';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
-import pluginConfigService from '@services/plugin-config';
+import { plugins } from '@services/config';
 
 /**
  * @class TCServer
@@ -25,7 +25,7 @@ export class TCServer {
         this.engine = EngineResolver.getEngine(engineName);
         this.channel.onMultiple('init', data => {
             this.engine.init(data);
-            this.channel.broadcast('pluginsList', pluginConfigService.getPlugins());
+            this.channel.broadcast('pluginsList', plugins);
         });
         this.channel.onMultiple('inputEvent', input => this.engine.handleInput(input));
         this.channel.onMultiple('pluginStartingIn', data => this.channel.broadcast('pluginStartingOut', data));

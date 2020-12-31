@@ -1,6 +1,6 @@
 'use strict';
 
-import config from '@config/config.json';
+import { config } from '@services/config';
 
 export default {
     /**

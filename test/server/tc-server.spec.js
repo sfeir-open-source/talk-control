@@ -6,15 +6,15 @@ import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { EventBus } from '@event-bus/event-bus';
 import { EngineResolver } from '@server/engines/engine-resolver';
 import { GenericEngine } from '@server/engines/generic-server-engine';
-import pluginConfigService from '@services/plugin-config';
+import * as configService from '@services/config';
 
 const mockStore = configureStore([]);
 describe('TCServer', function() {
     let resolveChannel, controllerChannel, server;
-    const httpServer = { port: 3000 };
     let resolveEngine, engine;
-    const engineName = 'ENGINE_NAME';
     let clock;
+    const httpServer = { port: 3000 };
+    const engineName = 'ENGINE_NAME';
 
     before(function() {
         clock = useFakeTimers();
@@ -92,7 +92,7 @@ describe('TCServer', function() {
                 { name: 'touchInput', autoActivate: true },
                 { name: 'touchPointerInput', autoActivate: false }
             ];
-            stub(pluginConfigService, 'getPlugins').returns(plugins);
+            stub(configService, 'plugins').value(plugins);
             // When
             controllerChannel.broadcast('init', data);
             // Then
