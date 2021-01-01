@@ -1,5 +1,6 @@
 'use strict';
 
+import http from 'http';
 import { EngineResolver } from './engines/engine-resolver';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { plugins } from '@services/config';

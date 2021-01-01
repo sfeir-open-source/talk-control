@@ -9,9 +9,11 @@ const proxy = httpProxy.createProxyServer();
 router.all('*', (req, res) => forwardTraffic(req, res, proxy));
 
 /**
- * @param req
- * @param res
- * @param proxy
+ * Forward requests to presentation server
+ *
+ * @param {Request} req - Request
+ * @param {Response} res - Response
+ * @param {httpProxy.Server} proxy - Http proxy server
  */
 export function forwardTraffic(req, res, proxy) {
     const presentationUrl = req.cookies && req.cookies['tc-presentation-url'];

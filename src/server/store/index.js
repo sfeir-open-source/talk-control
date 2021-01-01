@@ -1,7 +1,7 @@
 'use strict';
 
 import config from '@config/config';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Store } from 'redux';
 import { createLogger } from 'redux-logger';
 import { ACTIONS } from './actions';
 
@@ -22,7 +22,9 @@ export const reducers = (state, action) => {
 };
 
 /**
+ * Create a Talk Control state store
  *
+ * @returns {Store} - Talk control store
  */
 export function createTcStore() {
     return createStore(reducers, initialState, config.logger.redux ? applyMiddleware(createLogger()) : undefined);

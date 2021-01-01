@@ -4,7 +4,7 @@ import presentationService from '@services/presentation';
 import { TCController } from '@client/tc-controller/tc-controller';
 
 /**
- *
+ * Bootstraps Talk Control Controller
  */
 export function bootstrapTcController() {
     const isRemote = contextService.isUsingRemoteUrl(window.location.href);

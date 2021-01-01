@@ -10,8 +10,10 @@ const router = express.Router();
 router.get('/', patchPresentation);
 
 /**
- * @param req
- * @param res
+ * Handle presentation patching for control
+ *
+ * @param {Request} req - Request
+ * @param {Response} res - Response
  */
 export async function patchPresentation(req, res) {
     let presentationUrl;
@@ -43,7 +45,10 @@ export async function patchPresentation(req, res) {
 }
 
 /**
- * @param html
+ * Fixes Html by adding missing tags (html, head or body)
+ *
+ * @param {string} html - Document to be fixed
+ * @returns {string} - Fixed document
  */
 function fixHtmlDocument(html) {
     let fixed = html;
@@ -61,7 +66,10 @@ function fixHtmlDocument(html) {
 }
 
 /**
- * @param html
+ * Insert metadata to html to deny caching of the document when served
+ *
+ * @param {string} html - Document
+ * @returns {string} - Not cached document
  */
 function setNoCaching(html) {
     return html.replace(
@@ -74,25 +82,31 @@ function setNoCaching(html) {
 }
 
 /**
- * @param html
- * @param serverUrl
+ * Redirect relative requests towards the proxy endpoint by adding a base tag
+ *
+ * @param {string} html - Document
+ * @param {string} serverUrl - Proxy server url
+ * @returns {string} - Proxy directed document
  */
 function setFrontProxy(html, serverUrl) {
     return html.replace('<head>', `<head><base href="${serverUrl}/proxy/"/>`);
 }
 
 /**
- * @param html
- * @param controllerUrl
+ * Inject Talk Control component script in the document
+ *
+ * @param {string} html - Document
+ * @param {string} componentUrl - Talk control component server url
+ * @returns {string} - Document with talk control component script
  */
-function injectComponent(html, controllerUrl) {
+function injectComponent(html, componentUrl) {
     return html.replace(
         '</body>',
         `<script type="application/javascript">
             // Configure the url of the server serving the tc-component and other split shunks
-            window.tcResourcePath = '${controllerUrl}/'
+            window.tcResourcePath = '${componentUrl}/'
         </script>
-        <script src="${controllerUrl}/tc-component.bundle.js"></script></body>`
+        <script src="${componentUrl}/tc-component.bundle.js"></script></body>`
     );
 }
 

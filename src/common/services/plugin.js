@@ -1,10 +1,15 @@
 'use strict';
 
 import { loadPluginModule } from '@plugins/plugin-loader';
+import { TCController } from '@client/tc-controller/tc-controller';
+import { TCComponent } from '@client/tc-component/tc-component';
 
 /**
- * @param pluginName
- * @param controller
+ * Load and bind plugin events to event bus channels
+ *
+ * @param {string} pluginName - Name of plugin to be activated
+ * @param {TCController} controller - Providing event bus channels
+ * @returns {Promise} - Promise of plugin activation
  */
 function activateOnController(pluginName, controller) {
     return loadPluginModule(pluginName)
@@ -26,7 +31,10 @@ function activateOnController(pluginName, controller) {
 }
 
 /**
- * @param pluginName
+ * Deactivate plugin
+ *
+ * @param {string} pluginName - Name of plugin to be deactivated
+ * @returns {Promise} - Promise of plugin deactivation
  */
 function deactivateOnController(pluginName) {
     return loadPluginModule(pluginName)
@@ -35,8 +43,11 @@ function deactivateOnController(pluginName) {
 }
 
 /**
- * @param pluginName
- * @param component
+ * Load and bind plugin events to event bus channels
+ *
+ * @param {string} pluginName - Name of plugin to be activated
+ * @param {TCComponent} component - Providing event bus channels
+ * @returns {Promise} - Promise of plugin activation
  */
 function activateOnComponent(pluginName, component) {
     return loadPluginModule(pluginName)

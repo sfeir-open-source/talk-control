@@ -248,7 +248,7 @@ describe('TCController', function() {
     });
 
     /**
-     *
+     * Runs flow post control of the presentation (slide loading, presentation health check)
      */
     async function prepareControl() {
         await loadSlides(1, 1, 100);
@@ -256,9 +256,11 @@ describe('TCController', function() {
     }
 
     /**
-     * @param numberOfLoadedSlides
-     * @param numberOfSlides
-     * @param loadingTime
+     * Load slides
+     *
+     * @param {number} numberOfLoadedSlides - Number of slides to be loaded
+     * @param {number} numberOfSlides - Number of existing slides
+     * @param {number} loadingTime - Time for the slide to be loaded
      */
     async function loadSlides(numberOfLoadedSlides, numberOfSlides, loadingTime) {
         Array(numberOfSlides)
@@ -271,7 +273,9 @@ describe('TCController', function() {
     }
 
     /**
-     * @param delay
+     * Responds to health check
+     *
+     * @param {number} delay - Deplay in miliseconds before response
      */
     async function respondToHealthCheck(delay) {
         await clock.tickAsync(delay);

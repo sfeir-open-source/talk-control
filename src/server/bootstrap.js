@@ -5,7 +5,7 @@ import router from '@server/router';
 import { TCServer } from '@server/tc-server';
 
 /**
- *
+ * Bootstraps Talk Control Server
  */
 export function bootstrapTcServer() {
     const app = express();
