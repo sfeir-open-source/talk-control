@@ -8,7 +8,7 @@ import contextService from '@services/context';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
 
 // Extend the LitElement base class
-class UrlForm extends LitElement {
+class UrlFormComponent extends LitElement {
     static get styles() {
         return [bulmaStyles];
     }
@@ -101,4 +101,4 @@ class UrlForm extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-url-form', UrlForm);
+customElements.define('tc-url-form', UrlFormComponent);

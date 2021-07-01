@@ -6,7 +6,7 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
-class MenuPlugins extends LitElement {
+class MenuPluginsComponent extends LitElement {
     static get properties() {
         return {};
     }
@@ -82,4 +82,4 @@ class MenuPlugins extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-menu-plugins', MenuPlugins);
+customElements.define('tc-menu-plugins', MenuPluginsComponent);

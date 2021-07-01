@@ -4,7 +4,7 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import presentationService from '@services/presentation';
 
-class MagicInfo extends LitElement {
+class MagicInfoComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
@@ -73,4 +73,4 @@ window.tcResourcePath = 'http://localhost:3000/'
 }
 
 // Register the new element with the browser.
-customElements.define('tc-magic-info', MagicInfo);
+customElements.define('tc-magic-info', MagicInfoComponent);

@@ -6,7 +6,7 @@ import Fontawesome from 'lit-fontawesome';
 import { config } from '@services/config';
 const QRCode = require('qrcode');
 
-class RemoteControl extends LitElement {
+class RemoteControlComponent extends LitElement {
     static get properties() {
         return {};
     }
@@ -47,4 +47,4 @@ class RemoteControl extends LitElement {
     }
 }
 
-customElements.define('tc-remote-control', RemoteControl);
+customElements.define('tc-remote-control', RemoteControlComponent);

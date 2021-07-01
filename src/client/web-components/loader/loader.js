@@ -4,7 +4,7 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import { LoaderTCComponent } from '@client/web-components/loader/loader-tc-component';
 
-class Loader extends LitElement {
+class LoaderComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
@@ -63,4 +63,4 @@ class Loader extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-loader', Loader);
+customElements.define('tc-loader', LoaderComponent);

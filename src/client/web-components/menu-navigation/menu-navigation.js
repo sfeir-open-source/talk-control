@@ -6,7 +6,7 @@ import { LitElement, html } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
 // Extend the LitElement base class
-class MenuNavigation extends LitElement {
+class MenuNavigationComponent extends LitElement {
     static get properties() {
         return {};
     }
@@ -47,4 +47,4 @@ class MenuNavigation extends LitElement {
     }
 }
 // Register the new element with the browser.
-customElements.define('tc-menu-navigation', MenuNavigation);
+customElements.define('tc-menu-navigation', MenuNavigationComponent);

@@ -3,7 +3,7 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html } from 'lit-element';
 
-class Clock extends LitElement {
+class ClockComponent extends LitElement {
     static get styles() {
         return [bulmaStyles];
     }
@@ -36,4 +36,4 @@ class Clock extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-clock', Clock);
+customElements.define('tc-clock', ClockComponent);

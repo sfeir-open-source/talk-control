@@ -4,7 +4,7 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import { TimerTCComponent } from './timer-tc-component';
 
-class Timer extends LitElement {
+class TimerComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
@@ -71,4 +71,4 @@ class Timer extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-timer', Timer);
+customElements.define('tc-timer', TimerComponent);

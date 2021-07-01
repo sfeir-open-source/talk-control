@@ -5,7 +5,7 @@ import { SlideViewTCComponent } from './slide-view-tc-component';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
-class SlideView extends LitElement {
+class SlideViewComponent extends LitElement {
     static get properties() {
         return {
             url: { type: String, reflect: true, attribute: true },
@@ -81,4 +81,4 @@ class SlideView extends LitElement {
 }
 
 // Register the new element with the browser.
-customElements.define('tc-slide', SlideView);
+customElements.define('tc-slide', SlideViewComponent);
