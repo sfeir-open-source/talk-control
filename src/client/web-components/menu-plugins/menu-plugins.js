@@ -23,6 +23,12 @@ class MenuPluginsComponent extends LitElement {
         ];
     }
 
+    constructor() {
+        super();
+        this.menuPluginsTcComponent;
+        this.itemTitle = '';
+    }
+
     firstUpdated() {
         this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
             this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');

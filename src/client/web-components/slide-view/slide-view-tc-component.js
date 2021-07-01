@@ -10,7 +10,7 @@ export class SlideViewTCComponent extends EventBusComponent {
 
         this.controllerComponentChannel.on('loadPresentation', url => {
             this.slideView.url = url;
-            this.controllerComponentChannel.broadcast('slideLoading');
+            this.controllerComponentChannel.broadcast('presentationLoading');
         });
     }
 
@@ -19,6 +19,6 @@ export class SlideViewTCComponent extends EventBusComponent {
     }
 
     setLoaded() {
-        this.controllerComponentChannel.broadcast('slideLoaded');
+        this.controllerComponentChannel.broadcast('presentationLoaded');
     }
 }

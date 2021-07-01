@@ -2,7 +2,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
-import { LoaderTCComponent } from '@client/web-components/loader/loader-tc-component';
+import { TCComponentLoaderComponent } from '@client/web-components/loader/loader-tc-component';
 
 class LoaderComponent extends LitElement {
     static get styles() {
@@ -38,7 +38,7 @@ class LoaderComponent extends LitElement {
     }
 
     firstUpdated() {
-        new LoaderTCComponent(this);
+        new TCComponentLoaderComponent(this);
     }
 
     showSuccess() {

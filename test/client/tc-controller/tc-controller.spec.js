@@ -265,11 +265,11 @@ describe('TCController', function() {
     async function loadSlides(numberOfLoadedSlides, numberOfSlides, loadingTime) {
         Array(numberOfSlides)
             .fill(0)
-            .forEach(() => componentChannel.broadcast('slideLoading'));
+            .forEach(() => componentChannel.broadcast('presentationLoading'));
         await clock.tickAsync(loadingTime); // loading time
         Array(numberOfLoadedSlides)
             .fill(0)
-            .forEach(() => componentChannel.broadcast('slideLoaded'));
+            .forEach(() => componentChannel.broadcast('presentationLoaded'));
     }
 
     /**

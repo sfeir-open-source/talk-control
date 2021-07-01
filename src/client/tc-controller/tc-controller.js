@@ -14,8 +14,8 @@ export class TCController {
      * @param {string} server - Server URL
      */
     constructor(server) {
-        this.serverChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
-        this.componentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep: true });
+        this.controllerServerChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+        this.controllerComponentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep: true });
     }
 
     /**
@@ -40,13 +40,13 @@ export class TCController {
      */
     _bindPreControlEvents() {
         const slideCount = { loading: 0, loaded: 0 };
-        this.componentChannel.on('slideLoading', () => slideCount.loading++);
-        this.componentChannel.on('slideLoaded', () => {
+        this.controllerComponentChannel.on('presentationLoading', () => slideCount.loading++);
+        this.controllerComponentChannel.on('presentationLoaded', () => {
             if (++slideCount.loaded !== slideCount.loading) return;
 
-            this._checkHealthPresentation(100).then(status => {
-                if (status === 'ok') this.componentChannel.broadcast('init');
-                else this.componentChannel.broadcast('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
+            this._checkTCClientPresence(100).then(status => {
+                if (status === 'ok') this.controllerComponentChannel.broadcast('init');
+                else this.controllerComponentChannel.broadcast('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
             });
         });
     }
@@ -58,9 +58,9 @@ export class TCController {
      * @private
      */
     _bindControlEvents() {
-        this.componentChannel.on('initialized', data => this.serverChannel.broadcast('init', data));
-        this.serverChannel.on('gotoSlide', data => this.componentChannel.broadcast('gotoSlide', data));
-        this.componentChannel.on('sendNotesToController', data => this.componentChannel.broadcast('sendNotesToComponent', data));
+        this.controllerComponentChannel.on('initialized', data => this.controllerServerChannel.broadcast('init', data));
+        this.controllerServerChannel.on('gotoSlide', data => this.controllerComponentChannel.broadcast('gotoSlide', data));
+        this.controllerComponentChannel.on('sendNotesToController', data => this.controllerComponentChannel.broadcast('sendNotesToComponent', data));
     }
 
     /**
@@ -69,18 +69,18 @@ export class TCController {
      * @private
      */
     _bindPluginStartStopEvents() {
-        this.serverChannel.on('pluginsList', plugins => {
+        this.controllerServerChannel.on('pluginsList', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
                 if (plugin.autoActivate) pluginService.activateOnController(plugin.name, this);
-                else this.componentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
+                else this.controllerComponentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
             }
         });
 
-        this.componentChannel.on('pluginStartingIn', data => this.serverChannel.broadcast('pluginStartingIn', data));
-        this.componentChannel.on('pluginEndingIn', data => this.serverChannel.broadcast('pluginEndingIn', data));
-        this.serverChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activateOnController(pluginName, this));
-        this.serverChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivateOnController(pluginName, this));
+        this.controllerComponentChannel.on('pluginStartingIn', data => this.controllerServerChannel.broadcast('pluginStartingIn', data));
+        this.controllerComponentChannel.on('pluginEndingIn', data => this.controllerServerChannel.broadcast('pluginEndingIn', data));
+        this.controllerServerChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activateOnController(pluginName, this));
+        this.controllerServerChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivateOnController(pluginName, this));
     }
 
     /**
@@ -89,8 +89,8 @@ export class TCController {
      * @private
      */
     _bindPluginEvents() {
-        this.componentChannel.on('pluginEventIn', data => this.serverChannel.broadcast('pluginEventIn', data));
-        this.serverChannel.on('pluginEventOut', data => this.componentChannel.broadcast(data.origin, data));
+        this.controllerComponentChannel.on('pluginEventIn', data => this.controllerServerChannel.broadcast('pluginEventIn', data));
+        this.controllerServerChannel.on('pluginEventOut', data => this.controllerComponentChannel.broadcast(data.origin, data));
     }
 
     /**
@@ -99,13 +99,13 @@ export class TCController {
      * @param {number} timeout - time before fail check
      * @returns {Promise<'ok'|'ko'>} - Health status promise
      */
-    _checkHealthPresentation(timeout) {
+    _checkTCClientPresence(timeout) {
         // We create a timeoutPromise to race this promise with a ping message in order
         // to check if talkControl component is present in the iframe.
         const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), timeout));
         const pongPromise = new Promise(resolve => {
-            this.componentChannel.on('pong', () => resolve('ok'));
-            this.componentChannel.broadcast('ping');
+            this.controllerComponentChannel.on('pong', () => resolve('ok'));
+            this.controllerComponentChannel.broadcast('ping');
         });
 
         return Promise.race([timeoutPromise, pongPromise]);
@@ -117,6 +117,6 @@ export class TCController {
      * @param {string} url - Presentation URL
      */
     _loadPresentation(url) {
-        this.componentChannel.broadcast('loadPresentation', url);
+        this.controllerComponentChannel.broadcast('loadPresentation', url);
     }
 }

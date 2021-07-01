@@ -19,11 +19,11 @@ class MagicInfoComponent extends LitElement {
     }
 
     firstUpdated() {
-        this.shadowRoot.querySelector('#doMagic').addEventListener('click', this.doMagic);
+        this.shadowRoot.querySelector('#startMagicModeButton').addEventListener('click', this.startMagicMode);
     }
 
-    doMagic() {
-        let url = sessionStorage.getItem('presentationUrl');
+    startMagicMode() {
+        const url = sessionStorage.getItem('presentationUrl');
         presentationService.saveUrlForPatching(url);
         location.reload();
     }
@@ -35,20 +35,20 @@ class MagicInfoComponent extends LitElement {
                 <p>
                     You need to add tc-component.js script to your presentation to take control of it.
                 </p>
-                <h2>Do it with magic</h2>
+                <h2>Do it with magic mode</h2>
                 <p>
                     We implement a mecanism that could inject for you the script in your presentation but this one could not work with one of those cases:
                     <ul>
                     <li>Use of external server call in slides</li>
                     <li>Use of websockets</li>
-                    <li>Use of an Iframe pointing to an external website</li>
+                    <li>Use of an iframe pointing to an external website</li>
                     </ul>
-                    If you are in one of those cases, we encourage you to test the "magic" before.<br/>
-                    If something is not working, please refer to manually process.<br/>
-                    To use the magic, please click here :
+                    If you are in one of those cases, we encourage you to test the "magic mode" at first.<br/>
+                    If something is not working, please refer to the manual process.<br/>
+                    To use the magic mode, please click here :
                 </p>
                 <p class="has-text-centered">
-                    <button id="doMagic" class="is-size-4">Do the magic 🧙‍♀️</button>
+                    <button id="startMagicModeButton" class="is-size-4">Use magic mode 🧙‍♀️</button>
                 </p>
                 <h2>Or do it manually</h2>
                 <p>
