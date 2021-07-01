@@ -3,7 +3,8 @@
 import 'module-alias/register';
 import { expect } from 'chai';
 import { assert, createStubInstance, mock, stub } from 'sinon';
-import { Channels, EventBusProxy, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusProxy } from '@event-bus/event-bus-proxy';
 import { EventBus } from '@event-bus/event-bus';
 import contextService from '@services/context';
 import * as wsClientContext from '@event-bus/websockets/event-bus-websockets-client';
