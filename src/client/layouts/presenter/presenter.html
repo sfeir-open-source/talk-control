@@ -12,38 +12,45 @@
             <div><tc-clock></tc-clock></div>
             <div class="mt-1 mr-2 has-text-right"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
-        <section class="columns is-marginless">
-            <div class="column is-paddingless is-three-fifths" id="current">
-                <div class="content">
-                    <tc-slide id="currentSlide" focus></tc-slide>
-                    <div id="placeholder2"></div>
-                </div>
-            </div>
-            <div class="column is-paddingless has-background-white">
-                <div class="has-background-white" id="next">
+        <tc-loader>
+            <section slot="success" id="content" class="columns is-marginless">
+                <div class="column is-paddingless is-three-fifths" id="current">
                     <div class="content">
-                        <tc-slide id="nextSlide" delta="1"></tc-slide>
+                        <tc-slide id="currentSlide" focus></tc-slide>
+                        <div id="placeholder2"></div>
                     </div>
                 </div>
-                <div class="has-background-white" id="timer">
-                    <div class="content">
-                        <div class="block-title">
-                            <p class="is-size-6">TIMER</p>
+                <div class="column is-paddingless has-background-white">
+                    <div class="has-background-white" id="next">
+                        <div class="content">
+                            <tc-slide id="nextSlide" delta="1"></tc-slide>
                         </div>
-                        <div class="is-paddingless is-margin-less"><tc-timer></tc-timer></div>
+                    </div>
+                    <div class="has-background-white" id="timer">
+                        <div class="content">
+                            <div class="block-title">
+                                <p class="is-size-6">TIMER</p>
+                            </div>
+                            <div class="is-paddingless is-margin-less"><tc-timer></tc-timer></div>
+                        </div>
+                    </div>
+                    <div id="placeholder1" class="mb-0 ml-1 mr-3">
+                        <article class="message is-light" id="notes">
+                            <div class="message-header">
+                                <p>Notes</p>
+                            </div>
+                            <div class="message-body">
+                                <tc-notes></tc-notes>
+                            </div>
+                        </article>
                     </div>
                 </div>
-                <div id="placeholder1" class="mb-0 ml-1 mr-3">
-                    <article class="message is-light" id="notes">
-                        <div class="message-header">
-                            <p>Notes</p>
-                        </div>
-                        <div class="message-body">
-                            <tc-notes></tc-notes>
-                        </div>
-                    </article>
+            </section>
+            <section slot="error">
+                <div class="container is-max-desktop">
+                    <tc-magic-info></tc-magic-info>
                 </div>
-            </div>
-        </section>
+            </section>
+        </tc-loader>
     </body>
 </html>

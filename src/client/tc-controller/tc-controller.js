@@ -1,128 +1,122 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 import pluginService from '@services/plugin';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+
+export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
 
 /**
  * @class TCController
- * @classdesc Class that handle the events from the remote client
+ * @classdesc Manage the control flow through event buses
  */
 export class TCController {
     /**
-     * Class constructor
-     *
-     * @param {string} server - server adress to connect to
+     * @param {string} server - Server URL
      */
     constructor(server) {
-        this.frames = [];
-        // 'querySelectorAllDeep' enable search inside children's shadow-dom
-        querySelectorAllDeep('iframe').forEach(frame => this.frames.push(frame));
-        this.focusFrame = this.frames.find(frame => frame.getAttribute('focus') !== null) || this.frames[0];
+        this.controllerServerChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+        this.controllerComponentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep: true });
+    }
 
-        this.eventBusController = new EventBusResolver({
-            client: true,
-            server,
-            postMessage: {
-                frames: this.frames.map(frame => frame.contentWindow)
-            }
+    /**
+     * Initialize the control by plumbing event channels and loading the presentation
+     *
+     * @param {string} presentationUrl - Presentation URL
+     */
+    init(presentationUrl) {
+        this._bindPreControlEvents();
+        this._bindControlEvents();
+        this._bindPluginStartStopEvents();
+        this._bindPluginEvents();
+
+        this._loadPresentation(presentationUrl);
+    }
+
+    /**
+     * Bind events related to the preperation flow
+     * Includes slides counting, presentation health checking then control kick starting
+     *
+     * @private
+     */
+    _bindPreControlEvents() {
+        const slideCount = { loading: 0, loaded: 0 };
+        this.controllerComponentChannel.on('presentationLoading', () => slideCount.loading++);
+        this.controllerComponentChannel.on('presentationLoaded', () => {
+            if (++slideCount.loaded !== slideCount.loading) return;
+
+            this._checkTCClientPresence(100).then(status => {
+                if (status === 'ok') this.controllerComponentChannel.broadcast('init');
+                else this.controllerComponentChannel.broadcast('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
+            });
         });
     }
 
     /**
-     * Listen on event keys and display iframe when slideshow url is given
+     * Bind events related to the control flow
+     * Includes initialization of server, plugins loading. current slide control, pointer control ...
+     *
+     * @private
      */
-    init() {
-        // Fire init event when all iframes are loaded
-        let frameCount = 0;
-        this.frames.forEach(
-            frame =>
-                (frame.onload = () => {
-                    if (++frameCount >= this.frames.length) this.onFramesLoaded();
-                })
-        );
-
-        this.afterInitialisation();
-        this.forwardEvents();
+    _bindControlEvents() {
+        this.controllerComponentChannel.on('initialized', data => this.controllerServerChannel.broadcast('init', data));
+        this.controllerServerChannel.on('gotoSlide', data => this.controllerComponentChannel.broadcast('gotoSlide', data));
+        this.controllerComponentChannel.on('sendNotesToController', data => this.controllerComponentChannel.broadcast('sendNotesToComponent', data));
     }
 
     /**
-     * Do actions once the server send the 'initialized' event
+     * Bind events related to plugin start/stop flow
+     *
+     * @private
      */
-    afterInitialisation() {
-        // Forward initialization event to server
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'initialized', data => {
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'init', data);
-            this._initPlugins();
-        });
-
-        // Forward "showNotes" events to tc-component
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data)
-        );
-        // Forward "gotoSlide" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data)
-        );
-
-        // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginStartingIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data)
-        );
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEndingIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data)
-        );
-
-        // Forward plugin event to server to broadcast it to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'pluginEventIn', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data)
-        );
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, data.origin, data)
-        );
-
-        // Forward "sendPointerEventToController" to server to broadcast to all controllers
-        this.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, 'sendPointerEventToController', data =>
-            this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'sendPointerEventToController', data)
-        );
-        // Forward "pointerEvent" events to tc-component
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pointerEvent', data =>
-            this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'pointerEvent', data)
-        );
-    }
-
-    _initPlugins() {
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins => {
+    _bindPluginStartStopEvents() {
+        this.controllerServerChannel.on('pluginsList', plugins => {
             for (const plugin of plugins) {
                 // TODO: check if already initialized and usedByAComponent
-                if (plugin.autoActivate) {
-                    pluginService.activatePluginOnController(plugin.name, this);
-                    continue;
-                }
-
-                this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'addToPluginsMenu', { pluginName: plugin.name });
+                if (plugin.autoActivate) pluginService.activateOnController(plugin.name, this);
+                else this.controllerComponentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
             }
-
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', ({ pluginName }) =>
-                pluginService.activatePluginOnController(pluginName, this)
-            );
-            this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', ({ pluginName }) =>
-                pluginService.deactivatePluginOnController(pluginName, this)
-            );
         });
 
-        this.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, 'getPlugins');
+        this.controllerComponentChannel.on('pluginStartingIn', data => this.controllerServerChannel.broadcast('pluginStartingIn', data));
+        this.controllerComponentChannel.on('pluginEndingIn', data => this.controllerServerChannel.broadcast('pluginEndingIn', data));
+        this.controllerServerChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activateOnController(pluginName, this));
+        this.controllerServerChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivateOnController(pluginName, this));
     }
 
-    forwardEvents() {
-        const forward = (key => data => this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, key, data)).bind(this);
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'slideNumber', forward('slideNumber'));
-        this.eventBusController.on(CONTROLLER_SERVER_CHANNEL, 'currentSlide', forward('currentSlide'));
+    /**
+     * Bind plugin events (events forwarding)
+     *
+     * @private
+     */
+    _bindPluginEvents() {
+        this.controllerComponentChannel.on('pluginEventIn', data => this.controllerServerChannel.broadcast('pluginEventIn', data));
+        this.controllerServerChannel.on('pluginEventOut', data => this.controllerComponentChannel.broadcast(data.origin, data));
     }
 
-    onFramesLoaded() {
-        this.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'init');
-        this.focusFrame.focus();
-        document.addEventListener('click', () => this.focusFrame.focus());
+    /**
+     * Check that the presentation is accessible through event bus (ping pong system)
+     *
+     * @param {number} timeout - time before fail check
+     * @returns {Promise<'ok'|'ko'>} - Health status promise
+     */
+    _checkTCClientPresence(timeout) {
+        // We create a timeoutPromise to race this promise with a ping message in order
+        // to check if talkControl component is present in the iframe.
+        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), timeout));
+        const pongPromise = new Promise(resolve => {
+            this.controllerComponentChannel.on('pong', () => resolve('ok'));
+            this.controllerComponentChannel.broadcast('ping');
+        });
+
+        return Promise.race([timeoutPromise, pongPromise]);
+    }
+
+    /**
+     * Load the presentation (sending command)
+     *
+     * @param {string} url - Presentation URL
+     */
+    _loadPresentation(url) {
+        this.controllerComponentChannel.broadcast('loadPresentation', url);
     }
 }

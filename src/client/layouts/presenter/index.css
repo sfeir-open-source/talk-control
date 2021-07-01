@@ -5,36 +5,45 @@
     text-align: center;
     height: 5vh;
 }
-#header div:first-child, #header div:last-child {
+
+#header div:first-child,
+#header div:last-child {
     width: 13vw;
 }
+
 #header div {
     width: 80vw;
 }
+
 #current,
 .current-mobile {
     height: 95vh;
     overflow: hidden;
 }
+
 .current-mobile {
     position: relative;
     width: 100vw;
     max-width: 1000px;
     height: 50vh;
-    overflow: hidden
+    overflow: hidden;
 }
+
 #next {
     height: 42vh;
     padding: 0.3rem 0.3rem 0 0;
 }
+
 #timer {
     height: 7vh;
-    min-height: 80px
+    min-height: 80px;
 }
+
 .timer-title {
     margin-top: 0.5rem;
     height: 1rem;
 }
+
 #placeholder2 {
     width: 100%;
     height: 100%;
@@ -43,15 +52,22 @@
     left: 0;
     display: none;
 }
+
 #notes {
     padding: 0.3rem 0.3rem 0.3rem 0;
     overflow: auto;
 }
+
 .content {
     position: relative;
     height: 100%;
     padding: 0.5rem;
 }
+
 .mobile-half-screen-height {
-    height: 46vh !important
+    height: 46vh !important;
+}
+
+tc-loader {
+    height: 95vh;
 }

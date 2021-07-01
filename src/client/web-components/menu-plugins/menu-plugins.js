@@ -6,8 +6,7 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html, css } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
-// Extend the LitElement base class
-class MenuPlugins extends LitElement {
+class MenuPluginsComponent extends LitElement {
     static get properties() {
         return {};
     }
@@ -27,30 +26,25 @@ class MenuPlugins extends LitElement {
     constructor() {
         super();
         this.menuPluginsTcComponent;
-        this.itemTitle;
+        this.itemTitle = '';
     }
 
     firstUpdated() {
-        super.firstUpdated();
         this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
             this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
         });
-        this.menuPluginsTcComponent = new MenuPluginsTCComponent();
-        this.menuPluginsTcComponent.init(
-            pluginName => this._addItemToMenu('pluginsList', pluginName),
-            () => this._showMenu()
-        );
+        this.menuPluginsTcComponent = new MenuPluginsTCComponent(this);
         this.shadowRoot.getElementById('closeButton').addEventListener('click', () => this.closeButtonClick());
     }
 
-    _addItemToMenu(menuTagName, itemTitle) {
+    addItemToMenu(itemTitle) {
         const element = document.createElement('a');
 
         element.className = 'dropdown-item';
         element.innerHTML = itemTitle;
         element.addEventListener('click', () => this.menuItemClick(itemTitle));
 
-        this.shadowRoot.getElementById(menuTagName).appendChild(element);
+        this.shadowRoot.getElementById('pluginsList').appendChild(element);
     }
 
     menuItemClick(itemTitle) {
@@ -61,10 +55,10 @@ class MenuPlugins extends LitElement {
 
     closeButtonClick() {
         this.menuPluginsTcComponent.endPlugin(this.itemTitle);
-        this._showMenu();
+        this.showMenu();
     }
 
-    _showMenu() {
+    showMenu() {
         this.shadowRoot.getElementById('closeButton').style.display = 'none';
         this.shadowRoot.getElementById('menuDropdown').style.display = 'inline-flex';
     }
@@ -92,5 +86,6 @@ class MenuPlugins extends LitElement {
         `;
     }
 }
+
 // Register the new element with the browser.
-customElements.define('tc-menu-plugins', MenuPlugins);
+customElements.define('tc-menu-plugins', MenuPluginsComponent);

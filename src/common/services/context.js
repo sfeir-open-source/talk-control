@@ -1,8 +1,17 @@
 'use strict';
 
-import config from '@config/config.json';
+import { config } from '@services/config';
 
 export default {
+    /**
+     * Return whether execution context is running client side (browser)
+     *
+     * @returns {boolean} true if environment is browser
+     */
+    isClientSide() {
+        return typeof window !== 'undefined';
+    },
+
     /**
      * Return true if windowLocationHref is presentation's iframe
      *
@@ -28,6 +37,6 @@ export default {
             return false;
         }
 
-        return windowLocationHref.indexOf('://localhost:') === -1;
+        return !/(:\/\/localhost|:\/\/127.0.0.1)/.test(windowLocationHref);
     }
 };

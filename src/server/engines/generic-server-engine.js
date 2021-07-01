@@ -1,3 +1,4 @@
+import { createTcStore } from '@server/store';
 /* eslint-disable no-unused-vars */
 
 /**
@@ -5,6 +6,10 @@
  * @class GenericEngine
  */
 export class GenericEngine {
+    constructor() {
+        this.store = createTcStore();
+    }
+
     /**
      * Initialize the engine
      *

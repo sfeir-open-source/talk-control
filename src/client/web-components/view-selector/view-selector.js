@@ -4,21 +4,13 @@ import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bul
 import { LitElement, html } from 'lit-element';
 import Fontawesome from 'lit-fontawesome';
 
-class ViewSelector extends LitElement {
+class ViewSelectorComponent extends LitElement {
     static get properties() {
         return {};
     }
 
     static get styles() {
         return [bulmaStyles, Fontawesome];
-    }
-
-    constructor() {
-        super();
-    }
-
-    firstUpdated() {
-        super.firstUpdated();
     }
 
     render() {
@@ -73,4 +65,4 @@ class ViewSelector extends LitElement {
     }
 }
 
-customElements.define('tc-view-selector', ViewSelector);
+customElements.define('tc-view-selector', ViewSelectorComponent);

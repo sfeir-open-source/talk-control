@@ -1,6 +1,7 @@
 'use strict';
 
 import { EventBus } from '../event-bus.js';
+import { querySelectorAllDeep } from 'query-selector-shadow-dom';
 
 /**
  * @classdesc Event bus implementation that fire events through window
@@ -11,14 +12,13 @@ export class EventBusPostMessage extends EventBus {
     /**
      * Class constructor
      *
-     * @param {*} params -
+     * @param {boolean} deep - To link to child iframe while sending messages
      */
-    constructor(params) {
+    constructor(deep = false) {
         super();
         this.windows = [window.parent];
-        if (params.frames) {
-            this.windows = [...this.windows, ...params.frames];
-        }
+        if (deep) this.windows = [...this.windows, ...this._getFramesWindows()];
+
         window.addEventListener('message', this._receiveMessageWindow.bind(this), false);
     }
 
@@ -79,5 +79,9 @@ export class EventBusPostMessage extends EventBus {
                 callBacks.forEach(callback => callback(message.data.data));
             }
         }
+    }
+
+    _getFramesWindows() {
+        return querySelectorAllDeep('iframe').map(frame => frame.contentWindow);
     }
 }

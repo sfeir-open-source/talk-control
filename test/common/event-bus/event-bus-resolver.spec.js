@@ -2,78 +2,176 @@
 
 import 'module-alias/register';
 import { expect } from 'chai';
-import { stub, spy } from 'sinon';
-import { EventBusResolver, CONTROLLER_SERVER_CHANNEL, CONTROLLER_COMPONENT_CHANNEL, UNKNOWN_CHANNEL } from '@event-bus/event-bus-resolver';
-import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
-import socketIOClient from 'socket.io-client';
-import config from '@config/config.json';
+import { assert, createStubInstance, mock, stub } from 'sinon';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { EventBusProxy } from '@event-bus/event-bus-proxy';
+import { EventBus } from '@event-bus/event-bus';
+import contextService from '@services/context';
+import * as wsClientContext from '@event-bus/websockets/event-bus-websockets-client';
+import * as wsServerContext from '@event-bus/websockets/event-bus-websockets-server';
+import * as postMessageContext from '@event-bus/postmessage/event-bus-postmessage';
+import { eventBusLogger } from '@event-bus/event-bus-logger';
 
 describe('EventBusResolver', function() {
-    describe('constructor()', function() {
+    describe('resolve channel', function() {
+        let isClientSide;
+
         before(function() {
-            stub(socketIOClient, 'connect').returns({ on: spy() });
+            isClientSide = stub(contextService, 'isClientSide');
         });
 
         after(function() {
-            socketIOClient.connect.restore();
+            isClientSide.restore();
         });
 
-        // ! Could not implement because no server to connect to
-        // ! Throws 'TypeError: server.listeners is not a function'
-        // it('shoud instantiate a SocketServer', function() {
-        //     // When
-        //     resolver = new EventBusResolver({ server: config.tcServer.urls.local });
-        //     // Then
-        //     expect(resolver.socketBus instanceof EventBusWebsocketsServer).to.be.true;
-        // });
-
-        it('shoud instantiate a SocketClient', function() {
-            // When
-            const resolver = new EventBusResolver({ server: config.tcServer.urls.local, client: true });
-            // Then
-            expect(resolver.channels[CONTROLLER_SERVER_CHANNEL] instanceof EventBusWebsocketsClient).to.be.true;
-        });
-
-        it('shoud instantiate a Postmessage', function() {
+        it('should return a proxied web socket server based event bus when requesting CONTROLLER-SERVER channel and execution context is server side', function() {
             // Given
-            // global.window = { addEventListener: () => undefined, postMessage: spy() };
-            stub(window, 'addEventListener');
-            stub(window, 'postMessage');
+            const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_SERVER' });
+            const constructor = stub(wsServerContext, 'EventBusWebsocketsServer').returns(eventBus);
+            isClientSide.returns(false);
+
+            const server = { port: 10 };
             // When
-            const resolver = new EventBusResolver({});
+            const result = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
             // Then
-            expect(resolver.channels[CONTROLLER_COMPONENT_CHANNEL]).to.be.ok;
+            assert.calledWithExactly(constructor, server);
+            expect(result instanceof EventBusProxy).to.be.true;
+            expect(result.eventBus).to.be.equal(eventBus);
+            constructor.restore();
+        });
 
-            window.addEventListener.restore();
-            window.postMessage.restore();
+        it('should return a proxied web socket client based event bus when requesting CONTROLLER-SERVER channel and execution context is client side', function() {
+            // Given
+            const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_CLIENT' });
+            const constructor = stub(wsClientContext, 'EventBusWebsocketsClient').returns(eventBus);
+            isClientSide.returns(true);
+
+            const server = 'http://test.server.com';
+            // When
+            const result = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+            // Then
+            assert.calledWithExactly(constructor, server);
+            expect(result instanceof EventBusProxy).to.be.true;
+            expect(result.eventBus).to.be.equal(eventBus);
+            constructor.restore();
+        });
+
+        it('should return a proxied post message based event bus when requesting CONTROLLER-COMPONENT channel and execution context is client side', function() {
+            // Given
+            const eventBus = mock({ name: 'EVENT_BUS_POST_MESSAGE' });
+            const constructor = stub(postMessageContext, 'EventBusPostMessage').returns(eventBus);
+            isClientSide.returns(true);
+
+            const deep = true;
+            // When
+            const result = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep });
+            // Then
+            assert.calledWithExactly(constructor, deep);
+            expect(result instanceof EventBusProxy).to.be.true;
+            expect(result.eventBus).to.be.equal(eventBus);
+            constructor.restore();
+        });
+
+        it('should raise unknown channel error when requesting CONTROLLER-COMPONENT channel and execution context is server side', function() {
+            // Given
+            isClientSide.returns(false);
+            // When / Then
+            expect(() => EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, {})).to.throw(Error, 'Unknown channel');
+        });
+
+        it('should raise unknown channel error when requesting unknown channel and execution context is server side', function() {
+            // Given
+            isClientSide.returns(false);
+            // When / Then
+            expect(() => EventBusResolver.channel('NOT_EXIST', {})).to.throw(Error, 'Unknown channel');
+        });
+
+        it('should raise unknown channel error when requesting unknown channel and execution context is client side', function() {
+            // Given
+            isClientSide.returns(true);
+            // When / Then
+            expect(() => EventBusResolver.channel('NOT_EXIST', {})).to.throw(Error, 'Unknown channel');
         });
     });
+});
 
-    describe('broadcast()', function() {
-        it('should throw an error if channel is unknown', function() {
-            const resolver = new EventBusResolver({});
-            expect(() => resolver.broadcast('channel', 'key', 'data')).to.throw(UNKNOWN_CHANNEL);
-        });
+describe('EventBusProxy', function() {
+    const channelName = 'CHANNEL_NAME_TEST';
+    let proxy, eventBus, log;
+
+    beforeEach(function() {
+        log = stub(eventBusLogger, 'log');
+        eventBus = createStubInstance(EventBus);
+        proxy = new EventBusProxy(channelName, eventBus);
     });
 
-    describe('emitTo()', function() {
-        it('should throw an error if channel is unknown', function() {
-            const resolver = new EventBusResolver({});
-            expect(() => resolver.emitTo('channel', 'key', 'data')).to.throw(UNKNOWN_CHANNEL);
-        });
+    afterEach(function() {
+        log.restore();
     });
 
-    describe('on()', function() {
-        it('should throw an error if channel is unknown', function() {
-            const resolver = new EventBusResolver({});
-            expect(() => resolver.on('channel', 'key', () => 'callback')).to.throw(UNKNOWN_CHANNEL);
-        });
+    it('should log broadcast with data while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        const data = ['data1', 'data2'];
+        // When
+        proxy.broadcast(key, data);
+        // Then
+        assert.calledWithExactly(log, `BROADCAST "${key}" on channel ${channelName} with: ${JSON.stringify(data)}`);
+        assert.calledWithExactly(eventBus.broadcast, key, data);
     });
 
-    describe('onMultiple()', function() {
-        it('should throw an error if channel is unknown', function() {
-            const resolver = new EventBusResolver({});
-            expect(() => resolver.on('channel', 'key', () => 'callback')).to.throw(UNKNOWN_CHANNEL);
-        });
+    it('should log broadcast without data while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        // When
+        proxy.broadcast(key);
+        // Then
+        assert.calledWithExactly(log, `BROADCAST "${key}" on channel ${channelName} with: no data`);
+        assert.calledWithExactly(eventBus.broadcast, key, undefined);
+    });
+
+    it('should log emitTo target with data while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        const data = ['data1', 'data2'];
+        const target = { id: 'test_target' };
+        // When
+        proxy.emitTo(key, data, target);
+        // Then
+        assert.calledWithExactly(log, `EMIT "${key}" on channel ${channelName} to target "${target.id}" with: ${JSON.stringify(data)}`);
+        assert.calledWithExactly(eventBus.emitTo, key, data, target);
+    });
+
+    it('should log emitTo target without data while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        const target = { id: 'test_target' };
+        // When
+        proxy.emitTo(key, null, target);
+        // Then
+        assert.calledWithExactly(log, `EMIT "${key}" on channel ${channelName} to target "${target.id}" with: no data`);
+        assert.calledWithExactly(eventBus.emitTo, key, null, target);
+    });
+
+    it('should log onMultiple event while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        const callback = () => 'do something';
+        // When
+        proxy.onMultiple(key, callback);
+        // Then
+        assert.calledWithExactly(log, `SET onMultiple event '${key}' on ${channelName}`);
+        assert.calledWithExactly(eventBus.onMultiple, key, callback);
+    });
+
+    it('should log on event while delegating event bus', function() {
+        // Given
+        const key = 'KEY_TEST';
+        const callback = () => 'do something';
+        // When
+        proxy.on(key, callback);
+        // Then
+        assert.calledWithExactly(log, `SET on event '${key}' on ${channelName}`);
+        assert.calledWithExactly(eventBus.on, key, callback);
     });
 });

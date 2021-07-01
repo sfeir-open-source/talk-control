@@ -12,10 +12,17 @@
             <div><tc-clock></tc-clock></div>
             <div class="mt-1 mr-2 has-text-right"><tc-menu-plugins></tc-menu-plugins></div>
         </section>
-        <section class="columns is-marginless">
-            <div class="column is-paddingless" id="current">
-                <tc-slide id="currentSlide" fullscreen focus></tc-slide>
-            </div>
-        </section>
+        <tc-loader>
+            <section slot="success" class="columns is-marginless">
+                <div class="column is-paddingless" id="current">
+                    <tc-slide id="currentSlide" fullscreen focus></tc-slide>
+                </div>
+            </section>
+            <section slot="error">
+                <div class="container is-max-desktop">
+                    <tc-magic-info></tc-magic-info>
+                </div>
+            </section>
+        </tc-loader>
     </body>
 </html>

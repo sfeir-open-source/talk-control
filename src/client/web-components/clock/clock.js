@@ -8,14 +8,8 @@ class ClockComponent extends LitElement {
         return [bulmaStyles];
     }
 
-    constructor() {
-        super();
-        this.clockElement = {};
-    }
-
     firstUpdated() {
-        // Initialize clock
-        this.clockElement = this.shadowRoot.querySelector('#clock');
+        this.clock = this.shadowRoot.querySelector('#clock');
         this.startClock();
     }
 
@@ -28,7 +22,7 @@ class ClockComponent extends LitElement {
             const today = new Date();
             const hours = today.getHours();
             const minutes = today.getMinutes();
-            this.clockElement.textContent = `${this.formatTime(hours)}:${this.formatTime(minutes)}`;
+            this.clock.textContent = `${this.formatTime(hours)}:${this.formatTime(minutes)}`;
         };
         updateTime();
         setInterval(updateTime, 1000);

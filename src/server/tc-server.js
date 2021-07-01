@@ -1,61 +1,45 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
-import store from './store';
+import http from 'http';
 import { EngineResolver } from './engines/engine-resolver';
+import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { plugins } from '@services/config';
 
 /**
- * @classdesc Handle state changes and socket events
  * @class TCServer
+ * @classdesc Manage the control state changes
  */
 export class TCServer {
     /**
-     * @param {*} server - Server to connect to
+     * @param {http.Server} server - Http server
      */
     constructor(server) {
-        this.eventBusServer = new EventBusResolver({ server });
-        this.previousState = store.getState();
-        this.engine = null;
+        this.controllerServerChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
     }
 
     /**
-     * Subscribe to socket and store events and initialize the engine
+     * Initialize the control by initializing an engine and registering event handlers
      *
      * @param {string} engineName - Name of the engine to use
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'init', this.engine.init);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'inputEvent', this.engine.handleInput);
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginStartingIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginStartingOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEndingIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEndingOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'pluginEventIn', data =>
-            this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'pluginEventOut', data)
-        );
-        this.eventBusServer.onMultiple(CONTROLLER_SERVER_CHANNEL, 'getPlugins', socket => {
-            const fs = require('fs');
-            const path = require('path');
-            let plugins = [];
-            try {
-                plugins = JSON.parse(fs.readFileSync(path.join(__dirname, 'plugins.json')).toString('utf8'));
-                this.eventBusServer.emitTo(CONTROLLER_SERVER_CHANNEL, 'pluginsList', plugins, socket);
-            } catch (e) {
-                // ...
-            }
+        this.controllerServerChannel.onMultiple('init', data => {
+            this.engine.init(data);
+            this.controllerServerChannel.broadcast('pluginsList', plugins);
         });
-        store.subscribe(this.broadcastStateChanges.bind(this));
+        this.controllerServerChannel.onMultiple('inputEvent', input => this.engine.handleInput(input));
+        this.controllerServerChannel.onMultiple('pluginStartingIn', data => this.controllerServerChannel.broadcast('pluginStartingOut', data));
+        this.controllerServerChannel.onMultiple('pluginEndingIn', data => this.controllerServerChannel.broadcast('pluginEndingOut', data));
+        this.controllerServerChannel.onMultiple('pluginEventIn', data => this.controllerServerChannel.broadcast('pluginEventOut', data));
+
+        this.engine.store.subscribe(() => this._broadcastStateChanges());
     }
 
     /**
      * Broadcast an event depending on state changes
      */
-    broadcastStateChanges() {
-        const currentState = store.getState();
-        this.eventBusServer.broadcast(CONTROLLER_SERVER_CHANNEL, 'gotoSlide', { slide: currentState.currentSlide });
-        this.previousState = currentState;
+    _broadcastStateChanges() {
+        this.controllerServerChannel.broadcast('gotoSlide', { slide: this.engine.store.getState().currentSlide });
     }
 }

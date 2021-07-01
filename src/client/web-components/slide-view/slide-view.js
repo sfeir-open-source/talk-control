@@ -5,8 +5,7 @@ import { SlideViewTCComponent } from './slide-view-tc-component';
 import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
 import { LitElement, html, css } from 'lit-element';
 
-// Extend the LitElement base class
-class SlideView extends LitElement {
+class SlideViewComponent extends LitElement {
     static get properties() {
         return {
             url: { type: String, reflect: true, attribute: true },
@@ -26,6 +25,10 @@ class SlideView extends LitElement {
                     width: 100%;
                     height: 100%;
                 }
+                section.fullscreen {
+                    width: 100vw;
+                    height: 100vh;
+                }
             `
         ];
     }
@@ -38,31 +41,44 @@ class SlideView extends LitElement {
     }
 
     firstUpdated() {
-        super.firstUpdated();
-        new SlideViewTCComponent({ shadowRoot: this.shadowRoot });
+        this.slideViewTcComponent = new SlideViewTCComponent(this);
+        this.frame = this.shadowRoot.querySelector('iframe');
+        if (this.focus) {
+            this._bindFocus();
+        }
     }
 
     attributeChangedCallback(name, oldval, newval) {
         super.attributeChangedCallback(name, oldval, newval);
 
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
-            const iframe = this.shadowRoot.querySelector('iframe');
-            let src = `${this.url}#delta=${this.delta}`;
-            if (this.focus) {
-                src += '&focus';
-            }
-            iframe.src = src;
-            iframe.classList.remove('is-hidden');
+            this._loadFrame();
         }
+    }
+
+    _loadFrame() {
+        let src = `${this.url}#delta=${this.delta}`;
+        if (this.focus) {
+            src += '&focus';
+        }
+        this.frame.src = src;
+        this.frame.classList.remove('is-hidden');
+        this.frame.onload = () => this.slideViewTcComponent.setLoaded();
+    }
+
+    _bindFocus() {
+        this.frame.focus();
+        document.addEventListener('click', () => this.frame.focus());
     }
 
     render() {
         return html`
-            <section id="slideViewSection" style="width: ${this.fullscreen ? '100vw' : '100%'}; height: ${this.fullscreen ? '100vh' : '100%'}">
+            <section id="slideViewSection" class="${this.fullscreen ? 'fullscreen' : ''}">
                 <iframe id="slideViewFrame">Current slide</iframe>
             </section>
         `;
     }
 }
+
 // Register the new element with the browser.
-customElements.define('tc-slide', SlideView);
+customElements.define('tc-slide', SlideViewComponent);

@@ -1,45 +1,63 @@
 'use strict';
 
-import { CONTROLLER_COMPONENT_CHANNEL, CONTROLLER_SERVER_CHANNEL } from '@event-bus/event-bus-resolver';
 import { loadPluginModule } from '@plugins/plugin-loader';
+import { TCController } from '@client/tc-controller/tc-controller';
+import { TCComponent } from '@client/tc-component/tc-component';
 
-export default {
-    activatePluginOnController(pluginName, controller) {
-        return loadPluginModule(pluginName)
-            .then(plugin => {
-                if (plugin.instance.usedByAComponent) {
-                    // Plugins used by a component and need tc-component (ex: keyboard)
-                    controller.eventBusController.on(CONTROLLER_COMPONENT_CHANNEL, plugin.instance.type, event =>
-                        controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event)
-                    );
+/**
+ * Load and bind plugin events to event bus channels
+ *
+ * @param {string} pluginName - Name of plugin to be activated
+ * @param {TCController} controller - Providing event bus channels
+ * @returns {Promise} - Promise of plugin activation
+ */
+function activateOnController(pluginName, controller) {
+    return loadPluginModule(pluginName)
+        .then(plugin => {
+            if (plugin.instance.usedByAComponent) {
+                // Plugins used by a component and need tc-component (ex: keyboard)
+                controller.componentChannel.on(plugin.instance.type, event => controller.serverChannel.broadcast(plugin.instance.type, event));
+                controller.componentChannel.broadcast('activatePlugin', { pluginName });
+                return;
+            }
 
-                    controller.eventBusController.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', { pluginName });
-                    return;
-                }
+            // Other plugins like bluetooth devices
+            if (!plugin.instance.initialized) {
+                plugin.instance.init();
+                plugin.instance.onEvent(event => controller.serverChannel.broadcast(plugin.instance.type, event));
+            }
+        })
+        .catch(e => console.error('Unable to load plugin module', e));
+}
 
-                // Other plugins like bluetooth devices
-                if (!plugin.instance.initialized) {
-                    plugin.instance.init();
-                    plugin.instance.onEvent(event => controller.eventBusController.broadcast(CONTROLLER_SERVER_CHANNEL, plugin.instance.type, event));
-                }
-            })
-            .catch(e => console.error('Unable to load plugin module', e));
-    },
+/**
+ * Deactivate plugin
+ *
+ * @param {string} pluginName - Name of plugin to be deactivated
+ * @returns {Promise} - Promise of plugin deactivation
+ */
+function deactivateOnController(pluginName) {
+    return loadPluginModule(pluginName)
+        .then(plugin => plugin.instance.unload())
+        .catch(e => console.error('Unable to unload plugin module', e));
+}
 
-    deactivatePluginOnController(pluginName) {
-        return loadPluginModule(pluginName)
-            .then(plugin => plugin.instance.unload())
-            .catch(e => console.error('Unable to unload plugin module', e));
-    },
+/**
+ * Load and bind plugin events to event bus channels
+ *
+ * @param {string} pluginName - Name of plugin to be activated
+ * @param {TCComponent} component - Providing event bus channels
+ * @returns {Promise} - Promise of plugin activation
+ */
+function activateOnComponent(pluginName, component) {
+    return loadPluginModule(pluginName)
+        .then(plugin => {
+            if (!plugin.instance.initialized) {
+                plugin.instance.init();
+                plugin.instance.onEvent((type, event) => component.channel.broadcast(type, event));
+            }
+        })
+        .catch(e => console.error('Unable to load plugin module', e));
+}
 
-    activatePluginOnComponent(pluginName, component) {
-        return loadPluginModule(pluginName)
-            .then(plugin => {
-                if (!plugin.instance.initialized) {
-                    plugin.instance.init();
-                    plugin.instance.onEvent((type, event) => component.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, type, event));
-                }
-            })
-            .catch(e => console.error('Unable to load plugin module', e));
-    }
-};
+export default { activateOnController, deactivateOnController, activateOnComponent };

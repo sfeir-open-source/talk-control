@@ -1,10 +1,14 @@
 'use strict';
 
-import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { TCComponent } from '@client/tc-component/tc-component';
+import { EventBusComponent } from '@event-bus/event-bus-component';
 
-export class NotesTCComponent extends TCComponent {
+export class NotesTCComponent extends EventBusComponent {
+    constructor(notes) {
+        super();
+        this.notes = notes;
+    }
+
     init() {
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToComponent', data => postMessage({ type: 'notesReceived', notes: data }));
+        this.controllerComponentChannel.on('sendNotesToComponent', data => this.notes.addNotes(data));
     }
 }

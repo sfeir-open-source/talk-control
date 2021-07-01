@@ -1,0 +1,43 @@
+{
+	"info": {
+		"_postman_id": "c31d338f-f61b-4931-bd6d-3612be0471ae",
+		"name": "TalkControl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/iframe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "/iframe",
+					"path": [
+						"iframe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ (proxy)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/test-proxy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"test-proxy"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

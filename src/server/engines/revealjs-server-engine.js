@@ -1,4 +1,3 @@
-import store from '../store';
 import { init, gotoSlide } from '../store/actions';
 import { GenericEngine } from './generic-server-engine';
 
@@ -8,28 +7,20 @@ import { GenericEngine } from './generic-server-engine';
  * @augments GenericEngine
  */
 export class RevealEngine extends GenericEngine {
-    constructor() {
-        super();
-        // Binding this because they might be given as callback for some events
-        this.handleInput = this.handleInput.bind(this);
-        this.handleTouch = this.handleTouch.bind(this);
-        this.init = this.init.bind(this);
-    }
-
     /**
      * Initialize the engine
      *
      * @param {*} params - Needed params to initialize the engine
      */
     init(params) {
-        store.dispatch(init({ ...params, currentSlide: { h: 0, v: 0, f: -1 } }));
+        this.store.dispatch(init({ ...params, currentSlide: { h: 0, v: 0, f: -1 } }));
     }
 
     /**
      * @param {{key: string}} event - Key pressed
      */
     handleInput({ key }) {
-        const { currentSlide, slides } = store.getState();
+        const { currentSlide, slides } = this.store.getState();
         const currentSlideIndex = slides.findIndex(s => this.slideEquals(s, currentSlide, false));
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
@@ -72,7 +63,7 @@ export class RevealEngine extends GenericEngine {
      * @param {{direction: string}} event - Touch direction
      */
     handleTouch({ direction }) {
-        const { currentSlide, slides } = store.getState();
+        const { currentSlide, slides } = this.store.getState();
         const currentSlideIndex = slides.findIndex(s => this.slideEquals(s, currentSlide, false));
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
@@ -144,6 +135,6 @@ export class RevealEngine extends GenericEngine {
     }
 
     _gotoSlide(slide) {
-        store.dispatch(gotoSlide(slide));
+        this.store.dispatch(gotoSlide(slide));
     }
 }

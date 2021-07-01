@@ -1,21 +1,19 @@
 'use strict';
 
-import { EventBusResolver, CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
+import { EventBusComponent } from '@event-bus/event-bus-component';
 import { EngineResolver } from '../engines/engine-resolver';
-import pluginServices from '@services/plugin';
+import pluginService from '@services/plugin';
 
 /**
  * @class TCComponent
  */
-export class TCComponent {
+export class TCComponent extends EventBusComponent {
     constructor(params = {}) {
-        this.eventBusComponent = new EventBusResolver({
-            postMessage: {}
-        });
+        super();
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'init', this.init.bind(this));
+        this.controllerComponentChannel.on('ping', () => this.controllerComponentChannel.broadcast('pong'));
     }
 
     init() {
@@ -25,20 +23,18 @@ export class TCComponent {
 
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'gotoSlide', data => {
+        this.controllerComponentChannel.on('gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'sendNotesToController', this.engine.getSlideNotes());
+                this.controllerComponentChannel.broadcast('sendNotesToController', this.engine.getSlideNotes());
             }
         });
 
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) =>
-            pluginServices.activatePluginOnComponent(pluginName, this)
-        );
+        this.controllerComponentChannel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {
-            this.eventBusComponent.broadcast(CONTROLLER_COMPONENT_CHANNEL, 'initialized', { slides });
+            this.controllerComponentChannel.broadcast('initialized', { slides });
         }
     }
 }

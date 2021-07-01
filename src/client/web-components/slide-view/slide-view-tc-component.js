@@ -1,16 +1,24 @@
 'use strict';
 
-import { CONTROLLER_COMPONENT_CHANNEL } from '@event-bus/event-bus-resolver';
-import { TCComponent } from '@client/tc-component/tc-component';
-import pluginServices from '@services/plugin';
+import { EventBusComponent } from '@event-bus/event-bus-component';
+import pluginService from '@services/plugin';
 
-/**
- * Class to use plugins with SlideView component, and have access to eventBusComponent.
- */
-export class SlideViewTCComponent extends TCComponent {
+export class SlideViewTCComponent extends EventBusComponent {
+    constructor(slideView) {
+        super();
+        this.slideView = slideView;
+
+        this.controllerComponentChannel.on('loadPresentation', url => {
+            this.slideView.url = url;
+            this.controllerComponentChannel.broadcast('presentationLoading');
+        });
+    }
+
     init() {
-        this.eventBusComponent.on(CONTROLLER_COMPONENT_CHANNEL, 'activatePlugin', ({ pluginName }) =>
-            pluginServices.activatePluginOnComponent(pluginName, this)
-        );
+        this.controllerComponentChannel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
+    }
+
+    setLoaded() {
+        this.controllerComponentChannel.broadcast('presentationLoaded');
     }
 }

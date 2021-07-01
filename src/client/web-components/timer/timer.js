@@ -24,20 +24,8 @@ class TimerComponent extends LitElement {
     }
 
     firstUpdated() {
-        // Instantiate the component that will receive events from the controller
-        new TimerTCComponent();
-        // Initialize clock and timer
+        new TimerTCComponent(this);
         this.timerElement = this.shadowRoot.querySelector('#timer');
-
-        addEventListener('message', message => {
-            if (!message || !message.data) {
-                return;
-            }
-            // 'initTimer' event is fired by the TimerTCComponent
-            if (typeof message.data === 'object' && message.data.type === 'initTimer') {
-                this.restartTimer = this.startTimer();
-            }
-        });
     }
 
     formatTime(time) {
@@ -70,14 +58,14 @@ class TimerComponent extends LitElement {
         };
     }
 
-    handleTimerClick() {
+    reset() {
         this.restartTimer();
         this.restartTimer = this.startTimer();
     }
 
     render() {
         return html`
-            <div class="is-size-3 is-unselectable" id="timer" @click="${this.handleTimerClick}">00:00:00</div>
+            <div class="is-size-3 is-unselectable" id="timer" @click="${this.reset}">00:00:00</div>
         `;
     }
 }

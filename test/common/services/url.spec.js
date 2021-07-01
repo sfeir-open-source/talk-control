@@ -2,24 +2,24 @@
 
 import 'module-alias/register';
 import { assert } from 'chai';
-import { isUrlValid } from '@services/url';
+import { isValidUrl } from '@services/url';
 
 describe('Url service', function() {
     describe('isUrlValid', function() {
         it('should return true', function() {
-            assert(isUrlValid('http://example.com:8080'));
+            assert(isValidUrl('http://example.com:8080'));
         });
 
         it('should not reject localhost', function() {
-            assert(isUrlValid('http://localhost:3000'));
+            assert(isValidUrl('http://localhost:3000'));
         });
 
         it('should return false because no url given', function() {
-            assert(!isUrlValid());
+            assert(!isValidUrl());
         });
 
         it('should return false because url is bad formated', function() {
-            assert(!isUrlValid('this is a bad url'));
+            assert(!isValidUrl('this is a bad url'));
         });
     });
 });
