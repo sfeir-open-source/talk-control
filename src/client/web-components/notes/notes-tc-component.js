@@ -9,6 +9,6 @@ export class NotesTCComponent extends EventBusComponent {
     }
 
     init() {
-        this.channel.on('sendNotesToComponent', data => this.notes.addNotes(data));
+        this.controllerComponentChannel.on('sendNotesToComponent', data => this.notes.addNotes(data));
     }
 }

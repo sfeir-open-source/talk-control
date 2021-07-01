@@ -8,17 +8,17 @@ export class SlideViewTCComponent extends EventBusComponent {
         super();
         this.slideView = slideView;
 
-        this.channel.on('loadPresentation', url => {
+        this.controllerComponentChannel.on('loadPresentation', url => {
             this.slideView.url = url;
-            this.channel.broadcast('slideLoading');
+            this.controllerComponentChannel.broadcast('slideLoading');
         });
     }
 
     init() {
-        this.channel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
+        this.controllerComponentChannel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
     }
 
     setLoaded() {
-        this.channel.broadcast('slideLoaded');
+        this.controllerComponentChannel.broadcast('slideLoaded');
     }
 }

@@ -14,7 +14,7 @@ export class TCServer {
      * @param {http.Server} server - Http server
      */
     constructor(server) {
-        this.channel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+        this.controllerServerChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
     }
 
     /**
@@ -24,14 +24,14 @@ export class TCServer {
      */
     init(engineName) {
         this.engine = EngineResolver.getEngine(engineName);
-        this.channel.onMultiple('init', data => {
+        this.controllerServerChannel.onMultiple('init', data => {
             this.engine.init(data);
-            this.channel.broadcast('pluginsList', plugins);
+            this.controllerServerChannel.broadcast('pluginsList', plugins);
         });
-        this.channel.onMultiple('inputEvent', input => this.engine.handleInput(input));
-        this.channel.onMultiple('pluginStartingIn', data => this.channel.broadcast('pluginStartingOut', data));
-        this.channel.onMultiple('pluginEndingIn', data => this.channel.broadcast('pluginEndingOut', data));
-        this.channel.onMultiple('pluginEventIn', data => this.channel.broadcast('pluginEventOut', data));
+        this.controllerServerChannel.onMultiple('inputEvent', input => this.engine.handleInput(input));
+        this.controllerServerChannel.onMultiple('pluginStartingIn', data => this.controllerServerChannel.broadcast('pluginStartingOut', data));
+        this.controllerServerChannel.onMultiple('pluginEndingIn', data => this.controllerServerChannel.broadcast('pluginEndingOut', data));
+        this.controllerServerChannel.onMultiple('pluginEventIn', data => this.controllerServerChannel.broadcast('pluginEventOut', data));
 
         this.engine.store.subscribe(() => this._broadcastStateChanges());
     }
@@ -40,6 +40,6 @@ export class TCServer {
      * Broadcast an event depending on state changes
      */
     _broadcastStateChanges() {
-        this.channel.broadcast('gotoSlide', { slide: this.engine.store.getState().currentSlide });
+        this.controllerServerChannel.broadcast('gotoSlide', { slide: this.engine.store.getState().currentSlide });
     }
 }

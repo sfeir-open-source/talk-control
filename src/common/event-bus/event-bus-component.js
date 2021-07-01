@@ -7,9 +7,9 @@ import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
  */
 export class EventBusComponent {
     constructor() {
-        this.channel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT);
-        this.channel.on('init', this.init.bind(this));
-        this.channel.on('error', this.error.bind(this));
+        this.controllerComponentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT);
+        this.controllerComponentChannel.on('init', this.init.bind(this));
+        this.controllerComponentChannel.on('error', this.error.bind(this));
     }
 
     init() {}

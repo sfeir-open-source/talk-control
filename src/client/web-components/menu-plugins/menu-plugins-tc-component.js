@@ -9,15 +9,15 @@ export class MenuPluginsTCComponent extends EventBusComponent {
     }
 
     init() {
-        this.channel.on('addToPluginsMenu', ({ pluginName }) => this.menuPlugins.addItemToMenu(pluginName));
-        this.channel.on('deactivatePlugin', () => this.menuPlugins.showMenu());
+        this.controllerComponentChannel.on('addToPluginsMenu', ({ pluginName }) => this.menuPlugins.addItemToMenu(pluginName));
+        this.controllerComponentChannel.on('deactivatePlugin', () => this.menuPlugins.showMenu());
     }
 
     startPlugin(pluginName) {
-        this.channel.broadcast('pluginStartingIn', { pluginName });
+        this.controllerComponentChannel.broadcast('pluginStartingIn', { pluginName });
     }
 
     endPlugin(pluginName) {
-        this.channel.broadcast('pluginEndingIn', { pluginName });
+        this.controllerComponentChannel.broadcast('pluginEndingIn', { pluginName });
     }
 }

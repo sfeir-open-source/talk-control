@@ -13,7 +13,7 @@ export class TCComponent extends EventBusComponent {
         this.delta = params.delta || 0;
         this.engine = EngineResolver.getEngine(params.engineName);
         this.shadowRoot = params.shadowRoot || undefined;
-        this.channel.on('ping', () => this.channel.broadcast('pong'));
+        this.controllerComponentChannel.on('ping', () => this.controllerComponentChannel.broadcast('pong'));
     }
 
     init() {
@@ -23,18 +23,18 @@ export class TCComponent extends EventBusComponent {
 
         // Send the total slide number
         const slides = this.engine.getSlides();
-        this.channel.on('gotoSlide', data => {
+        this.controllerComponentChannel.on('gotoSlide', data => {
             this.engine.goToSlide(data.slide, this.delta);
             if (!this.delta) {
-                this.channel.broadcast('sendNotesToController', this.engine.getSlideNotes());
+                this.controllerComponentChannel.broadcast('sendNotesToController', this.engine.getSlideNotes());
             }
         });
 
-        this.channel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
+        this.controllerComponentChannel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
 
         // Broadcast the initialized event only on the 'main' tc-component
         if (!this.delta) {
-            this.channel.broadcast('initialized', { slides });
+            this.controllerComponentChannel.broadcast('initialized', { slides });
         }
     }
 }
