@@ -5,28 +5,39 @@
 
 ## Environnement de test
 
-- Node: v22.18.0 (cible migration) / historique : Node 14 (CI d'origine)
-- npm: 10.9.3
+- Node baseline: v20.10.0 (étape 0 — baseline fonctionnelle)
+- Node cible: v24.x (étape finale migration)
+- npm: 10.2.3 (Node 20) / 10.9.3 (Node 22)
 - npm start : lance tc-server (:3001) + tc-controller-and-component (:3000) + tc-showcase (:3002)
 
-## AVERTISSEMENT — État au 2026-06-09
+## Notes d'exécution — Baseline Node 20.10.0 (2026-06-09)
 
-**Le serveur tc-server NE DÉMARRE PAS sur Node 22.18.0.**
+**tc-server DÉMARRE sous Node 20.10.0** via `npx babel-node --ignore 'nothing' src/server/index.js`.
 
-Erreur au démarrage (npm run tc-server) :
+Validation :
+```
+curl http://localhost:3001/
+→ Express répond "Cannot GET /" (route / non définie — comportement correct)
+curl http://localhost:3001/patcher (sans URL)
+→ "Invalid presentation URL" (validation correcte)
+```
+
+Le serveur démarre correctement. Le golden path est **vérifiable** sur Node 20.
+
+### Différence Node 22 vs Node 20
+
+Node 22 : tc-server NE DÉMARRE PAS (path-to-regexp incompatible — `app.all('*')`)
+Node 20 : tc-server DÉMARRE (path-to-regexp compatible)
+
+### AVERTISSEMENT Node 22 (pour référence)
+
+Sur Node 22.18.0, le serveur crashe au démarrage :
 ```
 PathError [TypeError]: Missing parameter name at index 1: *;
-    visit https://git.new/pathToRegexpError for info
     at name (.../node_modules/path-to-regexp/src/index.ts:225:13)
-    ...
     at Object.<anonymous> (.../src/server/controllers/proxy.controller.js:9:8)
 ```
-
-Cause : `path-to-regexp` incompatible avec Node 22 dans la version Express 4 utilisée.
-Route wildcard `app.all('*', ...)` dans proxy.controller.js (ligne 9).
-
-**Le golden path ne peut pas être vérifié manuellement avant résolution de ce bug.**
-Ce document constitue le contrat cible à atteindre après l'étape 0.1.
+Cause : route wildcard `app.all('*', ...)` dans proxy.controller.js (ligne 9).
 
 ## Pré-requis
 
@@ -104,8 +115,12 @@ Ce document constitue le contrat cible à atteindre après l'étape 0.1.
 ## Notes d'exécution
 
 - Dernière vérification manuelle complète : TODO (à remplir manuellement avant étape 1)
+- Node version pour la baseline : v20.10.0
+- tc-server démarre sous Node 20 : **OUI** (babel-node, répond sur :3001)
+- tc-server démarre sous Node 22 : **NON** (path-to-regexp incompatible)
 - Points d'attention identifiés :
+  - `caniuse-lite` obsolète → Babel transpile async/await en generators → regeneratorRuntime manquant
+  - `nyc` (`append-transform`) incompatible Node 20 → coverage 0% (migrer vers c8)
+  - `npm ci` échoue (vuepress + webpack5 peer conflict) → utiliser `--legacy-peer-deps --ignore-scripts`
   - `path-to-regexp` incompatible Node 22 → proxy.controller.js ligne 9 (`app.all('*')`)
-  - ESM resolver bloque `module-alias/register` → tous les tests
-  - `npm ci` échoue (vuepress + webpack5 peer conflict) → utiliser `--legacy-peer-deps`
-  - caniuse-lite et baseline-browser-mapping obsolètes (warnings à chaque lancement)
+  - ESM resolver Node 22 bloque `module-alias/register` sans `.js` → tous les tests

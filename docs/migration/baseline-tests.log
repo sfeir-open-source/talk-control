@@ -1,47 +1,70 @@
 # Baseline tests — 2026-06-09
-# Node: v22.18.0 | npm: 10.9.3
-# Commande: npm test
+# Node: v20.10.0 | npm: 10.2.3
+# Commande: npm test (via export NVM_DIR + nvm use 20)
 
-## AVERTISSEMENT CRITIQUE — Incompatibilité Node 22
+## Résumé Node 20 (baseline réelle)
 
-npm ci échoue avec ERESOLVE (conflit peer deps vuepress/webpack) :
+- Total specs: 20 fichiers spec (spec découverte par mocha via test/**/*.spec.js)
+- Tests exécutés (16 fichiers, hors async/await): 97 passing
+- Tests en erreur de chargement (4 fichiers async/await): crash avant exécution
+- Failing tests: 0 (sur les 97 exécutés)
+- Durée: ~49ms (hors fichiers crashés)
+
+## Problème 1 — regeneratorRuntime (4 spec files)
+
+Les 4 spec files contenant des tests `async/await` ou `async function` ne se chargent
+pas car Babel 7.11.5 avec `@babel/preset-env` transpile async/await vers des generators
+mais `regenerator-runtime` n'est pas chargé dans `.mocharc.yml`.
+
+Cause racine : `caniuse-lite` est obsolète (> 9 mois) — browserslist résout
+"maintained node versions" vers une liste qui inclut `ie 11` et d'autres cibles
+très anciennes. Babel transpile en conséquence et génère du code qui nécessite
+`regeneratorRuntime`, non disponible sans import explicite.
+
+Erreur type :
+```
+ReferenceError: regeneratorRuntime is not defined
+    at Suite.<anonymous> (/...test/client/tc-controller/tc-controller.spec.js:55:11)
+```
+
+Spec files affectés (4) :
+  - test/client/tc-controller/tc-controller.spec.js  (21 tests déclarés)
+  - test/common/services/plugin.spec.js              ( 3 tests déclarés)
+  - test/server/tc-server.spec.js                    (12 tests déclarés)
+  - test/server/controllers/patcher.controller.spec.js (13 tests déclarés)
+
+Total tests non-exécutés : ~49 (estimation sur it() count)
+Total si tout passait : ~146 tests
+
+## Problème 2 — nyc / coverage (0% sur npm run coverage)
+
+`append-transform` (dépendance de nyc) est incompatible avec Node 20 :
+```
+TypeError [ERR_INVALID_ARG_TYPE]: The "mod" argument must be an instance of Module.
+    at makeRequireFunction (node:internal/modules/helpers:131:11)
+    at .../node_modules/append-transform/index.js:1
+```
+
+La couverture retourne 0% pour tous les fichiers — `npm run coverage` échoue.
+Corriger cela necessite de migrer nyc → c8 (prévu en étape 1).
+
+## Problème 3 — npm ci (peer deps vuepress/webpack)
+
+npm ci échoue avec ERESOLVE :
   - cache-loader@3.0.1 requiert webpack@^4 mais webpack@5 est installé
   - file-loader@3.0.1 requiert webpack@^4 (via @vuepress/core@1.5.4)
-  Contournement : npm ci --legacy-peer-deps  (ou node_modules existant)
+  Contournement : npm ci --legacy-peer-deps
 
-npm test retourne exit code 1 avec l'erreur suivante AVANT même de charger un seul test :
+Seconde erreur npm ci — postinstall ngrok :
+  - ngrok@3.x : "ngrok - platform darwinarm64 is not supported."
+  Contournement : npm ci --legacy-peer-deps --ignore-scripts
 
-```
-> talkcontrol@0.4.1 test
-> npx mocha
+## État des 97 tests qui passent sous Node 20
 
-[baseline-browser-mapping] The data in this module is over two months old.
-Browserslist: browsers data (caniuse-lite) is 9 months old.
-
-Exception during run: Error: Cannot find module '.../node_modules/module-alias/register' imported from .../test/client/engines/generic-client-engine.spec.js
-Did you mean to import "module-alias/register.js"?
-    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
-    ...
-{
-  code: 'ERR_MODULE_NOT_FOUND',
-  url: 'file:///.../node_modules/module-alias/register'
-}
-```
-
-## Diagnostic
-
-Cause racine : le resolver ESM strict de Node 22+ exige l'extension `.js` sur les imports.
-`module-alias/register` (sans `.js`) est résolu par `esm` shim via le loader ESM natif,
-qui rejette les imports sans extension quand le fichier n'est pas déclaré dans `exports`.
-
-Le package `module-alias@2.2.3` n'a pas de champ `exports` dans son package.json — seul
-`"main": "index.js"` est présent. Node 22 exige `.js` explicite pour les non-bare imports
-dans le contexte ESM.
-
-Fichiers spec affectés par `import 'module-alias/register'` (sans .js) :
+Les 16 spec files sans async/await s'exécutent tous sans erreur :
   - test/client/engines/generic-client-engine.spec.js
   - test/client/engines/revealjs-client-engine.spec.js
-  - test/client/tc-controller/tc-controller.spec.js
+  - test/client/tc-component/tc-component.spec.js
   - test/common/event-bus/event-bus-logger.spec.js
   - test/common/event-bus/event-bus-resolver.spec.js
   - test/common/event-bus/event-bus.spec.js
@@ -50,49 +73,21 @@ Fichiers spec affectés par `import 'module-alias/register'` (sans .js) :
   - test/common/event-bus/websockets/event-bus-websockets-server.spec.js
   - test/common/services/context.spec.js
   - test/common/services/logger.spec.js
-  - test/common/services/plugin.spec.js
   - test/common/services/url.spec.js
-
-Fichiers spec affectés par `import '@server/*'` / `import '@client/*'` (aliases non résolus) :
-  - test/client/tc-component/tc-component.spec.js
-  - test/server/store/actions.spec.js
-  - test/server/store/store.spec.js
-  - test/server/controllers/patcher.controller.spec.js
   - test/server/controllers/proxy.controller.spec.js
   - test/server/engines/revealjs-server-engine.spec.js
-  - test/server/tc-server.spec.js
+  - test/server/store/actions.spec.js
+  - test/server/store/store.spec.js
 
-Total : TOUS les 20 spec files sont affectés.
+## Différence avec le run Node 22 (commit précédent)
 
-## Deuxième incompatibilité : serveur tc-server
+Node 22 : 0 tests exécutés — crash ERR_MODULE_NOT_FOUND sur module-alias/register
+(ESM strict exige l'extension .js sur les bare imports)
 
-npm run tc-server crashe aussi sur Node 22 :
+Node 20 : 97 tests passent — module-alias/register résolu sans extension (CJS loader)
+Le problème Node 22 NE s'applique PAS sur Node 20.
 
-```
-PathError [TypeError]: Missing parameter name at index 1: *;
-    visit https://git.new/pathToRegexpError for info
-    at name (.../node_modules/path-to-regexp/src/index.ts:225:13)
-    ...
-    at Object.<anonymous> (.../src/server/controllers/proxy.controller.js:9:8)
-```
+## Warnings constants
 
-Cause : `path-to-regexp` v0.1.x (utilisé par Express 4 / router) utilise `app.all('*', ...)`
-qui n'est plus supporté dans les versions récentes de path-to-regexp.
-La version installée est incompatible avec Node 22 et express 4.x.
-
-## Résumé
-- Total specs: 20 fichiers spec
-- Passing: 0 (zéro — aucun test ne s'exécute)
-- Failing: 20/20 (incompatibilité ESM Node 22 — crash avant exécution)
-- Durée: N/A (exception avant chargement des tests)
-
-## Warnings npm ci / npm install
-- WARN: baseline-browser-mapping data over 2 months old
-- WARN: caniuse-lite data 9 months old (npx update-browserslist-db@latest)
-- ERROR: ERESOLVE — vuepress@1.5.4 requiert webpack@4, projet utilise webpack@5
-  → npm ci échoue ; npm install avec --legacy-peer-deps requis
-
-## Contexte historique
-- CI cible Node 10/12/14 (.github/workflows/develop.yml)
-- Jamais testée sur Node 16+ a priori
-- node_modules installé manuellement (npm install --legacy-peer-deps)
+- Browserslist: caniuse-lite is outdated (npx browserslist@latest --update-db)
+- npm ci échoue sans --legacy-peer-deps (vuepress/webpack4 peer conflict)
