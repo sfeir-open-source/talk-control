@@ -267,6 +267,164 @@ describe('RevealServerEngine', function() {
         });
     });
 
+    describe('handleTouch()', function() {
+        it('should do nothing for unknown direction', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            stub(store, 'dispatch');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({});
+            // Then
+            assert(store.dispatch.notCalled);
+            store.getState.restore();
+            store.dispatch.restore();
+        });
+
+        it('should call _nextFragment() on "left" when fragment available', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            stub(engine, '_nextFragment');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'left' });
+            // Then
+            assert(engine._nextFragment.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextFragment.restore();
+        });
+
+        it('should call _nextHorizontalSlide() on "left" when no fragment', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: 2 };
+            stub(engine, '_nextHorizontalSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'left' });
+            // Then
+            assert(engine._nextHorizontalSlide.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextHorizontalSlide.restore();
+        });
+
+        it('should call _prevFragment() on "right" when fragment available', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: 2 };
+            stub(engine, '_prevFragment');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'right' });
+            // Then
+            assert(engine._prevFragment.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._prevFragment.restore();
+        });
+
+        it('should call _prevSlide() on "right" when no fragment', function() {
+            // Given
+            const currentSlide = { h: 1, v: 0, f: -1 };
+            stub(engine, '_prevSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'right' });
+            // Then
+            assert(engine._prevSlide.calledOnceWith({ h: 0, v: 0, f: -1, fMax: 3 }));
+            store.getState.restore();
+            engine._prevSlide.restore();
+        });
+
+        it('should call _nextFragment() on "up" when fragment available', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            stub(engine, '_nextFragment');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'up' });
+            // Then
+            assert(engine._nextFragment.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextFragment.restore();
+        });
+
+        it('should call _nextVerticalSlide() on "up" when no fragment', function() {
+            // Given
+            const currentSlide = { h: 1, v: 0, f: 3 };
+            stub(engine, '_nextVerticalSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'up' });
+            // Then
+            assert(engine._nextVerticalSlide.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextVerticalSlide.restore();
+        });
+
+        it('should call _prevFragment() on "down" when fragment available', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: 2 };
+            stub(engine, '_prevFragment');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'down' });
+            // Then
+            assert(engine._prevFragment.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._prevFragment.restore();
+        });
+
+        it('should call _prevSlide() on "down" when no fragment', function() {
+            // Given
+            const currentSlide = { h: 1, v: 1, f: -1 };
+            stub(engine, '_prevSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'down' });
+            // Then
+            assert(engine._prevSlide.calledOnceWith({ h: 1, v: 0, f: -1, fMax: 2 }));
+            store.getState.restore();
+            engine._prevSlide.restore();
+        });
+
+        it('should call _nextFragment() on "none" when fragment available', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            stub(engine, '_nextFragment');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'none' });
+            // Then
+            assert(engine._nextFragment.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextFragment.restore();
+        });
+
+        it('should call _nextVerticalSlide() on "none" when no fragment but vertical slide', function() {
+            // Given
+            const currentSlide = { h: 1, v: 0, f: 3 };
+            stub(engine, '_nextVerticalSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'none' });
+            // Then
+            assert(engine._nextVerticalSlide.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextVerticalSlide.restore();
+        });
+
+        it('should call _nextHorizontalSlide() on "none" when no fragment, no vertical, but horizontal slide', function() {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: 4 };
+            stub(engine, '_nextHorizontalSlide');
+            stub(store, 'getState').returns({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'none' });
+            // Then
+            assert(engine._nextHorizontalSlide.calledOnceWith(currentSlide));
+            store.getState.restore();
+            engine._nextHorizontalSlide.restore();
+        });
+    });
+
     describe('slideEquals()', function() {
         it('should be equals', function() {
             // Given

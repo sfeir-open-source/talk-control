@@ -21,6 +21,24 @@ describe('ProxyController', function() {
             assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
         });
 
+        it('should error when req.cookies is undefined', function() {
+            // Given - no cookies at all
+            req.cookies = undefined;
+            // When - presentationUrl will be undefined, new URL(undefined) throws
+            forwardTraffic(req, res, proxy);
+            // Then
+            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+        });
+
+        it('should error when req.cookies is null', function() {
+            // Given
+            req.cookies = null;
+            // When
+            forwardTraffic(req, res, proxy);
+            // Then
+            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+        });
+
         it('should forward request for resource to presentation server (target)', function() {
             // Given
             req.cookies['tc-presentation-url'] = 'http://test.domain.com/presentation/';

@@ -1,4 +1,4 @@
 # mocha.opts
-require: ['@babel/register', 'jsdom-global/register', 'esm']
+require: ['@babel/register', 'jsdom-global/register']
 full-trace: true
 spec: 'test/**/*.spec.js'
