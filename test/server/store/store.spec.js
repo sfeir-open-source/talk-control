@@ -2,9 +2,9 @@ import { expect } from 'chai';
 import { reducers } from '@server/store';
 import { ACTIONS } from '@server/store/actions';
 
-describe('redux store', function() {
-    describe('reducers', function() {
-        it('should return the initial state', function() {
+describe('redux store', function () {
+    describe('reducers', function () {
+        it('should return the initial state', function () {
             // Given
             const state = {
                 currentSlide: {},
@@ -14,7 +14,7 @@ describe('redux store', function() {
             expect(reducers(state, {})).to.eql(state);
         });
 
-        it('should change state.currentSlide', function() {
+        it('should change state.currentSlide', function () {
             // Given
             const state = {
                 currentSlide: { h: 1, v: 1, f: 3 },
@@ -25,7 +25,7 @@ describe('redux store', function() {
             expect(reducers(state, { type: ACTIONS.GOTO_SLIDE, data })).to.eql({ ...state, currentSlide: data });
         });
 
-        it('should handle INIT', function() {
+        it('should handle INIT', function () {
             // Given
             const state = {
                 currentSlide: {},

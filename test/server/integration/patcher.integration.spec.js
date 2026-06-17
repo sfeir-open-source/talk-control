@@ -10,22 +10,22 @@ import { createTestApp } from '../helpers/server.helper';
 // we stub at the function level used by the controller.
 import * as nodeFetch from 'node-fetch';
 
-describe('Integration — /patcher', function() {
+describe('Integration — /patcher', function () {
     let app;
     let fetchStub;
 
-    before(function() {
+    before(function () {
         app = createTestApp();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         if (fetchStub && fetchStub.restore) {
             fetchStub.restore();
         }
     });
 
-    describe('GET /patcher', function() {
-        it('should return 400 when tc-presentation-url query param is missing', async function() {
+    describe('GET /patcher', function () {
+        it('should return 400 when tc-presentation-url query param is missing', async function () {
             const res = await request(app).get('/patcher');
             // patcher.controller sends res.send('Invalid...', 400) — Express quirk: status is 200 when
             // using res.send(body, statusCode) instead of res.status(N).send(body).
@@ -33,12 +33,12 @@ describe('Integration — /patcher', function() {
             expect(res.text).to.include('Invalid presentation URL');
         });
 
-        it('should return an error message when tc-presentation-url is not a valid URL', async function() {
+        it('should return an error message when tc-presentation-url is not a valid URL', async function () {
             const res = await request(app).get('/patcher?tc-presentation-url=not-a-valid-url');
             expect(res.text).to.include('Invalid presentation URL');
         });
 
-        it('should return presentation not found when fetch returns 404', async function() {
+        it('should return presentation not found when fetch returns 404', async function () {
             fetchStub = stub(nodeFetch, 'default').resolves({
                 status: 404,
                 text: async () => ''
@@ -48,7 +48,7 @@ describe('Integration — /patcher', function() {
             expect(res.text).to.include('Presentation not found');
         });
 
-        it('should return patched HTML with injected component script when fetch succeeds', async function() {
+        it('should return patched HTML with injected component script when fetch succeeds', async function () {
             const htmlContent = '<html><head></head><body><h1>Slide</h1></body></html>';
             fetchStub = stub(nodeFetch, 'default').resolves({
                 status: 200,
@@ -61,7 +61,7 @@ describe('Integration — /patcher', function() {
             expect(res.text).to.include('Cache-Control');
         });
 
-        it('should set tc-presentation-url cookie when fetch succeeds', async function() {
+        it('should set tc-presentation-url cookie when fetch succeeds', async function () {
             const htmlContent = '<html><head></head><body><h1>Slide</h1></body></html>';
             fetchStub = stub(nodeFetch, 'default').resolves({
                 status: 200,
@@ -76,7 +76,7 @@ describe('Integration — /patcher', function() {
             expect(tcCookie).to.exist;
         });
 
-        it('should add base href proxy tag pointing to local server URL', async function() {
+        it('should add base href proxy tag pointing to local server URL', async function () {
             const htmlContent = '<html><head></head><body></body></html>';
             fetchStub = stub(nodeFetch, 'default').resolves({
                 status: 200,
@@ -89,7 +89,7 @@ describe('Integration — /patcher', function() {
             expect(res.text).to.include('http://localhost:3001/proxy/');
         });
 
-        it('should fix HTML document that is missing html/head/body tags', async function() {
+        it('should fix HTML document that is missing html/head/body tags', async function () {
             const htmlContent = '<h1>Just a fragment</h1>';
             fetchStub = stub(nodeFetch, 'default').resolves({
                 status: 200,

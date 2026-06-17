@@ -9,26 +9,26 @@ import { GenericEngine } from '@server/engines/generic-server-engine';
 import * as configService from '@services/config';
 
 const mockStore = configureStore([]);
-describe('TCServer', function() {
+describe('TCServer', function () {
     let resolveChannel, controllerChannel, server;
     let resolveEngine, engine;
     let clock;
     const httpServer = { port: 3000 };
     const engineName = 'ENGINE_NAME';
 
-    before(function() {
+    before(function () {
         clock = useFakeTimers();
         resolveChannel = stub(EventBusResolver, 'channel');
         resolveEngine = stub(EngineResolver, 'getEngine');
     });
 
-    after(function() {
+    after(function () {
         clock.restore();
         resolveChannel.restore();
         resolveEngine.restore();
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         controllerChannel = spy(new EventBus());
         resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(controllerChannel);
 
@@ -39,13 +39,13 @@ describe('TCServer', function() {
         server = new TCServer(httpServer);
     });
 
-    it('should resolve controller channel', function() {
+    it('should resolve controller channel', function () {
         assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: httpServer });
         expect(EventBusResolver.channel.getCalls().length).to.be.equal(1);
         expect(server.controllerServerChannel).to.be.equal(controllerChannel);
     });
 
-    it('should resolve engine on initialization', function() {
+    it('should resolve engine on initialization', function () {
         // Given
         const eng = {
             name: engineName,
@@ -59,12 +59,12 @@ describe('TCServer', function() {
         expect(server.engine).to.be.equal(eng);
     });
 
-    describe('control', function() {
-        beforeEach(function() {
+    describe('control', function () {
+        beforeEach(function () {
             server.init(engineName);
         });
 
-        it('should init engine when presentation is initialized', async function() {
+        it('should init engine when presentation is initialized', async function () {
             // Given
             const data = {
                 slides: [
@@ -79,7 +79,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(engine.init, data);
         });
 
-        it('should push plugins config when presentation is initialized', async function() {
+        it('should push plugins config when presentation is initialized', async function () {
             // Given
             const data = {
                 slides: [
@@ -100,7 +100,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(controllerChannel.broadcast, 'pluginsList', plugins);
         });
 
-        it('should handle control input through engine', async function() {
+        it('should handle control input through engine', async function () {
             // Given
             const input = { key: 'arrowTest' };
             // When
@@ -110,7 +110,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(engine.handleInput, input);
         });
 
-        it('should command plugin activation on controllers when plugin need to be activated', async function() {
+        it('should command plugin activation on controllers when plugin need to be activated', async function () {
             // Given
             const data = { pluginName: 'plugin0' };
             // When
@@ -120,7 +120,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(controllerChannel.broadcast, 'pluginStartingOut', data);
         });
 
-        it('should command plugin deactivation on controllers when plugin need to be deactivated', async function() {
+        it('should command plugin deactivation on controllers when plugin need to be deactivated', async function () {
             // Given
             const data = { pluginName: 'plugin0' };
             // When
@@ -130,7 +130,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(controllerChannel.broadcast, 'pluginEndingOut', data);
         });
 
-        it('should notify controllers of plugin event', async function() {
+        it('should notify controllers of plugin event', async function () {
             // Given
             const data = { type: 'touchPointer' };
             // When
@@ -140,7 +140,7 @@ describe('TCServer', function() {
             assert.calledWithExactly(controllerChannel.broadcast, 'pluginEventOut', data);
         });
 
-        it('should notify controllers of state change', async function() {
+        it('should notify controllers of state change', async function () {
             // Given
             const eng = {
                 name: engineName,

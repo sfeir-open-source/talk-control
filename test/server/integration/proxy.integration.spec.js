@@ -10,34 +10,32 @@ import cors from 'cors';
 import { forwardTraffic } from '@server/controllers/proxy.controller';
 import proxyController from '@server/controllers/proxy.controller';
 
-describe('Integration — /proxy', function() {
+describe('Integration — /proxy', function () {
     let app;
 
-    before(function() {
+    before(function () {
         app = express();
         app.use(cors());
         app.use(cookieParser());
         app.use('/proxy', proxyController);
     });
 
-    describe('GET /proxy/* — uncovered branch: missing or invalid presentation URL cookie', function() {
-        it('should return error message when tc-presentation-url cookie is absent', async function() {
+    describe('GET /proxy/* — uncovered branch: missing or invalid presentation URL cookie', function () {
+        it('should return error message when tc-presentation-url cookie is absent', async function () {
             // This covers the branch at line 19-24 of proxy.controller.js:
             // req.cookies['tc-presentation-url'] is undefined → new URL(undefined) throws
             const res = await request(app).get('/proxy/some/asset.js');
             expect(res.text).to.include('Invalid presentation URL');
         });
 
-        it('should return error message when tc-presentation-url cookie is not a valid URL', async function() {
-            const res = await request(app)
-                .get('/proxy/some/asset.js')
-                .set('Cookie', 'tc-presentation-url=not-a-url');
+        it('should return error message when tc-presentation-url cookie is not a valid URL', async function () {
+            const res = await request(app).get('/proxy/some/asset.js').set('Cookie', 'tc-presentation-url=not-a-url');
             expect(res.text).to.include('Invalid presentation URL');
         });
     });
 
-    describe('forwardTraffic unit — valid cookie triggers proxy.web', function() {
-        it('should call proxy.web with the correct target when cookie is a valid URL', function(done) {
+    describe('forwardTraffic unit — valid cookie triggers proxy.web', function () {
+        it('should call proxy.web with the correct target when cookie is a valid URL', function (done) {
             const req = {
                 cookies: { 'tc-presentation-url': 'http://localhost:3002/presentation.html' },
                 originalUrl: '/proxy/assets/main.js',
@@ -59,7 +57,7 @@ describe('Integration — /proxy', function() {
             forwardTraffic(req, res, proxyMock);
         });
 
-        it('should strip /proxy prefix from request url', function(done) {
+        it('should strip /proxy prefix from request url', function (done) {
             const req = {
                 cookies: { 'tc-presentation-url': 'http://example.com/deck.html' },
                 originalUrl: '/proxy/images/logo.png',

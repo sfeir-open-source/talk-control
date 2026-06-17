@@ -39,9 +39,7 @@ class TouchPointerMaskComponent extends LitElement {
     }
 
     render() {
-        return html`
-            <div id="touchMask" />
-        `;
+        return html` <div id="touchMask" /> `;
     }
 
     _initPointerDblClick() {

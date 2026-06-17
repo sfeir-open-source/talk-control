@@ -18,9 +18,8 @@ class RemoteControlComponent extends LitElement {
     firstUpdated() {
         if (config.tcController.urls.external) {
             QRCode.toCanvas(this.shadowRoot.getElementById('qrCode'), config.tcController.urls.external);
-            this.shadowRoot.getElementById(
-                'textCode'
-            ).innerHTML = `<a href="${config.tcController.urls.external}" title="Use this url to connect to TalkControl from another device">${config.tcController.urls.external}</a>`;
+            this.shadowRoot.getElementById('textCode').innerHTML =
+                `<a href="${config.tcController.urls.external}" title="Use this url to connect to TalkControl from another device">${config.tcController.urls.external}</a>`;
         } else {
             this.shadowRoot.getElementById('qrCodeSection').classList.add('is-hidden');
         }
@@ -29,9 +28,7 @@ class RemoteControlComponent extends LitElement {
     render() {
         return html`
             <div id="qrCodeSection">
-                <h2 class="subtitle">
-                    Or take control from another device
-                </h2>
+                <h2 class="subtitle">Or take control from another device</h2>
                 <div class="columns">
                     <div class="column is-one-third">
                         <div class="card">

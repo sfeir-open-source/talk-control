@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { init, gotoSlide, ACTIONS } from '@server/store/actions';
 
-describe('redux actions', function() {
-    describe('init()', function() {
-        it('should create a "init" action', function() {
+describe('redux actions', function () {
+    describe('init()', function () {
+        it('should create a "init" action', function () {
             // Given
             const data = { slideNumber: 15 };
             // Then
@@ -11,8 +11,8 @@ describe('redux actions', function() {
         });
     });
 
-    describe('gotoSlide()', function() {
-        it('should create a "gotoSlide" action', function() {
+    describe('gotoSlide()', function () {
+        it('should create a "gotoSlide" action', function () {
             // Given
             const data = { h: 1, v: 4, f: 3 };
             // Then

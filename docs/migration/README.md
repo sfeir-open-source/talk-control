@@ -24,7 +24,10 @@
 | 0.4 Coverage push 70% | ✅ Done | mergé dans update-node-20 | c8 --all src/ (excl. browser), 70%/90%/60% |
 | 1 CI Node 22+24 | ✅ Done | mergé dans update-node-20 | Fix OpenSSL 3 (md4→sha256 webpack), workflow matrix Node 22/24 |
 | 2 Dépendances obsolètes | ✅ Done | chore/step-02-deps-upgrade | uws supprimé, socket.io 2→4, express 4.17→4.22, nodemon 1→3, patches sûrs |
-| ... | ... | ... | ... |
+| 3 Tooling qualité | ✅ Done | chore/step-03-tooling | prettier 1→3, eslint 6→8, husky 3→9, @babel/eslint-parser — 196/196 tests |
+| 4 Webpack loaders | 🔜 Todo | — | css-loader 4→7, mini-css-extract-plugin 0.11→2 |
+| 5 Test infra | 🔜 Todo | — | chai 4→6, jsdom 15→29 |
+| 6 Transpileur + UI | 🔜 Todo | — | babel 7→8, lit-element 2→4 |
 
 ## Commandes de validation
 

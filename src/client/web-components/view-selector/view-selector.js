@@ -23,9 +23,7 @@ class ViewSelectorComponent extends LitElement {
                                 <p class="title">
                                     <i class="fas fa-chalkboard"></i>
                                 </p>
-                                <p class="subtitle">
-                                    Stage view
-                                </p>
+                                <p class="subtitle">Stage view</p>
                             </div>
                         </div>
                     </a>
@@ -38,9 +36,7 @@ class ViewSelectorComponent extends LitElement {
                                 <p class="title">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                 </p>
-                                <p class="subtitle">
-                                    Presenter view
-                                </p>
+                                <p class="subtitle">Presenter view</p>
                             </div>
                         </div>
                     </a>
@@ -53,9 +49,7 @@ class ViewSelectorComponent extends LitElement {
                                 <p class="title">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                 </p>
-                                <p class="subtitle">
-                                    Presenter view
-                                </p>
+                                <p class="subtitle">Presenter view</p>
                             </div>
                         </div>
                     </a>

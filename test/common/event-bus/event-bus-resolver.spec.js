@@ -12,19 +12,19 @@ import * as wsServerContext from '@event-bus/websockets/event-bus-websockets-ser
 import * as postMessageContext from '@event-bus/postmessage/event-bus-postmessage';
 import { eventBusLogger } from '@event-bus/event-bus-logger';
 
-describe('EventBusResolver', function() {
-    describe('resolve channel', function() {
+describe('EventBusResolver', function () {
+    describe('resolve channel', function () {
         let isClientSide;
 
-        before(function() {
+        before(function () {
             isClientSide = stub(contextService, 'isClientSide');
         });
 
-        after(function() {
+        after(function () {
             isClientSide.restore();
         });
 
-        it('should return a proxied web socket server based event bus when requesting CONTROLLER-SERVER channel and execution context is server side', function() {
+        it('should return a proxied web socket server based event bus when requesting CONTROLLER-SERVER channel and execution context is server side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_SERVER' });
             const constructor = stub(wsServerContext, 'EventBusWebsocketsServer').returns(eventBus);
@@ -40,7 +40,7 @@ describe('EventBusResolver', function() {
             constructor.restore();
         });
 
-        it('should return a proxied web socket client based event bus when requesting CONTROLLER-SERVER channel and execution context is client side', function() {
+        it('should return a proxied web socket client based event bus when requesting CONTROLLER-SERVER channel and execution context is client side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_CLIENT' });
             const constructor = stub(wsClientContext, 'EventBusWebsocketsClient').returns(eventBus);
@@ -56,7 +56,7 @@ describe('EventBusResolver', function() {
             constructor.restore();
         });
 
-        it('should return a proxied post message based event bus when requesting CONTROLLER-COMPONENT channel and execution context is client side', function() {
+        it('should return a proxied post message based event bus when requesting CONTROLLER-COMPONENT channel and execution context is client side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_POST_MESSAGE' });
             const constructor = stub(postMessageContext, 'EventBusPostMessage').returns(eventBus);
@@ -72,21 +72,21 @@ describe('EventBusResolver', function() {
             constructor.restore();
         });
 
-        it('should raise unknown channel error when requesting CONTROLLER-COMPONENT channel and execution context is server side', function() {
+        it('should raise unknown channel error when requesting CONTROLLER-COMPONENT channel and execution context is server side', function () {
             // Given
             isClientSide.returns(false);
             // When / Then
             expect(() => EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, {})).to.throw(Error, 'Unknown channel');
         });
 
-        it('should raise unknown channel error when requesting unknown channel and execution context is server side', function() {
+        it('should raise unknown channel error when requesting unknown channel and execution context is server side', function () {
             // Given
             isClientSide.returns(false);
             // When / Then
             expect(() => EventBusResolver.channel('NOT_EXIST', {})).to.throw(Error, 'Unknown channel');
         });
 
-        it('should raise unknown channel error when requesting unknown channel and execution context is client side', function() {
+        it('should raise unknown channel error when requesting unknown channel and execution context is client side', function () {
             // Given
             isClientSide.returns(true);
             // When / Then
@@ -95,21 +95,21 @@ describe('EventBusResolver', function() {
     });
 });
 
-describe('EventBusProxy', function() {
+describe('EventBusProxy', function () {
     const channelName = 'CHANNEL_NAME_TEST';
     let proxy, eventBus, log;
 
-    beforeEach(function() {
+    beforeEach(function () {
         log = stub(eventBusLogger, 'log');
         eventBus = createStubInstance(EventBus);
         proxy = new EventBusProxy(channelName, eventBus);
     });
 
-    afterEach(function() {
+    afterEach(function () {
         log.restore();
     });
 
-    it('should log broadcast with data while delegating event bus', function() {
+    it('should log broadcast with data while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         const data = ['data1', 'data2'];
@@ -120,7 +120,7 @@ describe('EventBusProxy', function() {
         assert.calledWithExactly(eventBus.broadcast, key, data);
     });
 
-    it('should log broadcast without data while delegating event bus', function() {
+    it('should log broadcast without data while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         // When
@@ -130,7 +130,7 @@ describe('EventBusProxy', function() {
         assert.calledWithExactly(eventBus.broadcast, key, undefined);
     });
 
-    it('should log emitTo target with data while delegating event bus', function() {
+    it('should log emitTo target with data while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         const data = ['data1', 'data2'];
@@ -142,7 +142,7 @@ describe('EventBusProxy', function() {
         assert.calledWithExactly(eventBus.emitTo, key, data, target);
     });
 
-    it('should log emitTo target without data while delegating event bus', function() {
+    it('should log emitTo target without data while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         const target = { id: 'test_target' };
@@ -153,7 +153,7 @@ describe('EventBusProxy', function() {
         assert.calledWithExactly(eventBus.emitTo, key, null, target);
     });
 
-    it('should log onMultiple event while delegating event bus', function() {
+    it('should log onMultiple event while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         const callback = () => 'do something';
@@ -164,7 +164,7 @@ describe('EventBusProxy', function() {
         assert.calledWithExactly(eventBus.onMultiple, key, callback);
     });
 
-    it('should log on event while delegating event bus', function() {
+    it('should log on event while delegating event bus', function () {
         // Given
         const key = 'KEY_TEST';
         const callback = () => 'do something';

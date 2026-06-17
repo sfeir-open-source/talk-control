@@ -5,18 +5,19 @@ import { assert, expect } from 'chai';
 import { spy, stub } from 'sinon';
 import { EventBusWebsocketsServer } from '@event-bus/websockets/event-bus-websockets-server';
 
-describe('EventBusWebsocketsServer', function() {
+describe('EventBusWebsocketsServer', function () {
     let eventBus = new EventBusWebsocketsServer();
-    beforeEach(function() {
+
+    beforeEach(function () {
         eventBus = new EventBusWebsocketsServer();
     });
 
-    describe('constructor()', function() {
-        it('should have instantiated EventBusWebsocketsServer', function() {
+    describe('constructor()', function () {
+        it('should have instantiated EventBusWebsocketsServer', function () {
             expect(eventBus).to.be.ok;
         });
 
-        it('should add socket to sockets array on connection', function() {
+        it('should add socket to sockets array on connection', function () {
             // Given
             const mockSocket = {
                 id: 'socket-1',
@@ -33,7 +34,7 @@ describe('EventBusWebsocketsServer', function() {
             assert.include(eventBus.sockets, mockSocket);
         });
 
-        it('should remove socket from sockets array on disconnect', function() {
+        it('should remove socket from sockets array on disconnect', function () {
             // Given
             let disconnectCallback;
             const mockSocket = {
@@ -53,7 +54,7 @@ describe('EventBusWebsocketsServer', function() {
             assert.notInclude(eventBus.sockets, mockSocket, 'socket should be removed after disconnect');
         });
 
-        it('should subscribe new socket on existing keys', function() {
+        it('should subscribe new socket on existing keys', function () {
             // Given
             const onMultipleSpy = spy(eventBus, 'onMultiple');
             eventBus.callBacks['existingKey'] = [() => {}];
@@ -72,8 +73,8 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('on()', function() {
-        it('should call onMultiple', function() {
+    describe('on()', function () {
+        it('should call onMultiple', function () {
             // Given
             const key = 'key';
             const callback = () => 'callback';
@@ -85,7 +86,7 @@ describe('EventBusWebsocketsServer', function() {
             assert.isOk(eventBus.onMultiple.calledWith(key, callback, socket));
         });
 
-        it('should not throw when super.on throws (duplicate key error path)', function() {
+        it('should not throw when super.on throws (duplicate key error path)', function () {
             // Given
             const key = 'key';
             const callback = () => 'callback';
@@ -99,8 +100,8 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('onMultiple()', function() {
-        it('should fire events', function() {
+    describe('onMultiple()', function () {
+        it('should fire events', function () {
             // Given
             const socketA = { on: spy() },
                 socketB = { on: spy() },
@@ -115,7 +116,7 @@ describe('EventBusWebsocketsServer', function() {
             assert(socketC.on.calledOnceWith(key));
         });
 
-        it('should add key only on given socket', function() {
+        it('should add key only on given socket', function () {
             // Given
             const socketA = { on: spy() },
                 socketB = { on: spy() },
@@ -131,8 +132,8 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('broadcast()', function() {
-        it('should broadcast the data', function() {
+    describe('broadcast()', function () {
+        it('should broadcast the data', function () {
             // Given
             stub(eventBus.io, 'emit');
             const key = 'key';
@@ -144,7 +145,7 @@ describe('EventBusWebsocketsServer', function() {
             eventBus.io.emit.restore();
         });
 
-        it('should call io.emit when broadcast=true', function() {
+        it('should call io.emit when broadcast=true', function () {
             // Given
             stub(eventBus.io, 'emit');
             const key = 'key';
@@ -156,7 +157,7 @@ describe('EventBusWebsocketsServer', function() {
             eventBus.io.emit.restore();
         });
 
-        it('should call io.emit by default (no broadcast param)', function() {
+        it('should call io.emit by default (no broadcast param)', function () {
             // Given
             stub(eventBus.io, 'emit');
             const key = 'key';
@@ -169,8 +170,8 @@ describe('EventBusWebsocketsServer', function() {
         });
     });
 
-    describe('emitTo()', function() {
-        it('should emit the data', function() {
+    describe('emitTo()', function () {
+        it('should emit the data', function () {
             // Given
             const socket = {
                 emit: () => {}

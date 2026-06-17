@@ -16,6 +16,6 @@ import '@plugins/input/touch-pointer/components/touch-pointer-settings.js';
 import '@plugins/input/touch-pointer/components/touch-pointer-mask.js';
 import { bootstrapTcController } from '@client/tc-controller/bootstrap';
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     bootstrapTcController();
 });

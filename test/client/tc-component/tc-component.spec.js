@@ -2,23 +2,24 @@ import { assert, expect } from 'chai';
 import { stub } from 'sinon';
 import { TCComponent } from '@client/tc-component/tc-component';
 
-describe('TCComponent', function() {
+describe('TCComponent', function () {
     let tcComponent;
     let on, broadcast;
-    beforeEach(function() {
+
+    beforeEach(function () {
         tcComponent = new TCComponent({ engineName: 'revealjs' });
         on = stub(tcComponent.controllerComponentChannel, 'on');
         broadcast = stub(tcComponent.controllerComponentChannel, 'broadcast');
     });
 
-    describe('constructor()', function() {
-        it('should have instantiated TCServer', function() {
+    describe('constructor()', function () {
+        it('should have instantiated TCServer', function () {
             expect(tcComponent).to.be.ok;
         });
     });
 
-    describe('init()', function() {
-        it('should do the required subscriptions', function() {
+    describe('init()', function () {
+        it('should do the required subscriptions', function () {
             // When
             tcComponent.init();
             // Then
@@ -26,7 +27,7 @@ describe('TCComponent', function() {
             assert(broadcast.calledWith('initialized'), '"broadcast" not called with initialized');
         });
 
-        it('should NOT broadcast "initialized" when delta is set', function() {
+        it('should NOT broadcast "initialized" when delta is set', function () {
             // Given
             const tcComponentWithDelta = new TCComponent({ engineName: 'revealjs', delta: 1 });
             const broadcastWithDelta = stub(tcComponentWithDelta.controllerComponentChannel, 'broadcast');
@@ -37,7 +38,7 @@ describe('TCComponent', function() {
             assert(broadcastWithDelta.neverCalledWith('initialized'), '"broadcast" should NOT be called with initialized when delta is set');
         });
 
-        it('should broadcast "sendNotesToController" when delta is 0 and gotoSlide is called', function() {
+        it('should broadcast "sendNotesToController" when delta is 0 and gotoSlide is called', function () {
             // Given
             let gotoSlideCallback;
             on.callsFake((event, cb) => {

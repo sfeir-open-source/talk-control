@@ -70,9 +70,7 @@ class UrlFormComponent extends LitElement {
         return html`
             <section>
                 <div class="container">
-                    <p class="subtitle">
-                        Enter your presentation url:
-                    </p>
+                    <p class="subtitle">Enter your presentation url:</p>
 
                     <div class="field has-addons">
                         <div class="control">

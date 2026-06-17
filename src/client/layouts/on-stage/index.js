@@ -11,6 +11,6 @@ import '@client/web-components/menu-navigation/menu-navigation.js';
 import '@client/web-components/menu-plugins/menu-plugins.js';
 import { bootstrapTcController } from '@client/tc-controller/bootstrap';
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     bootstrapTcController();
 });

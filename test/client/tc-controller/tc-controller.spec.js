@@ -8,23 +8,23 @@ import { EventBus } from '@event-bus/event-bus';
 import pluginService from '@services/plugin';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 
-describe('TCController', function() {
+describe('TCController', function () {
     let resolveChannel, serverChannel, componentChannel, controller;
     let clock;
     const serverUrl = 'SERVER_URL';
     const presentationUrl = 'PRESENTATION_URL';
 
-    before(function() {
+    before(function () {
         clock = useFakeTimers();
         resolveChannel = stub(EventBusResolver, 'channel');
     });
 
-    after(function() {
+    after(function () {
         clock.restore();
         resolveChannel.restore();
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         serverChannel = spy(new EventBus());
         componentChannel = spy(new EventBus());
         resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(serverChannel);
@@ -32,7 +32,7 @@ describe('TCController', function() {
         controller = new TCController(serverUrl);
     });
 
-    it('should resolve server and component channels', function() {
+    it('should resolve server and component channels', function () {
         assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: serverUrl });
         assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_COMPONENT, { deep: true });
         expect(EventBusResolver.channel.getCalls().length).to.be.equal(2);
@@ -40,19 +40,19 @@ describe('TCController', function() {
         expect(controller.controllerComponentChannel).to.be.equal(componentChannel);
     });
 
-    it('should load presentation on initialization', function() {
+    it('should load presentation on initialization', function () {
         // When
         controller.init(presentationUrl);
         // Then
         assert.calledWithExactly(componentChannel.broadcast, 'loadPresentation', presentationUrl);
     });
 
-    describe('pre-control', function() {
-        beforeEach(function() {
+    describe('pre-control', function () {
+        beforeEach(function () {
             controller.init(presentationUrl);
         });
 
-        it('should ping presentation component when slides are loaded', async function() {
+        it('should ping presentation component when slides are loaded', async function () {
             // When
             await loadSlides(2, 2, 100);
             // Then
@@ -60,7 +60,7 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'ping');
         });
 
-        it('should not ping presentation component when not all slides are loaded', async function() {
+        it('should not ping presentation component when not all slides are loaded', async function () {
             // When
             await loadSlides(1, 2, 100);
             // Then
@@ -68,7 +68,7 @@ describe('TCController', function() {
             assert.neverCalledWithMatch(componentChannel.broadcast, 'ping');
         });
 
-        it('should init control when presentation health check response received in time', async function() {
+        it('should init control when presentation health check response received in time', async function () {
             // Given
             const timeout = 100;
             await loadSlides(1, 1, 100);
@@ -79,7 +79,7 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'init');
         });
 
-        it('should error when presentation health check response is not received', async function() {
+        it('should error when presentation health check response is not received', async function () {
             // Given
             await loadSlides(1, 1, 100);
             // When nothing
@@ -88,7 +88,7 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
         });
 
-        it('should error when presentation health check response is late', async function() {
+        it('should error when presentation health check response is late', async function () {
             // Given
             const timeout = 100;
             await loadSlides(1, 1, 100);
@@ -100,13 +100,13 @@ describe('TCController', function() {
         });
     });
 
-    describe('control', function() {
-        beforeEach(async function() {
+    describe('control', function () {
+        beforeEach(async function () {
             controller.init(presentationUrl);
             await prepareControl();
         });
 
-        it('should notify server when presentation component is initialized', async function() {
+        it('should notify server when presentation component is initialized', async function () {
             // Given
             const presentationData = { slides: [] };
             // When
@@ -116,7 +116,7 @@ describe('TCController', function() {
             assert.calledWithExactly(serverChannel.broadcast, 'init', presentationData);
         });
 
-        it("should notify components of presentation's slide state change", async function() {
+        it("should notify components of presentation's slide state change", async function () {
             // Given
             const data = { slide: 9 };
             // When
@@ -126,7 +126,7 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'gotoSlide', data);
         });
 
-        it('should forward notes from component to others', async function() {
+        it('should forward notes from component to others', async function () {
             // Given
             const notes = [{ note: 1 }, { note: 2 }, { note: 3 }];
             // When
@@ -136,7 +136,7 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'sendNotesToComponent', notes);
         });
 
-        it('should notify server of plugin event', async function() {
+        it('should notify server of plugin event', async function () {
             // Given
             const event = { origin: 'plugin', type: 'event1' };
             // When
@@ -146,7 +146,7 @@ describe('TCController', function() {
             assert.calledWithExactly(serverChannel.broadcast, 'pluginEventIn', event);
         });
 
-        it('should notify components of plugin event', async function() {
+        it('should notify components of plugin event', async function () {
             // Given
             const event = { origin: 'plugin1', type: 'event1' };
             // When
@@ -156,23 +156,23 @@ describe('TCController', function() {
             assert.calledWithExactly(componentChannel.broadcast, 'plugin1', event);
         });
 
-        describe('plugin start and stop flow', function() {
-            before(function() {
+        describe('plugin start and stop flow', function () {
+            before(function () {
                 stub(pluginService, 'activateOnController');
                 stub(pluginService, 'deactivateOnController');
             });
 
-            after(function() {
+            after(function () {
                 pluginService.activateOnController.restore();
                 pluginService.deactivateOnController.restore();
             });
 
-            beforeEach(async function() {
+            beforeEach(async function () {
                 pluginService.activateOnController.resetHistory();
                 pluginService.deactivateOnController.resetHistory();
             });
 
-            it('should notify server when plugin need to be activated', async function() {
+            it('should notify server when plugin need to be activated', async function () {
                 // Given
                 const data = { pluginName: 'plugin0' };
                 // When
@@ -182,7 +182,7 @@ describe('TCController', function() {
                 assert.calledWithExactly(serverChannel.broadcast, 'pluginStartingIn', data);
             });
 
-            it('should activate plugin on server command', async function() {
+            it('should activate plugin on server command', async function () {
                 // Given
                 const data = { pluginName: 'plugin0' };
                 // When
@@ -192,7 +192,7 @@ describe('TCController', function() {
                 assert.calledWithExactly(pluginService.activateOnController, data.pluginName, controller);
             });
 
-            it('should notify server when plugin need to be deactivated', async function() {
+            it('should notify server when plugin need to be deactivated', async function () {
                 // Given
                 const data = { pluginName: 'plugin0' };
                 // When
@@ -202,7 +202,7 @@ describe('TCController', function() {
                 assert.calledWithExactly(serverChannel.broadcast, 'pluginEndingIn', data);
             });
 
-            it('should deactivate plugin on server command', async function() {
+            it('should deactivate plugin on server command', async function () {
                 // Given
                 const data = { pluginName: 'plugin0' };
                 // When
@@ -212,7 +212,7 @@ describe('TCController', function() {
                 assert.calledWithExactly(pluginService.deactivateOnController, data.pluginName, controller);
             });
 
-            it('should activate auto activated plugins when plugins config is pushed', async function() {
+            it('should activate auto activated plugins when plugins config is pushed', async function () {
                 // Given
                 const plugins = [
                     { name: 'plugin1', autoActivate: true },
@@ -229,7 +229,7 @@ describe('TCController', function() {
                 expect(pluginService.activateOnController.getCalls().length).to.be.equal(2);
             });
 
-            it('should add to menu manually activated plugins when plugins config is pushed', async function() {
+            it('should add to menu manually activated plugins when plugins config is pushed', async function () {
                 // Given
                 const plugins = [
                     { name: 'plugin1', autoActivate: true },

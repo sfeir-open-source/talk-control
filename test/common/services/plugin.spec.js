@@ -6,9 +6,9 @@ import { spy, stub } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
 import pluginService from '@services/plugin';
 
-describe('Plugin service', function() {
-    describe('activatePluginOnController', function() {
-        it('should call required functions if plugin is usedByAComponent', async function() {
+describe('Plugin service', function () {
+    describe('activatePluginOnController', function () {
+        it('should call required functions if plugin is usedByAComponent', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -39,7 +39,7 @@ describe('Plugin service', function() {
             pluginLoader.loadPluginModule.restore();
         });
 
-        it('should call required functions if plugin is NOT usedByAComponent', async function() {
+        it('should call required functions if plugin is NOT usedByAComponent', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -71,8 +71,8 @@ describe('Plugin service', function() {
         });
     });
 
-    describe('activatePluginOnController - already initialized', function() {
-        it('should NOT call init when plugin is already initialized', async function() {
+    describe('activatePluginOnController - already initialized', function () {
+        it('should NOT call init when plugin is already initialized', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -100,8 +100,8 @@ describe('Plugin service', function() {
         });
     });
 
-    describe('deactivatePluginOnController', function() {
-        it('should call plugin.instance.unload()', async function() {
+    describe('deactivatePluginOnController', function () {
+        it('should call plugin.instance.unload()', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -120,7 +120,7 @@ describe('Plugin service', function() {
             pluginLoader.loadPluginModule.restore();
         });
 
-        it('should catch error when loadPluginModule rejects', async function() {
+        it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
@@ -133,8 +133,8 @@ describe('Plugin service', function() {
         });
     });
 
-    describe('activatePluginOnComponent', function() {
-        it('should call required functions', async function() {
+    describe('activatePluginOnComponent', function () {
+        it('should call required functions', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -156,7 +156,7 @@ describe('Plugin service', function() {
             pluginLoader.loadPluginModule.restore();
         });
 
-        it('should NOT call init when plugin is already initialized', async function() {
+        it('should NOT call init when plugin is already initialized', async function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
@@ -178,7 +178,7 @@ describe('Plugin service', function() {
             pluginLoader.loadPluginModule.restore();
         });
 
-        it('should catch error when loadPluginModule rejects', async function() {
+        it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
             stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));

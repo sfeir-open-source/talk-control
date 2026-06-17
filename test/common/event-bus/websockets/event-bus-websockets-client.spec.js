@@ -6,28 +6,29 @@ import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websoc
 import { stub } from 'sinon';
 import socketIO from 'socket.io-client';
 
-describe('EventBusWebsocketsClient', function() {
+describe('EventBusWebsocketsClient', function () {
     let eventBus;
-    before(function() {
+
+    before(function () {
         stub(socketIO, 'connect').returns({ on: stub(), emit: stub() });
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         eventBus = new EventBusWebsocketsClient();
     });
 
-    after(function() {
+    after(function () {
         socketIO.connect.restore();
     });
 
-    describe('constructor()', function() {
-        it('should have instantiated EventBusWebsocketsClient', function() {
+    describe('constructor()', function () {
+        it('should have instantiated EventBusWebsocketsClient', function () {
             expect(eventBus).to.be.ok;
         });
     });
 
-    describe('on()', function() {
-        it('should call onMultiple', function() {
+    describe('on()', function () {
+        it('should call onMultiple', function () {
             // Given
             const key = 'key';
             const callback = () => 'callback';
@@ -38,7 +39,7 @@ describe('EventBusWebsocketsClient', function() {
             assert.isOk(eventBus.onMultiple.calledWith(key, callback));
         });
 
-        it('should not throw when duplicate key triggers error (error path)', function() {
+        it('should not throw when duplicate key triggers error (error path)', function () {
             // Given
             const key = 'duplicateKey';
             const callback = () => 'callback';
@@ -51,8 +52,8 @@ describe('EventBusWebsocketsClient', function() {
         });
     });
 
-    describe('onMultiple()', function() {
-        it('should fire events', function() {
+    describe('onMultiple()', function () {
+        it('should fire events', function () {
             // Given
             const key = 'key';
             // When
@@ -62,8 +63,8 @@ describe('EventBusWebsocketsClient', function() {
         });
     });
 
-    describe('broadcast()', function() {
-        it('should broadcast through io', function() {
+    describe('broadcast()', function () {
+        it('should broadcast through io', function () {
             // Given
             const key = 'key';
             const data = 'data';
@@ -74,8 +75,8 @@ describe('EventBusWebsocketsClient', function() {
         });
     });
 
-    describe('emitTo()', function() {
-        it('should emit the data', function() {
+    describe('emitTo()', function () {
+        it('should emit the data', function () {
             // Given
             const socket = {
                 emit: () => {}

@@ -11,7 +11,7 @@ __webpack_public_path__ = window.tcResourcePath;
 
 import { TCComponent } from './tc-component';
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     const hash = window.location.hash || '#delta=0';
     const params = parseParams(hash);
     // TODO: retrieve engineName from configuration

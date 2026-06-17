@@ -5,9 +5,10 @@ import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
 import { RevealEngine } from '@client/engines/revealjs-client-engine';
 
-describe('RevealEngineClient', function() {
+describe('RevealEngineClient', function () {
     let engine;
-    beforeEach(function() {
+
+    beforeEach(function () {
         window.Reveal = {
             getCurrentSlide: stub(),
             configure: spy(),
@@ -27,19 +28,19 @@ describe('RevealEngineClient', function() {
         engine = new RevealEngine();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         window.addEventListener.restore();
         window.parent.postMessage.restore();
     });
 
-    describe('constructor()', function() {
-        it('should have instantiated RevealEngine', function() {
+    describe('constructor()', function () {
+        it('should have instantiated RevealEngine', function () {
             expect(engine).to.be.ok;
         });
     });
 
-    describe('goToSlide()', function() {
-        it('should call Reveal.slide() with the given params', function() {
+    describe('goToSlide()', function () {
+        it('should call Reveal.slide() with the given params', function () {
             // Given
             stub(engine, 'getSlides').returns([
                 { h: 1, v: 1, f: -1, fMax: -1 },
@@ -51,7 +52,7 @@ describe('RevealEngineClient', function() {
             assert(window.Reveal.slide.calledOnceWith(1, 2, 3));
         });
 
-        it('should go to next slide when fragment index exceeds fMax and next slide exists', function() {
+        it('should go to next slide when fragment index exceeds fMax and next slide exists', function () {
             // Given
             const slides = [
                 { h: 0, v: 0, f: -1, fMax: 1 },
@@ -65,7 +66,7 @@ describe('RevealEngineClient', function() {
             assert(window.Reveal.slide.calledOnceWith(1, 0, -1));
         });
 
-        it('should go to last slide when at end and fragment exceeds fMax', function() {
+        it('should go to last slide when at end and fragment exceeds fMax', function () {
             // Given
             const slides = [
                 { h: 0, v: 0, f: -1, fMax: 1 },
@@ -79,8 +80,8 @@ describe('RevealEngineClient', function() {
         });
     });
 
-    describe('getSlides()', function() {
-        it('should return an array of slides', function() {
+    describe('getSlides()', function () {
+        it('should return an array of slides', function () {
             // Given
             const querySelectorAll = stub().returns([]);
             stub(document, 'querySelectorAll').returns([{ querySelectorAll }, { querySelectorAll }, { querySelectorAll }]);
@@ -92,7 +93,7 @@ describe('RevealEngineClient', function() {
             document.querySelectorAll.restore();
         });
 
-        it('should handle vertical slides', function() {
+        it('should handle vertical slides', function () {
             // Given
             const fragmentsForVertical = stub().returns([{}, {}]); // 2 fragments in vertical slide
             const verticalSlide1 = { querySelectorAll: fragmentsForVertical };

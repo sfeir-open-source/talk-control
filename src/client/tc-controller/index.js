@@ -7,7 +7,7 @@ import '@client/web-components/url-form/url-form.js';
 import '@client/web-components/view-selector/view-selector';
 import '@client/web-components/remote-control/remote-control';
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     document.querySelector('tc-url-form').classList.remove('is-hidden');
 
     addEventListener('url-form-editing', () => {

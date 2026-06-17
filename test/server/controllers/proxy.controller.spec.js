@@ -2,17 +2,17 @@ import { expect } from 'chai';
 import { assert, stub } from 'sinon';
 import { forwardTraffic } from '@server/controllers/proxy.controller';
 
-describe('ProxyController', function() {
+describe('ProxyController', function () {
     let req, res, proxy;
 
-    beforeEach(function() {
+    beforeEach(function () {
         proxy = { web: stub() };
         req = { cookies: {} };
         res = { send: stub(), status: stub().returnsThis() };
     });
 
-    describe('forwardTraffic', function() {
-        it('should error if requested presentation url is invalid', function() {
+    describe('forwardTraffic', function () {
+        it('should error if requested presentation url is invalid', function () {
             // Given
             req.cookies['tc-presentation-url'] = 'INVALID_URL';
             // When
@@ -22,7 +22,7 @@ describe('ProxyController', function() {
             assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
-        it('should error when req.cookies is undefined', function() {
+        it('should error when req.cookies is undefined', function () {
             // Given - no cookies at all
             req.cookies = undefined;
             // When - presentationUrl will be undefined, new URL(undefined) throws
@@ -32,7 +32,7 @@ describe('ProxyController', function() {
             assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
-        it('should error when req.cookies is null', function() {
+        it('should error when req.cookies is null', function () {
             // Given
             req.cookies = null;
             // When
@@ -42,7 +42,7 @@ describe('ProxyController', function() {
             assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
-        it('should forward request for resource to presentation server (target)', function() {
+        it('should forward request for resource to presentation server (target)', function () {
             // Given
             req.cookies['tc-presentation-url'] = 'http://test.domain.com/presentation/';
             req.originalUrl = '/proxy/resource/1';

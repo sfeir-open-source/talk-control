@@ -25,9 +25,7 @@ class NotesComponent extends LitElement {
     }
 
     render() {
-        return html`
-            <div id="notes"></div>
-        `;
+        return html` <div id="notes"></div> `;
     }
 }
 

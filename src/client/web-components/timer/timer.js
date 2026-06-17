@@ -64,9 +64,7 @@ class TimerComponent extends LitElement {
     }
 
     render() {
-        return html`
-            <div class="is-size-3 is-unselectable" id="timer" @click="${this.reset}">00:00:00</div>
-        `;
+        return html` <div class="is-size-3 is-unselectable" id="timer" @click="${this.reset}">00:00:00</div> `;
     }
 }
 
