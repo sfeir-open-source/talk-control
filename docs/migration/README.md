@@ -23,6 +23,7 @@
 | 0.3 E2E Playwright | ✅ Done | mergé dans update-node-20 | +24 tests Playwright (chromium) |
 | 0.4 Coverage push 70% | ✅ Done | mergé dans update-node-20 | c8 --all src/ (excl. browser), 70%/90%/60% |
 | 1 CI Node 22+24 | ✅ Done | mergé dans update-node-20 | Fix OpenSSL 3 (md4→sha256 webpack), workflow matrix Node 22/24 |
+| 2 Dépendances obsolètes | ✅ Done | chore/step-02-deps-upgrade | uws supprimé, socket.io 2→4, express 4.17→4.22, nodemon 1→3, patches sûrs |
 | ... | ... | ... | ... |
 
 ## Commandes de validation
