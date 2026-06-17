@@ -19,11 +19,12 @@
     ],
     "globals": {
     },
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2018,
-        "allowImportExportEverywhere": true
+        "allowImportExportEverywhere": true,
+        "requireConfigFile": false
     },
     "rules": {
         "no-console": "off",
@@ -46,6 +47,8 @@
             "always"
         ],
         "mocha/no-setup-in-describe": "off",
-        "prettier/prettier": ["error"]
+        "mocha/max-top-level-suites": "off",
+        "prettier/prettier": ["error"],
+        "jsdoc/tag-lines": "off"
     }
 }
