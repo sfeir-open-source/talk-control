@@ -37,6 +37,18 @@ describe('EventBusWebsocketsClient', function() {
             // Then
             assert.isOk(eventBus.onMultiple.calledWith(key, callback));
         });
+
+        it('should not throw when duplicate key triggers error (error path)', function() {
+            // Given
+            const key = 'duplicateKey';
+            const callback = () => 'callback';
+            // Register the key once
+            eventBus.on(key, callback);
+            // When - registering the same key again should throw internally but be caught
+            assert.doesNotThrow(() => {
+                eventBus.on(key, () => 'second callback');
+            });
+        });
     });
 
     describe('onMultiple()', function() {

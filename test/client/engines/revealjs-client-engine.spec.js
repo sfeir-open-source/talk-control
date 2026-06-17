@@ -50,6 +50,33 @@ describe('RevealEngineClient', function() {
             // Then
             assert(window.Reveal.slide.calledOnceWith(1, 2, 3));
         });
+
+        it('should go to next slide when fragment index exceeds fMax and next slide exists', function() {
+            // Given
+            const slides = [
+                { h: 0, v: 0, f: -1, fMax: 1 },
+                { h: 1, v: 0, f: -1, fMax: 2 },
+                { h: 2, v: 0, f: -1, fMax: 0 }
+            ];
+            stub(engine, 'getSlides').returns(slides);
+            // When - currentIndex=0, delta=1, f+delta=0 which is not < fMax=1, currentIndex+delta=1 < 2 (slides.length-1)
+            engine.goToSlide({ h: 0, v: 0, f: 0 }, 1);
+            // Then - should move to slides[1]
+            assert(window.Reveal.slide.calledOnceWith(1, 0, -1));
+        });
+
+        it('should go to last slide when at end and fragment exceeds fMax', function() {
+            // Given
+            const slides = [
+                { h: 0, v: 0, f: -1, fMax: 1 },
+                { h: 1, v: 0, f: -1, fMax: 1 }
+            ];
+            stub(engine, 'getSlides').returns(slides);
+            // When - currentIndex=1 (last), delta=1, f+delta=1 >= fMax=1, currentIndex+delta=2 is NOT < slides.length-1=1
+            engine.goToSlide({ h: 1, v: 0, f: 0 }, 1);
+            // Then - should use last slide
+            assert(window.Reveal.slide.calledOnceWith(1, 0, -1));
+        });
     });
 
     describe('getSlides()', function() {
@@ -62,6 +89,35 @@ describe('RevealEngineClient', function() {
             // Then
             expect(slides.length).to.equals(3);
             expect(slides[0]).to.eqls({ h: 0, v: 0, f: -1, fMax: -1 });
+            document.querySelectorAll.restore();
+        });
+
+        it('should handle vertical slides', function() {
+            // Given
+            const fragmentsForVertical = stub().returns([{}, {}]); // 2 fragments in vertical slide
+            const verticalSlide1 = { querySelectorAll: fragmentsForVertical };
+            const verticalSlide2 = { querySelectorAll: stub().returns([]) };
+            const verticalSlides = [verticalSlide1, verticalSlide2];
+            const horizontalSlideWithVerticals = {
+                querySelectorAll: event => {
+                    if (event === 'section') return verticalSlides;
+                    return []; // fragments on the h slide itself
+                }
+            };
+            const horizontalSlideWithoutVerticals = {
+                querySelectorAll: event => {
+                    if (event === 'section') return [];
+                    return [{}, {}]; // 2 fragments at h level
+                }
+            };
+            stub(document, 'querySelectorAll').returns([horizontalSlideWithVerticals, horizontalSlideWithoutVerticals]);
+            // When
+            const slides = engine.getSlides();
+            // Then
+            expect(slides.length).to.equals(3); // 2 vertical + 1 horizontal
+            expect(slides[0]).to.eqls({ h: 0, v: 0, f: -1, fMax: 2 }); // vertical with 2 fragments
+            expect(slides[1]).to.eqls({ h: 0, v: 1, f: -1, fMax: -1 }); // vertical with 0 fragments -> -1
+            expect(slides[2]).to.eqls({ h: 1, v: 0, f: -1, fMax: 2 }); // horizontal with 2 fragments
             document.querySelectorAll.restore();
         });
     });
