@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>TalkControl - Controller</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+                padding: 1rem;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .slide-display {
+                border: 1px solid #ccc;
+                min-height: 200px;
+                padding: 1rem;
+                margin: 1rem 0;
+                background: #f9f9f9;
+            }
+            .navigation {
+                display: flex;
+                gap: 1rem;
+            }
+            button {
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+            }
+            .slide-counter {
+                margin-top: 1rem;
+                font-size: 0.9rem;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>TalkControl</h1>
+            <h2>Contrôleur de présentation</h2>
+
+            <div id="slide-display" class="slide-display" aria-label="Affichage de la diapositive">
+                <p>Diapositive 1 / 5</p>
+                <p>Contenu de la diapositive courante</p>
+            </div>
+
+            <div class="navigation" role="navigation" aria-label="Navigation entre diapositives">
+                <button id="btn-prev" aria-label="Diapositive précédente" disabled>Précédent</button>
+                <button id="btn-next" aria-label="Diapositive suivante">Suivant</button>
+            </div>
+
+            <div class="slide-counter" id="slide-counter">
+                Diapositive <span id="current-slide">1</span> sur <span id="total-slides">5</span>
+            </div>
+        </div>
+
+        <script>
+            let currentSlide = 1;
+            const totalSlides = 5;
+
+            function updateDisplay() {
+                document.getElementById('current-slide').textContent = currentSlide;
+                document.getElementById('btn-prev').disabled = currentSlide <= 1;
+                document.getElementById('btn-next').disabled = currentSlide >= totalSlides;
+                document.querySelector('#slide-display p').textContent =
+                    'Diapositive ' + currentSlide + ' / ' + totalSlides;
+            }
+
+            document.getElementById('btn-next').addEventListener('click', function () {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateDisplay();
+                }
+            });
+
+            document.getElementById('btn-prev').addEventListener('click', function () {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateDisplay();
+                }
+            });
+        </script>
+    </body>
+</html>
