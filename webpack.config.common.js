@@ -1,3 +1,9 @@
+// webpack 5.0.0 uses MD4 internally (FileSystemInfo snapshots + output hash).
+// MD4 is unsupported by OpenSSL 3 (Node 22+). Patch crypto before webpack loads.
+const crypto = require('crypto');
+const _origCreateHash = crypto.createHash;
+crypto.createHash = algo => _origCreateHash(algo === 'md4' ? 'sha256' : algo);
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
@@ -48,7 +54,8 @@ module.exports = {
     target: 'web',
     output: {
         publicPath: '', // Required by MiniCssExtractPlugin, but can be overridden dynamically (see tc-component/index.js)
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
+        hashFunction: 'sha256' // md4 (webpack default) is unsupported by OpenSSL 3 (Node 22+)
     },
     resolve: {
         alias: {
