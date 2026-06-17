@@ -59,6 +59,9 @@ module.exports = {
     },
     resolve: {
         alias: {
+            // socket.io-client 4.x exports field resolves to ESM build for browser targets;
+            // force CJS to avoid "import may only appear with sourceType: module" parse error.
+            'socket.io-client': path.resolve(__dirname, 'node_modules/socket.io-client/build/cjs/index.js'),
             '@event-bus': path.resolve(__dirname, './src/common/event-bus/'),
             '@services': path.resolve(__dirname, './src/common/services/'),
             '@client': path.resolve(__dirname, './src/client/'),
