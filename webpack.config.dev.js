@@ -5,9 +5,10 @@ module.exports = {
     ...common,
     mode: 'development',
     devServer: {
-        overlay: true,
+        client: {
+            overlay: true,
+        },
         port: config.tcController.port,
         hot: false,
-        quiet: true
     }
 };
