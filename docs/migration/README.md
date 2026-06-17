@@ -15,15 +15,29 @@
 
 ## État de la migration
 
-| Étape | Statut | Branche |
-|---|---|---|
-| 0.0 Audit | ✅ Done | chore/step-00-0-audit |
-| 0.1 Tests unitaires critiques | ⏳ TODO | chore/step-00-1-unit-tests-critical |
-| 0.2 Tests intégration | ⏳ TODO | chore/step-00-2-integration-tests |
-| 0.3 E2E Playwright | ⏳ TODO | chore/step-00-3-e2e-playwright |
-| 0.4 Coverage push 70% | ⏳ TODO | chore/step-00-4-coverage-push |
-| 1 CI Node 22+24 | ⏳ TODO | chore/step-01-node-runtime |
-| ... | ... | ... |
+| Étape | Statut | Branche | Résultat |
+|---|---|---|---|
+| 0.0 Audit | ✅ Done | chore/step-00-0-audit | Baseline : 140/140 tests, 91.83% lignes |
+| 0.1 Tests unitaires critiques | ✅ Done | mergé dans update-node-20 | +39 tests → 179 passing |
+| 0.2 Tests intégration | ✅ Done | mergé dans update-node-20 | +17 tests → 157 passing (supertest) |
+| 0.3 E2E Playwright | ✅ Done | mergé dans update-node-20 | +24 tests Playwright (chromium) |
+| 0.4 Coverage push 70% | ⏳ TODO | chore/step-00-4-coverage-push | c8 --all src/, seuils CI |
+| 1 CI Node 22+24 | ⏳ TODO | chore/step-01-node-runtime | Fix router.all('*'), legacy-peer-deps |
+| ... | ... | ... | ... |
+
+## Commandes de validation
+
+```bash
+# Lancer tous les tests
+NODE_ENV=test npm test          # 157 passing (unit + integration)
+npm run test:e2e                 # 24 passing (Playwright chromium)
+
+# Valider le pipeline CI complet en local
+bash scripts/validate-ci.sh     # 5/5 jobs : tests, build, smoke serveur, E2E
+
+# Lancer l'app (Node 20 requis)
+nvm use 20 && npm start          # http://localhost:3000
+```
 
 ## Findings critiques étape 0.0
 
