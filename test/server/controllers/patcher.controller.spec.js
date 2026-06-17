@@ -49,7 +49,7 @@ describe('PatcherController', function() {
         });
         isUsingRemoteUrl.returns(true);
         req = { query: { 'tc-presentation-url': presentationUrl } };
-        res = { send: stub(), cookie: stub() };
+        res = { send: stub(), cookie: stub(), status: stub().returnsThis() };
     });
 
     describe('patchPresentation', function() {
@@ -66,7 +66,8 @@ describe('PatcherController', function() {
             // When
             await patchPresentation(req, res);
             // Then
-            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+            assert.calledWithExactly(res.status, 400);
+            assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
         it('should error if presentation not found', async function() {
@@ -75,7 +76,8 @@ describe('PatcherController', function() {
             // When
             await patchPresentation(req, res);
             // Then
-            assert.calledWithExactly(res.send, 'Presentation not found', 404);
+            assert.calledWithExactly(res.status, 404);
+            assert.calledWithExactly(res.send, 'Presentation not found');
         });
 
         it('should send fixed presentation when presentation is missing <body>', async function() {

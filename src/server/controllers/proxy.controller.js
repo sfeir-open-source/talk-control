@@ -21,7 +21,7 @@ export function forwardTraffic(req, res, proxy) {
     try {
         target = new URL(presentationUrl).origin;
     } catch (e) {
-        res.send('Invalid presentation URL', 400);
+        res.status(400).send('Invalid presentation URL');
         return;
     }
 

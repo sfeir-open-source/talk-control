@@ -8,7 +8,7 @@ describe('ProxyController', function() {
     beforeEach(function() {
         proxy = { web: stub() };
         req = { cookies: {} };
-        res = { send: stub() };
+        res = { send: stub(), status: stub().returnsThis() };
     });
 
     describe('forwardTraffic', function() {
@@ -18,7 +18,8 @@ describe('ProxyController', function() {
             // When
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+            assert.calledWithExactly(res.status, 400);
+            assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
         it('should error when req.cookies is undefined', function() {
@@ -27,7 +28,8 @@ describe('ProxyController', function() {
             // When - presentationUrl will be undefined, new URL(undefined) throws
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+            assert.calledWithExactly(res.status, 400);
+            assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
         it('should error when req.cookies is null', function() {
@@ -36,7 +38,8 @@ describe('ProxyController', function() {
             // When
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.send, 'Invalid presentation URL', 400);
+            assert.calledWithExactly(res.status, 400);
+            assert.calledWithExactly(res.send, 'Invalid presentation URL');
         });
 
         it('should forward request for resource to presentation server (target)', function() {

@@ -20,7 +20,7 @@ export async function patchPresentation(req, res) {
     try {
         presentationUrl = new URL(req.query['tc-presentation-url']);
     } catch (e) {
-        res.send('Invalid presentation URL', 400);
+        res.status(400).send('Invalid presentation URL');
         return;
     }
 
@@ -31,7 +31,7 @@ export async function patchPresentation(req, res) {
     const response = await fetch(presentationUrl.href);
 
     if (response.status === 404) {
-        res.send('Presentation not found', 404);
+        res.status(404).send('Presentation not found');
         return;
     }
 

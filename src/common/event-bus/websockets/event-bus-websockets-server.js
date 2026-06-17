@@ -2,7 +2,7 @@
 
 import { EventBus } from '@event-bus/event-bus.js';
 import { eventBusLogger } from '@event-bus/event-bus-logger';
-import socketIO, { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 /**
  * @classdesc Sockets based EventBus implementation
@@ -18,7 +18,7 @@ export class EventBusWebsocketsServer extends EventBus {
     constructor(server) {
         super();
         this.sockets = [];
-        this.io = socketIO(server);
+        this.io = new Server(server);
         this.io.on('connection', socket => {
             eventBusLogger.log('### connected', {
                 id: socket.id,
