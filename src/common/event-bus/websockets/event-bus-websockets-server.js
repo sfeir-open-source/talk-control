@@ -18,7 +18,7 @@ export class EventBusWebsocketsServer extends EventBus {
     constructor(server) {
         super();
         this.sockets = [];
-        this.io = new Server(server);
+        this.io = new Server(server, { cors: { origin: '*' } });
         this.io.on('connection', socket => {
             eventBusLogger.log('### connected', {
                 id: socket.id,
