@@ -11,7 +11,7 @@
 | [baseline-tests.log](baseline-tests.log) | Sortie brute `npm test` avant toute migration — état Node 22 |
 | [coverage-baseline.md](coverage-baseline.md) | Couverture globale + fichiers non couverts |
 | [golden-path.md](golden-path.md) | Scénarios de vérification manuelle (contrat comportemental) |
-| coverage-final.md | *(à créer en étape 0.4)* Baseline post-filet de sécurité |
+| [coverage-final.md](coverage-final.md) | Baseline post-filet de sécurité (étape 0.4) |
 
 ## État de la migration
 
@@ -21,7 +21,7 @@
 | 0.1 Tests unitaires critiques | ✅ Done | mergé dans update-node-20 | +39 tests → 179 passing |
 | 0.2 Tests intégration | ✅ Done | mergé dans update-node-20 | +17 tests → 157 passing (supertest) |
 | 0.3 E2E Playwright | ✅ Done | mergé dans update-node-20 | +24 tests Playwright (chromium) |
-| 0.4 Coverage push 70% | ⏳ TODO | chore/step-00-4-coverage-push | c8 --all src/, seuils CI |
+| 0.4 Coverage push 70% | ✅ Done | mergé dans update-node-20 | c8 --all src/ (excl. browser), 70%/90%/60% |
 | 1 CI Node 22+24 | ⏳ TODO | chore/step-01-node-runtime | Fix router.all('*'), legacy-peer-deps |
 | ... | ... | ... | ... |
 
@@ -29,8 +29,12 @@
 
 ```bash
 # Lancer tous les tests
-NODE_ENV=test npm test          # 157 passing (unit + integration)
+NODE_ENV=test npm test          # 196 passing (unit + integration)
 npm run test:e2e                 # 24 passing (Playwright chromium)
+
+# Coverage avec seuils (étape 0.4)
+NODE_ENV=test npm run coverage   # rapport c8 (70% stmts/lines, 90% branches, 60% funcs)
+npm run coverage:check           # vérifie les seuils seuls
 
 # Valider le pipeline CI complet en local
 bash scripts/validate-ci.sh     # 5/5 jobs : tests, build, smoke serveur, E2E
