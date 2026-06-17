@@ -26,7 +26,7 @@
 | 2 Dépendances obsolètes | ✅ Done | chore/step-02-deps-upgrade | uws supprimé, socket.io 2→4, express 4.17→4.22, nodemon 1→3, patches sûrs |
 | 3 Tooling qualité | ✅ Done | chore/step-03-tooling | prettier 1→3, eslint 6→8, husky 3→9, @babel/eslint-parser — 196/196 tests |
 | 4 Webpack loaders | ✅ Done | chore/step-04-webpack-loaders | css-loader 4→7, mini-css-extract-plugin 0.11→2, webpack 5.0→5.107, html-webpack-plugin 4→5 |
-| 5 Test infra | 🔜 Todo | — | chai 4→6, jsdom 15→29 |
+| 5 Test infra | ✅ Done | chore/step-05-test-infra | chai 4→6, jsdom 15→29 — 196/196 tests |
 | 6 Transpileur + UI | 🔜 Todo | — | babel 7→8, lit-element 2→4 |
 
 ## Commandes de validation
