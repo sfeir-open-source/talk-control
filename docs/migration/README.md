@@ -22,7 +22,7 @@
 | 0.2 Tests intégration | ✅ Done | mergé dans update-node-20 | +17 tests → 157 passing (supertest) |
 | 0.3 E2E Playwright | ✅ Done | mergé dans update-node-20 | +24 tests Playwright (chromium) |
 | 0.4 Coverage push 70% | ✅ Done | mergé dans update-node-20 | c8 --all src/ (excl. browser), 70%/90%/60% |
-| 1 CI Node 22+24 | ⏳ TODO | chore/step-01-node-runtime | Fix router.all('*'), legacy-peer-deps |
+| 1 CI Node 22+24 | ✅ Done | mergé dans update-node-20 | Fix OpenSSL 3 (md4→sha256 webpack), workflow matrix Node 22/24 |
 | ... | ... | ... | ... |
 
 ## Commandes de validation
