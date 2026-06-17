@@ -38,6 +38,11 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|eot|svg|woff|woff2|ttf)$/i,
+                // webpack 5 processes these files as asset modules by default AND runs url-loader,
+                // producing hash-named stubs in dist/ while url-loader puts the real files in assets/.
+                // The CSS ends up referencing the wrong (hash) paths. 'javascript/auto' disables
+                // the built-in asset module so url-loader is the sole handler.
+                type: 'javascript/auto',
                 use: [
                     {
                         loader: 'url-loader',
