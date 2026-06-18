@@ -71,7 +71,8 @@ module.exports = {
             '@services': path.resolve(__dirname, './src/common/services/'),
             '@client': path.resolve(__dirname, './src/client/'),
             '@plugins': path.resolve(__dirname, './src/plugins/'),
-            '@config': path.resolve(__dirname, './config/')
+            '@config': path.resolve(__dirname, './config/'),
+            '@compat': path.resolve(__dirname, './src/compat/')
         },
         extensions: ['.js', '.json']
     },

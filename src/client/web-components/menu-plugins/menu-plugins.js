@@ -2,9 +2,8 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
-import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
-import Fontawesome from 'lit-fontawesome';
 
 class MenuPluginsComponent extends LitElement {
     static get properties() {

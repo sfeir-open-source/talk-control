@@ -22,7 +22,8 @@ module.exports = api => {
                         '@client': './src/client',
                         '@server': './src/server',
                         '@config': './config',
-                        '@plugins': './src/plugins'
+                        '@plugins': './src/plugins',
+                        '@compat': './src/compat'
                     }
                 }
             ]

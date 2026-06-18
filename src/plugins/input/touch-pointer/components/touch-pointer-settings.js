@@ -2,7 +2,7 @@ import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import { TouchPointerSettingsTCComponent } from './touch-pointer-settings-tc-component';
-import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 
 class TouchPointerSettingsComponent extends LitElement {
     static get styles() {

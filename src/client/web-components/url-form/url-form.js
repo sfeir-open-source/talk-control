@@ -5,7 +5,7 @@ import config from '@config/config';
 import { LitElement, html } from 'lit-element';
 import { isValidUrl } from '@services/url';
 import contextService from '@services/context';
-import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma.js';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 
 // Extend the LitElement base class
 class UrlFormComponent extends LitElement {

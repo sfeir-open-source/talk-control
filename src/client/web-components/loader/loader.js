@@ -1,6 +1,6 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
-import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
 import { TCComponentLoaderComponent } from '@client/web-components/loader/loader-tc-component';
 

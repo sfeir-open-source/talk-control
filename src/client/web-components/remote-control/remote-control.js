@@ -1,8 +1,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader';
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
-import { bulmaStyles } from '@granite-elements/granite-lit-bulma/granite-lit-bulma';
+import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
 import { LitElement, html } from 'lit-element';
-import Fontawesome from 'lit-fontawesome';
 import { config } from '@services/config';
 const QRCode = require('qrcode');
 
