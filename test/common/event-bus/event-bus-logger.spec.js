@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { assert } from 'chai';
 import sinon from 'sinon';
 import { eventBusLogger } from '@event-bus/event-bus-logger';

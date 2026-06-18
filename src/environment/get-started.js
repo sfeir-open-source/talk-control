@@ -1,7 +1,5 @@
-'use strict';
-
-require('colors');
-const config = require('../../config/config');
+import 'colors';
+import config from '../../config/config.json';
 
 console.log('\n\n\tWelcome to TalkControl\n'.bgBrightBlue.bold);
 console.log(

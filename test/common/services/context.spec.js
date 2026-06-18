@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect } from 'chai';
 import contextService from '@services/context';
 import { config } from '@services/config';

@@ -1,7 +1,6 @@
 'use strict';
 
 import express from 'express';
-import 'module-alias/register';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import patcher from '@server/controllers/patcher.controller';

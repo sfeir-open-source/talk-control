@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect } from 'chai';
 import { assert, createStubInstance, mock, stub } from 'sinon';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
@@ -10,6 +9,11 @@ import contextService from '@services/context';
 import * as wsClientContext from '@event-bus/websockets/event-bus-websockets-client';
 import * as wsServerContext from '@event-bus/websockets/event-bus-websockets-server';
 import * as postMessageContext from '@event-bus/postmessage/event-bus-postmessage';
+// esbuild creates non-configurable getters on namespace objects — sinon cannot stub them.
+// require() returns the raw module.exports (mutable) that the source code accesses at runtime.
+const _wsClientMod = require('@event-bus/websockets/event-bus-websockets-client');
+const _wsServerMod = require('@event-bus/websockets/event-bus-websockets-server');
+const _postMsgMod = require('@event-bus/postmessage/event-bus-postmessage');
 import { eventBusLogger } from '@event-bus/event-bus-logger';
 
 describe('EventBusResolver', function () {
@@ -27,7 +31,7 @@ describe('EventBusResolver', function () {
         it('should return a proxied web socket server based event bus when requesting CONTROLLER-SERVER channel and execution context is server side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_SERVER' });
-            const constructor = stub(wsServerContext, 'EventBusWebsocketsServer').returns(eventBus);
+            const constructor = stub(_wsServerMod, 'EventBusWebsocketsServer').returns(eventBus);
             isClientSide.returns(false);
 
             const server = { port: 10 };
@@ -43,7 +47,7 @@ describe('EventBusResolver', function () {
         it('should return a proxied web socket client based event bus when requesting CONTROLLER-SERVER channel and execution context is client side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_WEBSOCKET_CLIENT' });
-            const constructor = stub(wsClientContext, 'EventBusWebsocketsClient').returns(eventBus);
+            const constructor = stub(_wsClientMod, 'EventBusWebsocketsClient').returns(eventBus);
             isClientSide.returns(true);
 
             const server = 'http://test.server.com';
@@ -59,7 +63,7 @@ describe('EventBusResolver', function () {
         it('should return a proxied post message based event bus when requesting CONTROLLER-COMPONENT channel and execution context is client side', function () {
             // Given
             const eventBus = mock({ name: 'EVENT_BUS_POST_MESSAGE' });
-            const constructor = stub(postMessageContext, 'EventBusPostMessage').returns(eventBus);
+            const constructor = stub(_postMsgMod, 'EventBusPostMessage').returns(eventBus);
             isClientSide.returns(true);
 
             const deep = true;

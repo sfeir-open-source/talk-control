@@ -1,8 +1,8 @@
-'use strict';
+import { readFileSync, writeFileSync } from 'fs';
+import { createRequire } from 'module';
 
-const fs = require('fs');
-
-const configFilePath = __dirname + '/../../../config/config.json';
+const require = createRequire(import.meta.url);
+const configFilePath = require.resolve('../../../config/config.json');
 
 /**
  * Update service item with external url in config file
@@ -10,17 +10,10 @@ const configFilePath = __dirname + '/../../../config/config.json';
  * @param {string} item - service item in config (tc-server, tc-controller, ...)
  * @param {string} url - url external to write in config for service item
  */
-exports.setExternalUrl = (item, url) => {
-    const config = require(configFilePath);
+export const setExternalUrl = (item, url) => {
+    const config = JSON.parse(readFileSync(configFilePath, 'utf8'));
     config[item].urls.external = url;
-    writeNewConfig(config);
+    writeFileSync(configFilePath, JSON.stringify(config, null, 4));
 };
 
-/**
- * Write config file with new config object
- *
- * @param {*} config - config object
- */
-const writeNewConfig = config => {
-    fs.writeFileSync(configFilePath, JSON.stringify(config, null, 4));
-};
+export default { setExternalUrl };

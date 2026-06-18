@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect } from 'chai';
 import { stub } from 'sinon';
 import { GenericEngine } from '@client/engines/generic-client-engine';

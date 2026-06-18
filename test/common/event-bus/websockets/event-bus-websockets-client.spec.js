@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import { stub } from 'sinon';

@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect } from 'chai';
 import { EventBus, NO_KEY_PROVIDED, NO_TARGET_PROVIDED, DUPLICATE_CALLBACKS_ENTRY } from '@event-bus/event-bus';
 

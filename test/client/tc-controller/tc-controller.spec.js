@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect } from 'chai';
 import { assert, spy, stub, useFakeTimers } from 'sinon';
 import { ERROR_TYPE_SCRIPT_NOT_PRESENT, TCController } from '@client/tc-controller/tc-controller';

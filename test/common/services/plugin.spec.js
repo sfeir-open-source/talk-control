@@ -1,9 +1,9 @@
 'use strict';
 
-import 'module-alias/register';
 import { assert } from 'chai';
 import { spy, stub } from 'sinon';
 import * as pluginLoader from '@plugins/plugin-loader';
+const _pluginLoaderMod = require('@plugins/plugin-loader');
 import pluginService from '@services/plugin';
 
 describe('Plugin service', function () {
@@ -25,7 +25,7 @@ describe('Plugin service', function () {
                     broadcast: spy()
                 }
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.activateOnController(pluginName, params);
@@ -56,7 +56,7 @@ describe('Plugin service', function () {
                     broadcast: stub()
                 }
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.activateOnController(pluginName, params);
@@ -86,7 +86,7 @@ describe('Plugin service', function () {
                 controllerComponentChannel: { broadcast: stub() },
                 controllerServerChannel: { broadcast: stub() }
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.activateOnController(pluginName, params);
@@ -107,7 +107,7 @@ describe('Plugin service', function () {
             const pluginInstance = {
                 unload: spy()
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.deactivateOnController(pluginName);
@@ -123,7 +123,7 @@ describe('Plugin service', function () {
         it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
 
             // When - should not throw
             await pluginService.deactivateOnController(pluginName);
@@ -142,7 +142,7 @@ describe('Plugin service', function () {
                 init: spy(),
                 onEvent: spy()
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.activateOnComponent(pluginName, {});
@@ -165,7 +165,7 @@ describe('Plugin service', function () {
                 init: spy(),
                 onEvent: spy()
             };
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
 
             // When
             await pluginService.activateOnComponent(pluginName, {});
@@ -181,7 +181,7 @@ describe('Plugin service', function () {
         it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
-            stub(pluginLoader, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
+            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
 
             // When - should not throw
             await pluginService.activateOnComponent(pluginName, {});

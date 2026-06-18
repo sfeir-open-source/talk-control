@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { assert } from 'chai';
 import { stub } from 'sinon';
 import { logger } from '@services/logger';

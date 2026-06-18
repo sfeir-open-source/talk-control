@@ -1,7 +1,5 @@
-'use strict';
-
-const config = require('../../../config/config');
-const ngrok = require('ngrok');
+import config from '../../../config/config.json';
+import ngrok from 'ngrok';
 
 /**
  * Create a tunnel to specified local port and return an url
@@ -9,7 +7,7 @@ const ngrok = require('ngrok');
  * @param {number} port - local port on which to redirect
  * @returns {string} External url
  */
-exports.getUrl = async port => {
+export const getUrl = async port => {
     if (!config.ngrok.authToken) {
         return '';
     }
@@ -21,3 +19,5 @@ exports.getUrl = async port => {
         bind_tls: true
     });
 };
+
+export default { getUrl };

@@ -7,6 +7,7 @@ import { EventBus } from '@event-bus/event-bus';
 import { EngineResolver } from '@server/engines/engine-resolver';
 import { GenericEngine } from '@server/engines/generic-server-engine';
 import * as configService from '@services/config';
+const _configServiceMod = require('@services/config');
 
 const mockStore = configureStore([]);
 describe('TCServer', function () {
@@ -92,7 +93,7 @@ describe('TCServer', function () {
                 { name: 'touchInput', autoActivate: true },
                 { name: 'touchPointerInput', autoActivate: false }
             ];
-            stub(configService, 'plugins').value(plugins);
+            stub(_configServiceMod, 'plugins').value(plugins);
             // When
             controllerChannel.broadcast('init', data);
             // Then

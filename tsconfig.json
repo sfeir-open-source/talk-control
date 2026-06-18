@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@event-bus/*": ["src/common/event-bus/*"],
+            "@services/*": ["src/common/services/*"],
+            "@client/*": ["src/client/*"],
+            "@server/*": ["src/server/*"],
+            "@config/*": ["config/*"],
+            "@plugins/*": ["src/plugins/*"],
+            "@compat/*": ["src/compat/*"]
+        },
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ES2022",
+        "allowJs": true
+    },
+    "include": ["src/**/*", "test/**/*", "config/**/*"]
+}

@@ -1,4 +1,4 @@
-# mocha.opts
-require: ['@babel/register', 'jsdom-global/register']
+require: ['./test/helpers/make-stubbable.js', 'tsx/cjs', 'jsdom-global/register']
+exit: true
 full-trace: true
 spec: 'test/**/*.spec.js'

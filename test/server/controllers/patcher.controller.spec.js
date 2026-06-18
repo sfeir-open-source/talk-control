@@ -3,6 +3,8 @@ import { assert, stub } from 'sinon';
 import contextService from '@services/context';
 import * as fetchContext from 'node-fetch';
 import * as configService from '@services/config';
+const _fetchContextMod = require('node-fetch');
+const _configServiceMod = require('@services/config');
 import { patchPresentation } from '@server/controllers/patcher.controller';
 
 describe('PatcherController', function () {
@@ -19,8 +21,8 @@ describe('PatcherController', function () {
     `;
 
     before(function () {
-        config = stub(configService, 'config');
-        fetch = stub(fetchContext, 'default');
+        config = stub(_configServiceMod, 'config');
+        fetch = stub(_fetchContextMod, 'default');
         isUsingRemoteUrl = stub(contextService, 'isUsingRemoteUrl');
     });
 

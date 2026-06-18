@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { spy, stub } from 'sinon';
 import { EventBusPostMessage } from '@event-bus/postmessage/event-bus-postmessage';

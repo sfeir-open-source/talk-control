@@ -13,12 +13,12 @@ module.exports = {
         allowedHosts: 'all',
         // output.publicPath est '' (vide) pour MiniCssExtractPlugin ; wds5 a besoin de '/' pour servir les assets
         devMiddleware: {
-            publicPath: '/',
+            publicPath: '/'
         },
         // tc-component.bundle.js est chargé cross-origin depuis les présentations patchées
         headers: {
             'Cross-Origin-Resource-Policy': 'cross-origin',
-            'Access-Control-Allow-Origin': '*',
-        },
+            'Access-Control-Allow-Origin': '*'
+        }
     }
 };

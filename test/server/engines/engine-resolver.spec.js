@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { expect, assert } from 'chai';
 import { EngineResolver } from '@server/engines/engine-resolver';
 

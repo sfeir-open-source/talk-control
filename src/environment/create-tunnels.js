@@ -1,12 +1,7 @@
-'use strict';
+import config from '../../config/config.json';
+import tunnelService from './services/tunnel.js';
+import configFileService from './services/config-file.js';
 
-const config = require('../../config/config.json');
-const tunnelService = require('./services/tunnel');
-const configFileService = require('./services/config-file');
-
-/**
- * Create a tunnel for each service items in config (tc-server, tc-controller, tc-showcase)
- */
 const setTunnels = async () => {
     const configItems = ['tcServer', 'tcController', 'tcShowcase'];
 

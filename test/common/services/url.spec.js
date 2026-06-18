@@ -1,6 +1,5 @@
 'use strict';
 
-import 'module-alias/register';
 import { assert } from 'chai';
 import { isValidUrl } from '@services/url';
 
