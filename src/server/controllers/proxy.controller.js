@@ -6,7 +6,7 @@ import httpProxy from 'http-proxy';
 const router = express.Router();
 const proxy = httpProxy.createProxyServer();
 
-router.all('*', (req, res) => forwardTraffic(req, res, proxy));
+router.all('/{*splat}', (req, res) => forwardTraffic(req, res, proxy));
 
 /**
  * Forward requests to presentation server

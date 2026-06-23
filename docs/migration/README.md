@@ -25,7 +25,7 @@
 | 5 Test infra | ✅ Done | chore/step-05-test-infra | chai 4→6, jsdom 15→29 — 196/196 tests |
 | 6 Transpileur + UI | ✅ Done | chore/step-06-babel8-lit4 | Babel 7→8, lit-element 2→4, shim CSS compat |
 | 7 Suppression Babel | ✅ Done | chore/step-07-remove-babel | tsx + tsconfig paths, mocha 8→11 — 196/196 tests |
-| **8 Express 4 → 5** | 🔜 Todo | — | Fix bloquant `router.all('*')` Node 22+, DEC-004 |
+| 8 Express 4 → 5 | ✅ Done | chore/step-08-express5 | Fix bloquant `router.all('*')` Node 22+, DEC-004 |
 | **9 node-fetch → fetch natif** | 🔜 Todo | — | Node 24 a `fetch` global stable, DEC-005 |
 | **10 Polyfills webcomponents** | 🔜 Todo | — | Évaluer/retirer `@webcomponents/webcomponentsjs`, DEC-006 |
 | **11 Vuepress → VitePress** | 🔜 Todo | — | Vuepress 1.x cassé sur Node 22+, DEC-007 |
