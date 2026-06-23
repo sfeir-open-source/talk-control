@@ -5,23 +5,17 @@ import { stub } from 'sinon';
 import request from 'supertest';
 import { createTestApp } from '../helpers/server.helper';
 
-// We need to stub node-fetch before the controller is evaluated.
-// Since controllers are already cached via module imports in the helper,
-// we stub at the function level used by the controller.
-import * as nodeFetch from 'node-fetch';
-const _nodeFetchMod = require('node-fetch');
-
 describe('Integration — /patcher', function () {
     let app;
-    let fetchStub;
+    let fetch;
 
     before(function () {
         app = createTestApp();
     });
 
     afterEach(function () {
-        if (fetchStub && fetchStub.restore) {
-            fetchStub.restore();
+        if (fetch && fetch.restore) {
+            fetch.restore();
         }
     });
 
@@ -40,7 +34,7 @@ describe('Integration — /patcher', function () {
         });
 
         it('should return presentation not found when fetch returns 404', async function () {
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 404,
                 text: async () => ''
             });
@@ -51,7 +45,7 @@ describe('Integration — /patcher', function () {
 
         it('should return patched HTML with injected component script when fetch succeeds', async function () {
             const htmlContent = '<html><head></head><body><h1>Slide</h1></body></html>';
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 200,
                 text: async () => htmlContent
             });
@@ -64,7 +58,7 @@ describe('Integration — /patcher', function () {
 
         it('should set tc-presentation-url cookie when fetch succeeds', async function () {
             const htmlContent = '<html><head></head><body><h1>Slide</h1></body></html>';
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 200,
                 text: async () => htmlContent
             });
@@ -79,7 +73,7 @@ describe('Integration — /patcher', function () {
 
         it('should add base href proxy tag pointing to local server URL', async function () {
             const htmlContent = '<html><head></head><body></body></html>';
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 200,
                 text: async () => htmlContent
             });
@@ -92,7 +86,7 @@ describe('Integration — /patcher', function () {
 
         it('should fix HTML document that is missing html/head/body tags', async function () {
             const htmlContent = '<h1>Just a fragment</h1>';
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 200,
                 text: async () => htmlContent
             });

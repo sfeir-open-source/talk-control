@@ -4,27 +4,25 @@ import { expect } from 'chai';
 import { stub } from 'sinon';
 import request from 'supertest';
 import { createTestApp } from '../helpers/server.helper';
-import * as nodeFetch from 'node-fetch';
-const _nodeFetchMod = require('node-fetch');
 
 describe('Integration — Router', function () {
     let app;
-    let fetchStub;
+    let fetch;
 
     before(function () {
         app = createTestApp();
     });
 
     afterEach(function () {
-        if (fetchStub && fetchStub.restore) {
-            fetchStub.restore();
+        if (fetch && fetch.restore) {
+            fetch.restore();
         }
     });
 
     describe('CORS headers', function () {
         it('should include Access-Control-Allow-Origin header in responses', async function () {
             // Stub fetch to avoid real network call
-            fetchStub = stub(_nodeFetchMod, 'default').resolves({
+            fetch = stub(globalThis, 'fetch').resolves({
                 status: 200,
                 text: async () => '<html><head></head><body></body></html>'
             });

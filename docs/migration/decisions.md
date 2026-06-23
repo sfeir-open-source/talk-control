@@ -112,7 +112,7 @@ Monter sur Express 5. La surface de changement est faible : Express 5 est rétro
 
 ## DEC-005 — node-fetch → fetch natif
 
-**Date :** 2026-06-23 | **Étape :** 9 | **Statut :** décidé, pas encore implémenté
+**Date :** 2026-06-23 | **Étape :** 9 | **Statut :** implémenté
 
 ### Contexte
 

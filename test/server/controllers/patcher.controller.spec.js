@@ -1,9 +1,7 @@
 import { expect } from 'chai';
 import { assert, stub } from 'sinon';
 import contextService from '@services/context';
-import * as fetchContext from 'node-fetch';
 import * as configService from '@services/config';
-const _fetchContextMod = require('node-fetch');
 const _configServiceMod = require('@services/config');
 import { patchPresentation } from '@server/controllers/patcher.controller';
 
@@ -15,14 +13,14 @@ describe('PatcherController', function () {
     <html>
         <head></head>
         <body>
-            <p> Presentation content </p>  
+            <p> Presentation content </p>
         </body>
     </html>
     `;
 
     before(function () {
         config = stub(_configServiceMod, 'config');
-        fetch = stub(_fetchContextMod, 'default');
+        fetch = stub(globalThis, 'fetch');
         isUsingRemoteUrl = stub(contextService, 'isUsingRemoteUrl');
     });
 

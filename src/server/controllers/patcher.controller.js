@@ -1,7 +1,6 @@
 'use strict';
 
 import express from 'express';
-import fetch from 'node-fetch';
 import contextService from '@services/context';
 import { config } from '@services/config';
 
