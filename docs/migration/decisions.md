@@ -133,7 +133,7 @@ Supprimer `node-fetch` des `dependencies`. Utiliser `fetch` global directement d
 
 ## DEC-006 — Suppression des polyfills `@webcomponents/webcomponentsjs`
 
-**Date :** 2026-06-23 | **Étape :** 10 | **Statut :** décidé sous réserve de vérification
+**Date :** 2026-06-23 | **Étape :** 10 | **Statut :** implémenté
 
 ### Contexte
 

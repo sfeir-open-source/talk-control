@@ -27,7 +27,7 @@
 | 7 Suppression Babel | ✅ Done | chore/step-07-remove-babel | tsx + tsconfig paths, mocha 8→11 — 196/196 tests |
 | 8 Express 4 → 5 | ✅ Done | chore/step-08-express5 | Fix bloquant `router.all('*')` Node 22+, DEC-004 |
 | 9 node-fetch → fetch natif | ✅ Done | update-node-20 | `fetch` global, `stub(globalThis, 'fetch')` — 196/196 tests, DEC-005 |
-| **10 Polyfills webcomponents** | 🔜 Todo | — | Évaluer/retirer `@webcomponents/webcomponentsjs`, DEC-006 |
+| 10 Polyfills webcomponents | ✅ Done | update-node-20 | Supprime 2 imports × 13 composants + package retiré, DEC-006 — 196/196 tests |
 | **11 Vuepress → VitePress** | 🔜 Todo | — | Vuepress 1.x cassé sur Node 22+, DEC-007 |
 | **12 ESLint 8 → 9** | 🔜 Todo | — | Flat config, DEC-008 |
 | **13 DEC-001 : Bulma + FA** | 🔜 Todo | — | Import direct bulma, SVG icons FontAwesome |
