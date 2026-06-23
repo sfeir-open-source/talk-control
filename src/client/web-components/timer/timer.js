@@ -1,5 +1,3 @@
-import '@webcomponents/webcomponentsjs/webcomponents-loader';
-import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
 import { TimerTCComponent } from './timer-tc-component';

@@ -1,5 +1,3 @@
-import '@webcomponents/webcomponentsjs/webcomponents-loader';
-import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { LitElement, html, css } from 'lit-element';
 import { NotesTCComponent } from './notes-tc-component';
 import { bulmaStyles } from '@compat/lit-styles-compat';

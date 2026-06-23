@@ -1,6 +1,4 @@
 // Import the LitElement base class and html helper function
-import '@webcomponents/webcomponentsjs/webcomponents-loader';
-import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
 import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
