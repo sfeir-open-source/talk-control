@@ -18,7 +18,7 @@ npm start
 ## Core concepts
 ### TC-Server
 In this system, tc-server is the backend, that act as the single source of truth. It stores the informations on the current slide and the total number of slides in the presentation. It will update his store with each event received from a master (see next section) and then dispatch other events with changes to notify masters.
-You can find the attached jsdoc [here](code/server/talk-control-server.md).
+You can find the source code in `src/server/`.
 
 #### Events fired
 - **initialized**: fired once, the first time the server initialize its state. This initialization is triggered when an *'init'* event is fired from a master.
