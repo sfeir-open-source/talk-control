@@ -48,10 +48,10 @@
 
 ## Fichiers modifiés
 
-- `src/client/tc-controller/index.html` — `<script type="module" src="./index.js">`
-- `src/client/layouts/on-stage/on-stage.html` — idem
-- `src/client/layouts/presenter/presenter.html` — idem
-- `src/client/layouts/presenter/presenter-mobile.html` — idem
+- `src/client/tc-controller/index.html` — `<script type="module" src="/src/client/tc-controller/index.js">`
+- `src/client/layouts/on-stage/on-stage.html` — `<script type="module" src="/src/client/layouts/on-stage/index.js">`
+- `src/client/layouts/presenter/presenter.html` — `<script type="module" src="/src/client/layouts/presenter/index.js">`
+- `src/client/layouts/presenter/presenter-mobile.html` — idem presenter.html
 - `src/client/tc-component/index.js` — suppression de `__webpack_public_path__`
 - `package.json` — scripts `build` et `tc-controller-and-component` mis à jour
 
@@ -117,6 +117,31 @@ Comportement équivalent, sans variable globale webpack.
 | Assets | `assets/` | `assets/` | |
 | Chunks partagés | `NNN.bundle.js` | `name-hash.bundle.js` | Nommage différent, fonctionnel identique |
 
+### Plugin `devUrlRewrite`
+
+Webpack-dev-server servait les HTML à la racine par convention (`/` → `index.html`).
+Vite sert les fichiers depuis leur chemin source (`/src/client/tc-controller/index.html`).
+
+Le plugin `devUrlRewrite` ajoute un middleware qui réécrit les URLs plate
+vers les chemins source :
+
+| URL demandée | Rewrite vers |
+|---|---|
+| `/` | `/src/client/tc-controller/index.html` |
+| `/index.html` | `/src/client/tc-controller/index.html` |
+| `/on-stage.html` | `/src/client/layouts/on-stage/on-stage.html` |
+| `/presenter.html` | `/src/client/layouts/presenter/presenter.html` |
+| `/presenter-mobile.html` | `/src/client/layouts/presenter/presenter-mobile.html` |
+
+### Chemins absolus dans les `<script>` HTML
+
+Les balises `<script src="./index.js">` utilisaient des chemins relatifs.
+En dev, quand le browser est à l'URL `/` (rewritten depuis `/src/client/tc-controller/index.html`),
+le relatif `./index.js` résout en `/index.js` → 404.
+
+Solution : chemins absolus depuis la racine du projet (`/src/client/tc-controller/index.js`).
+Vite résout ces chemins absolus depuis la racine du projet en dev, et les bundle correctement en prod.
+
 ## Pièges identifiés
 
 | Problème | Cause | Solution |
@@ -125,6 +150,8 @@ Comportement équivalent, sans variable globale webpack.
 | `@compat/lit-styles-compat` non résolu | `vite-tsconfig-paths` ne couvrait pas les fichiers JS | Ajouter `resolve.alias` explicites en complément |
 | `"Server" is not exported by "__vite-browser-external"` | `socket.io` bundlé côté navigateur | Stub `src/compat/socket-io-browser-stub.js` via alias |
 | HTML imbriqués dans `dist/src/...` | Vite préserve la structure de dossiers source | Plugin `flatHtmlOutput` avec `closeBundle` + réécriture des refs |
+| `http://localhost:3000/` → 404 | Vite sert depuis les chemins source, pas les URLs plate | Plugin `devUrlRewrite` avec middleware `configureServer` |
+| `/index.js` → 404 en dev | Chemin relatif résout depuis l'URL browser (`/`), pas le chemin source | `<script src="/src/client/.../index.js">` (chemin absolu) |
 
 ## Scripts mis à jour
 
