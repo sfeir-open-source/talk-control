@@ -61,3 +61,6 @@ docs-sources/developers/code/parts/
 
 # Jetbrains
 .idea
+
+# Playwright MCP artifacts
+.playwright-mcp/
