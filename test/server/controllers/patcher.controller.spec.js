@@ -1,13 +1,12 @@
-import { expect } from 'chai';
-import { assert, stub } from 'sinon';
 import contextService from '@services/context';
-import '@services/config';
-const _configServiceMod = require('@services/config');
+import * as configModule from '@services/config';
 import { patchPresentation } from '@server/controllers/patcher.controller';
+
+vi.mock('@services/config', async orig => ({ ...(await orig()) }));
 
 describe('PatcherController', function () {
     let req, res;
-    let config, fetch, isUsingRemoteUrl;
+    let configSpy, fetchMock, isUsingRemoteUrl;
     const presentationUrl = 'http://test.com/presentation';
     const presentation = `
     <html>
@@ -18,22 +17,23 @@ describe('PatcherController', function () {
     </html>
     `;
 
-    before(function () {
-        config = stub(_configServiceMod, 'config');
-        fetch = stub(globalThis, 'fetch');
-        isUsingRemoteUrl = stub(contextService, 'isUsingRemoteUrl');
+    beforeAll(function () {
+        fetchMock = vi.fn();
+        vi.stubGlobal('fetch', fetchMock);
+        configSpy = vi.spyOn(configModule, 'config', 'get');
+        isUsingRemoteUrl = vi.spyOn(contextService, 'isUsingRemoteUrl').mockImplementation(() => {});
     });
 
-    after(function () {
-        fetch.restore();
-        config.restore();
-        isUsingRemoteUrl.restore();
+    afterAll(function () {
+        vi.unstubAllGlobals();
+        configSpy.mockRestore();
+        isUsingRemoteUrl.mockRestore();
     });
 
     beforeEach(function () {
-        fetch.resetHistory();
-        fetch.returns(Promise.resolve({ status: 200, text: () => Promise.resolve(presentation) }));
-        config.value({
+        fetchMock.mockReset();
+        fetchMock.mockResolvedValue({ status: 200, text: () => Promise.resolve(presentation) });
+        configSpy.mockReturnValue({
             tcServer: {
                 urls: {
                     external: 'EXTERNAL_SERVER',
@@ -47,9 +47,9 @@ describe('PatcherController', function () {
                 }
             }
         });
-        isUsingRemoteUrl.returns(true);
+        isUsingRemoteUrl.mockReturnValue(true);
         req = { query: { 'tc-presentation-url': presentationUrl } };
-        res = { send: stub(), cookie: stub(), status: stub().returnsThis() };
+        res = { send: vi.fn(), cookie: vi.fn(), status: vi.fn().mockReturnThis() };
     });
 
     describe('patchPresentation', function () {
@@ -57,7 +57,7 @@ describe('PatcherController', function () {
             // When
             await patchPresentation(req, res);
             // Then
-            assert.calledOnceWithExactly(fetch, presentationUrl);
+            expect(fetchMock).toHaveBeenCalledExactlyOnceWith(presentationUrl);
         });
 
         it('should error if requested presentation url is invalid', async function () {
@@ -66,65 +66,65 @@ describe('PatcherController', function () {
             // When
             await patchPresentation(req, res);
             // Then
-            assert.calledWithExactly(res.status, 400);
-            assert.calledWithExactly(res.send, 'Invalid presentation URL');
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
         });
 
         it('should error if presentation not found', async function () {
             // Given
-            fetch.returns(Promise.resolve({ status: 404, text: () => Promise.resolve('Empty') }));
+            fetchMock.mockResolvedValue({ status: 404, text: () => Promise.resolve('Empty') });
             // When
             await patchPresentation(req, res);
             // Then
-            assert.calledWithExactly(res.status, 404);
-            assert.calledWithExactly(res.send, 'Presentation not found');
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.send).toHaveBeenCalledWith('Presentation not found');
         });
 
         it('should send fixed presentation when presentation is missing <body>', async function () {
             // Given
             const pres = '<html><head></head>Content</html>';
-            fetch.returns(Promise.resolve({ status: 200, text: () => Promise.resolve(pres) }));
+            fetchMock.mockResolvedValue({ status: 200, text: () => Promise.resolve(pres) });
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
+            expect(res.send.mock.calls[0][0]).toMatch(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
         });
 
         it('should send fixed presentation when presentation is missing <head>', async function () {
             // Given
             const pres = '<html><body>Content</body></html>';
-            fetch.returns(Promise.resolve({ status: 200, text: () => Promise.resolve(pres) }));
+            fetchMock.mockResolvedValue({ status: 200, text: () => Promise.resolve(pres) });
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
+            expect(res.send.mock.calls[0][0]).toMatch(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
         });
 
         it('should send fixed presentation when presentation is missing <html>', async function () {
             // Given
             const pres = '<body>Content</body>';
-            fetch.returns(Promise.resolve({ status: 200, text: () => Promise.resolve(pres) }));
+            fetchMock.mockResolvedValue({ status: 200, text: () => Promise.resolve(pres) });
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
+            expect(res.send.mock.calls[0][0]).toMatch(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
         });
 
         it('should send fixed presentation when presentation with only content', async function () {
             // Given
             const pres = 'Content';
-            fetch.returns(Promise.resolve({ status: 200, text: () => Promise.resolve(pres) }));
+            fetchMock.mockResolvedValue({ status: 200, text: () => Promise.resolve(pres) });
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
+            expect(res.send.mock.calls[0][0]).toMatch(/<html><head[\s\S]*<\/head><body[\s\S]*Content[\s\S]*<\/body><\/html>/);
         });
 
         it('should send presentation with "no-cache" head metadata', async function () {
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(
+            expect(res.send.mock.calls[0][0]).toMatch(
                 new RegExp(
                     [
                         '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />',
@@ -139,29 +139,29 @@ describe('PatcherController', function () {
 
         it('should send presentation with local proxy server url as base when presentation is local', async function () {
             // Given
-            isUsingRemoteUrl.returns(false);
+            isUsingRemoteUrl.mockReturnValue(false);
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.include('<base href="LOCAL_SERVER/proxy/"/>');
+            expect(res.send.mock.calls[0][0]).toContain('<base href="LOCAL_SERVER/proxy/"/>');
         });
 
         it('should send presentation with remote proxy server url as base when presentation is remote', async function () {
             // Given
-            isUsingRemoteUrl.returns(true);
+            isUsingRemoteUrl.mockReturnValue(true);
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.include('<base href="EXTERNAL_SERVER/proxy/"/>');
+            expect(res.send.mock.calls[0][0]).toContain('<base href="EXTERNAL_SERVER/proxy/"/>');
         });
 
         it('should send presentation with tc component script from local server if presentation is local', async function () {
             // Given
-            isUsingRemoteUrl.returns(false);
+            isUsingRemoteUrl.mockReturnValue(false);
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(
+            expect(res.send.mock.calls[0][0]).toMatch(
                 new RegExp(
                     [
                         '<script type="application/javascript">',
@@ -180,11 +180,11 @@ describe('PatcherController', function () {
 
         it('should send presentation with tc component script from remote server if presentation is remote', async function () {
             // Given
-            isUsingRemoteUrl.returns(true);
+            isUsingRemoteUrl.mockReturnValue(true);
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.args[0][0]).to.match(
+            expect(res.send.mock.calls[0][0]).toMatch(
                 new RegExp(
                     [
                         '<script type="application/javascript">',
@@ -205,7 +205,7 @@ describe('PatcherController', function () {
             // When
             await patchPresentation(req, res);
             // then
-            assert.calledOnceWithExactly(res.cookie, 'tc-presentation-url', presentationUrl);
+            expect(res.cookie).toHaveBeenCalledExactlyOnceWith('tc-presentation-url', presentationUrl);
         });
     });
 });

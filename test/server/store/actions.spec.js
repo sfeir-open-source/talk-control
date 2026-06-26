@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { init, gotoSlide, ACTIONS } from '@server/store/actions';
 
 describe('redux actions', function () {
@@ -7,7 +6,7 @@ describe('redux actions', function () {
             // Given
             const data = { slideNumber: 15 };
             // Then
-            expect(init(data)).to.eql({ type: ACTIONS.INIT, data });
+            expect(init(data)).toEqual({ type: ACTIONS.INIT, data });
         });
     });
 
@@ -16,7 +15,7 @@ describe('redux actions', function () {
             // Given
             const data = { h: 1, v: 4, f: 3 };
             // Then
-            expect(gotoSlide(data)).to.eql({ type: ACTIONS.GOTO_SLIDE, data });
+            expect(gotoSlide(data)).toEqual({ type: ACTIONS.GOTO_SLIDE, data });
         });
     });
 });

@@ -1,26 +1,26 @@
 'use strict';
 
-import { expect, assert } from 'chai';
-import { spy, stub } from 'sinon';
 import { EventBusPostMessage } from '@event-bus/postmessage/event-bus-postmessage';
 
 describe('EventBusPostMessage', function () {
     let eventBus;
+    let postMessageMock;
 
     beforeEach(function () {
-        stub(window, 'addEventListener');
-        spy(window, 'postMessage');
+        postMessageMock = vi.fn();
+        vi.stubGlobal('postMessage', postMessageMock);
+        vi.spyOn(window, 'addEventListener').mockImplementation(() => {});
         eventBus = new EventBusPostMessage({ postMessage: {} });
+        window.addEventListener.mockRestore();
     });
 
     afterEach(function () {
-        window.addEventListener.restore();
-        window.postMessage.restore();
+        vi.unstubAllGlobals();
     });
 
     describe('constructor()', function () {
         it('should have instantiated EventBusWebsocketsServer', function () {
-            expect(eventBus).to.be.ok;
+            expect(eventBus).toBeTruthy();
         });
     });
 
@@ -33,8 +33,7 @@ describe('EventBusPostMessage', function () {
             // When
             eventBus.broadcast(key, data);
             // Then
-            const object = { type: key, data };
-            assert(window.postMessage.calledOnceWith(object));
+            expect(postMessageMock).toHaveBeenCalledExactlyOnceWith({ type: key, data }, '*');
         });
     });
 
@@ -46,8 +45,7 @@ describe('EventBusPostMessage', function () {
             // When
             eventBus.emitTo(key, data, window);
             // Then
-            const object = { type: key, data };
-            assert(window.postMessage.calledOnceWith(object));
+            expect(postMessageMock).toHaveBeenCalledExactlyOnceWith({ type: key, data }, '*');
         });
     });
 
@@ -60,29 +58,29 @@ describe('EventBusPostMessage', function () {
             const message = { type: key, data };
 
             const callbacks = {
-                [key]: [spy(), spy(), spy()],
-                [anotherKey]: [spy()]
+                [key]: [vi.fn(), vi.fn(), vi.fn()],
+                [anotherKey]: [vi.fn()]
             };
             eventBus.callBacks = callbacks;
             // When
             eventBus._receiveMessageWindow({ data: message });
             // Then
-            assert(callbacks[key][0].calledOnceWith(data), `callbacks[${key}][0] wasn't called with "${data}"`);
-            assert(callbacks[key][1].calledOnceWith(data), `callbacks[${key}][1] wasn't called with "${data}"`);
-            assert(callbacks[key][2].calledOnceWith(data), `callbacks[${key}][2] wasn't called with "${data}"`);
-            expect(callbacks[anotherKey][0].called).to.be.false;
+            expect(callbacks[key][0]).toHaveBeenCalledExactlyOnceWith(data);
+            expect(callbacks[key][1]).toHaveBeenCalledExactlyOnceWith(data);
+            expect(callbacks[key][2]).toHaveBeenCalledExactlyOnceWith(data);
+            expect(callbacks[anotherKey][0]).not.toHaveBeenCalled();
         });
 
         it('should do nothing because no message is given', function () {
             // Given
             const key = 'key';
-            const callback = spy();
+            const callback = vi.fn();
 
             eventBus.callBacks = { [key]: [callback] };
             // When
             eventBus._receiveMessageWindow();
             // Then
-            expect(callback.called).to.be.false;
+            expect(callback).not.toHaveBeenCalled();
         });
     });
 });

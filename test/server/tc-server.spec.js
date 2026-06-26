@@ -1,50 +1,49 @@
-import { expect } from 'chai';
-import { assert, spy, stub, useFakeTimers } from 'sinon';
 import configureStore from 'redux-mock-store';
 import { TCServer } from '@server/tc-server';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { EventBus } from '@event-bus/event-bus';
 import { EngineResolver } from '@server/engines/engine-resolver';
 import { GenericEngine } from '@server/engines/generic-server-engine';
-import '@services/config';
-const _configServiceMod = require('@services/config');
+import * as configModule from '@services/config';
+import { spyOnAll } from '../helpers/test-utils.js';
+
+vi.mock('@services/config', async orig => ({ ...(await orig()) }));
 
 const mockStore = configureStore([]);
 
 describe('TCServer', function () {
     let resolveChannel, controllerChannel, server;
     let resolveEngine, engine;
-    let clock;
     const httpServer = { port: 3000 };
     const engineName = 'ENGINE_NAME';
 
-    before(function () {
-        clock = useFakeTimers();
-        resolveChannel = stub(EventBusResolver, 'channel');
-        resolveEngine = stub(EngineResolver, 'getEngine');
+    beforeAll(function () {
+        vi.useFakeTimers();
+        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation(() => {});
+        resolveEngine = vi.spyOn(EngineResolver, 'getEngine').mockImplementation(() => {});
     });
 
-    after(function () {
-        clock.restore();
-        resolveChannel.restore();
-        resolveEngine.restore();
+    afterAll(function () {
+        vi.useRealTimers();
+        resolveChannel.mockRestore();
+        resolveEngine.mockRestore();
     });
 
     beforeEach(function () {
-        controllerChannel = spy(new EventBus());
-        resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(controllerChannel);
+        controllerChannel = spyOnAll(new EventBus());
+        resolveChannel.mockImplementation(channel => (channel === Channels.CONTROLLER_SERVER ? controllerChannel : undefined));
 
-        engine = spy(new GenericEngine());
-        stub(engine, 'store').value(mockStore({}));
-        resolveEngine.withArgs(engineName).returns(engine);
+        engine = spyOnAll(new GenericEngine());
+        engine.store = mockStore({});
+        resolveEngine.mockImplementation(name => (name === engineName ? engine : undefined));
 
         server = new TCServer(httpServer);
     });
 
     it('should resolve controller channel', function () {
-        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: httpServer });
-        expect(EventBusResolver.channel.getCalls().length).to.be.equal(1);
-        expect(server.controllerServerChannel).to.be.equal(controllerChannel);
+        expect(resolveChannel).toHaveBeenCalledWith(Channels.CONTROLLER_SERVER, { server: httpServer });
+        expect(resolveChannel).toHaveBeenCalledTimes(1);
+        expect(server.controllerServerChannel).toBe(controllerChannel);
     });
 
     it('should resolve engine on initialization', function () {
@@ -54,11 +53,11 @@ describe('TCServer', function () {
             handleInput: () => {},
             store: mockStore({})
         };
-        resolveEngine.withArgs(engineName).returns(eng);
+        resolveEngine.mockImplementation(name => (name === engineName ? eng : undefined));
         // When
         server.init(engineName);
         // Then
-        expect(server.engine).to.be.equal(eng);
+        expect(server.engine).toBe(eng);
     });
 
     describe('control', function () {
@@ -77,8 +76,8 @@ describe('TCServer', function () {
             // When
             controllerChannel.broadcast('init', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(engine.init, data);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(engine.init).toHaveBeenCalledWith(data);
         });
 
         it('should push plugins config when presentation is initialized', async function () {
@@ -94,12 +93,13 @@ describe('TCServer', function () {
                 { name: 'touchInput', autoActivate: true },
                 { name: 'touchPointerInput', autoActivate: false }
             ];
-            stub(_configServiceMod, 'plugins').value(plugins);
+            const pluginsSpy = vi.spyOn(configModule, 'plugins', 'get').mockReturnValue(plugins);
             // When
             controllerChannel.broadcast('init', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(controllerChannel.broadcast, 'pluginsList', plugins);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(controllerChannel.broadcast).toHaveBeenCalledWith('pluginsList', plugins);
+            pluginsSpy.mockRestore();
         });
 
         it('should handle control input through engine', async function () {
@@ -108,8 +108,8 @@ describe('TCServer', function () {
             // When
             controllerChannel.broadcast('inputEvent', input);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(engine.handleInput, input);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(engine.handleInput).toHaveBeenCalledWith(input);
         });
 
         it('should command plugin activation on controllers when plugin need to be activated', async function () {
@@ -118,8 +118,8 @@ describe('TCServer', function () {
             // When
             controllerChannel.broadcast('pluginStartingIn', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(controllerChannel.broadcast, 'pluginStartingOut', data);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(controllerChannel.broadcast).toHaveBeenCalledWith('pluginStartingOut', data);
         });
 
         it('should command plugin deactivation on controllers when plugin need to be deactivated', async function () {
@@ -128,8 +128,8 @@ describe('TCServer', function () {
             // When
             controllerChannel.broadcast('pluginEndingIn', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(controllerChannel.broadcast, 'pluginEndingOut', data);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(controllerChannel.broadcast).toHaveBeenCalledWith('pluginEndingOut', data);
         });
 
         it('should notify controllers of plugin event', async function () {
@@ -138,8 +138,8 @@ describe('TCServer', function () {
             // When
             controllerChannel.broadcast('pluginEventIn', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(controllerChannel.broadcast, 'pluginEventOut', data);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(controllerChannel.broadcast).toHaveBeenCalledWith('pluginEventOut', data);
         });
 
         it('should notify controllers of state change', async function () {
@@ -155,12 +155,12 @@ describe('TCServer', function () {
                     ]
                 })
             };
-            resolveEngine.withArgs(engineName).returns(eng);
+            resolveEngine.mockImplementation(name => (name === engineName ? eng : undefined));
             server.init(engineName);
             // When
             await eng.store.dispatch({ type: 'ACTION' });
             // Then
-            assert.calledWithExactly(controllerChannel.broadcast, 'gotoSlide', { slide: { h: 1, v: 0, f: 0 } });
+            expect(controllerChannel.broadcast).toHaveBeenCalledWith('gotoSlide', { slide: { h: 1, v: 0, f: 0 } });
         });
     });
 });

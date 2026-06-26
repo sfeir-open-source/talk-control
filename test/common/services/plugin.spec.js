@@ -1,12 +1,15 @@
 'use strict';
 
-import { assert } from 'chai';
-import { spy, stub } from 'sinon';
-import * as pluginLoader from '@plugins/plugin-loader';
-const _pluginLoaderMod = require('@plugins/plugin-loader');
+import { loadPluginModule } from '@plugins/plugin-loader';
 import pluginService from '@services/plugin';
 
+vi.mock('@plugins/plugin-loader');
+
 describe('Plugin service', function () {
+    afterEach(function () {
+        vi.resetAllMocks();
+    });
+
     describe('activatePluginOnController', function () {
         it('should call required functions if plugin is usedByAComponent', async function () {
             // Given
@@ -17,26 +20,23 @@ describe('Plugin service', function () {
             };
             const params = {
                 controllerComponentChannel: {
-                    on: spy(),
-                    broadcast: spy()
+                    on: vi.fn(),
+                    broadcast: vi.fn()
                 },
                 controllerServerChannel: {
-                    on: spy(),
-                    broadcast: spy()
+                    on: vi.fn(),
+                    broadcast: vi.fn()
                 }
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.activateOnController(pluginName, params);
 
             // Then
-            assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
-            assert.isOk(params.controllerComponentChannel.on.calledWith(pluginInstance.type));
-            assert.isOk(params.controllerComponentChannel.broadcast.calledWith('activatePlugin'));
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
+            expect(params.controllerComponentChannel.on).toHaveBeenCalledWith(pluginInstance.type, expect.any(Function));
+            expect(params.controllerComponentChannel.broadcast).toHaveBeenCalledWith('activatePlugin', { pluginName });
         });
 
         it('should call required functions if plugin is NOT usedByAComponent', async function () {
@@ -45,29 +45,26 @@ describe('Plugin service', function () {
             const pluginInstance = {
                 type: 'type',
                 usedByAComponent: false,
-                init: spy(),
-                onEvent: spy()
+                init: vi.fn(),
+                onEvent: vi.fn()
             };
             const params = {
                 controllerComponentChannel: {
-                    broadcast: stub()
+                    broadcast: vi.fn()
                 },
                 controllerServerChannel: {
-                    broadcast: stub()
+                    broadcast: vi.fn()
                 }
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.activateOnController(pluginName, params);
 
             // Then
-            assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
-            assert.isOk(pluginInstance.init.called);
-            assert.isOk(pluginInstance.onEvent.called);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
+            expect(pluginInstance.init).toHaveBeenCalled();
+            expect(pluginInstance.onEvent).toHaveBeenCalled();
         });
     });
 
@@ -78,25 +75,22 @@ describe('Plugin service', function () {
             const pluginInstance = {
                 type: 'type',
                 usedByAComponent: false,
-                initialized: true, // already initialized
-                init: spy(),
-                onEvent: spy()
+                initialized: true,
+                init: vi.fn(),
+                onEvent: vi.fn()
             };
             const params = {
-                controllerComponentChannel: { broadcast: stub() },
-                controllerServerChannel: { broadcast: stub() }
+                controllerComponentChannel: { broadcast: vi.fn() },
+                controllerServerChannel: { broadcast: vi.fn() }
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.activateOnController(pluginName, params);
 
             // Then
-            assert.isOk(pluginInstance.init.notCalled);
-            assert.isOk(pluginInstance.onEvent.notCalled);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(pluginInstance.init).not.toHaveBeenCalled();
+            expect(pluginInstance.onEvent).not.toHaveBeenCalled();
         });
     });
 
@@ -105,31 +99,31 @@ describe('Plugin service', function () {
             // Given
             const pluginName = 'pluginName';
             const pluginInstance = {
-                unload: spy()
+                unload: vi.fn()
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.deactivateOnController(pluginName);
 
             // Then
-            assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
-            assert.isOk(pluginInstance.unload.called);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
+            expect(pluginInstance.unload).toHaveBeenCalled();
         });
 
         it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
+            vi.mocked(loadPluginModule).mockRejectedValue(new Error('load error'));
 
             // When - should not throw
-            await pluginService.deactivateOnController(pluginName);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            let threw = false;
+            try {
+                await pluginService.deactivateOnController(pluginName);
+            } catch {
+                threw = true;
+            }
+            expect(threw).toBe(false);
         });
     });
 
@@ -139,21 +133,18 @@ describe('Plugin service', function () {
             const pluginName = 'pluginName';
             const pluginInstance = {
                 type: 'type',
-                init: spy(),
-                onEvent: spy()
+                init: vi.fn(),
+                onEvent: vi.fn()
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.activateOnComponent(pluginName, {});
 
             // Then
-            assert.isOk(pluginLoader.loadPluginModule.calledWith(pluginName));
-            assert.isOk(pluginInstance.init.called);
-            assert.isOk(pluginInstance.onEvent.called);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
+            expect(pluginInstance.init).toHaveBeenCalled();
+            expect(pluginInstance.onEvent).toHaveBeenCalled();
         });
 
         it('should NOT call init when plugin is already initialized', async function () {
@@ -162,32 +153,32 @@ describe('Plugin service', function () {
             const pluginInstance = {
                 type: 'type',
                 initialized: true,
-                init: spy(),
-                onEvent: spy()
+                init: vi.fn(),
+                onEvent: vi.fn()
             };
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.resolve({ instance: pluginInstance }));
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
 
             // When
             await pluginService.activateOnComponent(pluginName, {});
 
             // Then
-            assert.isOk(pluginInstance.init.notCalled);
-            assert.isOk(pluginInstance.onEvent.notCalled);
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            expect(pluginInstance.init).not.toHaveBeenCalled();
+            expect(pluginInstance.onEvent).not.toHaveBeenCalled();
         });
 
         it('should catch error when loadPluginModule rejects', async function () {
             // Given
             const pluginName = 'pluginName';
-            stub(_pluginLoaderMod, 'loadPluginModule').callsFake(() => Promise.reject(new Error('load error')));
+            vi.mocked(loadPluginModule).mockRejectedValue(new Error('load error'));
 
             // When - should not throw
-            await pluginService.activateOnComponent(pluginName, {});
-
-            // Finally
-            pluginLoader.loadPluginModule.restore();
+            let threw = false;
+            try {
+                await pluginService.activateOnComponent(pluginName, {});
+            } catch {
+                threw = true;
+            }
+            expect(threw).toBe(false);
         });
     });
 });

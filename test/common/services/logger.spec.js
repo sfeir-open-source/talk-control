@@ -1,45 +1,39 @@
 'use strict';
 
-import { assert } from 'chai';
-import { stub } from 'sinon';
 import { logger } from '@services/logger';
 
 describe('Logger service', function () {
     describe('log', function () {
-        const stubConsole = function () {
-            stub(console, 'error');
-            stub(console, 'log');
-        };
+        beforeEach(function () {
+            vi.spyOn(console, 'error').mockImplementation(() => {});
+            vi.spyOn(console, 'log').mockImplementation(() => {});
+        });
 
-        const restoreConsole = function () {
-            console.log.restore();
-            console.error.restore();
-        };
-
-        beforeEach(stubConsole);
-
-        afterEach(restoreConsole);
+        afterEach(function () {
+            console.log.mockRestore();
+            console.error.mockRestore();
+        });
 
         it('should call console.log', function () {
             logger.log('log message');
-            assert.isOk(console.log.calledWith('log message'));
+            expect(console.log).toHaveBeenCalledWith('log message', '');
         });
 
         it('should call console.log with params', function () {
             const params = ['my', 'params'];
             logger.log('log message', params);
-            assert.isOk(console.log.calledWith('log message', params));
+            expect(console.log).toHaveBeenCalledWith('log message', params);
         });
 
         it('should call console.error', function () {
             logger.log('log error', '', true);
-            assert.isOk(console.error.calledWith('log error'));
+            expect(console.error).toHaveBeenCalledWith('log error', '');
         });
 
         it('should call console.error with params', function () {
             const params = ['my', 'params'];
             logger.log('log error', params, true);
-            assert.isOk(console.error.calledWith('log error', params));
+            expect(console.error).toHaveBeenCalledWith('log error', params);
         });
     });
 });

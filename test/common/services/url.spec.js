@@ -1,24 +1,23 @@
 'use strict';
 
-import { assert } from 'chai';
 import { isValidUrl } from '@services/url';
 
 describe('Url service', function () {
     describe('isUrlValid', function () {
         it('should return true', function () {
-            assert(isValidUrl('http://example.com:8080'));
+            expect(isValidUrl('http://example.com:8080')).toBeTruthy();
         });
 
         it('should not reject localhost', function () {
-            assert(isValidUrl('http://localhost:3000'));
+            expect(isValidUrl('http://localhost:3000')).toBeTruthy();
         });
 
         it('should return false because no url given', function () {
-            assert(!isValidUrl());
+            expect(isValidUrl()).toBeFalsy();
         });
 
         it('should return false because url is bad formated', function () {
-            assert(!isValidUrl('this is a bad url'));
+            expect(isValidUrl('this is a bad url')).toBeFalsy();
         });
     });
 });

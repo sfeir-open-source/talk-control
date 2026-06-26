@@ -1,6 +1,5 @@
 'use strict';
 
-import { expect, assert } from 'chai';
 import { EngineResolver } from '@server/engines/engine-resolver';
 
 describe('EngineResolver', function () {
@@ -9,22 +8,22 @@ describe('EngineResolver', function () {
             // When
             const engine = EngineResolver.getEngine('revealjs');
             // Then
-            expect(engine).to.be.ok;
-            expect(engine.store).to.be.ok;
+            expect(engine).toBeTruthy();
+            expect(engine.store).toBeTruthy();
         });
 
         it('should return undefined for unknown engine name', function () {
             // When
             const engine = EngineResolver.getEngine('unknownEngine');
             // Then
-            assert.isUndefined(engine);
+            expect(engine).toBeUndefined();
         });
 
         it('should return undefined when no engine name is provided', function () {
             // When
             const engine = EngineResolver.getEngine();
             // Then
-            assert.isUndefined(engine);
+            expect(engine).toBeUndefined();
         });
     });
 });

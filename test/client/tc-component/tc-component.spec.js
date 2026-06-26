@@ -1,5 +1,3 @@
-import { assert, expect } from 'chai';
-import { stub } from 'sinon';
 import { TCComponent } from '@client/tc-component/tc-component';
 
 describe('TCComponent', function () {
@@ -8,13 +6,15 @@ describe('TCComponent', function () {
 
     beforeEach(function () {
         tcComponent = new TCComponent({ engineName: 'revealjs' });
-        on = stub(tcComponent.controllerComponentChannel, 'on');
-        broadcast = stub(tcComponent.controllerComponentChannel, 'broadcast');
+        vi.spyOn(tcComponent.engine, 'init').mockImplementation(() => {});
+        vi.spyOn(tcComponent.engine, 'getSlides').mockReturnValue([]);
+        on = vi.spyOn(tcComponent.controllerComponentChannel, 'on').mockImplementation(() => {});
+        broadcast = vi.spyOn(tcComponent.controllerComponentChannel, 'broadcast').mockImplementation(() => {});
     });
 
     describe('constructor()', function () {
         it('should have instantiated TCServer', function () {
-            expect(tcComponent).to.be.ok;
+            expect(tcComponent).toBeTruthy();
         });
     });
 
@@ -23,38 +23,40 @@ describe('TCComponent', function () {
             // When
             tcComponent.init();
             // Then
-            assert(on.calledWith('gotoSlide'), '"on" not called with gotoSlide');
-            assert(broadcast.calledWith('initialized'), '"broadcast" not called with initialized');
+            expect(on).toHaveBeenCalledWith('gotoSlide', expect.any(Function));
+            expect(broadcast).toHaveBeenCalledWith('initialized', expect.any(Object));
         });
 
         it('should NOT broadcast "initialized" when delta is set', function () {
             // Given
             const tcComponentWithDelta = new TCComponent({ engineName: 'revealjs', delta: 1 });
-            const broadcastWithDelta = stub(tcComponentWithDelta.controllerComponentChannel, 'broadcast');
-            stub(tcComponentWithDelta.controllerComponentChannel, 'on');
+            vi.spyOn(tcComponentWithDelta.engine, 'init').mockImplementation(() => {});
+            vi.spyOn(tcComponentWithDelta.engine, 'getSlides').mockReturnValue([]);
+            const broadcastWithDelta = vi.spyOn(tcComponentWithDelta.controllerComponentChannel, 'broadcast').mockImplementation(() => {});
+            vi.spyOn(tcComponentWithDelta.controllerComponentChannel, 'on').mockImplementation(() => {});
             // When
             tcComponentWithDelta.init();
             // Then
-            assert(broadcastWithDelta.neverCalledWith('initialized'), '"broadcast" should NOT be called with initialized when delta is set');
+            expect(broadcastWithDelta).not.toHaveBeenCalled();
         });
 
         it('should broadcast "sendNotesToController" when delta is 0 and gotoSlide is called', function () {
             // Given
             let gotoSlideCallback;
-            on.callsFake((event, cb) => {
+            on.mockImplementation((event, cb) => {
                 if (event === 'gotoSlide') gotoSlideCallback = cb;
             });
             // When
             tcComponent.init();
             // Then gotoSlide callback should trigger sendNotesToController
-            assert.isFunction(gotoSlideCallback, 'gotoSlide callback should be registered');
+            expect(gotoSlideCallback).toBeTypeOf('function');
             // Simulate calling the gotoSlide handler
-            stub(tcComponent.engine, 'getSlideNotes').returns('some notes');
-            stub(tcComponent.engine, 'goToSlide');
+            const getSlideNotesSpy = vi.spyOn(tcComponent.engine, 'getSlideNotes').mockReturnValue('some notes');
+            const goToSlideSpy = vi.spyOn(tcComponent.engine, 'goToSlide').mockImplementation(() => {});
             gotoSlideCallback({ slide: { h: 0, v: 0, f: -1 } });
-            assert(broadcast.calledWith('sendNotesToController', 'some notes'), 'should broadcast sendNotesToController');
-            tcComponent.engine.getSlideNotes.restore();
-            tcComponent.engine.goToSlide.restore();
+            expect(broadcast).toHaveBeenCalledWith('sendNotesToController', 'some notes');
+            getSlideNotesSpy.mockRestore();
+            goToSlideSpy.mockRestore();
         });
     });
 });

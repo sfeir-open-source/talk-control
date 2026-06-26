@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { reducers } from '@server/store';
 import { ACTIONS } from '@server/store/actions';
 
@@ -11,7 +10,7 @@ describe('redux store', function () {
                 slides: []
             };
             // Then
-            expect(reducers(state, {})).to.eql(state);
+            expect(reducers(state, {})).toEqual(state);
         });
 
         it('should change state.currentSlide', function () {
@@ -22,7 +21,7 @@ describe('redux store', function () {
             };
             const data = { h: 2, v: 0, f: 0 };
             // Then
-            expect(reducers(state, { type: ACTIONS.GOTO_SLIDE, data })).to.eql({ ...state, currentSlide: data });
+            expect(reducers(state, { type: ACTIONS.GOTO_SLIDE, data })).toEqual({ ...state, currentSlide: data });
         });
 
         it('should handle INIT', function () {
@@ -41,7 +40,7 @@ describe('redux store', function () {
                 ]
             };
             // Then
-            expect(reducers(state, { type: ACTIONS.INIT, data })).to.eql({ ...state, ...data });
+            expect(reducers(state, { type: ACTIONS.INIT, data })).toEqual({ ...state, ...data });
         });
     });
 });

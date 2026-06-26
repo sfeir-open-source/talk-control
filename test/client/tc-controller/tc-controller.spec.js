@@ -1,49 +1,50 @@
 'use strict';
 
-import { expect } from 'chai';
-import { assert, spy, stub, useFakeTimers } from 'sinon';
 import { ERROR_TYPE_SCRIPT_NOT_PRESENT, TCController } from '@client/tc-controller/tc-controller';
 import { EventBus } from '@event-bus/event-bus';
 import pluginService from '@services/plugin';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { spyOnAll } from '../../helpers/test-utils.js';
 
 describe('TCController', function () {
     let resolveChannel, serverChannel, componentChannel, controller;
-    let clock;
     const serverUrl = 'SERVER_URL';
     const presentationUrl = 'PRESENTATION_URL';
 
-    before(function () {
-        clock = useFakeTimers();
-        resolveChannel = stub(EventBusResolver, 'channel');
+    beforeAll(function () {
+        vi.useFakeTimers();
+        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation(() => {});
     });
 
-    after(function () {
-        clock.restore();
-        resolveChannel.restore();
+    afterAll(function () {
+        vi.useRealTimers();
+        resolveChannel.mockRestore();
     });
 
     beforeEach(function () {
-        serverChannel = spy(new EventBus());
-        componentChannel = spy(new EventBus());
-        resolveChannel.withArgs(Channels.CONTROLLER_SERVER).returns(serverChannel);
-        resolveChannel.withArgs(Channels.CONTROLLER_COMPONENT).returns(componentChannel);
+        serverChannel = spyOnAll(new EventBus());
+        componentChannel = spyOnAll(new EventBus());
+        resolveChannel.mockImplementation(channel => {
+            if (channel === Channels.CONTROLLER_SERVER) return serverChannel;
+            if (channel === Channels.CONTROLLER_COMPONENT) return componentChannel;
+            return undefined;
+        });
         controller = new TCController(serverUrl);
     });
 
     it('should resolve server and component channels', function () {
-        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_SERVER, { server: serverUrl });
-        assert.calledWithExactly(EventBusResolver.channel, Channels.CONTROLLER_COMPONENT, { deep: true });
-        expect(EventBusResolver.channel.getCalls().length).to.be.equal(2);
-        expect(controller.controllerServerChannel).to.be.equal(serverChannel);
-        expect(controller.controllerComponentChannel).to.be.equal(componentChannel);
+        expect(resolveChannel).toHaveBeenCalledWith(Channels.CONTROLLER_SERVER, { server: serverUrl });
+        expect(resolveChannel).toHaveBeenCalledWith(Channels.CONTROLLER_COMPONENT, { deep: true });
+        expect(resolveChannel).toHaveBeenCalledTimes(2);
+        expect(controller.controllerServerChannel).toBe(serverChannel);
+        expect(controller.controllerComponentChannel).toBe(componentChannel);
     });
 
     it('should load presentation on initialization', function () {
         // When
         controller.init(presentationUrl);
         // Then
-        assert.calledWithExactly(componentChannel.broadcast, 'loadPresentation', presentationUrl);
+        expect(componentChannel.broadcast).toHaveBeenCalledWith('loadPresentation', presentationUrl);
     });
 
     describe('pre-control', function () {
@@ -55,16 +56,16 @@ describe('TCController', function () {
             // When
             await loadSlides(2, 2, 100);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'ping');
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('ping');
         });
 
         it('should not ping presentation component when not all slides are loaded', async function () {
             // When
             await loadSlides(1, 2, 100);
             // Then
-            await clock.nextAsync();
-            assert.neverCalledWithMatch(componentChannel.broadcast, 'ping');
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).not.toHaveBeenCalledWith('ping');
         });
 
         it('should init control when presentation health check response received in time', async function () {
@@ -74,8 +75,8 @@ describe('TCController', function () {
             // When
             await respondToHealthCheck(timeout - 1);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'init');
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('init');
         });
 
         it('should error when presentation health check response is not received', async function () {
@@ -83,8 +84,8 @@ describe('TCController', function () {
             await loadSlides(1, 1, 100);
             // When nothing
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
         });
 
         it('should error when presentation health check response is late', async function () {
@@ -94,8 +95,8 @@ describe('TCController', function () {
             // When
             await respondToHealthCheck(timeout + 1);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
         });
     });
 
@@ -111,8 +112,8 @@ describe('TCController', function () {
             // When
             componentChannel.broadcast('initialized', presentationData);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(serverChannel.broadcast, 'init', presentationData);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(serverChannel.broadcast).toHaveBeenCalledWith('init', presentationData);
         });
 
         it("should notify components of presentation's slide state change", async function () {
@@ -121,8 +122,8 @@ describe('TCController', function () {
             // When
             serverChannel.broadcast('gotoSlide', data);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'gotoSlide', data);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('gotoSlide', data);
         });
 
         it('should forward notes from component to others', async function () {
@@ -131,8 +132,8 @@ describe('TCController', function () {
             // When
             componentChannel.broadcast('sendNotesToController', notes);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'sendNotesToComponent', notes);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('sendNotesToComponent', notes);
         });
 
         it('should notify server of plugin event', async function () {
@@ -141,8 +142,8 @@ describe('TCController', function () {
             // When
             componentChannel.broadcast('pluginEventIn', event);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(serverChannel.broadcast, 'pluginEventIn', event);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(serverChannel.broadcast).toHaveBeenCalledWith('pluginEventIn', event);
         });
 
         it('should notify components of plugin event', async function () {
@@ -151,24 +152,24 @@ describe('TCController', function () {
             // When
             serverChannel.broadcast('pluginEventOut', event);
             // Then
-            await clock.nextAsync();
-            assert.calledWithExactly(componentChannel.broadcast, 'plugin1', event);
+            await vi.advanceTimersToNextTimerAsync();
+            expect(componentChannel.broadcast).toHaveBeenCalledWith('plugin1', event);
         });
 
         describe('plugin start and stop flow', function () {
-            before(function () {
-                stub(pluginService, 'activateOnController');
-                stub(pluginService, 'deactivateOnController');
+            beforeAll(function () {
+                vi.spyOn(pluginService, 'activateOnController').mockImplementation(() => {});
+                vi.spyOn(pluginService, 'deactivateOnController').mockImplementation(() => {});
             });
 
-            after(function () {
-                pluginService.activateOnController.restore();
-                pluginService.deactivateOnController.restore();
+            afterAll(function () {
+                pluginService.activateOnController.mockRestore();
+                pluginService.deactivateOnController.mockRestore();
             });
 
             beforeEach(async function () {
-                pluginService.activateOnController.resetHistory();
-                pluginService.deactivateOnController.resetHistory();
+                pluginService.activateOnController.mockClear();
+                pluginService.deactivateOnController.mockClear();
             });
 
             it('should notify server when plugin need to be activated', async function () {
@@ -177,8 +178,8 @@ describe('TCController', function () {
                 // When
                 componentChannel.broadcast('pluginStartingIn', data);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(serverChannel.broadcast, 'pluginStartingIn', data);
+                await vi.advanceTimersToNextTimerAsync();
+                expect(serverChannel.broadcast).toHaveBeenCalledWith('pluginStartingIn', data);
             });
 
             it('should activate plugin on server command', async function () {
@@ -187,8 +188,8 @@ describe('TCController', function () {
                 // When
                 serverChannel.broadcast('pluginStartingOut', data);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(pluginService.activateOnController, data.pluginName, controller);
+                await vi.advanceTimersToNextTimerAsync();
+                expect(pluginService.activateOnController).toHaveBeenCalledWith(data.pluginName, controller);
             });
 
             it('should notify server when plugin need to be deactivated', async function () {
@@ -197,8 +198,8 @@ describe('TCController', function () {
                 // When
                 componentChannel.broadcast('pluginEndingIn', data);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(serverChannel.broadcast, 'pluginEndingIn', data);
+                await vi.advanceTimersToNextTimerAsync();
+                expect(serverChannel.broadcast).toHaveBeenCalledWith('pluginEndingIn', data);
             });
 
             it('should deactivate plugin on server command', async function () {
@@ -207,8 +208,8 @@ describe('TCController', function () {
                 // When
                 serverChannel.broadcast('pluginEndingOut', data);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(pluginService.deactivateOnController, data.pluginName, controller);
+                await vi.advanceTimersToNextTimerAsync();
+                expect(pluginService.deactivateOnController).toHaveBeenCalledWith(data.pluginName, controller);
             });
 
             it('should activate auto activated plugins when plugins config is pushed', async function () {
@@ -221,11 +222,11 @@ describe('TCController', function () {
                 // When
                 serverChannel.broadcast('pluginsList', plugins);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(pluginService.activateOnController, 'plugin1', controller);
-                assert.calledWithExactly(pluginService.activateOnController, 'plugin2', controller);
-                assert.neverCalledWithMatch(pluginService.activateOnController, 'plugin3', controller);
-                expect(pluginService.activateOnController.getCalls().length).to.be.equal(2);
+                await vi.advanceTimersToNextTimerAsync();
+                expect(pluginService.activateOnController).toHaveBeenCalledWith('plugin1', controller);
+                expect(pluginService.activateOnController).toHaveBeenCalledWith('plugin2', controller);
+                expect(pluginService.activateOnController).not.toHaveBeenCalledWith('plugin3', controller);
+                expect(pluginService.activateOnController).toHaveBeenCalledTimes(2);
             });
 
             it('should add to menu manually activated plugins when plugins config is pushed', async function () {
@@ -238,10 +239,10 @@ describe('TCController', function () {
                 // When
                 serverChannel.broadcast('pluginsList', plugins);
                 // Then
-                await clock.nextAsync();
-                assert.calledWithExactly(componentChannel.broadcast, 'addToPluginsMenu', { pluginName: 'plugin3' });
-                assert.neverCalledWithMatch(componentChannel.broadcast, 'addToPluginsMenu', { pluginName: 'plugin1' });
-                assert.neverCalledWithMatch(componentChannel.broadcast, 'addToPluginsMenu', { pluginName: 'plugin2' });
+                await vi.advanceTimersToNextTimerAsync();
+                expect(componentChannel.broadcast).toHaveBeenCalledWith('addToPluginsMenu', { pluginName: 'plugin3' });
+                expect(componentChannel.broadcast).not.toHaveBeenCalledWith('addToPluginsMenu', { pluginName: 'plugin1' });
+                expect(componentChannel.broadcast).not.toHaveBeenCalledWith('addToPluginsMenu', { pluginName: 'plugin2' });
             });
         });
     });
@@ -265,7 +266,7 @@ describe('TCController', function () {
         Array(numberOfSlides)
             .fill(0)
             .forEach(() => componentChannel.broadcast('presentationLoading'));
-        await clock.tickAsync(loadingTime); // loading time
+        await vi.advanceTimersByTimeAsync(loadingTime);
         Array(numberOfLoadedSlides)
             .fill(0)
             .forEach(() => componentChannel.broadcast('presentationLoaded'));
@@ -277,7 +278,7 @@ describe('TCController', function () {
      * @param {number} delay - Deplay in miliseconds before response
      */
     async function respondToHealthCheck(delay) {
-        await clock.tickAsync(delay);
+        await vi.advanceTimersByTimeAsync(delay);
         componentChannel.broadcast('pong');
     }
 });

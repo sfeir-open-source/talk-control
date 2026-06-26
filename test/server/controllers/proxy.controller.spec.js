@@ -1,14 +1,12 @@
-import { expect } from 'chai';
-import { assert, stub } from 'sinon';
 import { forwardTraffic } from '@server/controllers/proxy.controller';
 
 describe('ProxyController', function () {
     let req, res, proxy;
 
     beforeEach(function () {
-        proxy = { web: stub() };
+        proxy = { web: vi.fn() };
         req = { cookies: {} };
-        res = { send: stub(), status: stub().returnsThis() };
+        res = { send: vi.fn(), status: vi.fn().mockReturnThis() };
     });
 
     describe('forwardTraffic', function () {
@@ -18,8 +16,8 @@ describe('ProxyController', function () {
             // When
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.status, 400);
-            assert.calledWithExactly(res.send, 'Invalid presentation URL');
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
         });
 
         it('should error when req.cookies is undefined', function () {
@@ -28,8 +26,8 @@ describe('ProxyController', function () {
             // When - presentationUrl will be undefined, new URL(undefined) throws
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.status, 400);
-            assert.calledWithExactly(res.send, 'Invalid presentation URL');
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
         });
 
         it('should error when req.cookies is null', function () {
@@ -38,8 +36,8 @@ describe('ProxyController', function () {
             // When
             forwardTraffic(req, res, proxy);
             // Then
-            assert.calledWithExactly(res.status, 400);
-            assert.calledWithExactly(res.send, 'Invalid presentation URL');
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
         });
 
         it('should forward request for resource to presentation server (target)', function () {
@@ -49,11 +47,11 @@ describe('ProxyController', function () {
             // When
             forwardTraffic(req, res, proxy);
             // then
-            expect(proxy.web.args[0][0]).to.be.equal(req);
-            expect(proxy.web.args[0][0]).to.have.property('url', '/resource/1');
-            expect(proxy.web.args[0][1]).to.be.equal(res);
-            expect(proxy.web.args[0][2]).to.have.property('target', 'http://test.domain.com');
-            expect(proxy.web.args[0][2]).to.have.property('secure', false);
+            expect(proxy.web.mock.calls[0][0]).toBe(req);
+            expect(proxy.web.mock.calls[0][0]).toHaveProperty('url', '/resource/1');
+            expect(proxy.web.mock.calls[0][1]).toBe(res);
+            expect(proxy.web.mock.calls[0][2]).toHaveProperty('target', 'http://test.domain.com');
+            expect(proxy.web.mock.calls[0][2]).toHaveProperty('secure', false);
         });
     });
 });

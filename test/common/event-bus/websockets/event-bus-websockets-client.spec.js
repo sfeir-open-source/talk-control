@@ -1,28 +1,26 @@
 'use strict';
 
-import { expect, assert } from 'chai';
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
-import { stub } from 'sinon';
 import socketIO from 'socket.io-client';
 
 describe('EventBusWebsocketsClient', function () {
     let eventBus;
 
-    before(function () {
-        stub(socketIO, 'connect').returns({ on: stub(), emit: stub() });
+    beforeAll(function () {
+        vi.spyOn(socketIO, 'connect').mockReturnValue({ on: vi.fn(), emit: vi.fn() });
     });
 
     beforeEach(function () {
         eventBus = new EventBusWebsocketsClient();
     });
 
-    after(function () {
-        socketIO.connect.restore();
+    afterAll(function () {
+        socketIO.connect.mockRestore();
     });
 
     describe('constructor()', function () {
         it('should have instantiated EventBusWebsocketsClient', function () {
-            expect(eventBus).to.be.ok;
+            expect(eventBus).toBeTruthy();
         });
     });
 
@@ -31,11 +29,12 @@ describe('EventBusWebsocketsClient', function () {
             // Given
             const key = 'key';
             const callback = () => 'callback';
-            stub(eventBus, 'onMultiple');
+            const onMultipleSpy = vi.spyOn(eventBus, 'onMultiple').mockImplementation(() => {});
             // When
             eventBus.on(key, callback);
             // Then
-            assert.isOk(eventBus.onMultiple.calledWith(key, callback));
+            expect(onMultipleSpy).toHaveBeenCalledWith(key, callback);
+            onMultipleSpy.mockRestore();
         });
 
         it('should not throw when duplicate key triggers error (error path)', function () {
@@ -45,9 +44,9 @@ describe('EventBusWebsocketsClient', function () {
             // Register the key once
             eventBus.on(key, callback);
             // When - registering the same key again should throw internally but be caught
-            assert.doesNotThrow(() => {
+            expect(() => {
                 eventBus.on(key, () => 'second callback');
-            });
+            }).not.toThrow();
         });
     });
 
@@ -58,7 +57,7 @@ describe('EventBusWebsocketsClient', function () {
             // When
             eventBus.on(key, () => key);
             // Then
-            assert.isOk(eventBus.io.on.calledWith(key));
+            expect(eventBus.io.on).toHaveBeenCalledWith(key, expect.any(Function));
         });
     });
 
@@ -70,7 +69,7 @@ describe('EventBusWebsocketsClient', function () {
             // When
             eventBus.broadcast(key, data);
             // Then
-            assert(eventBus.io.emit.calledOnceWith(key, data));
+            expect(eventBus.io.emit).toHaveBeenCalledExactlyOnceWith(key, data);
         });
     });
 
@@ -80,14 +79,14 @@ describe('EventBusWebsocketsClient', function () {
             const socket = {
                 emit: () => {}
             };
-            stub(socket, 'emit');
+            const emitSpy = vi.spyOn(socket, 'emit').mockImplementation(() => {});
             const key = 'key';
             const data = 'data';
             // When
             eventBus.emitTo(key, data, socket);
             // Then
-            assert.isOk(socket.emit.calledWith(key, data));
-            socket.emit.restore();
+            expect(emitSpy).toHaveBeenCalledWith(key, data);
+            emitSpy.mockRestore();
         });
     });
 });

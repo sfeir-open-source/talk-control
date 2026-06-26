@@ -1,6 +1,6 @@
 import js from '@eslint/js';
 import globals from 'globals';
-import mochaPlugin from 'eslint-plugin-mocha';
+import vitestPlugin from '@vitest/eslint-plugin';
 import jsdocPlugin from 'eslint-plugin-jsdoc';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
@@ -10,7 +10,6 @@ export default [
         ignores: ['node_modules/', 'dist/', 'showcase/', 'docs-dist/', 'docs-sources/', '.claude/']
     },
     js.configs.recommended,
-    mochaPlugin.configs.recommended,
     jsdocPlugin.configs['flat/recommended'],
     prettierConfig,
     {
@@ -20,8 +19,7 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.node,
-                ...globals.browser,
-                ...globals.mocha
+                ...globals.browser
             },
             sourceType: 'module',
             ecmaVersion: 2022
@@ -33,10 +31,20 @@ export default [
             'linebreak-style': ['error', 'unix'],
             quotes: ['error', 'single', 'avoid-escape'],
             semi: ['error', 'always'],
-            'mocha/no-setup-in-describe': 'off',
-            'mocha/max-top-level-suites': 'off',
             'prettier/prettier': ['error'],
             'jsdoc/tag-lines': 'off'
+        }
+    },
+    {
+        files: ['test/**/*.spec.js'],
+        plugins: { vitest: vitestPlugin },
+        rules: {
+            ...vitestPlugin.configs.recommended.rules
+        },
+        languageOptions: {
+            globals: {
+                ...vitestPlugin.environments.env.globals
+            }
         }
     }
 ];
