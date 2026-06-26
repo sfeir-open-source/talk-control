@@ -48,8 +48,37 @@ function flatHtmlOutput(outDir = 'dist'): Plugin {
     };
 }
 
+// URL map so the Vite dev server mirrors webpack-dev-server's flat structure:
+//   /                     → src/client/tc-controller/index.html
+//   /on-stage.html        → src/client/layouts/on-stage/on-stage.html
+//   /presenter.html       → src/client/layouts/presenter/presenter.html
+//   /presenter-mobile.html→ src/client/layouts/presenter/presenter-mobile.html
+// Relative links in the app (href="on-stage.html" etc.) resolve correctly from /.
+const DEV_URL_MAP: Record<string, string> = {
+    '/': '/src/client/tc-controller/index.html',
+    '/index.html': '/src/client/tc-controller/index.html',
+    '/on-stage.html': '/src/client/layouts/on-stage/on-stage.html',
+    '/presenter.html': '/src/client/layouts/presenter/presenter.html',
+    '/presenter-mobile.html': '/src/client/layouts/presenter/presenter-mobile.html'
+};
+
+function devUrlRewrite(): Plugin {
+    return {
+        name: 'dev-url-rewrite',
+        apply: 'serve',
+        configureServer(server) {
+            server.middlewares.use((req, _res, next) => {
+                if (req.url && DEV_URL_MAP[req.url]) {
+                    req.url = DEV_URL_MAP[req.url];
+                }
+                next();
+            });
+        }
+    };
+}
+
 export default defineConfig({
-    plugins: [tsconfigPaths({ loose: true }), flatHtmlOutput()],
+    plugins: [tsconfigPaths({ loose: true }), flatHtmlOutput(), devUrlRewrite()],
     base: './',
     resolve: {
         alias: {
