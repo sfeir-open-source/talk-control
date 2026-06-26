@@ -3,19 +3,22 @@
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 describe('loadPluginModule', function () {
-    it('should return a Promise for "keyboardInput"', function () {
+    it('should return a Promise for "keyboardInput"', async function () {
         const result = loadPluginModule('keyboardInput');
         expect(result.then).toBeTypeOf('function');
+        await result;
     });
 
-    it('should return a Promise for "touchInput"', function () {
+    it('should return a Promise for "touchInput"', async function () {
         const result = loadPluginModule('touchInput');
         expect(result.then).toBeTypeOf('function');
+        await result;
     });
 
-    it('should return a Promise for "touchPointerInput"', function () {
+    it('should return a Promise for "touchPointerInput"', async function () {
         const result = loadPluginModule('touchPointerInput');
         expect(result.then).toBeTypeOf('function');
+        await result;
     });
 
     it('should return a resolved Promise for unknown plugin name', function () {
