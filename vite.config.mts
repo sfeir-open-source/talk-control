@@ -2,7 +2,10 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { resolve, relative, join, dirname, basename } from 'path';
 import { existsSync, readdirSync, readFileSync, writeFileSync, rmSync } from 'fs';
+import { fileURLToPath } from 'url';
 import type { Plugin } from 'vite';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Flatten nested HTML output paths: dist/src/client/.../foo.html → dist/foo.html
 // Rewrites relative asset URLs inside HTML to match the new root location,
