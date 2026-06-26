@@ -1,5 +1,5 @@
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
-import { bulmaStyles } from '@compat/lit-styles-compat';
+import { bulmaStyles, faStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 import { icon } from '@fortawesome/fontawesome-svg-core';
@@ -13,6 +13,7 @@ class MenuPluginsComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
+            faStyles,
             css`
                 #closeButton {
                     display: none;
