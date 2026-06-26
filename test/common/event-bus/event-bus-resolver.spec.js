@@ -6,9 +6,9 @@ import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { EventBusProxy } from '@event-bus/event-bus-proxy';
 import { EventBus } from '@event-bus/event-bus';
 import contextService from '@services/context';
-import * as wsClientContext from '@event-bus/websockets/event-bus-websockets-client';
-import * as wsServerContext from '@event-bus/websockets/event-bus-websockets-server';
-import * as postMessageContext from '@event-bus/postmessage/event-bus-postmessage';
+import '@event-bus/websockets/event-bus-websockets-client';
+import '@event-bus/websockets/event-bus-websockets-server';
+import '@event-bus/postmessage/event-bus-postmessage';
 // esbuild creates non-configurable getters on namespace objects — sinon cannot stub them.
 // require() returns the raw module.exports (mutable) that the source code accesses at runtime.
 const _wsClientMod = require('@event-bus/websockets/event-bus-websockets-client');

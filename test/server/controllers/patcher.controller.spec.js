@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { assert, stub } from 'sinon';
 import contextService from '@services/context';
-import * as configService from '@services/config';
+import '@services/config';
 const _configServiceMod = require('@services/config');
 import { patchPresentation } from '@server/controllers/patcher.controller';
 

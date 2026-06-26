@@ -4,7 +4,7 @@
  * writes to docs-sources/developers/code/parts/ and regenerates the README index.
  */
 import jsdoc2md from 'jsdoc-to-markdown';
-import { mkdirSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { mkdirSync, writeFileSync, readdirSync } from 'fs';
 import { join, relative, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,6 +13,10 @@ const root = join(__dirname, '..');
 const srcDir = join(root, 'src');
 const partsDir = join(root, 'docs-sources/developers/code/parts');
 
+/**
+ *
+ * @param dir
+ */
 function findJsFiles(dir) {
     const entries = readdirSync(dir, { withFileTypes: true });
     return entries.flatMap(entry => {

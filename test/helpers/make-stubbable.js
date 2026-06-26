@@ -23,7 +23,7 @@ Object.defineProperty = function (obj, prop, descriptor) {
 const Module = require('module');
 const originalLoad = Module._load;
 
-Module._load = function (request, parent, isMain) {
+Module._load = function (_request, _parent, _isMain) {
     const mod = originalLoad.apply(this, arguments);
     if (mod && typeof mod === 'object') {
         try {
@@ -43,12 +43,12 @@ Module._load = function (request, parent, isMain) {
                                 configurable: true
                             });
                         }
-                    } catch (_) {
+                    } catch {
                         /* skip if getter throws */
                     }
                 }
             }
-        } catch (_) {
+        } catch {
             /* skip sealed/frozen objects */
         }
     }

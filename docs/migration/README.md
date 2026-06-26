@@ -29,7 +29,7 @@
 | 9 node-fetch → fetch natif | ✅ Done | update-node-20 | `fetch` global, `stub(globalThis, 'fetch')` — 196/196 tests, DEC-005 |
 | 10 Polyfills webcomponents | ✅ Done | update-node-20 | Supprime 2 imports × 13 composants + package retiré, DEC-006 — 196/196 tests |
 | 11 Vuepress → VitePress | ✅ Done | update-node-20 | VitePress + jsdoc-to-markdown, npm install sans --legacy-peer-deps — 196/196 tests, DEC-007 |
-| **12 ESLint 8 → 9** | 🔜 Todo | — | Flat config, DEC-008 |
+| **12 ESLint 8 → 9** | ✅ Done | update-node-20 | Flat config, DEC-008 — 196/196 tests |
 | **13 DEC-001 : Bulma + FA** | 🔜 Todo | — | Import direct bulma, SVG icons FontAwesome |
 | **14 Mocha → Vitest** | 🔜 Todo | — | Supprime make-stubbable.js, mocking natif ESM, DEC-003 |
 | **15 Webpack → Vite** | 🔜 Todo | — | Build front + dev server unifié, DEC-003 |

@@ -6,10 +6,11 @@ import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { EventBus } from '@event-bus/event-bus';
 import { EngineResolver } from '@server/engines/engine-resolver';
 import { GenericEngine } from '@server/engines/generic-server-engine';
-import * as configService from '@services/config';
+import '@services/config';
 const _configServiceMod = require('@services/config');
 
 const mockStore = configureStore([]);
+
 describe('TCServer', function () {
     let resolveChannel, controllerChannel, server;
     let resolveEngine, engine;

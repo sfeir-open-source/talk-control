@@ -18,7 +18,7 @@ export async function patchPresentation(req, res) {
     let presentationUrl;
     try {
         presentationUrl = new URL(req.query['tc-presentation-url']);
-    } catch (e) {
+    } catch {
         res.status(400).send('Invalid presentation URL');
         return;
     }

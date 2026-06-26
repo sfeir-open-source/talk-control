@@ -20,7 +20,7 @@ export function forwardTraffic(req, res, proxy) {
     let target;
     try {
         target = new URL(presentationUrl).origin;
-    } catch (e) {
+    } catch {
         res.status(400).send('Invalid presentation URL');
         return;
     }

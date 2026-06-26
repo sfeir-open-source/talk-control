@@ -183,20 +183,21 @@ Remplacer `vuepress` + `vuepress-jsdoc` par `vitepress`. La config docs (`docs-s
 
 ## DEC-008 — ESLint 8 → ESLint 9
 
-**Date :** 2026-06-23 | **Étape :** 12 | **Statut :** décidé, pas encore implémenté
+**Date :** 2026-06-26 | **Étape :** 12 | **Statut :** implémenté
 
 ### Contexte
 
-ESLint 8 est en maintenance depuis fin 2023. ESLint 9 abandonne le format `.eslintrc.*` au profit du **flat config** (`eslint.config.js`). Les plugins utilisés (`eslint-plugin-mocha`, `eslint-plugin-jsdoc`, `eslint-plugin-prettier`) ont tous des versions compatibles ESLint 9.
-
-Note : `eslint-plugin-mocha` deviendra `eslint-plugin-vitest` après l'étape 14.
+ESLint 8 est en fin de vie (EOL). ESLint 9 abandonne le format `.eslintrc.*` au profit du **flat config** (`eslint.config.js`). Les plugins utilisés (`eslint-plugin-mocha`, `eslint-plugin-jsdoc`, `eslint-plugin-prettier`) ont tous des versions compatibles ESLint 9.
 
 ### Décision
 
-Migrer vers ESLint 9 + flat config. Faire la migration en même temps que le renommage du plugin mocha → vitest (étape 14) pour éviter deux passes sur la config ESLint.
+Migrer vers ESLint 9 + flat config. Utilisation de `eslint.config.mjs` (`.mjs` car le projet est `type: commonjs`). `eslint-plugin-mocha` conservé à ce stade — migration vers `eslint-plugin-vitest` reportée à l'étape 14.
 
 ### Conséquences
 
-- `.eslintrc` supprimé, remplacé par `eslint.config.js`
-- Config plus explicite et plus simple (plus de cascade de fichiers)
-- `eslint-plugin-mocha` → `eslint-plugin-vitest` en même temps
+- `.eslintrc` et `.eslintignore` supprimés, remplacés par `eslint.config.mjs`
+- Ajout de `@eslint/js@^9.39.4` et `globals@^15.15.0`
+- `eslint-plugin-mocha` montée à v11 (nécessite ESLint ≥9) ; `eslint-plugin-jsdoc` montée à v63
+- `eslint-plugin-mocha@11` : le nom du flat config est `configs.recommended` (plus `configs['flat/recommended']`)
+- 47 avertissements JSDoc apparaissent (nouvelles règles jsdoc@63) — non bloquants
+- Corrections induites : `catch (e)` → `catch {}`, imports namespace inutilisés → imports de côté-effet, convention `_param` pour args intentionnellement inutilisés
