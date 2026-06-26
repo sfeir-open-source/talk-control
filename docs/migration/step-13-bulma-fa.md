@@ -13,9 +13,15 @@
 `lit-styles-compat.js` importait `@granite-elements/granite-lit-bulma` pour obtenir un objet CSSResult compatible lit 3.
 Remplacé par un import direct du CSS Bulma avec la query webpack `?raw` (`asset/source`), puis wrappé via `unsafeCSS()`.
 
-Règle ajoutée dans `webpack.config.common.cjs` :
+Règle ajoutée dans `webpack.config.common.cjs` avec `oneOf` pour l'exclusivité mutuelle (sans `oneOf`, webpack applique les deux branches CSS en même temps, `MiniCssExtractPlugin` gagne et `unsafeCSS` reçoit un objet au lieu d'une string → styles vides) :
 ```js
-{ test: /\.css$/i, resourceQuery: /raw/, type: 'asset/source' },
+{
+    test: /\.css$/i,
+    oneOf: [
+        { resourceQuery: /raw/, type: 'asset/source' },
+        { use: [MiniCssExtractPlugin.loader, 'css-loader'] }
+    ]
+}
 ```
 
 `lit-styles-compat.js` devient :

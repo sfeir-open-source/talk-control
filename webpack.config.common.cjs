@@ -33,14 +33,18 @@ module.exports = {
     module: {
         rules: [
             {
-                // Import CSS as a raw string (for unsafeCSS in LitElement components)
+                // oneOf ensures mutual exclusivity: ?raw → raw string for unsafeCSS,
+                // everything else → MiniCssExtractPlugin for the page stylesheet.
                 test: /\.css$/i,
-                resourceQuery: /raw/,
-                type: 'asset/source'
-            },
-            {
-                test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                oneOf: [
+                    {
+                        resourceQuery: /raw/,
+                        type: 'asset/source'
+                    },
+                    {
+                        use: [MiniCssExtractPlugin.loader, 'css-loader']
+                    }
+                ]
             },
             {
                 test: /\.(png|jpg|gif|eot|svg|woff|woff2|ttf)$/i,
