@@ -56,7 +56,7 @@ Après la migration Vitest (étape 14), utiliser le **browser mode de Vitest** p
 
 ## DEC-003 — Migration TypeScript + Vite
 
-**Date :** 2026-06-23 | **Étapes :** 14 (Vitest), 15 (Vite), 16 (TypeScript) | **Statut :** étape 14 implémentée (2026-06-26)
+**Date :** 2026-06-23 | **Étapes :** 14 (Vitest), 15 (Vite), 16 (TypeScript) | **Statut :** étapes 14 et 15 implémentées (2026-06-26)
 
 ### Contexte
 
