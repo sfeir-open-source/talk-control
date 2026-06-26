@@ -1,5 +1,8 @@
-import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faChalkboard, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 
 class ViewSelectorComponent extends LitElement {
     static get properties() {
@@ -7,7 +10,7 @@ class ViewSelectorComponent extends LitElement {
     }
 
     static get styles() {
-        return [bulmaStyles, Fontawesome];
+        return [bulmaStyles];
     }
 
     render() {
@@ -17,9 +20,7 @@ class ViewSelectorComponent extends LitElement {
                     <a href="on-stage.html">
                         <div id="onStageButton" class="card">
                             <div class="card-content has-text-centered">
-                                <p class="title">
-                                    <i class="fas fa-chalkboard"></i>
-                                </p>
+                                <p class="title">${unsafeHTML(icon(faChalkboard).html[0])}</p>
                                 <p class="subtitle">Stage view</p>
                             </div>
                         </div>
@@ -30,9 +31,7 @@ class ViewSelectorComponent extends LitElement {
                     <a href="presenter-mobile.html">
                         <div class="card">
                             <div class="card-content has-text-centered" onclick="window.location.href = 'presenter-mobile.html'">
-                                <p class="title">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                </p>
+                                <p class="title">${unsafeHTML(icon(faChalkboardTeacher).html[0])}</p>
                                 <p class="subtitle">Presenter view</p>
                             </div>
                         </div>
@@ -43,9 +42,7 @@ class ViewSelectorComponent extends LitElement {
                     <a href="presenter.html">
                         <div class="card">
                             <div class="card-content has-text-centered" onclick="window.location.href = 'presenter.html'">
-                                <p class="title">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                </p>
+                                <p class="title">${unsafeHTML(icon(faChalkboardTeacher).html[0])}</p>
                                 <p class="subtitle">Presenter view</p>
                             </div>
                         </div>

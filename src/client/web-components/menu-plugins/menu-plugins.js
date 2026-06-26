@@ -1,7 +1,9 @@
-// Import the LitElement base class and html helper function
 import { MenuPluginsTCComponent } from './menu-plugins-tc-component';
-import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faCube } from '@fortawesome/free-solid-svg-icons';
 
 class MenuPluginsComponent extends LitElement {
     static get properties() {
@@ -11,7 +13,6 @@ class MenuPluginsComponent extends LitElement {
     static get styles() {
         return [
             bulmaStyles,
-            Fontawesome,
             css`
                 #closeButton {
                     display: none;
@@ -72,8 +73,8 @@ class MenuPluginsComponent extends LitElement {
             <div id="menuDropdown" class="dropdown is-right">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span class="is-hidden-tablet"><i class="fas fa-cube" aria-hidden="true"></i></span>
-                        <span class="is-hidden-mobile">Plugins <i class="fas fa-cube" aria-hidden="true"></i></span>
+                        <span class="is-hidden-tablet">${unsafeHTML(icon(faCube).html[0])}</span>
+                        <span class="is-hidden-mobile">Plugins ${unsafeHTML(icon(faCube).html[0])}</span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
@@ -84,5 +85,4 @@ class MenuPluginsComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-menu-plugins', MenuPluginsComponent);

@@ -33,6 +33,12 @@ module.exports = {
     module: {
         rules: [
             {
+                // Import CSS as a raw string (for unsafeCSS in LitElement components)
+                test: /\.css$/i,
+                resourceQuery: /raw/,
+                type: 'asset/source'
+            },
+            {
                 test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, 'css-loader']
             },

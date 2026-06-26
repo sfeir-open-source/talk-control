@@ -1,15 +1,16 @@
-// Import the LitElement base class and html helper function
-import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html } from 'lit-element';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faBars, faHome, faDesktop, faChalkboardTeacher, faMobileAlt } from '@fortawesome/free-solid-svg-icons';
 
-// Extend the LitElement base class
 class MenuNavigationComponent extends LitElement {
     static get properties() {
         return {};
     }
 
     static get styles() {
-        return [bulmaStyles, Fontawesome];
+        return [bulmaStyles];
     }
 
     constructor() {
@@ -27,21 +28,21 @@ class MenuNavigationComponent extends LitElement {
             <div id="menuDropdown" class="dropdown">
                 <div class="dropdown-trigger">
                     <button id="menuButton" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                        <span class="is-hidden-tablet"><i class="fas fa-bars"></i></span>
-                        <span class="is-hidden-mobile"><i class="fas fa-bars"></i> Navigation</span>
+                        <span class="is-hidden-tablet">${unsafeHTML(icon(faBars).html[0])}</span>
+                        <span class="is-hidden-mobile">${unsafeHTML(icon(faBars).html[0])} Navigation</span>
                     </button>
                 </div>
                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                     <div class="dropdown-content">
-                        <a href="index.html" class="dropdown-item"> <i class="fas fa-home"></i> Home </a>
-                        <a href="on-stage.html" class="dropdown-item"> <i class="fas fa-desktop"></i> On stage view </a>
-                        <a href="presenter.html" class="dropdown-item is-hidden-mobile"> <i class="fas fa-chalkboard-teacher"></i> Presenter view </a>
-                        <a href="presenter-mobile.html" class="dropdown-item is-hidden-tablet"> <i class="fas fa-mobile-alt"></i> Presenter view </a>
+                        <a href="index.html" class="dropdown-item"> ${unsafeHTML(icon(faHome).html[0])} Home </a>
+                        <a href="on-stage.html" class="dropdown-item"> ${unsafeHTML(icon(faDesktop).html[0])} On stage view </a>
+                        <a href="presenter.html" class="dropdown-item is-hidden-mobile"> ${unsafeHTML(icon(faChalkboardTeacher).html[0])} Presenter view </a>
+                        <a href="presenter-mobile.html" class="dropdown-item is-hidden-tablet"> ${unsafeHTML(icon(faMobileAlt).html[0])} Presenter view </a>
                     </div>
                 </div>
             </div>
         `;
     }
 }
-// Register the new element with the browser.
+
 customElements.define('tc-menu-navigation', MenuNavigationComponent);

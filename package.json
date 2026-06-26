@@ -47,7 +47,7 @@
     "devDependencies": {
         "@commitlint/cli": "^9.1.2",
         "@commitlint/config-conventional": "^8.3.4",
-        "@granite-elements/granite-lit-bulma": "^0.9.0-4",
+        "@eslint/js": "^9.39.4",
         "@playwright/test": "^1.61.0",
         "@vue/component-compiler-utils": "^3.1.2",
         "c8": "^11.0.0",
@@ -56,7 +56,6 @@
         "commitizen": "^4.2.1",
         "css-loader": "^7.1.2",
         "cz-conventional-changelog": "^3.2.0",
-        "@eslint/js": "^9.39.4",
         "eslint": "^9.39.4",
         "eslint-config-prettier": "^9.1.2",
         "eslint-plugin-jsdoc": "^63.0.7",
@@ -69,7 +68,6 @@
         "jsdom": "^29.1.1",
         "jsdom-global": "3.0.2",
         "lit-element": "^4.2.2",
-        "lit-fontawesome": "0.1.3",
         "mini-css-extract-plugin": "^2.9.2",
         "mocha": "^11.7.6",
         "nodemon": "^3.1.14",
@@ -107,6 +105,8 @@
         }
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^7.3.0",
+        "@fortawesome/free-solid-svg-icons": "^7.3.0",
         "bulma": "^0.9.0",
         "colors": "^1.4.0",
         "cookie-parser": "^1.4.7",

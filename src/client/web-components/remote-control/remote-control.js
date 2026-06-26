@@ -1,4 +1,4 @@
-import { bulmaStyles, Fontawesome } from '@compat/lit-styles-compat';
+import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html } from 'lit-element';
 import { config } from '@services/config';
 import QRCode from 'qrcode';
@@ -9,7 +9,7 @@ class RemoteControlComponent extends LitElement {
     }
 
     static get styles() {
-        return [bulmaStyles, Fontawesome];
+        return [bulmaStyles];
     }
 
     firstUpdated() {
