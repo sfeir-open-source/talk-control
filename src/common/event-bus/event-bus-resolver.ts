@@ -14,7 +14,7 @@ export const Channels = {
 export type Channel = (typeof Channels)[keyof typeof Channels];
 
 interface ChannelOptions {
-    server?: HttpServer;
+    server?: HttpServer | string;
     deep?: boolean;
 }
 
@@ -23,7 +23,7 @@ export class EventBusResolver {
         if (!contextService.isClientSide()) {
             switch (name) {
                 case Channels.CONTROLLER_SERVER:
-                    return new EventBusProxy(Channels.CONTROLLER_SERVER, new EventBusWebsocketsServer(options.server!));
+                    return new EventBusProxy(Channels.CONTROLLER_SERVER, new EventBusWebsocketsServer(options.server as HttpServer));
                 default:
                     throw new Error('Unknown channel');
             }

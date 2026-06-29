@@ -1,49 +1,31 @@
-'use strict';
-
 import pluginService from '@services/plugin';
 import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import type { EventBus } from '@event-bus/event-bus';
 
 export const ERROR_TYPE_SCRIPT_NOT_PRESENT = 'script_not_present';
 
-/**
- * @class TCController
- * @classdesc Manage the control flow through event buses
- */
 export class TCController {
-    /**
-     * @param {string} server - Server URL
-     */
-    constructor(server) {
+    controllerServerChannel: EventBus;
+    controllerComponentChannel: EventBus;
+
+    constructor(server: string) {
         this.controllerServerChannel = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
         this.controllerComponentChannel = EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, { deep: true });
     }
 
-    /**
-     * Initialize the control by plumbing event channels and loading the presentation
-     *
-     * @param {string} presentationUrl - Presentation URL
-     */
-    init(presentationUrl) {
+    init(presentationUrl: string): void {
         this._bindPreControlEvents();
         this._bindControlEvents();
         this._bindPluginStartStopEvents();
         this._bindPluginEvents();
-
         this._loadPresentation(presentationUrl);
     }
 
-    /**
-     * Bind events related to the preperation flow
-     * Includes slides counting, presentation health checking then control kick starting
-     *
-     * @private
-     */
-    _bindPreControlEvents() {
+    private _bindPreControlEvents(): void {
         const slideCount = { loading: 0, loaded: 0 };
         this.controllerComponentChannel.on('presentationLoading', () => slideCount.loading++);
         this.controllerComponentChannel.on('presentationLoaded', () => {
             if (++slideCount.loaded !== slideCount.loading) return;
-
             this._checkTCClientPresence(100).then(status => {
                 if (status === 'ok') this.controllerComponentChannel.broadcast('init');
                 else this.controllerComponentChannel.broadcast('error', { type: ERROR_TYPE_SCRIPT_NOT_PRESENT });
@@ -51,72 +33,46 @@ export class TCController {
         });
     }
 
-    /**
-     * Bind events related to the control flow
-     * Includes initialization of server, plugins loading. current slide control, pointer control ...
-     *
-     * @private
-     */
-    _bindControlEvents() {
+    private _bindControlEvents(): void {
         this.controllerComponentChannel.on('initialized', data => this.controllerServerChannel.broadcast('init', data));
         this.controllerServerChannel.on('gotoSlide', data => this.controllerComponentChannel.broadcast('gotoSlide', data));
         this.controllerComponentChannel.on('sendNotesToController', data => this.controllerComponentChannel.broadcast('sendNotesToComponent', data));
     }
 
-    /**
-     * Bind events related to plugin start/stop flow
-     *
-     * @private
-     */
-    _bindPluginStartStopEvents() {
-        this.controllerServerChannel.on('pluginsList', plugins => {
-            for (const plugin of plugins) {
-                // TODO: check if already initialized and usedByAComponent
+    private _bindPluginStartStopEvents(): void {
+        this.controllerServerChannel.on('pluginsList', data => {
+            for (const plugin of data as Array<{ name: string; autoActivate: boolean }>) {
                 if (plugin.autoActivate) pluginService.activateOnController(plugin.name, this);
                 else this.controllerComponentChannel.broadcast('addToPluginsMenu', { pluginName: plugin.name });
             }
         });
-
         this.controllerComponentChannel.on('pluginStartingIn', data => this.controllerServerChannel.broadcast('pluginStartingIn', data));
         this.controllerComponentChannel.on('pluginEndingIn', data => this.controllerServerChannel.broadcast('pluginEndingIn', data));
-        this.controllerServerChannel.on('pluginStartingOut', ({ pluginName }) => pluginService.activateOnController(pluginName, this));
-        this.controllerServerChannel.on('pluginEndingOut', ({ pluginName }) => pluginService.deactivateOnController(pluginName, this));
+        this.controllerServerChannel.on('pluginStartingOut', data => {
+            const { pluginName } = data as { pluginName: string };
+            pluginService.activateOnController(pluginName, this);
+        });
+        this.controllerServerChannel.on('pluginEndingOut', data => {
+            const { pluginName } = data as { pluginName: string };
+            pluginService.deactivateOnController(pluginName);
+        });
     }
 
-    /**
-     * Bind plugin events (events forwarding)
-     *
-     * @private
-     */
-    _bindPluginEvents() {
+    private _bindPluginEvents(): void {
         this.controllerComponentChannel.on('pluginEventIn', data => this.controllerServerChannel.broadcast('pluginEventIn', data));
-        this.controllerServerChannel.on('pluginEventOut', data => this.controllerComponentChannel.broadcast(data.origin, data));
+        this.controllerServerChannel.on('pluginEventOut', data => this.controllerComponentChannel.broadcast((data as { origin: string }).origin, data));
     }
 
-    /**
-     * Check that the presentation is accessible through event bus (ping pong system)
-     *
-     * @param {number} timeout - time before fail check
-     * @returns {Promise<'ok'|'ko'>} - Health status promise
-     */
-    _checkTCClientPresence(timeout) {
-        // We create a timeoutPromise to race this promise with a ping message in order
-        // to check if talkControl component is present in the iframe.
-        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('ko'), timeout));
-        const pongPromise = new Promise(resolve => {
+    private _checkTCClientPresence(timeout: number): Promise<'ok' | 'ko'> {
+        const timeoutPromise = new Promise<'ok' | 'ko'>(resolve => setTimeout(() => resolve('ko'), timeout));
+        const pongPromise = new Promise<'ok' | 'ko'>(resolve => {
             this.controllerComponentChannel.on('pong', () => resolve('ok'));
             this.controllerComponentChannel.broadcast('ping');
         });
-
         return Promise.race([timeoutPromise, pongPromise]);
     }
 
-    /**
-     * Load the presentation (sending command)
-     *
-     * @param {string} url - Presentation URL
-     */
-    _loadPresentation(url) {
+    private _loadPresentation(url: string): void {
         this.controllerComponentChannel.broadcast('loadPresentation', url);
     }
 }

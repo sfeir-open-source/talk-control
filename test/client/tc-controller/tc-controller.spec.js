@@ -209,7 +209,7 @@ describe('TCController', function () {
                 serverChannel.broadcast('pluginEndingOut', data);
                 // Then
                 await vi.advanceTimersToNextTimerAsync();
-                expect(pluginService.deactivateOnController).toHaveBeenCalledWith(data.pluginName, controller);
+                expect(pluginService.deactivateOnController).toHaveBeenCalledWith(data.pluginName);
             });
 
             it('should activate auto activated plugins when plugins config is pushed', async function () {

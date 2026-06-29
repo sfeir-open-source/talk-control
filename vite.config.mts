@@ -63,7 +63,7 @@ const DEV_URL_MAP: Record<string, string> = {
     '/on-stage.html': '/src/client/layouts/on-stage/on-stage.html',
     '/presenter.html': '/src/client/layouts/presenter/presenter.html',
     '/presenter-mobile.html': '/src/client/layouts/presenter/presenter-mobile.html',
-    '/tc-component.bundle.js': '/src/client/tc-component/index.js'
+    '/tc-component.bundle.js': '/src/client/tc-component/index.ts'
 };
 
 function devUrlRewrite(): Plugin {
@@ -105,7 +105,7 @@ export default defineConfig({
                 'on-stage': resolve(__dirname, 'src/client/layouts/on-stage/on-stage.html'),
                 presenter: resolve(__dirname, 'src/client/layouts/presenter/presenter.html'),
                 'presenter-mobile': resolve(__dirname, 'src/client/layouts/presenter/presenter-mobile.html'),
-                'tc-component': resolve(__dirname, 'src/client/tc-component/index.js')
+                'tc-component': resolve(__dirname, 'src/client/tc-component/index.ts')
             },
             output: {
                 entryFileNames: '[name].bundle.js',
