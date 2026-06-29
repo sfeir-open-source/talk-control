@@ -56,7 +56,7 @@ Après la migration Vitest (étape 14), utiliser le **browser mode de Vitest** p
 
 ## DEC-003 — Migration TypeScript + Vite
 
-**Date :** 2026-06-23 | **Étapes :** 14 (Vitest), 15 (Vite), 16 (TypeScript) | **Statut :** étapes 14 et 15 implémentées (2026-06-26)
+**Date :** 2026-06-23 | **Étapes :** 14 (Vitest), 15 (Vite), 16 (TypeScript) | **Statut :** implémenté (étape 16 terminée 2026-06-29)
 
 ### Contexte
 
@@ -75,16 +75,22 @@ L'étape 7 a introduit `test/helpers/make-stubbable.js` — un double patch `Obj
 - `webpack.config.*.cjs` supprimés, `vite.config.ts` créé
 - Partage les mêmes `resolve.alias` que `tsconfig.json` — zéro config dupliquée
 
-**Étape 16 — JavaScript → TypeScript**
+**Étape 16 — JavaScript → TypeScript** *(implémenté 2026-06-29)*
 - `allowJs: true` dans tsconfig → migration fichier par fichier sans blocage
-- `src/` d'abord (code serveur + common), `test/` ensuite
-- Types stricts sur le code nouveau, `any` permissif sur l'existant
+- `moduleResolution: bundler` → imports `.js` existants résolus vers `.ts` sans modification
+- `src/` d'abord (bottom-up par dépendances), `test/` ensuite
+- Types stricts sur le code nouveau, `as any` permissif dans les tests sur les mocks
+- `plugin.js` différé après `tc-component.ts` et `tc-controller.ts` (dépendance circulaire)
+- `ChannelOptions.server` élargi à `HttpServer | string` pour corriger le typage client/serveur
+- Bug détecté : `deactivateOnController` recevait un second argument inutile — corrigé
 
 ### Conséquences
 
 - `make-stubbable.js` supprimé dès l'étape 14
 - `tsconfig.json` déjà en place depuis l'étape 7 — base prête
 - Vuepress 1.x (mort, cassé Node 22+) adressé séparément en étape 11
+- 73 fichiers `src/` + 27 fichiers `test/` migrés → 0 `.js` dans le code applicatif
+- `vitest.config.ts` : pattern mis à jour `*.spec.ts` ; `tsconfig.json` : `types: ["vitest/globals"]`
 
 ---
 

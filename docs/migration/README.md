@@ -33,7 +33,7 @@
 | **13 DEC-001 : Bulma + FA** | ✅ Done | update-node-20 | Import direct bulma, SVG icons FontAwesome |
 | **14 Mocha → Vitest** | ✅ Done | update-node-20 | [step-14-vitest.md](step-14-vitest.md) — supprime make-stubbable.js, mocking natif ESM, DEC-003 |
 | **15 Webpack → Vite** | ✅ Done | update-node-20 | [step-15-vite.md](step-15-vite.md) — vite.config.mts, flatHtmlOutput, stub socket.io, DEC-003 |
-| **16 JavaScript → TypeScript** | 🔜 Todo | — | Renommage .js → .ts progressif, DEC-003 |
+| **16 JavaScript → TypeScript** | ✅ Done | update-node-20 | [step-16-typescript.md](step-16-typescript.md) — strict: true, 73 src/ + 27 test/ migrés, DEC-003 |
 | **17 Tests web components** | 🔜 Todo | — | Vitest browser mode sur LitElement, DEC-002 |
 | **18 Merge final** | 🔜 Todo | — | update-node-20 → develop, tag v2.0.0 |
 
