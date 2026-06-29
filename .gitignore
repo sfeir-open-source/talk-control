@@ -58,6 +58,7 @@ showcase/resources/tc-component/
 # Documentation
 docs-dist
 docs-sources/developers/code/parts/
+docs-sources/.vitepress/cache/
 
 # Jetbrains
 .idea
