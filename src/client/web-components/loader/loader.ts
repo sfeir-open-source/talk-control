@@ -35,18 +35,18 @@ class LoaderComponent extends LitElement {
         ];
     }
 
-    firstUpdated() {
+    firstUpdated(): void {
         new TCComponentLoaderComponent(this);
     }
 
-    showSuccess() {
-        this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
-        this.shadowRoot.querySelector('slot[name="success"]').classList.remove('is-hidden');
+    showSuccess(): void {
+        this.shadowRoot!.querySelector('.tc-loader')!.classList.remove('is-active');
+        this.shadowRoot!.querySelector('slot[name="success"]')!.classList.remove('is-hidden');
     }
 
-    showError() {
-        this.shadowRoot.querySelector('.tc-loader').classList.remove('is-active');
-        this.shadowRoot.querySelector('slot[name="error"]').classList.remove('is-hidden');
+    showError(): void {
+        this.shadowRoot!.querySelector('.tc-loader')!.classList.remove('is-active');
+        this.shadowRoot!.querySelector('slot[name="error"]')!.classList.remove('is-hidden');
     }
 
     render() {
@@ -60,5 +60,4 @@ class LoaderComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-loader', LoaderComponent);

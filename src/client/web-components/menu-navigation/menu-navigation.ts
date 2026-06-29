@@ -13,13 +13,9 @@ class MenuNavigationComponent extends LitElement {
         return [bulmaStyles, faStyles];
     }
 
-    constructor() {
-        super();
-    }
-
-    firstUpdated() {
-        this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
-            this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
+    firstUpdated(): void {
+        this.shadowRoot!.getElementById('menuButton')!.addEventListener('click', () => {
+            this.shadowRoot!.getElementById('menuDropdown')!.classList.toggle('is-active');
         });
     }
 

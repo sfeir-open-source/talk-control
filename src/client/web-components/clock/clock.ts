@@ -2,20 +2,22 @@ import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html } from 'lit-element';
 
 class ClockComponent extends LitElement {
+    clock!: Element;
+
     static get styles() {
         return [bulmaStyles];
     }
 
-    firstUpdated() {
-        this.clock = this.shadowRoot.querySelector('#clock');
+    firstUpdated(): void {
+        this.clock = this.shadowRoot!.querySelector('#clock')!;
         this.startClock();
     }
 
-    formatTime(time) {
+    formatTime(time: number): string | number {
         return time ? (time < 10 ? '0' + time : time) : '00';
     }
 
-    startClock() {
+    startClock(): void {
         const updateTime = () => {
             const today = new Date();
             const hours = today.getHours();
@@ -31,5 +33,4 @@ class ClockComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-clock', ClockComponent);

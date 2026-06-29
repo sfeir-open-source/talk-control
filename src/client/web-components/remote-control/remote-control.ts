@@ -12,13 +12,13 @@ class RemoteControlComponent extends LitElement {
         return [bulmaStyles];
     }
 
-    firstUpdated() {
+    firstUpdated(): void {
         if (config.tcController.urls.external) {
-            QRCode.toCanvas(this.shadowRoot.getElementById('qrCode'), config.tcController.urls.external);
-            this.shadowRoot.getElementById('textCode').innerHTML =
+            QRCode.toCanvas(this.shadowRoot!.getElementById('qrCode') as HTMLCanvasElement, config.tcController.urls.external);
+            this.shadowRoot!.getElementById('textCode')!.innerHTML =
                 `<a href="${config.tcController.urls.external}" title="Use this url to connect to TalkControl from another device">${config.tcController.urls.external}</a>`;
         } else {
-            this.shadowRoot.getElementById('qrCodeSection').classList.add('is-hidden');
+            this.shadowRoot!.getElementById('qrCodeSection')!.classList.add('is-hidden');
         }
     }
 

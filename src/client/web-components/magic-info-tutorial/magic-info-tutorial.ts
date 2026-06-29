@@ -16,13 +16,13 @@ class MagicModeTutorialComponent extends LitElement {
         ];
     }
 
-    firstUpdated() {
-        this.shadowRoot.querySelector('#startMagicModeButton').addEventListener('click', this.startMagicMode);
+    firstUpdated(): void {
+        this.shadowRoot!.querySelector('#startMagicModeButton')!.addEventListener('click', this.startMagicMode);
     }
 
-    startMagicMode() {
+    startMagicMode(): void {
         const url = sessionStorage.getItem('presentationUrl');
-        presentationService.saveUrlForPatching(url);
+        presentationService.saveUrlForPatching(url ?? '');
         location.reload();
     }
 
@@ -59,7 +59,7 @@ class MagicModeTutorialComponent extends LitElement {
 // Configure the url of the server serving the tc-component and other split shunks
 window.tcResourcePath = 'http://localhost:3000/'
 &lt;/script>
-&lt;script type="text/javascript" src="http://localhost:3000/tc-component.bundle.js"&gt;&lt;/script&gt;	
+&lt;script type="text/javascript" src="http://localhost:3000/tc-component.bundle.js"&gt;&lt;/script&gt;
                                 </code>
                             </pre>
                         </li>
@@ -70,5 +70,4 @@ window.tcResourcePath = 'http://localhost:3000/'
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-magic-info', MagicModeTutorialComponent);

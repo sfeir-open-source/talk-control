@@ -14,12 +14,12 @@ class NotesComponent extends LitElement {
         ];
     }
 
-    firstUpdated() {
+    firstUpdated(): void {
         new NotesTCComponent(this);
     }
 
-    addNotes(notes) {
-        this.shadowRoot.getElementById('notes').innerHTML = notes;
+    addNotes(notes: unknown): void {
+        this.shadowRoot!.getElementById('notes')!.innerHTML = notes as string;
     }
 
     render() {
@@ -27,5 +27,4 @@ class NotesComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-notes', NotesComponent);

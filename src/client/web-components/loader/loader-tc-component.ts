@@ -1,18 +1,23 @@
-'use strict';
-
 import { EventBusComponent } from '@event-bus/event-bus-component';
 
+interface LoaderHost {
+    showSuccess(): void;
+    showError(): void;
+}
+
 export class TCComponentLoaderComponent extends EventBusComponent {
-    constructor(loader) {
+    loader: LoaderHost;
+
+    constructor(loader: LoaderHost) {
         super();
         this.loader = loader;
     }
 
-    init() {
+    override init(): void {
         this.loader.showSuccess();
     }
 
-    error() {
+    override error(): void {
         this.loader.showError();
     }
 }

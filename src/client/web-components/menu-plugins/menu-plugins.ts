@@ -6,6 +6,9 @@ import { icon } from '@fortawesome/fontawesome-svg-core';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
 
 class MenuPluginsComponent extends LitElement {
+    menuPluginsTcComponent!: MenuPluginsTCComponent;
+    itemTitle: string = '';
+
     static get properties() {
         return {};
     }
@@ -22,50 +25,44 @@ class MenuPluginsComponent extends LitElement {
         ];
     }
 
-    constructor() {
-        super();
-        this.menuPluginsTcComponent;
-        this.itemTitle = '';
-    }
-
-    firstUpdated() {
-        this.shadowRoot.getElementById('menuButton').addEventListener('click', () => {
-            this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
+    firstUpdated(): void {
+        this.shadowRoot!.getElementById('menuButton')!.addEventListener('click', () => {
+            this.shadowRoot!.getElementById('menuDropdown')!.classList.toggle('is-active');
         });
         this.menuPluginsTcComponent = new MenuPluginsTCComponent(this);
-        this.shadowRoot.getElementById('closeButton').addEventListener('click', () => this.closeButtonClick());
+        this.shadowRoot!.getElementById('closeButton')!.addEventListener('click', () => this.closeButtonClick());
     }
 
-    addItemToMenu(itemTitle) {
+    addItemToMenu(itemTitle: string): void {
         const element = document.createElement('a');
 
         element.className = 'dropdown-item';
         element.innerHTML = itemTitle;
         element.addEventListener('click', () => this.menuItemClick(itemTitle));
 
-        this.shadowRoot.getElementById('pluginsList').appendChild(element);
+        this.shadowRoot!.getElementById('pluginsList')!.appendChild(element);
     }
 
-    menuItemClick(itemTitle) {
+    menuItemClick(itemTitle: string): void {
         this.itemTitle = itemTitle;
         this._showCloseButton();
         this.menuPluginsTcComponent.startPlugin(this.itemTitle);
     }
 
-    closeButtonClick() {
+    closeButtonClick(): void {
         this.menuPluginsTcComponent.endPlugin(this.itemTitle);
         this.showMenu();
     }
 
-    showMenu() {
-        this.shadowRoot.getElementById('closeButton').style.display = 'none';
-        this.shadowRoot.getElementById('menuDropdown').style.display = 'inline-flex';
+    showMenu(): void {
+        (this.shadowRoot!.getElementById('closeButton') as HTMLElement).style.display = 'none';
+        (this.shadowRoot!.getElementById('menuDropdown') as HTMLElement).style.display = 'inline-flex';
     }
 
-    _showCloseButton() {
-        this.shadowRoot.getElementById('menuDropdown').classList.toggle('is-active');
-        this.shadowRoot.getElementById('menuDropdown').style.display = 'none';
-        this.shadowRoot.getElementById('closeButton').style.display = 'inline-flex';
+    _showCloseButton(): void {
+        this.shadowRoot!.getElementById('menuDropdown')!.classList.toggle('is-active');
+        (this.shadowRoot!.getElementById('menuDropdown') as HTMLElement).style.display = 'none';
+        (this.shadowRoot!.getElementById('closeButton') as HTMLElement).style.display = 'inline-flex';
     }
 
     render() {

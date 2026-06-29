@@ -2,7 +2,7 @@
 
 import 'bulma/css/bulma.min.css';
 import './index.css';
-import '@client/web-components/url-form/url-form.js';
+import '@client/web-components/url-form/url-form';
 import '@client/web-components/view-selector/view-selector';
 import '@client/web-components/remote-control/remote-control';
 

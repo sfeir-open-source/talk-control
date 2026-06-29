@@ -3,6 +3,9 @@ import { LitElement, html, css } from 'lit-element';
 import { TimerTCComponent } from './timer-tc-component';
 
 class TimerComponent extends LitElement {
+    timerElement!: Element;
+    restartTimer: () => void = () => undefined;
+
     static get styles() {
         return [
             bulmaStyles,
@@ -15,22 +18,16 @@ class TimerComponent extends LitElement {
         ];
     }
 
-    constructor() {
-        super();
-        this.timerElement = {};
-        this.restartTimer = () => undefined;
-    }
-
-    firstUpdated() {
+    firstUpdated(): void {
         new TimerTCComponent(this);
-        this.timerElement = this.shadowRoot.querySelector('#timer');
+        this.timerElement = this.shadowRoot!.querySelector('#timer')!;
     }
 
-    formatTime(time) {
+    formatTime(time: number): string | number {
         return time ? (time < 10 ? '0' + time : time) : '00';
     }
 
-    startTimer() {
+    startTimer(): () => void {
         let seconds = 0,
             minutes = 0,
             hours = 0;
@@ -56,7 +53,7 @@ class TimerComponent extends LitElement {
         };
     }
 
-    reset() {
+    reset(): void {
         this.restartTimer();
         this.restartTimer = this.startTimer();
     }
@@ -66,5 +63,4 @@ class TimerComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-timer', TimerComponent);

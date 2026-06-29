@@ -1,14 +1,20 @@
-// Import the LitElement base class and html helper function
 import { SlideViewTCComponent } from './slide-view-tc-component';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
 
 class SlideViewComponent extends LitElement {
+    url: string = '';
+    delta: string = '0';
+    fullscreen: boolean = false;
+    _focus: boolean = false;
+    slideViewTcComponent!: SlideViewTCComponent;
+    frame!: HTMLIFrameElement;
+
     static get properties() {
         return {
             url: { type: String, reflect: true, attribute: true },
             delta: { type: String, reflect: true, attribute: true },
-            focus: { type: Boolean, reflect: true, attribute: true },
+            _focus: { type: Boolean, attribute: 'focus' },
             fullscreen: { type: Boolean, reflect: true, attribute: true }
         };
     }
@@ -31,22 +37,15 @@ class SlideViewComponent extends LitElement {
         ];
     }
 
-    constructor() {
-        super();
-        this.url = '';
-        this.delta = '0';
-        this.fullscreen = false;
-    }
-
-    firstUpdated() {
+    firstUpdated(): void {
         this.slideViewTcComponent = new SlideViewTCComponent(this);
-        this.frame = this.shadowRoot.querySelector('iframe');
-        if (this.focus) {
+        this.frame = this.shadowRoot!.querySelector('iframe')!;
+        if (this._focus) {
             this._bindFocus();
         }
     }
 
-    attributeChangedCallback(name, oldval, newval) {
+    override attributeChangedCallback(name: string, oldval: string | null, newval: string | null): void {
         super.attributeChangedCallback(name, oldval, newval);
 
         if (newval && (name === 'url' || (this.url && name === 'delta'))) {
@@ -54,9 +53,9 @@ class SlideViewComponent extends LitElement {
         }
     }
 
-    _loadFrame() {
+    _loadFrame(): void {
         let src = `${this.url}#delta=${this.delta}`;
-        if (this.focus) {
+        if (this._focus) {
             src += '&focus';
         }
         this.frame.src = src;
@@ -64,7 +63,7 @@ class SlideViewComponent extends LitElement {
         this.frame.onload = () => this.slideViewTcComponent.setLoaded();
     }
 
-    _bindFocus() {
+    _bindFocus(): void {
         this.frame.focus();
         document.addEventListener('click', () => this.frame.focus());
     }
@@ -78,5 +77,4 @@ class SlideViewComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-slide', SlideViewComponent);

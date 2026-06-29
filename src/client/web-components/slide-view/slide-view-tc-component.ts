@@ -1,10 +1,14 @@
-'use strict';
-
 import { EventBusComponent } from '@event-bus/event-bus-component';
 import pluginService from '@services/plugin';
 
+interface SlideViewHost {
+    url: unknown;
+}
+
 export class SlideViewTCComponent extends EventBusComponent {
-    constructor(slideView) {
+    slideView: SlideViewHost;
+
+    constructor(slideView: SlideViewHost) {
         super();
         this.slideView = slideView;
 
@@ -14,11 +18,15 @@ export class SlideViewTCComponent extends EventBusComponent {
         });
     }
 
-    init() {
-        this.controllerComponentChannel.on('activatePlugin', ({ pluginName }) => pluginService.activateOnComponent(pluginName, this));
+    override init(): void {
+        this.controllerComponentChannel.on('activatePlugin', (data: unknown) => {
+            const { pluginName } = data as { pluginName: string };
+
+            pluginService.activateOnComponent(pluginName, this as any);
+        });
     }
 
-    setLoaded() {
+    setLoaded(): void {
         this.controllerComponentChannel.broadcast('presentationLoaded');
     }
 }

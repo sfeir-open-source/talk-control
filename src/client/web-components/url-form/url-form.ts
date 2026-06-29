@@ -1,32 +1,28 @@
-// Import the LitElement base class and html helper function
-import config from '@config/config';
+import config from '@config/config.json';
 import { LitElement, html } from 'lit-element';
 import { isValidUrl } from '@services/url';
 import contextService from '@services/context';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 
-// Extend the LitElement base class
 class UrlFormComponent extends LitElement {
     static get styles() {
         return [bulmaStyles];
     }
 
-    firstUpdated() {
-        const presentationUrl = this.shadowRoot.getElementById('presentationUrl');
-        const validateButton = this.shadowRoot.getElementById('validateButton');
-        const updateButton = this.shadowRoot.getElementById('updateButton');
-        const urlError = this.shadowRoot.getElementById('urlError');
+    firstUpdated(): void {
+        const presentationUrl = this.shadowRoot!.getElementById('presentationUrl') as HTMLInputElement;
+        const validateButton = this.shadowRoot!.getElementById('validateButton')!;
+        const updateButton = this.shadowRoot!.getElementById('updateButton')!;
+        const urlError = this.shadowRoot!.getElementById('urlError')!;
 
-        // Presentation url field validation
         presentationUrl.addEventListener('keypress', e => {
-            const key = e.which || e.keyCode;
+            const key = (e as KeyboardEvent).which || (e as KeyboardEvent).keyCode;
             if (key === 13) {
                 validateUrl();
             }
         });
         validateButton.addEventListener('click', () => validateUrl());
 
-        // Update button click
         updateButton.addEventListener('click', () => {
             dispatchEvent(new CustomEvent('url-form-editing'));
             switchToEdition();
@@ -47,15 +43,15 @@ class UrlFormComponent extends LitElement {
         };
 
         const switchToEdition = () => {
-            this.shadowRoot.getElementById('updateButton').classList.add('is-hidden');
-            this.shadowRoot.getElementById('validateButton').classList.remove('is-hidden');
-            this.shadowRoot.getElementById('presentationUrl').disabled = false;
+            (this.shadowRoot!.getElementById('updateButton') as HTMLElement).classList.add('is-hidden');
+            (this.shadowRoot!.getElementById('validateButton') as HTMLElement).classList.remove('is-hidden');
+            (this.shadowRoot!.getElementById('presentationUrl') as HTMLInputElement).disabled = false;
         };
 
         const switchToReadOnly = () => {
-            this.shadowRoot.getElementById('validateButton').classList.add('is-hidden');
-            this.shadowRoot.getElementById('updateButton').classList.remove('is-hidden');
-            this.shadowRoot.getElementById('presentationUrl').disabled = true;
+            (this.shadowRoot!.getElementById('validateButton') as HTMLElement).classList.add('is-hidden');
+            (this.shadowRoot!.getElementById('updateButton') as HTMLElement).classList.remove('is-hidden');
+            (this.shadowRoot!.getElementById('presentationUrl') as HTMLInputElement).disabled = true;
         };
 
         const hideUrlError = () => urlError.classList.add('is-hidden');
@@ -87,7 +83,7 @@ class UrlFormComponent extends LitElement {
                     </div>
                     <!-- Error message area -->
                     <div id="urlError" class="notification is-danger is-hidden">
-                        <button class="delete" @click="${() => this.shadowRoot.getElementById('urlError').classList.add('is-hidden')}"></button>
+                        <button class="delete" @click="${() => this.shadowRoot!.getElementById('urlError')!.classList.add('is-hidden')}"></button>
                         URL is not valid
                     </div>
                 </div>
@@ -96,5 +92,4 @@ class UrlFormComponent extends LitElement {
     }
 }
 
-// Register the new element with the browser.
 customElements.define('tc-url-form', UrlFormComponent);
