@@ -1,10 +1,10 @@
-/**
- * Dynamically load a plugin module
- *
- * @param {string} name Plugin name
- * @returns {Promise} a resolved promise with plugin module
- */
-export function loadPluginModule(name) {
+import type { Plugin } from './plugin';
+
+export interface PluginModule {
+    instance: Plugin;
+}
+
+export function loadPluginModule(name: string | undefined): Promise<PluginModule | undefined> {
     switch (name) {
         case 'keyboardInput':
             return import('./input/keyboard/index');
@@ -13,6 +13,6 @@ export function loadPluginModule(name) {
         case 'touchPointerInput':
             return import('./input/touch-pointer/index');
         default:
-            return Promise.resolve();
+            return Promise.resolve(undefined);
     }
 }

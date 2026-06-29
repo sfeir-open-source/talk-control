@@ -1,8 +1,11 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css, PropertyValues } from 'lit-element';
 import { TouchPointerSettingsTCComponent } from './touch-pointer-settings-tc-component';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 
 class TouchPointerSettingsComponent extends LitElement {
+    pointerColor = '#FF00000';
+    touchPointerSettingsTCComponent!: TouchPointerSettingsTCComponent;
+
     static get styles() {
         return [
             bulmaStyles,
@@ -31,16 +34,9 @@ class TouchPointerSettingsComponent extends LitElement {
         };
     }
 
-    constructor() {
-        super();
-        this.pointerColor = '#FF00000';
-        this.touchPointerSettingsTCComponent;
-    }
-
-    firstUpdated() {
-        super.firstUpdated();
+    override firstUpdated(_changedProperties: PropertyValues): void {
+        super.firstUpdated(_changedProperties);
         this._initColorsButtons();
-
         this.touchPointerSettingsTCComponent = new TouchPointerSettingsTCComponent();
     }
 
@@ -64,14 +60,14 @@ class TouchPointerSettingsComponent extends LitElement {
         `;
     }
 
-    _initColorsButtons() {
-        const buttons = this.shadowRoot.querySelectorAll('button');
+    _initColorsButtons(): void {
+        const buttons = this.shadowRoot!.querySelectorAll('button');
         for (const button of buttons) {
-            button.addEventListener('click', e => this._chooseColor(e.target.value));
+            button.addEventListener('click', e => this._chooseColor((e.target as HTMLButtonElement).value));
         }
     }
 
-    _chooseColor(color) {
+    _chooseColor(color: string): void {
         this.pointerColor = color;
         this.touchPointerSettingsTCComponent.sendPointerEventToController({
             origin: 'touchPointer',

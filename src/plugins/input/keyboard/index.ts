@@ -1,5 +1,3 @@
-'use strict';
-
 import { config } from '@services/config';
 import { Plugin } from '@plugins/plugin.js';
 
@@ -9,40 +7,39 @@ class KeyboardInput extends Plugin {
         this.type = 'inputEvent';
     }
 
-    init() {
-        addEventListener('keyup', e => this._captureKeyboardEvent.bind(this)(e, true), true);
-        addEventListener('keypressed', this._captureKeyboardEvent.bind(this), true);
+    override init(): void {
+        addEventListener('keyup', e => this._captureKeyboardEvent(e, true), true);
+        addEventListener('keypressed', this._captureKeyboardEvent.bind(this) as EventListener, true);
         addEventListener('keydown', this._captureKeyboardEvent.bind(this), true);
         this.initialized = true;
     }
 
-    _captureKeyboardEvent(event, forward = false) {
+    _captureKeyboardEvent(event: KeyboardEvent, forward = false): void {
         const keys = config.tcComponent.keysBlocked;
-        // Check if there's a focused element that could be using the keyboard
-        const activeElementIsInput = document.activeElement && document.activeElement.tagName && /input|textarea/i.test(document.activeElement.tagName);
-        if ((document.activeElement && document.activeElement.contentEditable !== 'inherit') || activeElementIsInput) {
+        const activeElementIsInput = document.activeElement?.tagName && /input|textarea/i.test(document.activeElement.tagName);
+        const activeEditable = document.activeElement && (document.activeElement as HTMLElement).contentEditable !== 'inherit';
+        if (activeEditable || activeElementIsInput) {
             return;
         }
 
-        // Check if the pressed key should be interpreted
         if (keys.includes(event.code)) {
             event.stopPropagation();
             if (forward) {
                 let action = '';
                 switch (event.key) {
-                    case 'Down': // IE specific value
+                    case 'Down':
                     case 'ArrowDown':
                         action = 'arrowDown';
                         break;
-                    case 'Up': // IE specific value
+                    case 'Up':
                     case 'ArrowUp':
                         action = 'arrowUp';
                         break;
-                    case 'Left': // IE specific value
+                    case 'Left':
                     case 'ArrowLeft':
                         action = 'arrowLeft';
                         break;
-                    case 'Right': // IE specific value
+                    case 'Right':
                     case 'ArrowRight':
                         action = 'arrowRight';
                         break;

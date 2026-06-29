@@ -1,9 +1,14 @@
-'use strict';
-
 import contextService from '@services/context';
 import { Plugin } from '@plugins/plugin.js';
 
+interface TouchPosition {
+    clientX: number;
+    clientY: number;
+}
+
 class TouchInput extends Plugin {
+    touchPosition: { touchstart: TouchPosition; touchend: TouchPosition };
+
     constructor() {
         super();
         this.type = 'inputEvent';
@@ -13,17 +18,20 @@ class TouchInput extends Plugin {
         };
     }
 
-    init() {
+    override init(): void {
         addEventListener('touchstart', this._captureTouchEvent.bind(this), false);
-        addEventListener('touchend', e => this._captureTouchEvent.bind(this)(e, true), false);
+        addEventListener('touchend', e => this._captureTouchEvent(e, true), false);
         this.initialized = true;
     }
 
-    _captureTouchEvent(event, forward = false) {
+    _captureTouchEvent(event: TouchEvent, forward = false): void {
+        if (!event.view) return;
         if (contextService.isPresentationIframe(event.view.location.href)) {
-            this.touchPosition[event.type] = {
-                clientX: event.changedTouches[0].clientX,
-                clientY: event.changedTouches[0].clientY
+            const touch = event.changedTouches[0];
+            if (!touch) return;
+            this.touchPosition[event.type as 'touchstart' | 'touchend'] = {
+                clientX: touch.clientX,
+                clientY: touch.clientY
             };
 
             if (forward) {

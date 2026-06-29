@@ -1,13 +1,11 @@
-'use strict';
-
 import { EventBusComponent } from '@event-bus/event-bus-component';
 
 export class TouchPointerMaskTCComponent extends EventBusComponent {
-    init() {
+    override init(): void {
         this.controllerComponentChannel.on('touchPointer', () => postMessage);
     }
 
-    sendPointerEventToController(eventData) {
+    sendPointerEventToController(eventData: unknown): void {
         this.controllerComponentChannel.broadcast('pluginEventIn', eventData);
     }
 }

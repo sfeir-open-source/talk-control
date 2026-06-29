@@ -11,8 +11,8 @@ import '@client/web-components/timer/timer.js';
 import '@client/web-components/notes/notes.js';
 import '@client/web-components/menu-navigation/menu-navigation.js';
 import '@client/web-components/menu-plugins/menu-plugins.js';
-import '@plugins/input/touch-pointer/components/touch-pointer-settings.js';
-import '@plugins/input/touch-pointer/components/touch-pointer-mask.js';
+import '@plugins/input/touch-pointer/components/touch-pointer-settings.ts';
+import '@plugins/input/touch-pointer/components/touch-pointer-mask.ts';
 import { bootstrapTcController } from '@client/tc-controller/bootstrap';
 
 window.addEventListener('DOMContentLoaded', function () {

@@ -62,6 +62,7 @@ export default [
         },
         rules: {
             'no-unused-vars': 'off',
+            'no-undef': 'off',
             '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
             'jsdoc/require-param': 'off',
             'jsdoc/require-param-type': 'off',

@@ -1,18 +1,35 @@
-'use strict';
-
 import { Plugin } from '@plugins/plugin.js';
 
+interface PointerState {
+    x: string;
+    y: string;
+    color: string;
+}
+
+interface MessageEventData {
+    type: string;
+    data?: {
+        type: string;
+        payload: {
+            x?: string;
+            y?: string;
+            color?: string;
+        };
+    };
+}
+
 class TouchPointerInput extends Plugin {
+    zooming = false;
+    pointer: PointerState = { x: '0', y: '0', color: '#FF0000' };
+    interval: ReturnType<typeof setInterval> | undefined;
+    messageEventRegistered = false;
+
     constructor() {
         super();
         this.type = 'touchPointerEvent';
-        this.zooming = false;
-        this.pointer = { x: 0, y: 0, color: '#FF0000' };
-        this.interval;
-        this.messageEventRegistered = false;
     }
 
-    init() {
+    override init(): void {
         this._addSettingsArea();
         this._addMaskArea();
         this._addPointer();
@@ -24,21 +41,19 @@ class TouchPointerInput extends Plugin {
         this.initialized = true;
     }
 
-    unload() {
+    override unload(): void {
         this._removeSettingsArea();
         this._removeMaskArea();
         this._removePointer();
         this.initialized = false;
     }
 
-    _addPointer() {
-        // Identifying current slide component
+    _addPointer(): void {
         const currentSlide = document.getElementById('currentSlide');
         if (!currentSlide || !currentSlide.shadowRoot) {
             return;
         }
 
-        // HTML
         const slideViewFrame = currentSlide.shadowRoot.getElementById('slideViewFrame');
         if (slideViewFrame) {
             slideViewFrame.style.width = '100%';
@@ -50,30 +65,26 @@ class TouchPointerInput extends Plugin {
         const slideViewSection = currentSlide.shadowRoot.getElementById('slideViewSection');
         if (slideViewSection) {
             const divPointer = document.createElement('div');
-
             divPointer.id = 'pointer';
             divPointer.style.position = 'absolute';
-            divPointer.style.left = 0;
-            divPointer.style.top = 0;
+            divPointer.style.left = '0';
+            divPointer.style.top = '0';
             divPointer.style.width = '12px';
             divPointer.style.height = '12px';
             divPointer.style.borderRadius = '6px';
             divPointer.style.backgroundColor = '#FF0000';
             divPointer.style.visibility = 'hidden';
-
             slideViewSection.append(divPointer);
         }
     }
 
-    _removePointer() {
-        // Identifying current slide component
+    _removePointer(): void {
         const currentSlide = document.getElementById('currentSlide');
         if (!currentSlide || !currentSlide.shadowRoot) {
             console.log('no current slide nor shadowroot');
             return;
         }
 
-        // HTML
         const slideViewSection = currentSlide.shadowRoot.getElementById('slideViewSection');
         if (slideViewSection) {
             const pointer = currentSlide.shadowRoot.getElementById('pointer');
@@ -83,75 +94,74 @@ class TouchPointerInput extends Plugin {
         }
     }
 
-    _addArea(tag, placeholderId) {
+    _addArea(tag: string, placeholderId: string): void {
         const placeholder = document.getElementById(placeholderId);
-
         if (placeholder) {
             placeholder.innerHTML = tag;
             placeholder.style.display = 'block';
         }
     }
 
-    _removeArea(placeholderId) {
+    _removeArea(placeholderId: string): void {
         const placeholder = document.getElementById(placeholderId);
-
         if (placeholder) {
             placeholder.innerHTML = '';
             placeholder.style.display = 'none';
         }
     }
 
-    _addSettingsArea() {
+    _addSettingsArea(): void {
         this._addArea('<tc-touch-pointer-settings></tc-touch-pointer-settings>', 'placeholder1');
     }
 
-    _removeSettingsArea() {
+    _removeSettingsArea(): void {
         this._removeArea('placeholder1');
     }
 
-    _addMaskArea() {
+    _addMaskArea(): void {
         this._addArea('<tc-touch-pointer-mask></tc-touch-pointer-mask>', 'placeholder2');
     }
 
-    _removeMaskArea() {
+    _removeMaskArea(): void {
         this._removeArea('placeholder2');
     }
 
-    _onMessageEvent(message) {
+    _onMessageEvent(message: MessageEvent): void {
         if (!message || !message.data) {
             return;
         }
 
-        if (!message.data || !message.data.data || typeof message.data.data !== 'object') {
+        const msgData = message.data as MessageEventData;
+
+        if (!msgData.data || typeof msgData.data !== 'object') {
             return;
         }
 
-        if (message.data.type === 'pluginEventIn') {
+        if (msgData.type === 'pluginEventIn') {
             return;
         }
 
-        const messageData = message.data.data;
+        const messageData = msgData.data;
 
         if (messageData.type === 'pointerMove') {
-            this._setPointer(messageData.payload.x, messageData.payload.y);
+            this._setPointer(messageData.payload.x ?? '0', messageData.payload.y ?? '0');
             return;
         }
 
         if (messageData.type === 'pointerColor') {
-            this._setPointerColor(messageData.payload.color);
+            this._setPointerColor(messageData.payload.color ?? '');
             return;
         }
 
         if (messageData.type === 'pointerClick') {
             this._toggleZoom(
-                this._convertPercentToCoordinates(messageData.payload.x, window.innerWidth),
-                this._convertPercentToCoordinates(messageData.payload.y, window.innerHeight)
+                this._convertPercentToCoordinates(messageData.payload.x ?? '0', window.innerWidth),
+                this._convertPercentToCoordinates(messageData.payload.y ?? '0', window.innerHeight)
             );
         }
     }
 
-    _setPointer(x, y) {
-        // Identifying current slide component
+    _setPointer(x: string, y: string): void {
         const currentSlide = document.getElementById('currentSlide');
         if (!currentSlide || !currentSlide.shadowRoot) {
             return;
@@ -169,23 +179,25 @@ class TouchPointerInput extends Plugin {
         }
     }
 
-    _setPointerColor(color) {
+    _setPointerColor(color: string): void {
         const currentSlide = document.getElementById('currentSlide');
         if (!currentSlide || !currentSlide.shadowRoot) {
             return;
         }
 
-        currentSlide.shadowRoot.getElementById('pointer').style.backgroundColor = this.pointer.color = color;
+        const pointer = currentSlide.shadowRoot.getElementById('pointer');
+        if (pointer) {
+            pointer.style.backgroundColor = this.pointer.color = color;
+        }
     }
 
-    _toggleZoom(mouseX, mouseY) {
+    _toggleZoom(mouseX: number, mouseY: number): void {
         const currentSlide = document.getElementById('currentSlide');
         if (!currentSlide || !currentSlide.shadowRoot) {
             return;
         }
 
         const element = currentSlide.shadowRoot.getElementById('slideViewFrame');
-
         if (!element) {
             return;
         }
@@ -210,8 +222,8 @@ class TouchPointerInput extends Plugin {
         }
     }
 
-    _convertPercentToCoordinates(percentValue, size) {
-        return (percentValue.replace('%', '') * size) / 100;
+    _convertPercentToCoordinates(percentValue: string, size: number): number {
+        return (Number(percentValue.replace('%', '')) * size) / 100;
     }
 }
 

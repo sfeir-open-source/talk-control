@@ -1,8 +1,11 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css, PropertyValues } from 'lit-element';
 import { TouchPointerMaskTCComponent } from './touch-pointer-mask-tc-component';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 
 class TouchPointerMaskComponent extends LitElement {
+    pointer: { x: string | number; y: string | number; color: string } = { x: 0, y: 0, color: '#FF00000' };
+    touchPointerMaskTCComponent!: TouchPointerMaskTCComponent;
+
     static get styles() {
         return [
             bulmaStyles,
@@ -23,14 +26,8 @@ class TouchPointerMaskComponent extends LitElement {
         };
     }
 
-    constructor() {
-        super();
-        this.pointer = { x: 0, y: 0, color: '#FF00000' };
-        this.touchPointerMaskTCComponent;
-    }
-
-    firstUpdated() {
-        super.firstUpdated();
+    override firstUpdated(_changedProperties: PropertyValues): void {
+        super.firstUpdated(_changedProperties);
         this.touchPointerMaskTCComponent = new TouchPointerMaskTCComponent();
         this._initPointerDblClick();
         this._initPointerMove();
@@ -40,8 +37,8 @@ class TouchPointerMaskComponent extends LitElement {
         return html` <div id="touchMask" /> `;
     }
 
-    _initPointerDblClick() {
-        this.shadowRoot.getElementById('touchMask').addEventListener('click', () =>
+    _initPointerDblClick(): void {
+        this.shadowRoot!.getElementById('touchMask')!.addEventListener('click', () =>
             this.touchPointerMaskTCComponent.sendPointerEventToController({
                 origin: 'touchPointer',
                 type: 'pointerClick',
@@ -50,9 +47,9 @@ class TouchPointerMaskComponent extends LitElement {
         );
     }
 
-    _initPointerMove() {
-        const touchMask = this.shadowRoot.getElementById('touchMask');
-        const movePointer = (x, y) => {
+    _initPointerMove(): void {
+        const touchMask = this.shadowRoot!.getElementById('touchMask') as HTMLElement;
+        const movePointer = (x: number, y: number) => {
             this.pointer.x = `${this._getPositionInPercent(x, touchMask.offsetWidth)}%`;
             this.pointer.y = `${this._getPositionInPercent(y, touchMask.offsetHeight)}%`;
 
@@ -63,25 +60,21 @@ class TouchPointerMaskComponent extends LitElement {
             });
         };
 
-        touchMask.addEventListener('mousemove', e => {
-            const x = e.layerX;
-            const y = e.layerY;
-
-            movePointer(x, y);
+        touchMask.addEventListener('mousemove', (e: MouseEvent) => {
+            movePointer(e.offsetX, e.offsetY);
         });
-        touchMask.addEventListener('touchmove', e => {
+        touchMask.addEventListener('touchmove', (e: TouchEvent) => {
             const touch = e.changedTouches.length ? e.changedTouches[0] : null;
             if (touch) {
-                const rect = touch.target.getBoundingClientRect();
+                const rect = (touch.target as Element).getBoundingClientRect();
                 const x = touch.pageX - rect.left;
                 const y = touch.pageY - rect.top;
-
                 movePointer(x, y);
             }
         });
     }
 
-    _getPositionInPercent(value, size) {
+    _getPositionInPercent(value: number, size: number): number {
         return Math.round((value * 100) / size);
     }
 }
