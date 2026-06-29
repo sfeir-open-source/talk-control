@@ -18,7 +18,8 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
         "target": "ES2022",
-        "allowJs": true
+        "allowJs": true,
+        "allowImportingTsExtensions": true
     },
     "include": ["src/**/*", "test/**/*", "config/**/*"]
 }

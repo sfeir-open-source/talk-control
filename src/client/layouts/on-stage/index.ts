@@ -1,5 +1,3 @@
-'use strict';
-
 import 'bulma/css/bulma.min.css';
 import './index.css';
 import '@client/web-components/slide-view/slide-view.js';

@@ -9,4 +9,8 @@ interface String {
     bgBrightBlue: string;
 }
 
+interface Window {
+    Reveal: any;
+}
+
 declare module 'redux-logger';

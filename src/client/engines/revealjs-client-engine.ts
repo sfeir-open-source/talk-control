@@ -1,26 +1,23 @@
-'use strict';
-
 import { GenericEngine } from './generic-client-engine.js';
 
-/**
- * @class RevealEngine
- * @classdesc Revealjs engine implementation
- * @augments GenericEngine
- */
+interface ClientSlide {
+    h: number;
+    v: number;
+    f: number;
+    fMax: number;
+}
+
 export class RevealEngine extends GenericEngine {
+    callbackEngine: null = null;
+
+    Reveal: any;
+
     constructor() {
         super();
-        this.callbackEngine = null;
         this.Reveal = window.Reveal;
     }
 
-    /*
-     * **************************************
-     * --------EXPOSED METHODS----------------
-     * **************************************
-     */
-
-    init() {
+    override init(): void {
         this.Reveal.configure({
             controls: false,
             transition: 'default',
@@ -33,13 +30,8 @@ export class RevealEngine extends GenericEngine {
         });
     }
 
-    /**
-     *
-     * @param {{h: number, v: number, f: number}} indices - position of the slide to go to
-     * @param {number} delta - delta
-     */
-    goToSlide(indices, delta = 0) {
-        let slideDelta = { ...indices };
+    override goToSlide(indices: ClientSlide, delta = 0): void {
+        let slideDelta: ClientSlide = { ...indices };
         const slides = this.getSlides();
         const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
         if (indices.f + delta < slides[currentIndex].fMax) {
@@ -52,11 +44,8 @@ export class RevealEngine extends GenericEngine {
         this.Reveal.slide(slideDelta.h, slideDelta.v, slideDelta.f);
     }
 
-    /**
-     * @returns {Array<{h: number, v: number, f: number, fMax: number}>} List on slides
-     */
-    getSlides() {
-        const slides = [];
+    override getSlides(): ClientSlide[] {
+        const slides: ClientSlide[] = [];
         const horizontalSlides = document.querySelectorAll('.slides>section');
         horizontalSlides.forEach((slideH, indexH) => {
             const fragmentsH = slideH.querySelectorAll('.fragment');
@@ -73,7 +62,7 @@ export class RevealEngine extends GenericEngine {
         return slides;
     }
 
-    getSlideNotes() {
+    override getSlideNotes(): unknown {
         return this.Reveal.getSlideNotes();
     }
 }
