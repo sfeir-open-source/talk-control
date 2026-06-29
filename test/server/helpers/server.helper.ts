@@ -1,5 +1,3 @@
-'use strict';
-
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -11,7 +9,7 @@ import proxy from '@server/controllers/proxy.controller';
  *
  * @returns {express.Application} Configured Express application for testing
  */
-export function createTestApp() {
+export function createTestApp(): express.Application {
     const app = express();
     app.use(cors());
     app.use(cookieParser());

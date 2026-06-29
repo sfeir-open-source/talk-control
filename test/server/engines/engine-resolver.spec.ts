@@ -1,5 +1,3 @@
-'use strict';
-
 import { EngineResolver } from '@server/engines/engine-resolver';
 
 describe('EngineResolver', function () {
@@ -9,7 +7,7 @@ describe('EngineResolver', function () {
             const engine = EngineResolver.getEngine('revealjs');
             // Then
             expect(engine).toBeTruthy();
-            expect(engine.store).toBeTruthy();
+            expect(engine!.store).toBeTruthy();
         });
 
         it('should return undefined for unknown engine name', function () {
@@ -21,7 +19,7 @@ describe('EngineResolver', function () {
 
         it('should return undefined when no engine name is provided', function () {
             // When
-            const engine = EngineResolver.getEngine();
+            const engine = EngineResolver.getEngine(undefined as unknown as string);
             // Then
             expect(engine).toBeUndefined();
         });

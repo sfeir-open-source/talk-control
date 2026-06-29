@@ -9,18 +9,18 @@ import { spyOnAll } from '../helpers/test-utils.js';
 
 vi.mock('@services/config', async orig => ({ ...(await orig()) }));
 
-const mockStore = configureStore([]);
+const mockStore = (configureStore as (...args: any[]) => any)([]);
 
 describe('TCServer', function () {
-    let resolveChannel, controllerChannel, server;
-    let resolveEngine, engine;
+    let resolveChannel: ReturnType<typeof vi.spyOn>, controllerChannel: EventBus, server!: TCServer;
+    let resolveEngine: ReturnType<typeof vi.spyOn>, engine!: GenericEngine;
     const httpServer = { port: 3000 };
     const engineName = 'ENGINE_NAME';
 
     beforeAll(function () {
         vi.useFakeTimers();
-        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation(() => {});
-        resolveEngine = vi.spyOn(EngineResolver, 'getEngine').mockImplementation(() => {});
+        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation((() => {}) as any);
+        resolveEngine = vi.spyOn(EngineResolver, 'getEngine').mockImplementation((() => {}) as any);
     });
 
     afterAll(function () {
@@ -31,13 +31,13 @@ describe('TCServer', function () {
 
     beforeEach(function () {
         controllerChannel = spyOnAll(new EventBus());
-        resolveChannel.mockImplementation(channel => (channel === Channels.CONTROLLER_SERVER ? controllerChannel : undefined));
+        resolveChannel.mockImplementation(((channel: string) => (channel === Channels.CONTROLLER_SERVER ? controllerChannel : undefined)) as any);
 
         engine = spyOnAll(new GenericEngine());
         engine.store = mockStore({});
-        resolveEngine.mockImplementation(name => (name === engineName ? engine : undefined));
+        resolveEngine.mockImplementation(((name: string) => (name === engineName ? engine : undefined)) as any);
 
-        server = new TCServer(httpServer);
+        server = new TCServer(httpServer as any);
     });
 
     it('should resolve controller channel', function () {
@@ -53,7 +53,7 @@ describe('TCServer', function () {
             handleInput: () => {},
             store: mockStore({})
         };
-        resolveEngine.mockImplementation(name => (name === engineName ? eng : undefined));
+        resolveEngine.mockImplementation(((name: string) => (name === engineName ? eng : undefined)) as any);
         // When
         server.init(engineName);
         // Then
@@ -93,7 +93,7 @@ describe('TCServer', function () {
                 { name: 'touchInput', autoActivate: true },
                 { name: 'touchPointerInput', autoActivate: false }
             ];
-            const pluginsSpy = vi.spyOn(configModule, 'plugins', 'get').mockReturnValue(plugins);
+            const pluginsSpy = vi.spyOn(configModule, 'plugins', 'get').mockReturnValue(plugins as any);
             // When
             controllerChannel.broadcast('init', data);
             // Then
@@ -155,7 +155,7 @@ describe('TCServer', function () {
                     ]
                 })
             };
-            resolveEngine.mockImplementation(name => (name === engineName ? eng : undefined));
+            resolveEngine.mockImplementation(((name: string) => (name === engineName ? eng : undefined)) as any);
             server.init(engineName);
             // When
             await eng.store.dispatch({ type: 'ACTION' });

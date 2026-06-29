@@ -1,5 +1,3 @@
-'use strict';
-
 import { loadPluginModule } from '@plugins/plugin-loader';
 import pluginService from '@services/plugin';
 
@@ -28,10 +26,10 @@ describe('Plugin service', function () {
                     broadcast: vi.fn()
                 }
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
-            await pluginService.activateOnController(pluginName, params);
+            await pluginService.activateOnController(pluginName, params as any);
 
             // Then
             expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
@@ -56,10 +54,10 @@ describe('Plugin service', function () {
                     broadcast: vi.fn()
                 }
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
-            await pluginService.activateOnController(pluginName, params);
+            await pluginService.activateOnController(pluginName, params as any);
 
             // Then
             expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
@@ -83,10 +81,10 @@ describe('Plugin service', function () {
                 controllerComponentChannel: { broadcast: vi.fn() },
                 controllerServerChannel: { broadcast: vi.fn() }
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
-            await pluginService.activateOnController(pluginName, params);
+            await pluginService.activateOnController(pluginName, params as any);
 
             // Then
             expect(pluginInstance.init).not.toHaveBeenCalled();
@@ -101,7 +99,7 @@ describe('Plugin service', function () {
             const pluginInstance = {
                 unload: vi.fn()
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
             await pluginService.deactivateOnController(pluginName);
@@ -136,10 +134,10 @@ describe('Plugin service', function () {
                 init: vi.fn(),
                 onEvent: vi.fn()
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
-            await pluginService.activateOnComponent(pluginName, {});
+            await pluginService.activateOnComponent(pluginName, {} as any);
 
             // Then
             expect(loadPluginModule).toHaveBeenCalledWith(pluginName);
@@ -156,10 +154,10 @@ describe('Plugin service', function () {
                 init: vi.fn(),
                 onEvent: vi.fn()
             };
-            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance });
+            vi.mocked(loadPluginModule).mockResolvedValue({ instance: pluginInstance as any });
 
             // When
-            await pluginService.activateOnComponent(pluginName, {});
+            await pluginService.activateOnComponent(pluginName, {} as any);
 
             // Then
             expect(pluginInstance.init).not.toHaveBeenCalled();
@@ -174,7 +172,7 @@ describe('Plugin service', function () {
             // When - should not throw
             let threw = false;
             try {
-                await pluginService.activateOnComponent(pluginName, {});
+                await pluginService.activateOnComponent(pluginName, {} as any);
             } catch {
                 threw = true;
             }

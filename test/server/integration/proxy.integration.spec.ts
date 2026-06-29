@@ -1,5 +1,3 @@
-'use strict';
-
 import request from 'supertest';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -10,7 +8,7 @@ import { forwardTraffic } from '@server/controllers/proxy.controller';
 import proxyController from '@server/controllers/proxy.controller';
 
 describe('Integration — /proxy', function () {
-    let app;
+    let app: express.Application;
 
     beforeAll(function () {
         app = express();
@@ -49,7 +47,7 @@ describe('Integration — /proxy', function () {
             const webSpy = vi.fn();
             const proxyMock = { web: webSpy };
 
-            forwardTraffic(req, resMock, proxyMock);
+            forwardTraffic(req as any, resMock as any, proxyMock as any);
 
             expect(resMock.send).not.toHaveBeenCalled();
             expect(webSpy).toHaveBeenCalledOnce();
@@ -69,7 +67,7 @@ describe('Integration — /proxy', function () {
             const webSpy = vi.fn();
             const proxyMock = { web: webSpy };
 
-            forwardTraffic(req, resMock, proxyMock);
+            forwardTraffic(req as any, resMock as any, proxyMock as any);
 
             expect(resMock.send).not.toHaveBeenCalled();
             expect(webSpy).toHaveBeenCalledOnce();

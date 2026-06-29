@@ -1,6 +1,4 @@
-'use strict';
-
-import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
+import { Channels, EventBusResolver, type Channel } from '@event-bus/event-bus-resolver';
 import { EventBusProxy } from '@event-bus/event-bus-proxy';
 import { EventBus } from '@event-bus/event-bus';
 import contextService from '@services/context';
@@ -16,10 +14,10 @@ vi.mock('@event-bus/postmessage/event-bus-postmessage');
 
 describe('EventBusResolver', function () {
     describe('resolve channel', function () {
-        let isClientSide;
+        let isClientSide: ReturnType<typeof vi.spyOn>;
 
         beforeAll(function () {
-            isClientSide = vi.spyOn(contextService, 'isClientSide').mockImplementation(() => {});
+            isClientSide = vi.spyOn(contextService, 'isClientSide').mockImplementation((() => {}) as any);
         });
 
         afterAll(function () {
@@ -32,19 +30,19 @@ describe('EventBusResolver', function () {
             vi.mocked(EventBusWebsocketsServer).mockImplementation(
                 class {
                     constructor() {
-                        return eventBus;
+                        return eventBus as any;
                     }
-                }
+                } as any
             );
-            isClientSide.mockReturnValue(false);
+            isClientSide.mockReturnValue(false as any);
 
             const server = { port: 10 };
             // When
-            const result = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server });
+            const result = EventBusResolver.channel(Channels.CONTROLLER_SERVER, { server: server as any });
             // Then
             expect(EventBusWebsocketsServer).toHaveBeenCalledWith(server);
             expect(result).toBeInstanceOf(EventBusProxy);
-            expect(result.eventBus).toBe(eventBus);
+            expect((result as unknown as EventBusProxy).eventBus).toBe(eventBus);
             vi.mocked(EventBusWebsocketsServer).mockReset();
         });
 
@@ -54,11 +52,11 @@ describe('EventBusResolver', function () {
             vi.mocked(EventBusWebsocketsClient).mockImplementation(
                 class {
                     constructor() {
-                        return eventBus;
+                        return eventBus as any;
                     }
-                }
+                } as any
             );
-            isClientSide.mockReturnValue(true);
+            isClientSide.mockReturnValue(true as any);
 
             const server = 'http://test.server.com';
             // When
@@ -66,7 +64,7 @@ describe('EventBusResolver', function () {
             // Then
             expect(EventBusWebsocketsClient).toHaveBeenCalledWith(server);
             expect(result).toBeInstanceOf(EventBusProxy);
-            expect(result.eventBus).toBe(eventBus);
+            expect((result as unknown as EventBusProxy).eventBus).toBe(eventBus);
             vi.mocked(EventBusWebsocketsClient).mockReset();
         });
 
@@ -76,11 +74,11 @@ describe('EventBusResolver', function () {
             vi.mocked(EventBusPostMessage).mockImplementation(
                 class {
                     constructor() {
-                        return eventBus;
+                        return eventBus as any;
                     }
-                }
+                } as any
             );
-            isClientSide.mockReturnValue(true);
+            isClientSide.mockReturnValue(true as any);
 
             const deep = true;
             // When
@@ -88,36 +86,36 @@ describe('EventBusResolver', function () {
             // Then
             expect(EventBusPostMessage).toHaveBeenCalledWith(deep);
             expect(result).toBeInstanceOf(EventBusProxy);
-            expect(result.eventBus).toBe(eventBus);
+            expect((result as unknown as EventBusProxy).eventBus).toBe(eventBus);
             vi.mocked(EventBusPostMessage).mockReset();
         });
 
         it('should raise unknown channel error when requesting CONTROLLER-COMPONENT channel and execution context is server side', function () {
             // Given
-            isClientSide.mockReturnValue(false);
+            isClientSide.mockReturnValue(false as any);
             // When / Then
             expect(() => EventBusResolver.channel(Channels.CONTROLLER_COMPONENT, {})).toThrow('Unknown channel');
         });
 
         it('should raise unknown channel error when requesting unknown channel and execution context is server side', function () {
             // Given
-            isClientSide.mockReturnValue(false);
+            isClientSide.mockReturnValue(false as any);
             // When / Then
-            expect(() => EventBusResolver.channel('NOT_EXIST', {})).toThrow('Unknown channel');
+            expect(() => EventBusResolver.channel('NOT_EXIST' as Channel, {})).toThrow('Unknown channel');
         });
 
         it('should raise unknown channel error when requesting unknown channel and execution context is client side', function () {
             // Given
-            isClientSide.mockReturnValue(true);
+            isClientSide.mockReturnValue(true as any);
             // When / Then
-            expect(() => EventBusResolver.channel('NOT_EXIST', {})).toThrow('Unknown channel');
+            expect(() => EventBusResolver.channel('NOT_EXIST' as Channel, {})).toThrow('Unknown channel');
         });
     });
 });
 
 describe('EventBusProxy', function () {
     const channelName = 'CHANNEL_NAME_TEST';
-    let proxy, eventBus, log;
+    let proxy!: EventBusProxy, eventBus!: EventBus, log: ReturnType<typeof vi.spyOn>;
 
     beforeEach(function () {
         log = vi.spyOn(eventBusLogger, 'log').mockImplementation(() => {});

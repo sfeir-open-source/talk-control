@@ -1,12 +1,10 @@
-'use strict';
-
 import contextService from '@services/context';
 import { config } from '@services/config';
 
 describe('Context service', function () {
     describe('isPresentationIframe', function () {
         it('should return false if window.location.href object is falsy', function () {
-            expect(contextService.isPresentationIframe()).toBe(false);
+            expect(contextService.isPresentationIframe(undefined as unknown as string)).toBe(false);
         });
 
         it('should return false if window.location.href contains TC Controller port', function () {
@@ -24,7 +22,7 @@ describe('Context service', function () {
         });
 
         it('should return false otherwise', function () {
-            expect(contextService.isUsingRemoteUrl()).toBe(false);
+            expect(contextService.isUsingRemoteUrl(undefined as unknown as string)).toBe(false);
             expect(contextService.isUsingRemoteUrl('http://localhost:3000/index.html')).toBe(false);
         });
     });

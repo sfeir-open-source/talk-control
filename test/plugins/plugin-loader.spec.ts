@@ -1,5 +1,3 @@
-'use strict';
-
 import { loadPluginModule } from '@plugins/plugin-loader';
 
 describe('loadPluginModule', function () {

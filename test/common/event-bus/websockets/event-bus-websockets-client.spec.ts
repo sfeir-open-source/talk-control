@@ -1,13 +1,11 @@
-'use strict';
-
 import { EventBusWebsocketsClient } from '@event-bus/websockets/event-bus-websockets-client';
 import socketIO from 'socket.io-client';
 
 describe('EventBusWebsocketsClient', function () {
-    let eventBus;
+    let eventBus!: EventBusWebsocketsClient;
 
     beforeAll(function () {
-        vi.spyOn(socketIO, 'connect').mockReturnValue({ on: vi.fn(), emit: vi.fn() });
+        vi.spyOn(socketIO as any, 'connect').mockReturnValue({ on: vi.fn(), emit: vi.fn() });
     });
 
     beforeEach(function () {
@@ -15,7 +13,7 @@ describe('EventBusWebsocketsClient', function () {
     });
 
     afterAll(function () {
-        socketIO.connect.mockRestore();
+        ((socketIO as any).connect as ReturnType<typeof vi.fn>).mockRestore();
     });
 
     describe('constructor()', function () {

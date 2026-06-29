@@ -1,7 +1,8 @@
 import { forwardTraffic } from '@server/controllers/proxy.controller';
+import { Request, Response } from 'express';
 
 describe('ProxyController', function () {
-    let req, res, proxy;
+    let req: Partial<Request>, res: Partial<Response>, proxy: { web: ReturnType<typeof vi.fn> };
 
     beforeEach(function () {
         proxy = { web: vi.fn() };
@@ -12,9 +13,9 @@ describe('ProxyController', function () {
     describe('forwardTraffic', function () {
         it('should error if requested presentation url is invalid', function () {
             // Given
-            req.cookies['tc-presentation-url'] = 'INVALID_URL';
+            req.cookies!['tc-presentation-url'] = 'INVALID_URL';
             // When
-            forwardTraffic(req, res, proxy);
+            forwardTraffic(req as Request, res as Response, proxy as any);
             // Then
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
@@ -24,7 +25,7 @@ describe('ProxyController', function () {
             // Given - no cookies at all
             req.cookies = undefined;
             // When - presentationUrl will be undefined, new URL(undefined) throws
-            forwardTraffic(req, res, proxy);
+            forwardTraffic(req as Request, res as Response, proxy as any);
             // Then
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
@@ -32,9 +33,9 @@ describe('ProxyController', function () {
 
         it('should error when req.cookies is null', function () {
             // Given
-            req.cookies = null;
+            req.cookies = null as any;
             // When
-            forwardTraffic(req, res, proxy);
+            forwardTraffic(req as Request, res as Response, proxy as any);
             // Then
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.send).toHaveBeenCalledWith('Invalid presentation URL');
@@ -42,10 +43,10 @@ describe('ProxyController', function () {
 
         it('should forward request for resource to presentation server (target)', function () {
             // Given
-            req.cookies['tc-presentation-url'] = 'http://test.domain.com/presentation/';
+            req.cookies!['tc-presentation-url'] = 'http://test.domain.com/presentation/';
             req.originalUrl = '/proxy/resource/1';
             // When
-            forwardTraffic(req, res, proxy);
+            forwardTraffic(req as Request, res as Response, proxy as any);
             // then
             expect(proxy.web.mock.calls[0][0]).toBe(req);
             expect(proxy.web.mock.calls[0][0]).toHaveProperty('url', '/resource/1');

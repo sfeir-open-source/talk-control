@@ -10,7 +10,7 @@ describe('redux store', function () {
                 slides: []
             };
             // Then
-            expect(reducers(state, {})).toEqual(state);
+            expect(reducers(state as any, {} as any)).toEqual(state);
         });
 
         it('should change state.currentSlide', function () {
@@ -21,7 +21,7 @@ describe('redux store', function () {
             };
             const data = { h: 2, v: 0, f: 0 };
             // Then
-            expect(reducers(state, { type: ACTIONS.GOTO_SLIDE, data })).toEqual({ ...state, currentSlide: data });
+            expect(reducers(state as any, { type: ACTIONS.GOTO_SLIDE, data })).toEqual({ ...state, currentSlide: data });
         });
 
         it('should handle INIT', function () {
@@ -40,7 +40,7 @@ describe('redux store', function () {
                 ]
             };
             // Then
-            expect(reducers(state, { type: ACTIONS.INIT, data })).toEqual({ ...state, ...data });
+            expect(reducers(state as any, { type: ACTIONS.INIT, data })).toEqual({ ...state, ...data });
         });
     });
 });

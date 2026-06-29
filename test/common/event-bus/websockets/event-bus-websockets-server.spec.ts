@@ -1,12 +1,10 @@
-'use strict';
-
 import { EventBusWebsocketsServer } from '@event-bus/websockets/event-bus-websockets-server';
 
 describe('EventBusWebsocketsServer', function () {
-    let eventBus = new EventBusWebsocketsServer();
+    let eventBus = new EventBusWebsocketsServer(undefined as any);
 
     beforeEach(function () {
-        eventBus = new EventBusWebsocketsServer();
+        eventBus = new EventBusWebsocketsServer(undefined as any);
     });
 
     describe('constructor()', function () {
@@ -24,7 +22,7 @@ describe('EventBusWebsocketsServer', function () {
             // Get the connection listener registered in the constructor
             const connectionListeners = eventBus.io.listeners('connection');
             expect(connectionListeners.length).toBeGreaterThan(0);
-            const connectionCallback = connectionListeners[0];
+            const connectionCallback = connectionListeners[0] as unknown as (socket: typeof mockSocket) => void;
             // When
             connectionCallback(mockSocket);
             // Then
@@ -33,20 +31,20 @@ describe('EventBusWebsocketsServer', function () {
 
         it('should remove socket from sockets array on disconnect', function () {
             // Given
-            let disconnectCallback;
+            let disconnectCallback: (() => void) | undefined;
             const mockSocket = {
                 id: 'socket-1',
                 handshake: { headers: {} },
-                on: (event, cb) => {
+                on: (event: string, cb: () => void) => {
                     if (event === 'disconnect') disconnectCallback = cb;
                 }
             };
             const connectionListeners = eventBus.io.listeners('connection');
-            const connectionCallback = connectionListeners[0];
+            const connectionCallback = connectionListeners[0] as unknown as (socket: typeof mockSocket) => void;
             connectionCallback(mockSocket);
             expect(eventBus.sockets).toContain(mockSocket);
             // When
-            disconnectCallback();
+            disconnectCallback!();
             // Then
             expect(eventBus.sockets).not.toContain(mockSocket);
         });
@@ -61,7 +59,7 @@ describe('EventBusWebsocketsServer', function () {
                 on: vi.fn()
             };
             const connectionListeners = eventBus.io.listeners('connection');
-            const connectionCallback = connectionListeners[0];
+            const connectionCallback = connectionListeners[0] as unknown as (socket: typeof mockSocket) => void;
             // When
             connectionCallback(mockSocket);
             // Then
@@ -78,7 +76,7 @@ describe('EventBusWebsocketsServer', function () {
             const socket = 'socket';
             const onMultipleSpy = vi.spyOn(eventBus, 'onMultiple').mockImplementation(() => {});
             // When
-            eventBus.on(key, callback, socket);
+            eventBus.on(key, callback, socket as any);
             // Then
             expect(onMultipleSpy).toHaveBeenCalledWith(key, callback, socket);
             onMultipleSpy.mockRestore();
@@ -105,7 +103,7 @@ describe('EventBusWebsocketsServer', function () {
                 socketB = { on: vi.fn() },
                 socketC = { on: vi.fn() };
             const key = 'key';
-            eventBus.sockets = [socketA, socketB, socketC];
+            eventBus.sockets = [socketA, socketB, socketC] as any;
             // When
             eventBus.on(key, () => key);
             // Then
@@ -120,9 +118,9 @@ describe('EventBusWebsocketsServer', function () {
                 socketB = { on: vi.fn() },
                 socketC = { on: vi.fn() };
             const key = 'key';
-            eventBus.sockets = [socketA, socketB];
+            eventBus.sockets = [socketA, socketB] as any;
             // When
-            eventBus.on(key, null, socketC);
+            eventBus.on(key, null as any, socketC as any);
             // Then
             expect(socketA.on).not.toHaveBeenCalled();
             expect(socketB.on).not.toHaveBeenCalled();
@@ -133,38 +131,38 @@ describe('EventBusWebsocketsServer', function () {
     describe('broadcast()', function () {
         it('should broadcast the data', function () {
             // Given
-            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => {});
+            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => false);
             const key = 'key';
             const message = 'message';
             // When
             eventBus.broadcast(key, message, false);
             // Then
             expect(eventBus.io.emit).not.toHaveBeenCalled();
-            eventBus.io.emit.mockRestore();
+            (eventBus.io.emit as ReturnType<typeof vi.fn>).mockRestore();
         });
 
         it('should call io.emit when broadcast=true', function () {
             // Given
-            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => {});
+            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => false);
             const key = 'key';
             const message = 'message';
             // When
             eventBus.broadcast(key, message, true);
             // Then
             expect(eventBus.io.emit).toHaveBeenCalledExactlyOnceWith(key, message);
-            eventBus.io.emit.mockRestore();
+            (eventBus.io.emit as ReturnType<typeof vi.fn>).mockRestore();
         });
 
         it('should call io.emit by default (no broadcast param)', function () {
             // Given
-            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => {});
+            vi.spyOn(eventBus.io, 'emit').mockImplementation(() => false);
             const key = 'key';
             const message = 'message';
             // When
             eventBus.broadcast(key, message);
             // Then
             expect(eventBus.io.emit).toHaveBeenCalledExactlyOnceWith(key, message);
-            eventBus.io.emit.mockRestore();
+            (eventBus.io.emit as ReturnType<typeof vi.fn>).mockRestore();
         });
     });
 
@@ -178,7 +176,7 @@ describe('EventBusWebsocketsServer', function () {
             const key = 'key';
             const data = 'data';
             // When
-            eventBus.emitTo(key, data, socket);
+            eventBus.emitTo(key, data, socket as any);
             // Then
             expect(emitSpy).toHaveBeenCalledWith(key, data);
             emitSpy.mockRestore();

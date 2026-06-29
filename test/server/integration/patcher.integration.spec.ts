@@ -1,10 +1,8 @@
-'use strict';
-
 import request from 'supertest';
-import { createTestApp } from '../helpers/server.helper';
+import { createTestApp } from '../helpers/server.helper.js';
 
 describe('Integration — /patcher', function () {
-    let app;
+    let app: ReturnType<typeof createTestApp>;
 
     beforeAll(function () {
         app = createTestApp();
@@ -68,7 +66,7 @@ describe('Integration — /patcher', function () {
             expect(res.status).toBe(200);
             const cookies = res.headers['set-cookie'];
             expect(Array.isArray(cookies)).toBe(true);
-            const tcCookie = cookies.find(c => c.includes('tc-presentation-url'));
+            const tcCookie = ([cookies].flat() as string[]).find(c => c.includes('tc-presentation-url'));
             expect(tcCookie).toBeTruthy();
         });
 

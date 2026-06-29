@@ -1,8 +1,8 @@
 import { TCComponent } from '@client/tc-component/tc-component';
 
 describe('TCComponent', function () {
-    let tcComponent;
-    let on, broadcast;
+    let tcComponent!: TCComponent;
+    let on: ReturnType<typeof vi.fn>, broadcast: ReturnType<typeof vi.fn>;
 
     beforeEach(function () {
         tcComponent = new TCComponent({ engineName: 'revealjs' });
@@ -42,8 +42,8 @@ describe('TCComponent', function () {
 
         it('should broadcast "sendNotesToController" when delta is 0 and gotoSlide is called', function () {
             // Given
-            let gotoSlideCallback;
-            on.mockImplementation((event, cb) => {
+            let gotoSlideCallback: ((...args: unknown[]) => void) | undefined;
+            on.mockImplementation((event: string, cb: (...args: unknown[]) => void) => {
                 if (event === 'gotoSlide') gotoSlideCallback = cb;
             });
             // When
@@ -53,7 +53,7 @@ describe('TCComponent', function () {
             // Simulate calling the gotoSlide handler
             const getSlideNotesSpy = vi.spyOn(tcComponent.engine, 'getSlideNotes').mockReturnValue('some notes');
             const goToSlideSpy = vi.spyOn(tcComponent.engine, 'goToSlide').mockImplementation(() => {});
-            gotoSlideCallback({ slide: { h: 0, v: 0, f: -1 } });
+            gotoSlideCallback!({ slide: { h: 0, v: 0, f: -1 } });
             expect(broadcast).toHaveBeenCalledWith('sendNotesToController', 'some notes');
             getSlideNotesSpy.mockRestore();
             goToSlideSpy.mockRestore();

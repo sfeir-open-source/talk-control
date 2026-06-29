@@ -19,7 +19,8 @@
         "moduleResolution": "bundler",
         "target": "ES2022",
         "allowJs": true,
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "types": ["vitest/globals"]
     },
     "include": ["src/**/*", "test/**/*", "config/**/*"]
 }

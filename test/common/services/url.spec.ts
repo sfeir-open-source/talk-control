@@ -1,5 +1,3 @@
-'use strict';
-
 import { isValidUrl } from '@services/url';
 
 describe('Url service', function () {
@@ -13,7 +11,7 @@ describe('Url service', function () {
         });
 
         it('should return false because no url given', function () {
-            expect(isValidUrl()).toBeFalsy();
+            expect(isValidUrl(undefined as unknown as string)).toBeFalsy();
         });
 
         it('should return false because url is bad formated', function () {

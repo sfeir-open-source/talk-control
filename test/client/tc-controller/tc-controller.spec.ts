@@ -1,5 +1,3 @@
-'use strict';
-
 import { ERROR_TYPE_SCRIPT_NOT_PRESENT, TCController } from '@client/tc-controller/tc-controller';
 import { EventBus } from '@event-bus/event-bus';
 import pluginService from '@services/plugin';
@@ -7,13 +5,13 @@ import { Channels, EventBusResolver } from '@event-bus/event-bus-resolver';
 import { spyOnAll } from '../../helpers/test-utils.js';
 
 describe('TCController', function () {
-    let resolveChannel, serverChannel, componentChannel, controller;
+    let resolveChannel: ReturnType<typeof vi.spyOn>, serverChannel: EventBus, componentChannel: EventBus, controller!: TCController;
     const serverUrl = 'SERVER_URL';
     const presentationUrl = 'PRESENTATION_URL';
 
     beforeAll(function () {
         vi.useFakeTimers();
-        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation(() => {});
+        resolveChannel = vi.spyOn(EventBusResolver, 'channel').mockImplementation((() => {}) as any);
     });
 
     afterAll(function () {
@@ -24,11 +22,11 @@ describe('TCController', function () {
     beforeEach(function () {
         serverChannel = spyOnAll(new EventBus());
         componentChannel = spyOnAll(new EventBus());
-        resolveChannel.mockImplementation(channel => {
+        resolveChannel.mockImplementation(((channel: string) => {
             if (channel === Channels.CONTROLLER_SERVER) return serverChannel;
             if (channel === Channels.CONTROLLER_COMPONENT) return componentChannel;
             return undefined;
-        });
+        }) as any);
         controller = new TCController(serverUrl);
     });
 
@@ -158,18 +156,18 @@ describe('TCController', function () {
 
         describe('plugin start and stop flow', function () {
             beforeAll(function () {
-                vi.spyOn(pluginService, 'activateOnController').mockImplementation(() => {});
-                vi.spyOn(pluginService, 'deactivateOnController').mockImplementation(() => {});
+                vi.spyOn(pluginService, 'activateOnController').mockImplementation((() => {}) as any);
+                vi.spyOn(pluginService, 'deactivateOnController').mockImplementation((() => {}) as any);
             });
 
             afterAll(function () {
-                pluginService.activateOnController.mockRestore();
-                pluginService.deactivateOnController.mockRestore();
+                (pluginService.activateOnController as ReturnType<typeof vi.fn>).mockRestore();
+                (pluginService.deactivateOnController as ReturnType<typeof vi.fn>).mockRestore();
             });
 
             beforeEach(async function () {
-                pluginService.activateOnController.mockClear();
-                pluginService.deactivateOnController.mockClear();
+                (pluginService.activateOnController as ReturnType<typeof vi.fn>).mockClear();
+                (pluginService.deactivateOnController as ReturnType<typeof vi.fn>).mockClear();
             });
 
             it('should notify server when plugin need to be activated', async function () {
@@ -262,7 +260,7 @@ describe('TCController', function () {
      * @param {number} numberOfSlides - Number of existing slides
      * @param {number} loadingTime - Time for the slide to be loaded
      */
-    async function loadSlides(numberOfLoadedSlides, numberOfSlides, loadingTime) {
+    async function loadSlides(numberOfLoadedSlides: number, numberOfSlides: number, loadingTime: number) {
         Array(numberOfSlides)
             .fill(0)
             .forEach(() => componentChannel.broadcast('presentationLoading'));
@@ -277,7 +275,7 @@ describe('TCController', function () {
      *
      * @param {number} delay - Deplay in miliseconds before response
      */
-    async function respondToHealthCheck(delay) {
+    async function respondToHealthCheck(delay: number) {
         await vi.advanceTimersByTimeAsync(delay);
         componentChannel.broadcast('pong');
     }

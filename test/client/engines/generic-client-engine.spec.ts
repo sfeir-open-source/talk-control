@@ -1,5 +1,3 @@
-'use strict';
-
 import { GenericEngine } from '@client/engines/generic-client-engine';
 
 describe('GenericEngine', function () {

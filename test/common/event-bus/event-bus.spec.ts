@@ -1,5 +1,3 @@
-'use strict';
-
 import { EventBus, NO_KEY_PROVIDED, NO_TARGET_PROVIDED, DUPLICATE_CALLBACKS_ENTRY } from '@event-bus/event-bus';
 
 describe('EventBus', function () {
@@ -17,11 +15,11 @@ describe('EventBus', function () {
 
     describe('on()', function () {
         it('should throw an error if no key provided', function () {
-            expect(() => eventBus.on(undefined, () => 'test')).toThrow(NO_KEY_PROVIDED);
+            expect(() => eventBus.on(undefined as unknown as string, () => 'test')).toThrow(NO_KEY_PROVIDED);
         });
 
         it('should throw an error if callback already registered', function () {
-            eventBus.callBacks['key'] = () => 'key';
+            (eventBus.callBacks as Record<string, unknown>)['key'] = () => 'key';
             expect(() => eventBus.on('key', () => 'test')).toThrow(DUPLICATE_CALLBACKS_ENTRY);
         });
 
@@ -38,7 +36,7 @@ describe('EventBus', function () {
 
     describe('onMultiple()', function () {
         it('should throw an error if no key provided', function () {
-            expect(() => eventBus.onMultiple(undefined, () => 'test')).toThrow(NO_KEY_PROVIDED);
+            expect(() => eventBus.onMultiple(undefined as unknown as string, () => 'test')).toThrow(NO_KEY_PROVIDED);
         });
 
         it('should add a callback', function () {
@@ -54,7 +52,7 @@ describe('EventBus', function () {
 
     describe('broadcast()', function () {
         it('should throw an error', function () {
-            expect(() => eventBus.broadcast(undefined, 'test')).toThrow(NO_KEY_PROVIDED);
+            expect(() => eventBus.broadcast(undefined as unknown as string, 'test')).toThrow(NO_KEY_PROVIDED);
         });
 
         it("shouldn't fire any event", function () {
@@ -86,17 +84,17 @@ describe('EventBus', function () {
 
     describe('emitTo()', function () {
         it('should throw an error if no key provided', function () {
-            expect(() => eventBus.emitTo(undefined, 'data')).toThrow(NO_KEY_PROVIDED);
+            expect(() => eventBus.emitTo(undefined as unknown as string, 'data', {} as unknown as object)).toThrow(NO_KEY_PROVIDED);
         });
 
         it('should throw an error if no target provided', function () {
-            expect(() => eventBus.emitTo('key', 'data')).toThrow(NO_TARGET_PROVIDED);
+            expect(() => eventBus.emitTo('key', 'data', undefined as unknown as object)).toThrow(NO_TARGET_PROVIDED);
         });
     });
 
     describe('getCallbacks()', function () {
         it('should throw an error', function () {
-            expect(() => eventBus.getCallbacks()).toThrow(NO_KEY_PROVIDED);
+            expect(() => eventBus.getCallbacks(undefined as unknown as string)).toThrow(NO_KEY_PROVIDED);
         });
 
         it('sould retrun an empty array', function () {

@@ -1,10 +1,8 @@
-'use strict';
-
 import request from 'supertest';
-import { createTestApp } from '../helpers/server.helper';
+import { createTestApp } from '../helpers/server.helper.js';
 
 describe('Integration — Router', function () {
-    let app;
+    let app: ReturnType<typeof createTestApp>;
 
     beforeAll(function () {
         app = createTestApp();

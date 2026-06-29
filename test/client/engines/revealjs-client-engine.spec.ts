@@ -1,9 +1,7 @@
-'use strict';
-
 import { RevealEngine } from '@client/engines/revealjs-client-engine';
 
 describe('RevealEngineClient', function () {
-    let engine;
+    let engine!: RevealEngine;
 
     beforeEach(function () {
         window.Reveal = {
@@ -26,8 +24,8 @@ describe('RevealEngineClient', function () {
     });
 
     afterEach(function () {
-        window.addEventListener.mockRestore();
-        window.parent.postMessage.mockRestore();
+        (window.addEventListener as ReturnType<typeof vi.fn>).mockRestore();
+        (window.parent.postMessage as ReturnType<typeof vi.fn>).mockRestore();
     });
 
     describe('constructor()', function () {
@@ -44,7 +42,7 @@ describe('RevealEngineClient', function () {
                 { h: 1, v: 2, f: -1, fMax: 4 }
             ]);
             // When
-            engine.goToSlide({ h: 1, v: 2, f: 3 });
+            engine.goToSlide({ h: 1, v: 2, f: 3, fMax: 4 });
             // Then
             expect(window.Reveal.slide).toHaveBeenCalledExactlyOnceWith(1, 2, 3);
         });
@@ -58,7 +56,7 @@ describe('RevealEngineClient', function () {
             ];
             vi.spyOn(engine, 'getSlides').mockReturnValue(slides);
             // When - currentIndex=0, delta=1, f+delta=0 which is not < fMax=1, currentIndex+delta=1 < 2 (slides.length-1)
-            engine.goToSlide({ h: 0, v: 0, f: 0 }, 1);
+            engine.goToSlide({ h: 0, v: 0, f: 0, fMax: 1 }, 1);
             // Then - should move to slides[1]
             expect(window.Reveal.slide).toHaveBeenCalledExactlyOnceWith(1, 0, -1);
         });
@@ -71,7 +69,7 @@ describe('RevealEngineClient', function () {
             ];
             vi.spyOn(engine, 'getSlides').mockReturnValue(slides);
             // When - currentIndex=1 (last), delta=1, f+delta=1 >= fMax=1, currentIndex+delta=2 is NOT < slides.length-1=1
-            engine.goToSlide({ h: 1, v: 0, f: 0 }, 1);
+            engine.goToSlide({ h: 1, v: 0, f: 0, fMax: 1 }, 1);
             // Then - should use last slide
             expect(window.Reveal.slide).toHaveBeenCalledExactlyOnceWith(1, 0, -1);
         });
@@ -81,13 +79,13 @@ describe('RevealEngineClient', function () {
         it('should return an array of slides', function () {
             // Given
             const querySelectorAll = vi.fn().mockReturnValue([]);
-            vi.spyOn(document, 'querySelectorAll').mockReturnValue([{ querySelectorAll }, { querySelectorAll }, { querySelectorAll }]);
+            vi.spyOn(document, 'querySelectorAll').mockReturnValue([{ querySelectorAll }, { querySelectorAll }, { querySelectorAll }] as any);
             // When
             const slides = engine.getSlides();
             // Then
             expect(slides.length).toBe(3);
             expect(slides[0]).toEqual({ h: 0, v: 0, f: -1, fMax: -1 });
-            document.querySelectorAll.mockRestore();
+            (document.querySelectorAll as ReturnType<typeof vi.fn>).mockRestore();
         });
 
         it('should handle vertical slides', function () {
@@ -97,18 +95,18 @@ describe('RevealEngineClient', function () {
             const verticalSlide2 = { querySelectorAll: vi.fn().mockReturnValue([]) };
             const verticalSlides = [verticalSlide1, verticalSlide2];
             const horizontalSlideWithVerticals = {
-                querySelectorAll: event => {
+                querySelectorAll: (event: string) => {
                     if (event === 'section') return verticalSlides;
                     return []; // fragments on the h slide itself
                 }
             };
             const horizontalSlideWithoutVerticals = {
-                querySelectorAll: event => {
+                querySelectorAll: (event: string) => {
                     if (event === 'section') return [];
                     return [{}, {}]; // 2 fragments at h level
                 }
             };
-            vi.spyOn(document, 'querySelectorAll').mockReturnValue([horizontalSlideWithVerticals, horizontalSlideWithoutVerticals]);
+            vi.spyOn(document, 'querySelectorAll').mockReturnValue([horizontalSlideWithVerticals, horizontalSlideWithoutVerticals] as any);
             // When
             const slides = engine.getSlides();
             // Then
@@ -116,7 +114,7 @@ describe('RevealEngineClient', function () {
             expect(slides[0]).toEqual({ h: 0, v: 0, f: -1, fMax: 2 }); // vertical with 2 fragments
             expect(slides[1]).toEqual({ h: 0, v: 1, f: -1, fMax: -1 }); // vertical with 0 fragments -> -1
             expect(slides[2]).toEqual({ h: 1, v: 0, f: -1, fMax: 2 }); // horizontal with 2 fragments
-            document.querySelectorAll.mockRestore();
+            (document.querySelectorAll as ReturnType<typeof vi.fn>).mockRestore();
         });
     });
 });

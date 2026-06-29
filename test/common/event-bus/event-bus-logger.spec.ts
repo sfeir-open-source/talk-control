@@ -1,10 +1,8 @@
-'use strict';
-
 import { eventBusLogger } from '@event-bus/event-bus-logger';
 
 describe('Event bus logger', function () {
     describe('log', function () {
-        const stubIsLoggerEnabled = function (returnValue) {
+        const stubIsLoggerEnabled = function (returnValue: boolean) {
             vi.spyOn(eventBusLogger, 'isLoggerEnabled').mockImplementation(() => returnValue);
         };
 

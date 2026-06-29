@@ -1,5 +1,3 @@
-'use strict';
-
 import { logger } from '@services/logger';
 
 describe('Logger service', function () {
@@ -10,8 +8,8 @@ describe('Logger service', function () {
         });
 
         afterEach(function () {
-            console.log.mockRestore();
-            console.error.mockRestore();
+            (console.log as ReturnType<typeof vi.fn>).mockRestore();
+            (console.error as ReturnType<typeof vi.fn>).mockRestore();
         });
 
         it('should call console.log', function () {

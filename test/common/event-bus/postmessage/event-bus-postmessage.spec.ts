@@ -1,17 +1,15 @@
-'use strict';
-
 import { EventBusPostMessage } from '@event-bus/postmessage/event-bus-postmessage';
 
 describe('EventBusPostMessage', function () {
-    let eventBus;
-    let postMessageMock;
+    let eventBus!: EventBusPostMessage;
+    let postMessageMock: ReturnType<typeof vi.fn>;
 
     beforeEach(function () {
         postMessageMock = vi.fn();
         vi.stubGlobal('postMessage', postMessageMock);
         vi.spyOn(window, 'addEventListener').mockImplementation(() => {});
-        eventBus = new EventBusPostMessage({ postMessage: {} });
-        window.addEventListener.mockRestore();
+        eventBus = new EventBusPostMessage({ postMessage: {} } as any);
+        (window.addEventListener as ReturnType<typeof vi.fn>).mockRestore();
     });
 
     afterEach(function () {
@@ -63,7 +61,7 @@ describe('EventBusPostMessage', function () {
             };
             eventBus.callBacks = callbacks;
             // When
-            eventBus._receiveMessageWindow({ data: message });
+            eventBus._receiveMessageWindow({ data: message } as MessageEvent);
             // Then
             expect(callbacks[key][0]).toHaveBeenCalledExactlyOnceWith(data);
             expect(callbacks[key][1]).toHaveBeenCalledExactlyOnceWith(data);
@@ -78,7 +76,7 @@ describe('EventBusPostMessage', function () {
 
             eventBus.callBacks = { [key]: [callback] };
             // When
-            eventBus._receiveMessageWindow();
+            eventBus._receiveMessageWindow(undefined as unknown as MessageEvent);
             // Then
             expect(callback).not.toHaveBeenCalled();
         });
