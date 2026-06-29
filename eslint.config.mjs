@@ -36,7 +36,7 @@ export default [
         }
     },
     {
-        files: ['test/**/*.spec.js'],
+        files: ['test/**/*.spec.js', 'test/**/*.spec.ts'],
         plugins: { vitest: vitestPlugin },
         rules: {
             ...vitestPlugin.configs.recommended.rules
@@ -45,6 +45,17 @@ export default [
             globals: {
                 ...vitestPlugin.environments.env.globals
             }
+        }
+    },
+    {
+        files: ['**/*.ts'],
+        rules: {
+            'jsdoc/require-param': 'off',
+            'jsdoc/require-param-type': 'off',
+            'jsdoc/require-returns': 'off',
+            'jsdoc/require-returns-type': 'off',
+            'jsdoc/require-property-description': 'off',
+            'jsdoc/require-jsdoc': 'off'
         }
     }
 ];

@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
+        "strict": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "checkJs": false,
+        "resolveJsonModule": true,
         "baseUrl": ".",
         "paths": {
             "@event-bus/*": ["src/common/event-bus/*"],
