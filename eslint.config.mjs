@@ -4,6 +4,7 @@ import vitestPlugin from '@vitest/eslint-plugin';
 import jsdocPlugin from 'eslint-plugin-jsdoc';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
 export default [
     {
@@ -49,7 +50,19 @@ export default [
     },
     {
         files: ['**/*.ts'],
+        plugins: {
+            '@typescript-eslint': tseslint.plugin
+        },
+        languageOptions: {
+            parser: tseslint.parser,
+            globals: {
+                ...globals.node,
+                ...globals.browser
+            }
+        },
         rules: {
+            'no-unused-vars': 'off',
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
             'jsdoc/require-param': 'off',
             'jsdoc/require-param-type': 'off',
             'jsdoc/require-returns': 'off',
