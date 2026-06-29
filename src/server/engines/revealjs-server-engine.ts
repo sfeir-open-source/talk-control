@@ -1,26 +1,15 @@
 import { init, gotoSlide } from '../store/actions';
+import { Slide } from '../store/index';
 import { GenericEngine } from './generic-server-engine';
 
-/**
- * @classdesc
- * @class RevealEngine
- * @augments GenericEngine
- */
 export class RevealEngine extends GenericEngine {
-    /**
-     * Initialize the engine
-     *
-     * @param {*} params - Needed params to initialize the engine
-     */
-    init(params) {
-        this.store.dispatch(init({ ...params, currentSlide: { h: 0, v: 0, f: -1 } }));
+    override init(params: unknown): void {
+        this.store.dispatch(init({ ...(params as object), currentSlide: { h: 0, v: 0, f: -1 } }));
     }
 
-    /**
-     * @param {{key: string}} event - Key pressed
-     */
-    handleInput({ key }) {
-        const { currentSlide, slides } = this.store.getState();
+    override handleInput({ key }: { key: string }): void {
+        const { slides } = this.store.getState();
+        const currentSlide = this.store.getState().currentSlide as Slide;
         const currentSlideIndex = slides.findIndex(s => this.slideEquals(s, currentSlide, false));
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
@@ -59,11 +48,9 @@ export class RevealEngine extends GenericEngine {
         }
     }
 
-    /**
-     * @param {{direction: string}} event - Touch direction
-     */
-    handleTouch({ direction }) {
-        const { currentSlide, slides } = this.store.getState();
+    override handleTouch({ direction }: { direction: string }): void {
+        const { slides } = this.store.getState();
+        const currentSlide = this.store.getState().currentSlide as Slide;
         const currentSlideIndex = slides.findIndex(s => this.slideEquals(s, currentSlide, false));
         const { fMax } = slides[currentSlideIndex];
         const nextVerticalSlide = slides.find(slide => currentSlide.h === slide.h && slide.v === currentSlide.v + 1);
@@ -96,45 +83,31 @@ export class RevealEngine extends GenericEngine {
         }
     }
 
-    /**
-     * Tell if two slides are equal
-     *
-     * @param {{h: number, v: number, f: number}} slide1 -
-     * @param {{h: number, v: number, f: number}} slide2 -
-     * @param {boolean} includeFragment - Include fragments in the equality test
-     * @returns {boolean} True if the slides are equal
-     */
-    slideEquals(slide1, slide2, includeFragment = true) {
+    override slideEquals(slide1: Slide, slide2: Slide, includeFragment = true): boolean {
         return slide1.h === slide2.h && slide1.v === slide2.v && (!includeFragment || slide1.f === slide2.f);
     }
 
-    /*
-     * **************************************
-     * ------- DISPATCHING METHODS ----------
-     * **************************************
-     */
-
-    _nextHorizontalSlide({ h }) {
+    _nextHorizontalSlide({ h }: Slide): void {
         this._gotoSlide({ h: h + 1, v: 0, f: -1 });
     }
 
-    _nextVerticalSlide({ h, v }) {
+    _nextVerticalSlide({ h, v }: Slide): void {
         this._gotoSlide({ h, v: v + 1, f: -1 });
     }
 
-    _prevSlide({ h, v, fMax }) {
+    _prevSlide({ h, v, fMax }: Slide): void {
         this._gotoSlide({ h, v, f: fMax > 0 ? fMax - 1 : fMax });
     }
 
-    _nextFragment({ h, v, f }) {
+    _nextFragment({ h, v, f }: Slide): void {
         this._gotoSlide({ h, v, f: f + 1 });
     }
 
-    _prevFragment({ h, v, f }) {
+    _prevFragment({ h, v, f }: Slide): void {
         this._gotoSlide({ h, v, f: f - 1 });
     }
 
-    _gotoSlide(slide) {
+    _gotoSlide(slide: Partial<Slide>): void {
         this.store.dispatch(gotoSlide(slide));
     }
 }

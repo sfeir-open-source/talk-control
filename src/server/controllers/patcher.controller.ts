@@ -1,6 +1,4 @@
-'use strict';
-
-import express from 'express';
+import express, { Request, Response } from 'express';
 import contextService from '@services/context';
 import { config } from '@services/config';
 
@@ -8,16 +6,10 @@ const router = express.Router();
 
 router.get('/', patchPresentation);
 
-/**
- * Handle presentation patching for control
- *
- * @param {Request} req - Request
- * @param {Response} res - Response
- */
-export async function patchPresentation(req, res) {
+export async function patchPresentation(req: Request, res: Response): Promise<void> {
     let presentationUrl;
     try {
-        presentationUrl = new URL(req.query['tc-presentation-url']);
+        presentationUrl = new URL(req.query['tc-presentation-url'] as string);
     } catch {
         res.status(400).send('Invalid presentation URL');
         return;
@@ -43,13 +35,7 @@ export async function patchPresentation(req, res) {
     res.send(content);
 }
 
-/**
- * Fixes Html by adding missing tags (html, head or body)
- *
- * @param {string} html - Document to be fixed
- * @returns {string} - Fixed document
- */
-function fixHtmlDocument(html) {
+function fixHtmlDocument(html: string): string {
     let fixed = html;
     if (!fixed.includes('<html')) {
         fixed = '<html>' + fixed + '</html>';
@@ -64,13 +50,7 @@ function fixHtmlDocument(html) {
     return fixed;
 }
 
-/**
- * Insert metadata to html to deny caching of the document when served
- *
- * @param {string} html - Document
- * @returns {string} - Not cached document
- */
-function setNoCaching(html) {
+function setNoCaching(html: string): string {
     return html.replace(
         '<head>',
         `<head>
@@ -80,25 +60,11 @@ function setNoCaching(html) {
     );
 }
 
-/**
- * Redirect relative requests towards the proxy endpoint by adding a base tag
- *
- * @param {string} html - Document
- * @param {string} serverUrl - Proxy server url
- * @returns {string} - Proxy directed document
- */
-function setFrontProxy(html, serverUrl) {
+function setFrontProxy(html: string, serverUrl: string): string {
     return html.replace('<head>', `<head><base href="${serverUrl}/proxy/"/>`);
 }
 
-/**
- * Inject Talk Control component script in the document
- *
- * @param {string} html - Document
- * @param {string} componentUrl - Talk control component server url
- * @returns {string} - Document with talk control component script
- */
-function injectComponent(html, componentUrl) {
+function injectComponent(html: string, componentUrl: string): string {
     return html.replace('</body>', `<script type="module" src="${componentUrl}/tc-component.bundle.js"></script></body>`);
 }
 

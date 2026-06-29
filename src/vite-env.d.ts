@@ -8,3 +8,5 @@ declare module 'query-selector-shadow-dom' {
 interface String {
     bgBrightBlue: string;
 }
+
+declare module 'redux-logger';

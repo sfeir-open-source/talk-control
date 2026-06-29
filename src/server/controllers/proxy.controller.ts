@@ -1,6 +1,4 @@
-'use strict';
-
-import express from 'express';
+import express, { Request, Response } from 'express';
 import httpProxy from 'http-proxy';
 
 const router = express.Router();
@@ -8,14 +6,7 @@ const proxy = httpProxy.createProxyServer();
 
 router.all('/{*splat}', (req, res) => forwardTraffic(req, res, proxy));
 
-/**
- * Forward requests to presentation server
- *
- * @param {Request} req - Request
- * @param {Response} res - Response
- * @param {httpProxy.Server} proxy - Http proxy server
- */
-export function forwardTraffic(req, res, proxy) {
+export function forwardTraffic(req: Request, res: Response, proxy: ReturnType<typeof httpProxy.createProxyServer>): void {
     const presentationUrl = req.cookies && req.cookies['tc-presentation-url'];
     let target;
     try {
