@@ -1,21 +1,12 @@
-'use strict';
-
 import { loadPluginModule } from '@plugins/plugin-loader';
 import { TCController } from '@client/tc-controller/tc-controller';
 import { TCComponent } from '@client/tc-component/tc-component';
 
-/**
- * Load and bind plugin events to event bus channels
- *
- * @param {string} pluginName - Name of plugin to be activated
- * @param {TCController} controller - Providing event bus channels
- * @returns {Promise} - Promise of plugin activation
- */
-function activateOnController(pluginName, controller) {
+function activateOnController(pluginName: string, controller: TCController): Promise<void> {
     return loadPluginModule(pluginName)
         .then(plugin => {
+            if (!plugin) return;
             if (plugin.instance.usedByAComponent) {
-                // Plugins used by a component and need tc-component (ex: keyboard)
                 controller.controllerComponentChannel.on(plugin.instance.type, event =>
                     controller.controllerServerChannel.broadcast(plugin.instance.type, event)
                 );
@@ -23,7 +14,6 @@ function activateOnController(pluginName, controller) {
                 return;
             }
 
-            // Other plugins like bluetooth devices
             if (!plugin.instance.initialized) {
                 plugin.instance.init();
                 plugin.instance.onEvent(event => controller.controllerServerChannel.broadcast(plugin.instance.type, event));
@@ -32,28 +22,16 @@ function activateOnController(pluginName, controller) {
         .catch(e => console.error('Unable to load plugin module', e));
 }
 
-/**
- * Deactivate plugin
- *
- * @param {string} pluginName - Name of plugin to be deactivated
- * @returns {Promise} - Promise of plugin deactivation
- */
-function deactivateOnController(pluginName) {
+function deactivateOnController(pluginName: string): Promise<void> {
     return loadPluginModule(pluginName)
-        .then(plugin => plugin.instance.unload())
+        .then(plugin => plugin?.instance.unload())
         .catch(e => console.error('Unable to unload plugin module', e));
 }
 
-/**
- * Load and bind plugin events to event bus channels
- *
- * @param {string} pluginName - Name of plugin to be activated
- * @param {TCComponent} component - Providing event bus channels
- * @returns {Promise} - Promise of plugin activation
- */
-function activateOnComponent(pluginName, component) {
+function activateOnComponent(pluginName: string, component: TCComponent): Promise<void> {
     return loadPluginModule(pluginName)
         .then(plugin => {
+            if (!plugin) return;
             if (!plugin.instance.initialized) {
                 plugin.instance.init();
                 plugin.instance.onEvent((type, event) => component.controllerComponentChannel.broadcast(type, event));
