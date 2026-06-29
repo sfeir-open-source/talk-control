@@ -99,14 +99,7 @@ function setFrontProxy(html, serverUrl) {
  * @returns {string} - Document with talk control component script
  */
 function injectComponent(html, componentUrl) {
-    return html.replace(
-        '</body>',
-        `<script type="application/javascript">
-            // Configure the url of the server serving the tc-component and other split shunks
-            window.tcResourcePath = '${componentUrl}/'
-        </script>
-        <script src="${componentUrl}/tc-component.bundle.js"></script></body>`
-    );
+    return html.replace('</body>', `<script type="module" src="${componentUrl}/tc-component.bundle.js"></script></body>`);
 }
 
 export default router;

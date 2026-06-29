@@ -161,21 +161,7 @@ describe('PatcherController', function () {
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.mock.calls[0][0]).toMatch(
-                new RegExp(
-                    [
-                        '<script type="application/javascript">',
-                        '[\\s\\t\\n]*',
-                        '// Configure the url of the server serving the tc-component and other split shunks',
-                        '[\\s\\t\\n]*',
-                        "window.tcResourcePath = 'LOCAL_CONTROLLER/'",
-                        '[\\s\\t\\n]*',
-                        '</script>',
-                        '[\\s\\t\\n]*',
-                        '<script src="LOCAL_CONTROLLER/tc-component.bundle.js"></script>'
-                    ].join('')
-                )
-            );
+            expect(res.send.mock.calls[0][0]).toContain('<script type="module" src="LOCAL_CONTROLLER/tc-component.bundle.js"></script>');
         });
 
         it('should send presentation with tc component script from remote server if presentation is remote', async function () {
@@ -184,21 +170,7 @@ describe('PatcherController', function () {
             // When
             await patchPresentation(req, res);
             // Then
-            expect(res.send.mock.calls[0][0]).toMatch(
-                new RegExp(
-                    [
-                        '<script type="application/javascript">',
-                        '[\\s\\t\\n]*',
-                        '// Configure the url of the server serving the tc-component and other split shunks',
-                        '[\\s\\t\\n]*',
-                        "window.tcResourcePath = 'EXTERNAL_CONTROLLER/'",
-                        '[\\s\\t\\n]*',
-                        '</script>',
-                        '[\\s\\t\\n]*',
-                        '<script src="EXTERNAL_CONTROLLER/tc-component.bundle.js"></script>'
-                    ].join('')
-                )
-            );
+            expect(res.send.mock.calls[0][0]).toContain('<script type="module" src="EXTERNAL_CONTROLLER/tc-component.bundle.js"></script>');
         });
 
         it('should send presentation origin url as cookie', async function () {

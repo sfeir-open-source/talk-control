@@ -54,12 +54,16 @@ function flatHtmlOutput(outDir = 'dist'): Plugin {
 //   /presenter.html       → src/client/layouts/presenter/presenter.html
 //   /presenter-mobile.html→ src/client/layouts/presenter/presenter-mobile.html
 // Relative links in the app (href="on-stage.html" etc.) resolve correctly from /.
+//
+// tc-component.bundle.js: in dev mode there is no bundle file; redirect to the
+// ESM source so the patcher's <script type="module"> loads the real component.
 const DEV_URL_MAP: Record<string, string> = {
     '/': '/src/client/tc-controller/index.html',
     '/index.html': '/src/client/tc-controller/index.html',
     '/on-stage.html': '/src/client/layouts/on-stage/on-stage.html',
     '/presenter.html': '/src/client/layouts/presenter/presenter.html',
-    '/presenter-mobile.html': '/src/client/layouts/presenter/presenter-mobile.html'
+    '/presenter-mobile.html': '/src/client/layouts/presenter/presenter-mobile.html',
+    '/tc-component.bundle.js': '/src/client/tc-component/index.js'
 };
 
 function devUrlRewrite(): Plugin {
