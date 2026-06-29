@@ -142,6 +142,26 @@ le relatif `./index.js` résout en `/index.js` → 404.
 Solution : chemins absolus depuis la racine du projet (`/src/client/tc-controller/index.js`).
 Vite résout ces chemins absolus depuis la racine du projet en dev, et les bundle correctement en prod.
 
+### Patcher et `tc-component.bundle.js` — régression mode magique
+
+Webpack produisait `tc-component.bundle.js` au format IIFE/UMD (script classique).
+Vite le produit en **ESM** (commence par `import{...}from"..."`).
+
+Le patcher (`src/server/controllers/patcher.controller.js`) injectait :
+```html
+<script type="application/javascript" src="…/tc-component.bundle.js"></script>
+```
+Un script classique ne peut pas contenir de `import` → SyntaxError, le composant
+ne se chargeait jamais → le mode magique restait bloqué sur l'écran d'erreur.
+
+**Fix :** `type="module"` sur le script injecté. Les chunks ESM se résolvent
+relativement à l'URL du module (pas à `window.tcResourcePath`), donc la variable
+webpack `window.tcResourcePath` a aussi été supprimée.
+
+**Dev mode :** Vite ne génère pas de fichier bundle. Le `devUrlRewrite` mappe
+`/tc-component.bundle.js` → `/src/client/tc-component/index.js` (source ESM)
+pour que le patcher fonctionne aussi en dev sans build intermédiaire.
+
 ## Pièges identifiés
 
 | Problème | Cause | Solution |
@@ -152,6 +172,8 @@ Vite résout ces chemins absolus depuis la racine du projet en dev, et les bundl
 | HTML imbriqués dans `dist/src/...` | Vite préserve la structure de dossiers source | Plugin `flatHtmlOutput` avec `closeBundle` + réécriture des refs |
 | `http://localhost:3000/` → 404 | Vite sert depuis les chemins source, pas les URLs plate | Plugin `devUrlRewrite` avec middleware `configureServer` |
 | `/index.js` → 404 en dev | Chemin relatif résout depuis l'URL browser (`/`), pas le chemin source | `<script src="/src/client/.../index.js">` (chemin absolu) |
+| Mode magique cassé (SyntaxError ESM) | Patcher injectait `type="application/javascript"` mais bundle Vite est ESM | `type="module"` dans `injectComponent` + `window.tcResourcePath` supprimé |
+| `/tc-component.bundle.js` → 404 en dev | Vite dev ne génère pas de bundle | `devUrlRewrite` mappe vers le source ESM (`/src/client/tc-component/index.js`) |
 
 ## Scripts mis à jour
 
