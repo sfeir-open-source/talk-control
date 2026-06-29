@@ -93,7 +93,7 @@ export default defineConfig({
             '@config': resolve(__dirname, 'config'),
             '@compat': resolve(__dirname, 'src/compat'),
             // socket.io is server-only; replace with an empty stub for browser builds
-            'socket.io': resolve(__dirname, 'src/compat/socket-io-browser-stub.js')
+            'socket.io': resolve(__dirname, 'src/compat/socket-io-browser-stub.ts')
         }
     },
     build: {
