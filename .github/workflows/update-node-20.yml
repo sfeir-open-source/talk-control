@@ -1,150 +1,174 @@
 name: Node 20 CI
 
 on:
-  push:
-    branches:
-      - update-node-20
-      - 'chore/step-00-*'
-  pull_request:
-    branches:
-      - develop
-      - update-node-20
+    push:
+        branches:
+            - update-node-20
+            - 'chore/step-00-*'
+    pull_request:
+        branches:
+            - develop
+            - update-node-20
 
 jobs:
-  # ----------------------------------------------------------------
-  # Job 1 — Tests unitaires et intégration
-  # ----------------------------------------------------------------
-  unit-and-integration:
-    name: Tests (unit + integration)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    # ----------------------------------------------------------------
+    # Job 1 — Tests unitaires et intégration
+    # ----------------------------------------------------------------
+    unit-and-integration:
+        name: Tests (unit + integration)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+            - name: Setup Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
 
-      - name: Run tests
-        run: NODE_ENV=test npm test
+            - name: Run tests
+              run: NODE_ENV=test npm test
 
-  # ----------------------------------------------------------------
-  # Job 2 — Coverage (seuils : 70% stmts/lines, 90% branches, 60% funcs)
-  # ----------------------------------------------------------------
-  coverage:
-    name: Coverage check (c8)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    # ----------------------------------------------------------------
+    # Job 2 — Tests web components en browser mode (Vitest + Playwright)
+    # ----------------------------------------------------------------
+    web-components:
+        name: Web components (browser mode)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+            - name: Setup Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
 
-      - name: Run coverage
-        run: NODE_ENV=test npm run coverage
+            - name: Install Playwright chromium
+              run: npx playwright install chromium --with-deps
 
-      - name: Check coverage thresholds
-        run: npm run coverage:check
+            - name: Run web component tests
+              run: npm run test:components
 
-  # ----------------------------------------------------------------
-  # Job 3 — Vérification du build webpack
-  # ----------------------------------------------------------------
-  build-check:
-    name: Webpack build check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    # ----------------------------------------------------------------
+    # Job 3 — Coverage (seuils : 70% stmts/lines, 90% branches, 60% funcs)
+    # ----------------------------------------------------------------
+    coverage:
+        name: Coverage check (c8)
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+            - name: Setup Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
 
-      - name: Build (production)
-        run: npm run build
+            - name: Run coverage
+              run: NODE_ENV=test npm run coverage
 
-  # ----------------------------------------------------------------
-  # Job 3 — Smoke test du serveur Express
-  # ----------------------------------------------------------------
-  server-smoke:
-    name: Server smoke test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+            - name: Check coverage thresholds
+              run: npm run coverage:check
 
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+    # ----------------------------------------------------------------
+    # Job 3 — Vérification du build webpack
+    # ----------------------------------------------------------------
+    build-check:
+        name: Webpack build check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+            - name: Setup Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-      - name: Start server in background
-        run: npm run smoke:server &
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
 
-      - name: Wait for server on port 3001
-        run: npx wait-on tcp:3001 --timeout 30000
+            - name: Build (production)
+              run: npm run build
 
-      - name: Check server responds
-        run: curl -sf http://localhost:3001/ || curl -sf http://localhost:3001/socket.io/ || true
+    # ----------------------------------------------------------------
+    # Job 3 — Smoke test du serveur Express
+    # ----------------------------------------------------------------
+    server-smoke:
+        name: Server smoke test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Server started successfully
-        run: echo "Server smoke test passed — port 3001 is open"
+            - name: Setup Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
 
-  # ----------------------------------------------------------------
-  # Job 4 — Tests E2E Playwright (activé quand la branche 0.3 est mergée)
-  # ----------------------------------------------------------------
-  e2e:
-    name: E2E Playwright
-    runs-on: ubuntu-latest
-    # Ce job est skippé si le dossier e2e/ n'existe pas encore
-    steps:
-      - uses: actions/checkout@v4
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
 
-      - name: Check if e2e tests exist
-        id: e2e-check
-        run: |
-          if [ -d "e2e" ] && [ -f "playwright.config.js" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
+            - name: Start server in background
+              run: npm run smoke:server &
 
-      - name: Setup Node 20
-        if: steps.e2e-check.outputs.exists == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+            - name: Wait for server on port 3001
+              run: npx wait-on tcp:3001 --timeout 30000
 
-      - name: Install dependencies
-        if: steps.e2e-check.outputs.exists == 'true'
-        run: npm ci --legacy-peer-deps
+            - name: Check server responds
+              run: curl -sf http://localhost:3001/ || curl -sf http://localhost:3001/socket.io/ || true
 
-      - name: Install Playwright browsers
-        if: steps.e2e-check.outputs.exists == 'true'
-        run: npx playwright install chromium --with-deps
+            - name: Server started successfully
+              run: echo "Server smoke test passed — port 3001 is open"
 
-      - name: Run E2E tests
-        if: steps.e2e-check.outputs.exists == 'true'
-        run: npm run test:e2e
+    # ----------------------------------------------------------------
+    # Job 4 — Tests E2E Playwright (activé quand la branche 0.3 est mergée)
+    # ----------------------------------------------------------------
+    e2e:
+        name: E2E Playwright
+        runs-on: ubuntu-latest
+        # Ce job est skippé si le dossier e2e/ n'existe pas encore
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Skip message
-        if: steps.e2e-check.outputs.exists != 'true'
-        run: echo "E2E tests not yet set up (e2e/ directory missing) — skipping"
+            - name: Check if e2e tests exist
+              id: e2e-check
+              run: |
+                  if [ -d "e2e" ] && [ -f "playwright.config.js" ]; then
+                    echo "exists=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "exists=false" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Setup Node 20
+              if: steps.e2e-check.outputs.exists == 'true'
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              if: steps.e2e-check.outputs.exists == 'true'
+              run: npm ci --legacy-peer-deps
+
+            - name: Install Playwright browsers
+              if: steps.e2e-check.outputs.exists == 'true'
+              run: npx playwright install chromium --with-deps
+
+            - name: Run E2E tests
+              if: steps.e2e-check.outputs.exists == 'true'
+              run: npm run test:e2e
+
+            - name: Skip message
+              if: steps.e2e-check.outputs.exists != 'true'
+              run: echo "E2E tests not yet set up (e2e/ directory missing) — skipping"
