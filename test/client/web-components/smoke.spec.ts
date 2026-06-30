@@ -10,10 +10,6 @@ import '../../../src/client/web-components/timer/timer';
 import '../../../src/client/web-components/url-form/url-form';
 import '../../../src/client/web-components/view-selector/view-selector';
 
-vi.mock('@services/context', () => ({
-    default: { isUsingRemoteUrl: vi.fn(() => false) }
-}));
-
 const COMPONENTS = [
     'tc-clock',
     'tc-loader',

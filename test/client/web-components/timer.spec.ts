@@ -10,6 +10,7 @@ describe('tc-timer', () => {
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         document.body.innerHTML = '';
     });
 
@@ -17,12 +18,11 @@ describe('tc-timer', () => {
         expect((el as any).timerElement.textContent).toBe('00:00:00');
     });
 
-    it('démarre le compteur au premier clic', async () => {
+    it('démarre le compteur au premier clic', () => {
         vi.useFakeTimers();
         el.shadowRoot!.querySelector<HTMLElement>('#timer')!.click();
         vi.advanceTimersByTime(3000);
         expect((el as any).timerElement.textContent).toBe('00:00:03');
-        vi.useRealTimers();
     });
 
     it('remet à zéro (synchrone) au second clic', () => {
@@ -32,7 +32,6 @@ describe('tc-timer', () => {
         el.shadowRoot!.querySelector<HTMLElement>('#timer')!.click();
         // vérification synchrone avant le 1er tick du nouvel interval
         expect((el as any).timerElement.textContent).toBe('00:00:00');
-        vi.useRealTimers();
     });
 
     it('formatTime(0) → "00", formatTime(5) → "05", formatTime(10) → 10', () => {

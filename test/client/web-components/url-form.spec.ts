@@ -1,9 +1,5 @@
 import '../../../src/client/web-components/url-form/url-form';
 
-vi.mock('@services/context', () => ({
-    default: { isUsingRemoteUrl: vi.fn(() => false) }
-}));
-
 describe('tc-url-form', () => {
     let el: HTMLElement;
 

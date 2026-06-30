@@ -6,13 +6,17 @@ vi.mock('@event-bus/event-bus-resolver', () => ({
     EventBusResolver: {
         channel: vi.fn().mockReturnValue({
             on: vi.fn(),
-            emit: vi.fn()
+            broadcast: vi.fn(),
+            emitTo: vi.fn()
         }),
         init: vi.fn()
     },
     Channels: {
-        CONTROLLER_COMPONENT: 'CONTROLLER_COMPONENT',
         CONTROLLER_SERVER: 'CONTROLLER_SERVER',
-        COMPONENT_CONTROLLER: 'COMPONENT_CONTROLLER'
+        CONTROLLER_COMPONENT: 'CONTROLLER_COMPONENT'
     }
+}));
+
+vi.mock('@services/context', () => ({
+    default: { isUsingRemoteUrl: vi.fn(() => false) }
 }));
