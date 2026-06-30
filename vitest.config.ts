@@ -7,6 +7,7 @@ export default defineConfig({
         globals: true,
         environment: 'jsdom',
         include: ['test/**/*.spec.ts'],
+        exclude: ['**/node_modules/**', '**/.git/**', 'test/client/web-components/**'],
         coverage: {
             provider: 'v8',
             all: true,

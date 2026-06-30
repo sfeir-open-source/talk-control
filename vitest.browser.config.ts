@@ -1,9 +1,11 @@
 import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
-    plugins: [tsconfigPaths()],
+    resolve: {
+        // @ts-expect-error: Vite 8 native tsconfig paths (bundled in vitest 4.x)
+        tsconfigPaths: true
+    },
     test: {
         browser: {
             enabled: true,
@@ -12,6 +14,7 @@ export default defineConfig({
             instances: [{ browser: 'chromium' }]
         },
         globals: true,
-        include: ['test/client/web-components/**/*.spec.ts']
+        include: ['test/client/web-components/**/*.spec.ts'],
+        setupFiles: ['./test/client/web-components/setup.ts']
     }
 });
