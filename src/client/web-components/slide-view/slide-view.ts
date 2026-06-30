@@ -3,12 +3,17 @@ import { bulmaStyles } from '@compat/lit-styles-compat';
 import { LitElement, html, css } from 'lit-element';
 
 class SlideViewComponent extends LitElement {
-    url: string = '';
-    delta: string = '0';
-    fullscreen: boolean = false;
-    _focus: boolean = false;
+    declare url: string;
+    declare delta: string;
+    declare fullscreen: boolean;
+    declare _focus: boolean;
     slideViewTcComponent!: SlideViewTCComponent;
     frame!: HTMLIFrameElement;
+
+    constructor() {
+        super();
+        this.delta = '0';
+    }
 
     static get properties() {
         return {
