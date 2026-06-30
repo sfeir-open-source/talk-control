@@ -32,7 +32,7 @@ L'étape 6 a introduit `src/compat/lit-styles-compat.js` pour contourner l'incom
 
 ## DEC-002 — Tests des composants LitElement
 
-**Date :** 2026-06-18 | **Étape :** 17 | **Statut :** décidé, pas encore implémenté
+**Date :** 2026-06-18 | **Étape :** 17 | **Statut :** ✅ implémenté (2026-06-30)
 
 ### Contexte
 
