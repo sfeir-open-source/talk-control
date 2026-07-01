@@ -7,11 +7,12 @@ export default defineConfig({
         globals: true,
         environment: 'jsdom',
         include: ['test/**/*.spec.ts'],
+        exclude: ['**/node_modules/**', '**/.git/**', 'test/client/web-components/**'],
         coverage: {
             provider: 'v8',
             all: true,
             include: ['src/**/*.ts'],
-            exclude: ['src/client/web-components/**', 'src/client/layouts/**', 'src/environment/**'],
+            exclude: ['src/client/layouts/**', 'src/environment/**'],
             reporter: ['text', 'html', 'lcov'],
             thresholds: { lines: 70, statements: 70, branches: 90, functions: 60 }
         }
