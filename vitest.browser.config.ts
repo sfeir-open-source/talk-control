@@ -3,7 +3,6 @@ import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
     resolve: {
-        // @ts-expect-error: Vite 8 native tsconfig paths (bundled in vitest 4.x)
         tsconfigPaths: true
     },
     test: {
