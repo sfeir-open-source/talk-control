@@ -1,0 +1,93 @@
+# Baseline tests — 2026-06-09
+# Node: v20.10.0 | npm: 10.2.3
+# Commande: npm test (via export NVM_DIR + nvm use 20)
+
+## Résumé Node 20 (baseline réelle)
+
+- Total specs: 20 fichiers spec (spec découverte par mocha via test/**/*.spec.js)
+- Tests exécutés (16 fichiers, hors async/await): 97 passing
+- Tests en erreur de chargement (4 fichiers async/await): crash avant exécution
+- Failing tests: 0 (sur les 97 exécutés)
+- Durée: ~49ms (hors fichiers crashés)
+
+## Problème 1 — regeneratorRuntime (4 spec files)
+
+Les 4 spec files contenant des tests `async/await` ou `async function` ne se chargent
+pas car Babel 7.11.5 avec `@babel/preset-env` transpile async/await vers des generators
+mais `regenerator-runtime` n'est pas chargé dans `.mocharc.yml`.
+
+Cause racine : `caniuse-lite` est obsolète (> 9 mois) — browserslist résout
+"maintained node versions" vers une liste qui inclut `ie 11` et d'autres cibles
+très anciennes. Babel transpile en conséquence et génère du code qui nécessite
+`regeneratorRuntime`, non disponible sans import explicite.
+
+Erreur type :
+```
+ReferenceError: regeneratorRuntime is not defined
+    at Suite.<anonymous> (/...test/client/tc-controller/tc-controller.spec.js:55:11)
+```
+
+Spec files affectés (4) :
+  - test/client/tc-controller/tc-controller.spec.js  (21 tests déclarés)
+  - test/common/services/plugin.spec.js              ( 3 tests déclarés)
+  - test/server/tc-server.spec.js                    (12 tests déclarés)
+  - test/server/controllers/patcher.controller.spec.js (13 tests déclarés)
+
+Total tests non-exécutés : ~49 (estimation sur it() count)
+Total si tout passait : ~146 tests
+
+## Problème 2 — nyc / coverage (0% sur npm run coverage)
+
+`append-transform` (dépendance de nyc) est incompatible avec Node 20 :
+```
+TypeError [ERR_INVALID_ARG_TYPE]: The "mod" argument must be an instance of Module.
+    at makeRequireFunction (node:internal/modules/helpers:131:11)
+    at .../node_modules/append-transform/index.js:1
+```
+
+La couverture retourne 0% pour tous les fichiers — `npm run coverage` échoue.
+Corriger cela necessite de migrer nyc → c8 (prévu en étape 1).
+
+## Problème 3 — npm ci (peer deps vuepress/webpack)
+
+npm ci échoue avec ERESOLVE :
+  - cache-loader@3.0.1 requiert webpack@^4 mais webpack@5 est installé
+  - file-loader@3.0.1 requiert webpack@^4 (via @vuepress/core@1.5.4)
+  Contournement : npm ci --legacy-peer-deps
+
+Seconde erreur npm ci — postinstall ngrok :
+  - ngrok@3.x : "ngrok - platform darwinarm64 is not supported."
+  Contournement : npm ci --legacy-peer-deps --ignore-scripts
+
+## État des 97 tests qui passent sous Node 20
+
+Les 16 spec files sans async/await s'exécutent tous sans erreur :
+  - test/client/engines/generic-client-engine.spec.js
+  - test/client/engines/revealjs-client-engine.spec.js
+  - test/client/tc-component/tc-component.spec.js
+  - test/common/event-bus/event-bus-logger.spec.js
+  - test/common/event-bus/event-bus-resolver.spec.js
+  - test/common/event-bus/event-bus.spec.js
+  - test/common/event-bus/postmessage/event-bus-postmessage.spec.js
+  - test/common/event-bus/websockets/event-bus-websockets-client.spec.js
+  - test/common/event-bus/websockets/event-bus-websockets-server.spec.js
+  - test/common/services/context.spec.js
+  - test/common/services/logger.spec.js
+  - test/common/services/url.spec.js
+  - test/server/controllers/proxy.controller.spec.js
+  - test/server/engines/revealjs-server-engine.spec.js
+  - test/server/store/actions.spec.js
+  - test/server/store/store.spec.js
+
+## Différence avec le run Node 22 (commit précédent)
+
+Node 22 : 0 tests exécutés — crash ERR_MODULE_NOT_FOUND sur module-alias/register
+(ESM strict exige l'extension .js sur les bare imports)
+
+Node 20 : 97 tests passent — module-alias/register résolu sans extension (CJS loader)
+Le problème Node 22 NE s'applique PAS sur Node 20.
+
+## Warnings constants
+
+- Browserslist: caniuse-lite is outdated (npx browserslist@latest --update-db)
+- npm ci échoue sans --legacy-peer-deps (vuepress/webpack4 peer conflict)

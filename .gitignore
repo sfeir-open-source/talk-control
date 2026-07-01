@@ -58,6 +58,15 @@ showcase/resources/tc-component/
 # Documentation
 docs-dist
 docs-sources/developers/code/parts/
+docs-sources/.vitepress/cache/
 
 # Jetbrains
 .idea
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Vitest browser mode artifacts
+test-results/
+.vitest-attachments/
+test/**/__screenshots__/
