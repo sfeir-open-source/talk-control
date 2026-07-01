@@ -1,14 +1,14 @@
-# Étape 18 — Merge final : update-node-20 → develop (v2.0.0)
+# Étape 18 — Merge final : update-node-20 → develop (v0.5.0)
 
 ## Objectif
 
-Intégrer toutes les étapes 0–17 de la migration Node 24 + TypeScript dans la branche `develop`. Tagguer la version `v2.0.0` pour marquer la rupture majeure.
+Intégrer toutes les étapes 0–17 de la migration Node 24 + TypeScript dans la branche `develop`. Tagguer la version `v0.5.0` pour marquer la rupture majeure.
 
 ## Résumé des changements
 
 ### Bump de version
-- `package.json` : `"version": "0.4.1"` → `"version": "2.0.0"`
-- Justification : migration majeure (Node 24 LTS + TypeScript strict + Vite + Vitest)
+- `package.json` : `"version": "0.4.1"` → `"version": "0.5.0"`
+- Justification : première release intégrant Node 24 LTS + TypeScript strict + Vite + Vitest — passage du mode pre-release (0.4.x) à une version outillée et stable (0.5.0)
 
 ### Correction du script `test:e2e`
 - Problème : `node_modules/.bin/playwright` pointait vers `playwright@1.61.1` (installé pour `@vitest/browser-playwright`) et non vers `@playwright/test@1.61.0`, causant une erreur « Playwright Test did not expect test.describe() to be called here »
@@ -34,7 +34,7 @@ Intégrer toutes les étapes 0–17 de la migration Node 24 + TypeScript dans la
 
 ### Merge
 - Merge `--no-ff` de `chore/step-18-merge-final` → `develop`
-- Tag annoté `v2.0.0`
+- Tag annoté `v0.5.0`
 
 ## Validation finale
 
@@ -49,7 +49,7 @@ Intégrer toutes les étapes 0–17 de la migration Node 24 + TypeScript dans la
 
 ## Stack finale
 
-| Outil | Avant (v0.4.1) | Après (v2.0.0) |
+| Outil | Avant (v0.4.1) | Après (v0.5.0) |
 |---|---|---|
 | Node.js | 14.x | 24 LTS |
 | TypeScript | non | strict: true |

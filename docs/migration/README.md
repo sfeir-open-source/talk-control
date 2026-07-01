@@ -35,7 +35,7 @@
 | **15 Webpack → Vite** | ✅ Done | update-node-20 | [step-15-vite.md](step-15-vite.md) — vite.config.mts, flatHtmlOutput, stub socket.io, DEC-003 |
 | **16 JavaScript → TypeScript** | ✅ Done | update-node-20 | [step-16-typescript.md](step-16-typescript.md) — strict: true, 73 src/ + 27 test/ migrés, DEC-003 |
 | **17 Tests web components** | ✅ Done | chore/step-17-web-component-tests | [step-17-web-components.md](step-17-web-components.md) — 23 browser tests, @vitest/browser-playwright, DEC-002 |
-| **18 Merge final** | ✅ Done | chore/step-18-merge-final | [step-18-merge-final.md](step-18-merge-final.md) — merge --no-ff → develop, tag v2.0.0 |
+| **18 Merge final** | ✅ Done | chore/step-18-merge-final | [step-18-merge-final.md](step-18-merge-final.md) — merge --no-ff → develop, tag v0.5.0 |
 
 ## Commandes de validation
 
@@ -57,7 +57,7 @@ npm run test:e2e                # 24/24 passing
 
 # Coverage
 NODE_ENV=test npm run coverage
-npm run coverage:check
+npm run coverage       # seuils configurés dans vitest.config.ts
 
 # Build Vite
 npm run build                  # dist/ généré
