@@ -35,25 +35,34 @@
 | **15 Webpack → Vite** | ✅ Done | update-node-20 | [step-15-vite.md](step-15-vite.md) — vite.config.mts, flatHtmlOutput, stub socket.io, DEC-003 |
 | **16 JavaScript → TypeScript** | ✅ Done | update-node-20 | [step-16-typescript.md](step-16-typescript.md) — strict: true, 73 src/ + 27 test/ migrés, DEC-003 |
 | **17 Tests web components** | ✅ Done | chore/step-17-web-component-tests | [step-17-web-components.md](step-17-web-components.md) — 23 browser tests, @vitest/browser-playwright, DEC-002 |
-| **18 Merge final** | 🔜 Todo | — | update-node-20 → develop, tag v2.0.0 |
+| **18 Merge final** | ✅ Done | chore/step-18-merge-final | [step-18-merge-final.md](step-18-merge-final.md) — merge --no-ff → develop, tag v2.0.0 |
 
 ## Commandes de validation
 
 ```bash
+# TypeScript strict
+npx tsc --noEmit               # 0 erreur
+
+# Lint
+npm run lint                   # 0 erreur
+
 # Tests unitaires + intégration
-NODE_ENV=test npm test          # 196 passing
+NODE_ENV=test npm test          # 196/196 passing
+
+# Tests web components (browser mode)
+npm run test:components         # 23/23 passing
 
 # E2E
-npm run test:e2e
+npm run test:e2e                # 24/24 passing
 
 # Coverage
 NODE_ENV=test npm run coverage
 npm run coverage:check
 
-# Build webpack
-npm run build
+# Build Vite
+npm run build                  # dist/ généré
 
-# Serveur (tsx, Node 22+)
+# Serveur (tsx, Node 24)
 npm run smoke:server            # port 3001
 ```
 
