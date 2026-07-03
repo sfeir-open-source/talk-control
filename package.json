@@ -15,7 +15,6 @@
         "build": "vite build",
         "smoke:server": "npx tsx src/server/index.ts",
         "lint": "eslint --fix . --cache",
-        "commit": "npx git-cz",
         "tc-showcase": "node scripts/sync-showcase-reveal.mjs && npx http-server showcase -s -p 3002",
         "tc-controller-and-component": "vite --port 3000",
         "tc-server": "npx nodemon --exec \"npx tsx\" src/server/index.ts",
@@ -46,8 +45,6 @@
     },
     "homepage": "https://github.com/TalkControl/TalkControl#readme",
     "devDependencies": {
-        "@commitlint/cli": "^9.1.2",
-        "@commitlint/config-conventional": "^8.3.4",
         "@eslint/js": "^9.39.4",
         "@playwright/test": "^1.61.0",
         "@types/cookie-parser": "^1.4.10",
@@ -62,8 +59,6 @@
         "@vitest/browser-playwright": "^4.1.9",
         "@vitest/coverage-v8": "^4.1.9",
         "@vitest/eslint-plugin": "^1.6.20",
-        "commitizen": "^4.2.1",
-        "cz-conventional-changelog": "^3.2.0",
         "eslint": "^9.39.4",
         "eslint-config-prettier": "^9.1.2",
         "eslint-plugin-jsdoc": "^63.0.7",
@@ -91,30 +86,28 @@
     "directories": {
         "test": "test"
     },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^7.3.0",
         "@fortawesome/free-solid-svg-icons": "^7.3.0",
+        "@ngrok/ngrok": "^1.7.0",
         "bulma": "^0.9.0",
         "colors": "^1.4.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
         "express": "^5.2.1",
         "http-proxy": "^1.18.1",
-        "http-server": "^0.12.3",
-        "ngrok": "^3.4.1",
-        "npm-run-all": "^4.1.5",
+        "http-server": "^14.1.1",
+        "npm-run-all2": "^9.0.2",
         "qrcode": "^1.5.4",
         "query-selector-shadow-dom": "^0.3.4",
         "redux": "^4.2.1",
         "redux-logger": "^3.0.6",
         "socket.io": "^4.8.3",
         "socket.io-client": "^4.8.3",
-        "wait-on": "^4.0.2"
+        "wait-on": "^9.0.10"
+    },
+    "overrides": {
+        "y18n": "^4.0.1"
     },
     "browserslist": [
         "defaults",
