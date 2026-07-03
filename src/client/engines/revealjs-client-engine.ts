@@ -26,7 +26,13 @@ export class RevealEngine extends GenericEngine {
             slideNumber: false,
             keyboard: true,
             touch: false,
-            embedded: true
+            embedded: true,
+            // Reveal 6.x auto-switches to its native "Scroll View" (a different DOM
+            // structure) below this width — it kicks in on the narrow presenter
+            // next-slide preview pane and breaks getSlides()/goToSlide(), and fights
+            // TalkControl's own touch plugin. TalkControl never wants Reveal's own
+            // scroll view, so disable the auto-activation entirely.
+            scrollActivationWidth: null
         });
     }
 
