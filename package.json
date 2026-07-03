@@ -22,8 +22,8 @@
         "docs:build": "npm run jsdoc:build && vitepress build docs-sources --outDir ../docs-dist",
         "jsdoc:build": "node scripts/jsdoc-build.mjs",
         "test:components": "vitest run --config vitest.browser.config.ts",
-        "test:e2e": "node_modules/@playwright/test/node_modules/.bin/playwright test --config playwright.config.cjs",
-        "test:e2e:report": "node_modules/@playwright/test/node_modules/.bin/playwright show-report",
+        "test:e2e": "node node_modules/@playwright/test/cli.js test --config playwright.config.cjs",
+        "test:e2e:report": "node node_modules/@playwright/test/cli.js show-report",
         "prepare": "husky"
     },
     "repository": {
