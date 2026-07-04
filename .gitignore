@@ -19,6 +19,7 @@ pids
 coverage
 *.lcov
 .nyc_output
+.vitest-reports
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
