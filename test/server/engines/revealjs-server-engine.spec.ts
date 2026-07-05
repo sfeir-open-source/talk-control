@@ -266,6 +266,84 @@ describe('RevealServerEngine', function () {
             (store.getState as ReturnType<typeof vi.fn>).mockRestore();
             (engine._nextHorizontalSlide as ReturnType<typeof vi.fn>).mockRestore();
         });
+
+        it('should do nothing on "arrowRight" at the very last fragment with no next horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 0, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'arrowRight' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "arrowLeft" at the very first fragment with no prev horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'arrowLeft' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "arrowUp" at the very first fragment with no prev vertical slide', function () {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'arrowUp' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "arrowDown" at the very last fragment with no next vertical slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 1, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'arrowDown' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "pageUp" at the very first fragment with no prev vertical nor horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'pageUp' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "pageDown" at the very last fragment with no next vertical nor horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 1, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleInput({ key: 'pageDown' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
     });
 
     describe('handleTouch()', function () {
@@ -424,6 +502,71 @@ describe('RevealServerEngine', function () {
             (store.getState as ReturnType<typeof vi.fn>).mockRestore();
             (engine._nextHorizontalSlide as ReturnType<typeof vi.fn>).mockRestore();
         });
+
+        it('should do nothing on "left" at the very last fragment with no next horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 0, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'left' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "right" at the very first fragment with no prev horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'right' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "up" at the very last fragment with no next vertical slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 1, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'up' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "down" at the very first fragment with no prev vertical slide', function () {
+            // Given
+            const currentSlide = { h: 0, v: 0, f: -1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'down' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should do nothing on "none" at the very last fragment with no next vertical nor horizontal slide', function () {
+            // Given
+            const currentSlide = { h: 1, v: 1, f: 1 };
+            vi.spyOn(store, 'dispatch').mockImplementation((() => {}) as any);
+            vi.spyOn(store, 'getState').mockReturnValue({ currentSlide, slides });
+            // When
+            engine.handleTouch({ direction: 'none' });
+            // Then
+            expect(store.dispatch).not.toHaveBeenCalled();
+            (store.getState as ReturnType<typeof vi.fn>).mockRestore();
+            (store.dispatch as ReturnType<typeof vi.fn>).mockRestore();
+        });
     });
 
     describe('slideEquals()', function () {
@@ -449,6 +592,28 @@ describe('RevealServerEngine', function () {
                 s2 = { ...s1, f: 3 };
             // Then
             expect(engine.slideEquals(s1, s2, false)).toBeTruthy();
+        });
+    });
+
+    describe('_prevSlide()', function () {
+        it('should go to the last fragment of the slide when it has fragments', function () {
+            // Given
+            vi.spyOn(engine, '_gotoSlide').mockImplementation(() => {});
+            // When
+            engine._prevSlide({ h: 1, v: 2, f: -1, fMax: 3 });
+            // Then
+            expect(engine._gotoSlide).toHaveBeenCalledExactlyOnceWith({ h: 1, v: 2, f: 2 });
+            (engine._gotoSlide as ReturnType<typeof vi.fn>).mockRestore();
+        });
+
+        it('should go to fMax itself when the slide has no fragments', function () {
+            // Given
+            vi.spyOn(engine, '_gotoSlide').mockImplementation(() => {});
+            // When
+            engine._prevSlide({ h: 1, v: 2, f: -1, fMax: 0 });
+            // Then
+            expect(engine._gotoSlide).toHaveBeenCalledExactlyOnceWith({ h: 1, v: 2, f: 0 });
+            (engine._gotoSlide as ReturnType<typeof vi.fn>).mockRestore();
         });
     });
 });

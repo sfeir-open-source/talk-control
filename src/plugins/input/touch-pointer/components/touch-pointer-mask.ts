@@ -3,8 +3,16 @@ import { TouchPointerMaskTCComponent } from './touch-pointer-mask-tc-component';
 import { bulmaStyles } from '@compat/lit-styles-compat';
 
 class TouchPointerMaskComponent extends LitElement {
-    pointer: { x: string | number; y: string | number; color: string } = { x: 0, y: 0, color: '#FF00000' };
-    touchPointerMaskTCComponent!: TouchPointerMaskTCComponent;
+    // `declare` (not plain class fields) is required here: with this project's ES2022
+    // target, useDefineForClassFields shadows Lit's reactive property accessors and
+    // silently breaks rendering entirely (see slide-view.ts for the same pattern).
+    declare pointer: { x: string | number; y: string | number; color: string };
+    declare touchPointerMaskTCComponent: TouchPointerMaskTCComponent;
+
+    constructor() {
+        super();
+        this.pointer = { x: 0, y: 0, color: '#FF00000' };
+    }
 
     static get styles() {
         return [

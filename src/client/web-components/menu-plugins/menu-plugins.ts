@@ -34,13 +34,23 @@ class MenuPluginsComponent extends LitElement {
     }
 
     addItemToMenu(itemTitle: string): void {
+        const pluginsList = this.shadowRoot!.getElementById('pluginsList')!;
+
+        // The server re-broadcasts the plugins list to every connected client whenever
+        // any client (re)initializes (e.g. presenter + on-stage both connected), so this
+        // can be called more than once for the same plugin — skip duplicates.
+        const alreadyListed = Array.from(pluginsList.children).some(child => child.innerHTML === itemTitle);
+        if (alreadyListed) {
+            return;
+        }
+
         const element = document.createElement('a');
 
         element.className = 'dropdown-item';
         element.innerHTML = itemTitle;
         element.addEventListener('click', () => this.menuItemClick(itemTitle));
 
-        this.shadowRoot!.getElementById('pluginsList')!.appendChild(element);
+        pluginsList.appendChild(element);
     }
 
     menuItemClick(itemTitle: string): void {

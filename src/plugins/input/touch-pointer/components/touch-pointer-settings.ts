@@ -3,8 +3,16 @@ import { TouchPointerSettingsTCComponent } from './touch-pointer-settings-tc-com
 import { bulmaStyles } from '@compat/lit-styles-compat';
 
 class TouchPointerSettingsComponent extends LitElement {
-    pointerColor = '#FF00000';
-    touchPointerSettingsTCComponent!: TouchPointerSettingsTCComponent;
+    // `declare` (not plain class fields) is required here: with this project's ES2022
+    // target, useDefineForClassFields shadows Lit's reactive property accessors and
+    // silently breaks rendering entirely (see slide-view.ts for the same pattern).
+    declare pointerColor: string;
+    declare touchPointerSettingsTCComponent: TouchPointerSettingsTCComponent;
+
+    constructor() {
+        super();
+        this.pointerColor = '#FF00000';
+    }
 
     static get styles() {
         return [

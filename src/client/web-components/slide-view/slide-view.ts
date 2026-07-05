@@ -59,7 +59,11 @@ class SlideViewComponent extends LitElement {
     }
 
     _loadFrame(): void {
-        let src = `${this.url}#delta=${this.delta}`;
+        // Uses a query param rather than a hash fragment: Reveal's own hash-based
+        // slide routing reads and rewrites location.hash on load, which would wipe
+        // out a `#delta=` value before tc-component.bundle.js gets to read it.
+        const separator = this.url.includes('?') ? '&' : '?';
+        let src = `${this.url}${separator}delta=${this.delta}`;
         if (this._focus) {
             src += '&focus';
         }

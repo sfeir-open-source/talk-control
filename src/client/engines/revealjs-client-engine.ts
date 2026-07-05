@@ -26,7 +26,13 @@ export class RevealEngine extends GenericEngine {
             slideNumber: false,
             keyboard: true,
             touch: false,
-            embedded: true
+            embedded: true,
+            // Reveal 6.x auto-switches to its native "Scroll View" (a different DOM
+            // structure) below this width — it kicks in on the narrow presenter
+            // next-slide preview pane and breaks getSlides()/goToSlide(), and fights
+            // TalkControl's own touch plugin. TalkControl never wants Reveal's own
+            // scroll view, so disable the auto-activation entirely.
+            scrollActivationWidth: null
         });
     }
 
@@ -34,6 +40,11 @@ export class RevealEngine extends GenericEngine {
         let slideDelta: ClientSlide = { ...indices };
         const slides = this.getSlides();
         const currentIndex = slides.findIndex(slide => slide.h === indices.h && slide.v === indices.v);
+        if (currentIndex === -1) {
+            // Can happen if the command arrives before Reveal has rendered the slides into the DOM,
+            // or if it targets a slide that no longer exists. Drop it rather than crash.
+            return;
+        }
         if (indices.f + delta < slides[currentIndex].fMax) {
             slideDelta.f += delta;
         } else if (currentIndex + delta < slides.length - 1) {

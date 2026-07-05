@@ -73,6 +73,24 @@ describe('RevealEngineClient', function () {
             // Then - should use last slide
             expect(window.Reveal.slide).toHaveBeenCalledExactlyOnceWith(1, 0, -1);
         });
+
+        it('should ignore the command instead of throwing when called before any slide exists in the DOM', function () {
+            // Given
+            vi.spyOn(engine, 'getSlides').mockReturnValue([]);
+            // When
+            expect(() => engine.goToSlide({ h: 0, v: 0, f: -1, fMax: -1 })).not.toThrow();
+            // Then
+            expect(window.Reveal.slide).not.toHaveBeenCalled();
+        });
+
+        it('should ignore the command instead of throwing when the target slide is not found', function () {
+            // Given
+            vi.spyOn(engine, 'getSlides').mockReturnValue([{ h: 0, v: 0, f: -1, fMax: -1 }]);
+            // When
+            expect(() => engine.goToSlide({ h: 5, v: 5, f: -1, fMax: -1 })).not.toThrow();
+            // Then
+            expect(window.Reveal.slide).not.toHaveBeenCalled();
+        });
     });
 
     describe('getSlides()', function () {

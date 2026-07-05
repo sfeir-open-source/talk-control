@@ -11,20 +11,23 @@
         "when-controller-is-started": "wait-on tcp:3000 && npm run get-started",
         "test": "vitest run",
         "test:watch": "vitest",
-        "coverage": "vitest run --coverage",
+        "coverage": "npm run coverage:clean && npm run coverage:jsdom && npm run coverage:browser && npm run coverage:merge",
+        "coverage:clean": "rm -rf .vitest-reports coverage",
+        "coverage:jsdom": "vitest run --reporter=blob --outputFile=.vitest-reports/jsdom.blob --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+        "coverage:browser": "vitest run --config vitest.browser.config.ts --reporter=blob --outputFile=.vitest-reports/browser.blob --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+        "coverage:merge": "vitest --mergeReports=.vitest-reports --reporter=default --coverage",
         "build": "vite build",
         "smoke:server": "npx tsx src/server/index.ts",
         "lint": "eslint --fix . --cache",
-        "commit": "npx git-cz",
-        "tc-showcase": "npx http-server showcase -s -p 3002",
+        "tc-showcase": "node scripts/sync-showcase-reveal.mjs && npx http-server showcase -s -p 3002",
         "tc-controller-and-component": "vite --port 3000",
         "tc-server": "npx nodemon --exec \"npx tsx\" src/server/index.ts",
         "docs:dev": "vitepress dev docs-sources",
         "docs:build": "npm run jsdoc:build && vitepress build docs-sources --outDir ../docs-dist",
         "jsdoc:build": "node scripts/jsdoc-build.mjs",
         "test:components": "vitest run --config vitest.browser.config.ts",
-        "test:e2e": "node_modules/@playwright/test/node_modules/.bin/playwright test --config playwright.config.cjs",
-        "test:e2e:report": "node_modules/@playwright/test/node_modules/.bin/playwright show-report",
+        "test:e2e": "node node_modules/@playwright/test/cli.js test --config playwright.config.cjs",
+        "test:e2e:report": "node node_modules/@playwright/test/cli.js show-report",
         "prepare": "husky"
     },
     "repository": {
@@ -46,8 +49,6 @@
     },
     "homepage": "https://github.com/TalkControl/TalkControl#readme",
     "devDependencies": {
-        "@commitlint/cli": "^9.1.2",
-        "@commitlint/config-conventional": "^8.3.4",
         "@eslint/js": "^9.39.4",
         "@playwright/test": "^1.61.0",
         "@types/cookie-parser": "^1.4.10",
@@ -62,8 +63,6 @@
         "@vitest/browser-playwright": "^4.1.9",
         "@vitest/coverage-v8": "^4.1.9",
         "@vitest/eslint-plugin": "^1.6.20",
-        "commitizen": "^4.2.1",
-        "cz-conventional-changelog": "^3.2.0",
         "eslint": "^9.39.4",
         "eslint-config-prettier": "^9.1.2",
         "eslint-plugin-jsdoc": "^63.0.7",
@@ -78,6 +77,7 @@
         "prettier": "^3.8.4",
         "pretty-quick": "^4.2.2",
         "redux-mock-store": "^1.5.5",
+        "reveal.js": "^6.0.1",
         "supertest": "^6.3.4",
         "tsx": "^4.22.4",
         "typescript": "^5.9.3",
@@ -90,30 +90,28 @@
     "directories": {
         "test": "test"
     },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^7.3.0",
         "@fortawesome/free-solid-svg-icons": "^7.3.0",
+        "@ngrok/ngrok": "^1.7.0",
         "bulma": "^0.9.0",
         "colors": "^1.4.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
         "express": "^5.2.1",
         "http-proxy": "^1.18.1",
-        "http-server": "^0.12.3",
-        "ngrok": "^3.4.1",
-        "npm-run-all": "^4.1.5",
+        "http-server": "^14.1.1",
+        "npm-run-all2": "^9.0.2",
         "qrcode": "^1.5.4",
         "query-selector-shadow-dom": "^0.3.4",
         "redux": "^4.2.1",
         "redux-logger": "^3.0.6",
         "socket.io": "^4.8.3",
         "socket.io-client": "^4.8.3",
-        "wait-on": "^4.0.2"
+        "wait-on": "^9.0.10"
+    },
+    "overrides": {
+        "y18n": "^4.0.1"
     },
     "browserslist": [
         "defaults",
